@@ -3,18 +3,16 @@
     // 封面圖片
     $("#progressbarTWInput").change(function () {
         readURL(this);
+        // this是改變的那個元素(input)
     });
     function readURL(input) {
 
         if (input.files && input.files[0]) {
-            console.log(input.files);
 
             var reader = new FileReader();
 
             reader.onload = function (e) {
-
                 $("#preview_progressbarTW_img").attr('src', e.target.result);
-
             }
 
             reader.readAsDataURL(input.files[0]);
