@@ -1,0 +1,43 @@
+
+#container{
+    position:absolute;
+    right:20%;
+}
+
+#member:hover {
+    transition: 0.5s;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+#entrance {
+    position: fixed;
+    display: none;
+    background-color: lightblue;
+}
+
+#loginBtn{
+    cursor:pointer;
+}
+#RegisterBtn {
+    cursor: pointer;
+}
+#loginBtn:hover {
+    transition: 0.5s;
+    color: white;
+    background-color: black;
+}
+
+#RegisterBtn:hover {
+    transition: 0.5s;
+    color: white;
+    background-color: black;
+}
+
+#LoginForm {
+    display: none;
+}
+#RegisterForm{
+    display:none;
+}

@@ -1,0 +1,53 @@
+﻿
+::-webkit-scrollbar {
+    display: none;
+}
+
+#Toggle {
+    word-wrap: break-word;
+}
+
+#Main {
+    flex: 0 0 auto;
+    width: 56%;
+}
+
+#Userlist {
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+#Sidebar {
+}
+
+.UserIcon {
+    height: 12vh;
+    width: 12vh;
+    max-height: 12vh;
+    max-width: 12vh;
+    object-fit: cover;
+}
+
+.WorkImg {
+    height: 50vh;
+    max-height: 50vh;
+}
+
+.ToMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+. JustifyMiddle {
+    display: flex;
+    justify-content: center;
+}
+
+#SmallTour {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+    height: 5vh;
+}

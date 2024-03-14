@@ -29,4 +29,12 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\Shared\" />
+    <Folder Include="wwwroot\css\yhu\" />
+    <Folder Include="wwwroot\js\Creator\" />
+    <Folder Include="wwwroot\js\Event\" />
+    <Folder Include="wwwroot\js\yhu\" />
+  </ItemGroup>
+
 </Project>
