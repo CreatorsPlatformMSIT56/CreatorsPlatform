@@ -1,0 +1,126 @@
+﻿/*活動主視覺圖片*/
+.EventHeaderImg {
+    height: 16rem;
+    overflow: hidden;
+}
+
+    .EventHeaderImg > img {
+        width: 100%;
+        object-fit: cover;
+        object-position: center -8rem;
+    }
+
+/*說明欄*/
+.EventIntroSection {
+    background-color: rgb(217 244 246);
+}
+/*中型參加者頭像*/
+.MidSizeHeadShot {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* 保持圖片比例並填滿容器 */
+    border-radius: 50%; /* 將邊框半徑設置為容器寬度的一半，從而裁剪圖片成圓形 */
+}
+/*小型參加者頭像*/
+.SmallSizeHeadShot {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/*活動標題*/
+.EventTitle > h3 {
+    color: white;
+    background-color: #206896;
+}
+
+/*預留的活動投稿部分導覽列*/
+.EventNav {
+    height: 3rem;
+    background-color: #dff2f9;
+}
+
+/*活動投稿部分*/
+.EventPostSection {
+    background-color: #f5f5f5;
+}
+
+/*一個活動投稿*/
+.EventPost {
+    height: 20rem;
+}
+
+.EventPostImgPart {
+    height: 15rem;
+    overflow: hidden;
+}
+
+    .EventPostImgPart img {
+        object-fit: cover;
+    }
+
+/*對話盒的樣式*/
+.modal-header {
+    background-color: #c3e0fd;
+    /*    color: white;
+    text-align: center;
+    font-size: 2em;*/
+}
+
+/*沒連結圖片時不要顯示*/
+#preview_progressbarTW_img[src="#"] {
+    display: none;
+}
+/*上傳圖片預覽不要過大*/
+#preview_progressbarTW_img {
+    width: 100%;
+}
+/*不要浮誇focus*/
+#titleTextBox:focus, #EventPostContentTextBox:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.05rem #258cfb;
+}
+/*叉叉按鈕*/
+.CloseBtn:focus, .CloseBtn:active:focus {
+    box-shadow: none;
+}
+
+
+#okButton:focus, #cancelButton:focus {
+    box-shadow: none;
+}
+
+#okButton {
+    font-weight: bold;
+    background-color: #f9db12;
+    transition: background-color 0.1s;
+}
+
+    #okButton:hover {
+        filter: brightness(1.1);
+    }
+
+#cancelButton {
+    font-weight: bold;
+    transition-duration: 0.1s;
+}
+/*右下的投稿按鈕*/
+.QuickPostBtn {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    background-color: #f9a21a;
+    border-radius: 25%
+}
+
+    .QuickPostBtn:hover {
+        filter: brightness(1.05);
+        background-color: #f9a21a;
+    }
+
+    .QuickPostBtn:focus {
+        box-shadow: none;
+        border: none;
+    }

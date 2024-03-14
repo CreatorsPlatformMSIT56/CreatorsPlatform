@@ -1,0 +1,49 @@
+﻿<link href="~/css/Lolm/CreateEvent.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-7 d-flex flex-column">
+            <div><h3>發起活動</h3></div>
+            <div class="mb-3 pe-5"><b>標題</b><br /> <input class="EventNameInput" type="type" name="name" value="" /></div>
+            <div class="mb-3 d-flex SetEventTime"><b>時程設定</b><input type="datetime-local" name="name" value="" /><span>~</span><input type="datetime-local" name="name" value="" /></div>
+            <div>
+                <b class="mb-2">封面圖片</b> <br />
+                <form action="/somewhere/to/upload" enctype="multipart/form-data">
+                    <input type="file" id="progressbarTWInput" accept="image/gif, image/jpeg, image/png" />
+                    <div class="PreviewImgWarp"><img id="preview_progressbarTW_img" src="#" /></div>
+                </form>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="EventIntroSection">
+                <b>活動描述</b><br />
+                <textarea></textarea>
+            </div>
+            <div>
+                <b>範例圖片</b><br />
+                <div class="d-flex ExampleImgSection">
+                    <div><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="" /></div>
+                    <div><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="" /></div>
+                </div>
+
+                @* test *@
+                @*                 <div class="upload-container">
+                <div class="upload-box">
+                <input type="file" id="upload" accept="image/*">
+                <label for="upload"></label>
+                </div>
+                <div class="upload-preview" id="preview"></div>
+                </div> *@
+
+
+            </div>
+            <div class="mt-1 CreateEventBtnSection">
+                <button class="btn" id="cancelButton" type="button">取消</button>
+                <button class="btn" id="PreviewButton" type="button">預覽</button>
+                <button class="btn" id="okButton" type="button">發起活動</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Lolm/CreateEvent.js"></script>
