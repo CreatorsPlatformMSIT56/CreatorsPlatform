@@ -1,0 +1,132 @@
+html {
+    font-size: 14px;
+}
+
+/*設定html的a都不要有底線*/
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+    /*設定html的a點過都不要變顏色*/
+    a:visited {
+        color: inherit;
+    }
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+/*主商標圖片*/
+#MainIcon {
+    width: 200px
+}
+
+/*搜尋欄*/
+.SearchFormInput {
+    width: 220px;
+}
+
+    .SearchFormInput:focus {
+        color: #212529;
+        background-color: #fff;
+        outline: 0;
+        box-shadow: 0 0 0 0.1rem rgba(13,110,253,.25)
+    }
+
+/*搜尋按鈕*/
+.SearchFormBtn {
+    color: gray;
+    border: none;
+    background-color: white;
+    padding-right: 3px;
+    padding-left: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+    .SearchFormBtn:hover {
+        background-color: white;
+        border-color: #ced4da;
+        color: black;
+    }
+
+/*導覽列*/
+.NavSection {
+    margin-right: 10rem;
+}
+
+/*導覽列會員登入*/
+#MemberSection {
+    display: flex;
+    height: 3rem;
+    position: relative;
+    align-items: center;
+}
+
+/*會員下拉選單按鈕*/
+.MemberDropdown {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+}
+
+/*會員下拉選單*/
+.MemberDropdownList {
+    text-align: center;
+    width: 7rem;
+    white-space: nowrap;
+    border-radius: 2px;
+    border: 1px solid #b8b8b8;
+    background-color: white;
+    position: absolute;
+    left: -40px;
+    top: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none !important;
+}
+
+    #MemberSection:hover > .MemberDropdownList,
+    .MemberDropdownList:hover {
+        display: block !important;
+    }
+
+/*會員下拉選單裡面的按鈕(a)*/
+.MemberDropdownList a {
+    text-decoration: none;
+    background: white;
+    color: black;
+    display: block;
+    text-align: center;
+}
+
+    .MemberDropdownList a:hover {
+        display: block;
+        background: #d6edff;
+    }
+
+    /*Footer*/
+.FooterContainer{
+    line-height: 30px;
+}
+/*社群媒體圖片*/
+.SocialIcon {
+    width: 25px;
+    height: 25px;
+}

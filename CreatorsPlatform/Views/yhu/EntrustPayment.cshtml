@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form action="/submit-form" method="post">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="..." class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="EstimatedAmount">金額預計</label>
+                <input type="number" name="EstimatedAmount  ">
+            </div>
+            <hr />
+            <div class="row">
+                <h5>委託內容描述</h5>
+                <div id="editor"></div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <div class="row border">
+                <div class="row mb-3">
+                    <label for="CardNumber">卡號</label>
+                    <input type="text" name="CardNumber">
+                </div>
+                <div class="row mb-3">
+                    <label for="CardholderName">持卡人名</label>
+                    <input type="text" name="CardholderName">
+                </div>
+                <div class="row mb-3">
+                    <label for="ExpiryDate">有效期限</label>
+                    <input type="text" name="ExpiryDate">
+                </div>
+                <div class="row mb-5">
+                    <label label for="SecurityCode">安全碼</label>
+                    <input type="text" name="SecurityCode">
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+            </div>
+        </div>
+    </div>
+</form>
+<button onclick="htmlch()">eeeeeee</button>
+<script src="/js/yhu/EntrustPayment.js"></script>

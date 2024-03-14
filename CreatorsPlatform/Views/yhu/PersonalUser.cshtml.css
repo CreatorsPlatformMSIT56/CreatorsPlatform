@@ -1,0 +1,53 @@
+﻿.MainOpen {
+    flex: 0 0 auto;
+    width: 65%;
+    transform-origin: left;
+    transition: 0.5s;
+    margin-left: -5px;
+    z-index: 1;
+}
+
+.SidebarOpen {
+    flex: 0 0 auto;
+    width: 10%;
+    transform-origin: right;
+    transition: 0.5s;
+    background-color: aqua;
+}
+
+.MainClose {
+    flex: 0 0 auto;
+    width: 73%;
+    transform-origin: left;
+    transition: 0.3s;
+    margin-left: -1px;
+}
+
+.SidebarClose {
+    flex: 0 0 auto;
+    width: 2%;
+    transform-origin: right;
+    transition: 0.3s;
+    background-color: aqua;
+}
+
+ol {
+    list-style-type: none;
+}
+
+.HighlightMesg {
+    background-color: rgb(255, 255, 255);
+    z-index: 2;
+    position: relative;
+}
+
+.iconHeig {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 12vh;
+}
+
+.border-right-0 {
+    border-right: 0 !important;
+}
