@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "AddCommisionForm";
+}
+<link rel="stylesheet" href="/css/Shared/Quill.css" />
+<link href="~/css/Creator/AddCommisionForm.css" rel="stylesheet" />
+
+<h2>刊登委託</h2>
+
+<div class="row">
+    <div class="col-12">
+        <div class="CommisionSetUpSection">
+            <div class="input-group-lg">
+                <label class="col-form-label">名稱</label>
+                <input class="form-control" type="text" name="CommisionName" value="" />
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="">
+                        <label>類別</label>
+                        <select class="form-select">
+                            <option>繪圖</option>
+                            <option>影片</option>
+                            <option>聲音</option>
+                            <option>手做</option>
+                            <option>遊戲&工具程式</option>
+                            <option>教學</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="">
+                        <label>子分類</label>
+                        <select class="form-select">
+                            <option>原創</option>
+                            <option>同人</option>
+                            <option>AI繪圖</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="">
+                        <label>總名額限制</label>
+                        <input class="form-control" type="text" name="CommisionRequstLimit" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class=" flex-column">
+                        <div>
+                            <label class="text-nowrap">開放期限</label>
+                            <input class="form-control" type="date" name="AcceptCommisionUntil" value="" />
+                        </div>
+                        <div class="d-flex pt-2">
+                            <input type="checkbox" name="AcceptCommisionUntil" value="" />
+                            <label class="ms-1">不限期</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="">
+                        <label>預計交期</label>
+                        <input class="form-control" type="text" name="FinishTime" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="">
+                        <label>修改次數</label>
+                        <input class="form-control" type="text" name="FixLimit" value="" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="">
+                        <label>授權範圍</label>
+                        <select class="form-select">
+                            <option>個人收藏使用</option>
+                            <option>同人非營利作品使用</option>
+                            <option>同人營利作品使用</option>
+                            <option>商業使用</option>
+                            <option>可縮放裁切</option>
+                            <option>可二次加工</option>
+                            <option>可註明出處後發布</option>
+                            <option>可不註明出處後發布</option>
+                            <option>可談著作權轉讓</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 CommisionEditor">
+                    <label>委託說明</label>
+                    <!-- Create the editor container -->
+                    <div id="editor">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label>設定代表圖片</label>
+                    <form action="/somewhere/to/upload" enctype="multipart/form-data">
+                        <input type="file" id="progressbarTWInput" accept="image/gif, image/jpeg, image/png" />
+                        <img id="preview_progressbarTW_img" src="#" />
+                    </form>
+                </div>
+                <div class="col-6 d-flex CommisionChargeSet">
+                    <div class="flex-grow-1 px-1">
+                        <label>基本委託費用</label>
+                        <input class="form-control" type="number" name="MinCharge" value="" />
+                    </div>
+                    <div class="flex-grow-1 px-1">
+                        <label>最高委託費用</label>
+                        <input class="form-control" type="number" name="MaxCharge" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn NextBtn">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Copy -->
+
+<script src="~/js/Creator/AddCommisionForm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script src="/js/Shared/Quill.js"></script>

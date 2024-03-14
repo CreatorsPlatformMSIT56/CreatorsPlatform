@@ -19,9 +19,15 @@ public partial class Event
 
     public int CategoryId { get; set; }
 
+    public string? EventStyle { get; set; }
+
+    public int? CreatorId { get; set; }
+
     public virtual Category Category { get; set; } = null!;
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
+
+    public virtual Creator? Creator { get; set; }
 
     public virtual ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
 }

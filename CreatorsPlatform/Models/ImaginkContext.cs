@@ -227,9 +227,13 @@ public partial class ImaginkContext : DbContext
 
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+            entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventName).HasMaxLength(200);
+            entity.Property(e => e.EventStyle)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.EventUrl).HasColumnName("EventURL");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
 
@@ -237,6 +241,10 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Events__Category__5EBF139D");
+
+            entity.HasOne(d => d.Creator).WithMany(p => p.Events)
+                .HasForeignKey(d => d.CreatorId)
+                .HasConstraintName("FK__Events__CreatorI__3493CFA7");
         });
 
         modelBuilder.Entity<EventImage>(entity =>
