@@ -9,15 +9,15 @@
 <div class="row">
     <div class="col-12">
         <div class="CommisionSetUpSection">
-            <div class="input-group-lg">
+            <div class="input-group-md">
                 <label class="col-form-label">名稱</label>
-                <input class="form-control" type="text" name="CommisionName" value="" />
+                <input class="form-control mb-3" type="text" name="CommisionName" value="" />
             </div>
             <div class="row">
                 <div class="col-6">
                     <div class="">
-                        <label>類別</label>
-                        <select class="form-select">
+                        <label class="col-form-label">類別</label>
+                        <select class="form-select mb-3">
                             <option>繪圖</option>
                             <option>影片</option>
                             <option>聲音</option>
@@ -30,8 +30,8 @@
 
                 <div class="col-6">
                     <div class="">
-                        <label>子分類</label>
-                        <select class="form-select">
+                        <label class="col-form-label">子分類</label>
+                        <select class="form-select mb-3">
                             <option>原創</option>
                             <option>同人</option>
                             <option>AI繪圖</option>
@@ -40,10 +40,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="">
-                        <label>總名額限制</label>
-                        <input class="form-control" type="text" name="CommisionRequstLimit" value="" />
+                        <label class ="col-form-label">總名額限制</label>
+                        <input class="form-control  mb-3" type="text" name="CommisionRequstLimit" value="" />
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 <div class="col-6">
                     <div class=" flex-column">
                         <div>
-                            <label class="text-nowrap">開放期限</label>
+                            <label class="col-form-label text-nowrap">開放期限</label>
                             <input class="form-control" type="date" name="AcceptCommisionUntil" value="" />
                         </div>
                         <div class="d-flex pt-2">
@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-6">
                     <div class="">
-                        <label>預計交期</label>
+                        <label class="col-form-label">預計交期</label>
                         <input class="form-control" type="text" name="FinishTime" value="" />
                     </div>
                 </div>
@@ -71,13 +71,13 @@
             <div class="row">
                 <div class="col-6">
                     <div class="">
-                        <label>修改次數</label>
-                        <input class="form-control" type="text" name="FixLimit" value="" />
+                        <label class="col-form-label">修改次數</label>
+                        <input class="form-control mb-3" type="text" name="FixLimit" value="" />
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="">
-                        <label>授權範圍</label>
+                        <label class="col-form-label">授權範圍</label>
                         <select class="form-select">
                             <option>個人收藏使用</option>
                             <option>同人非營利作品使用</option>
@@ -96,7 +96,7 @@
                 <div class="col-12 CommisionEditor">
                     <label>委託說明</label>
                     <!-- Create the editor container -->
-                    <div id="editor">
+                    <div class="mb-3" id="editor">
                     </div>
                 </div>
             </div>
@@ -120,8 +120,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <button class="btn NextBtn">下一步</button>
+                <div class="col-12 mb-3">
+                    <button class="btn NextBtn btn-primary justify-content-center">下一步</button>
                 </div>
             </div>
         </div>
