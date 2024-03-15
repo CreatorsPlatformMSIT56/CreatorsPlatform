@@ -252,8 +252,14 @@ public partial class ImaginkContext : DbContext
             entity.HasKey(e => e.EventImageId).HasName("PK__EventIma__9B3A6940E9049B02");
 
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
+            entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+
+            entity.HasOne(d => d.Creator).WithMany(p => p.EventImages)
+                .HasForeignKey(d => d.CreatorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__EventImag__Creat__3587F3E0");
 
             entity.HasOne(d => d.Event).WithMany(p => p.EventImages)
                 .HasForeignKey(d => d.EventId)
