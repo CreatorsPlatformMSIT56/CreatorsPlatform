@@ -22,28 +22,38 @@
     object-fit: cover;
     object-position: center -8rem;
 }
+/*----------------上傳封面照片--------------------*/
+
+/*----------------上傳範例圖片--------------------*/
 /*預覽圖片範圍*/
 .ExampleImgSection {
     width: auto;
     border: 3px dashed #999999;
 }
 
-    .ExampleImgSection > div {
+    .ExampleImgSection form {
+        flex-grow:1;
         width: 10rem;
         height: 10rem;
     }
 
-    .ExampleImgSection img {
-        width: inherit;
-        object-fit: scale-down;
-    }
-/*----------------上傳封面照片--------------------*/
+        .ExampleImgSection form div {
+            width: inherit;
+        }
+        .ExampleImgSection form img{
+            width:inherit;
+            object-fit:contain;
+        }
 
-/*活動描述*/
-.EventIntroSection textarea {
-    width: 100%;
-    height: 15rem;
-}
+            .ExampleImgSection form img[src="#"] {
+                display: none;
+            }
+            /*----------------上傳範例圖片--------------------*/
+            /*活動描述*/
+            .EventIntroSection textarea {
+                width: 100%;
+                height: 15rem;
+            }
 /*重置按鈕樣式*/
 .CreateEventBtnSection .btn:focus {
     box-shadow: none;
