@@ -11,5 +11,11 @@ public partial class EventImage
 
     public int EventId { get; set; }
 
+    public bool? ImageSample { get; set; }
+
+    public int CreatorId { get; set; }
+
+    public virtual Creator Creator { get; set; } = null!;
+
     public virtual Event Event { get; set; } = null!;
 }

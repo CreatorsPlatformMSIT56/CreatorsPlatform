@@ -17,6 +17,8 @@ public partial class Creator
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
 
+    public virtual ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
+
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
 
     public virtual ICollection<Plan> Plans { get; set; } = new List<Plan>();
