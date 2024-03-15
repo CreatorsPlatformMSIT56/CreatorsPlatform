@@ -83,7 +83,20 @@ namespace CreatorsPlatform.Controllers
 		{
 			return View();
 		}
-	}
+        public IActionResult Individual()
+        {
+            return View();
+        }
+        public IActionResult Login()
+        {
+            return View();
+        }
+        public IActionResult Signup()
+        {
+            return View();
+        }
+
+    }
 
 
 }
