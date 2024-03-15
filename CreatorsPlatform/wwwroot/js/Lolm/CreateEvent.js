@@ -18,9 +18,30 @@
             reader.readAsDataURL(input.files[0]);
 
         }
+    }
 
+    $(".ExampleImgSection input").change(
+        function () {
+            ReadExURL(this);
+        }
+    );
+
+    function ReadExURL(TheEle) {
+        if (TheEle.files && TheEle.files[0]) {
+
+            var reader = new FileReader();
+            console.log($(TheEle).next("div").children("img"));
+            reader.onload = function (e) {
+                $(TheEle).next("div").children("img").attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(TheEle.files[0]);
+
+        }
     }
 });
+
+
 //document.getElementById('upload').addEventListener('change', function () {
 //    var file = this.files[0];
 //    if (file) {
