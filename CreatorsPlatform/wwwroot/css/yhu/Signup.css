@@ -1,0 +1,13 @@
+﻿#Signup {
+    height: 60vh;
+    min-height: 60vh;
+}
+.ToMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.vr {
+   width:10px;
+   height:100%;
+}

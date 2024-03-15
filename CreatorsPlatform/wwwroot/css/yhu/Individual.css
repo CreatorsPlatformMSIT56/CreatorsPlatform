@@ -1,0 +1,10 @@
+﻿#FormOptions {
+    height: 60vh;
+    min-height: 60vh;
+}
+
+.ToMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<link href="/css/yhu/Signup.css" rel="stylesheet" />
+<div id="Signup" class="row">
+    <div class="col-md-4 row ToMiddle" style="height:60vh">
+        <div class="row ToMiddle">
+            <h5 class="ToMiddle m-0" ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10%" height="10% fill="currentColor" class="bi bi-1-circle" viewBox="0 0 16 16">
+                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
+                </svg>&nbsp;&nbsp;填寫基本資料
+            </h5>
+        </div>
+        <div class="d-flex ToMiddle" style="height:30%">
+            <div class="vr"></div>
+        </div>
+        <div class="row ToMiddle">
+            <h5 class="ToMiddle m-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" fill="currentColor" class="bi bi-2-circle" viewBox="0 0 16 16">
+                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
+                </svg>&nbsp;&nbsp;完成
+            </h5>
+        </div>
+    </div>
+    <div class="col-md-8 ToMiddle">
+        <form action="/submit-form" method="post">
+            <div class="row ToMiddle">
+                <div class="col-md-4">
+                    <div class="row border">
+                        <div class="row">
+                            <p> <label for="Email">Email</label></p>
+                            <p><input type="text" name="Email"></p>
+                        </div>
+                        <div class="row">
+                            <p><label for="UserID">ID</label></p>
+                            <p><input type="text" name="UserID"></p>  
+                        </div>
+                        <div class="row">
+                            <p><label for="UserPasswd">Passwd</label></p>
+                            <p><input type="text" name="UserPasswd"></p>
+                        </div>
+                        <div class="row">
+                            <p><label for="UserPasswdCheck">Passwd Check</label></p>
+                            <p><input type="text" name="UserPasswdCheck"></p>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
