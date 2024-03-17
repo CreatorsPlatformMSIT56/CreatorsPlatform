@@ -22,4 +22,6 @@ public partial class Plan
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
 
     public virtual Creator Creator { get; set; } = null!;
+
+    public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }

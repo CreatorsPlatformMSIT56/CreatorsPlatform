@@ -19,9 +19,13 @@ public partial class Subscription
 
     public int UserId { get; set; }
 
+    public int PlanId { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual Creator Creator { get; set; } = null!;
+
+    public virtual Plan Plan { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

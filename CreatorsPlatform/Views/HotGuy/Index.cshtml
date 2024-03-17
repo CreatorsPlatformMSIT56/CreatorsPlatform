@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    var result = (from e in Model
+                  orderby e.StartDate
+                  select e).Take(3);
 }
 ﻿<style>
 
@@ -24,6 +28,7 @@
 
      .EventDes {
          display: inline-block;
+         width: 70%;
      }
 
      .EventEndDate {
@@ -96,7 +101,7 @@
         <div class="evtTitle"></div>
         <p class="evtStatus">最新活動</p>
         <ul class="list-group">
-            @foreach (var item in Model)
+            @foreach (var item in result)
             {
                 <li class="list-group-item" position-relative m-4>
                     <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />

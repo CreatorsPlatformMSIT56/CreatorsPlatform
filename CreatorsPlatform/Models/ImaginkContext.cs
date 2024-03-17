@@ -308,6 +308,7 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.SubscriptionId).HasColumnName("SubscriptionID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
+            entity.Property(e => e.PlanId).HasColumnName("PlanID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Subscriptions)
@@ -318,6 +319,11 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.CreatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Subscript__Creat__5BE2A6F2");
+
+            entity.HasOne(d => d.Plan).WithMany(p => p.Subscriptions)
+                .HasForeignKey(d => d.PlanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Subscript__PlanI__367C1819");
 
             entity.HasOne(d => d.User).WithMany(p => p.Subscriptions)
                 .HasForeignKey(d => d.UserId)
