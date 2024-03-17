@@ -1,13 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using static CreatorsPlatform.Controllers.HomeController;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CreatorsPlatform.Controllers
 {
 	public class yhuController : Controller
 	{
-		public class Dftest
+		
+
+      
+
+        public class Dftest
 		{
 			public string? Nickname { get; set; }
 			public string? ImageURL { get; set; }
@@ -54,7 +61,9 @@ namespace CreatorsPlatform.Controllers
 		}
 		public IActionResult PersonalUser()
 		{
-			return View();
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            return View(member);
 		}
 		[HttpPost]
 		public ActionResult PersonalUser(int _CurrentMsg, string tapy)

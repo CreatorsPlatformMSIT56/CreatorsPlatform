@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(60);
+    options.IdleTimeout = TimeSpan.FromSeconds(600);
     options.Cookie.Name = "DefaultName";
     options.Cookie.Path = "/";
     options.Cookie.HttpOnly = true;

@@ -1,15 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
+﻿@model ImaginkContext;
 @* 編輯器的套件 *@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
 	  rel="stylesheet" /> *@
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
-
 @* 活動圖片 *@
 <div class="container-fluid px-0 EventHeaderImg"><img class="img-fluid" src="~/img/Lolm/EventContent/PekoraImg.jpg" alt="Alternate Text" /></div>
 @* 說明欄 *@
@@ -39,6 +33,15 @@
                 現在，讓我們一同投稿，用插畫來捕捉這震撼人心的時刻吧！<br />
             </p>
         </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h5 class="ms-5">範例圖片</h5>
+            <div class="row">
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="Alternate Text" /></div>
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="Alternate Text" /></div>
+            </div>
+        </div>        
     </div>
 </div>
 @* 投稿區 *@

@@ -17,11 +17,13 @@ function MessagUpdata(UserCurrentMsgtype){
             for (i = CurrentMsg; i < response.length; i++) {
                 let MsgHtml =
                     `<li>
-             <p>${response[i].nickname}</p>
-             <p>${response[i].description}</p>
-             <img src="${response[i].imageURL}" alt="">
-             <p>${response[i].title}</p>
-            </li>`;
+                    <div class="mb-3">
+                    <p>${response[i].nickname}</p>
+                    <p>${response[i].description}</p>
+                    <img src="${response[i].imageURL}" alt="">
+                    <p>${response[i].title}</p>
+                    </div>            
+                    </li>`;
                 $('#Messages').append(MsgHtml);
             }
         }
