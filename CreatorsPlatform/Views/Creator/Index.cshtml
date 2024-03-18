@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Creator Home";
 }
-
+@model CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel
 
 <!-- Banner -->
 <div class="text-center" id="banner">
@@ -11,12 +11,14 @@
 <div class="container p-3">
     <div class="row">
         <div class="col-sm-2 col-md-2 col-lg-1">
-            <img class="rounded-circle img-fluid" src="https://fakeimg.pl/100/" alt="">
+            @* <img class="rounded-circle img-fluid" src="https://fakeimg.pl/100/" alt=""> *@
+            <img class="rounded-circle img-fluid" src="data:image/png;base64,@(Convert.ToBase64String(Model.UserAvatar ?? Array.Empty<byte>()))"
+                 alt="" style="max-width:100px; max-height:100px;">
         </div>
         <div class="col-sm-10 col-md-10 col-lg-11">
             <div class="row">
                 <div class="col">
-                    <h4>創作者名稱</h4>
+                    <h4>@Model.UserName</h4>
                 </div>
                 <!-- 強制換行 -->
                 <div class="w-100"></div>
@@ -50,8 +52,9 @@
 <div class="tab-content" id="creatorTabContent">
     <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <div class="p-3">
+            <!-- 創作者描述 -->
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi enim nunc faucibus a pellentesque sit. Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Nisl pretium fusce id velit. Et leo duis ut diam quam nulla. In massa tempor nec feugiat nisl pretium. Augue mauris augue neque gravida in fermentum et. Ante in nibh mauris cursus mattis. Faucibus turpis in eu mi bibendum neque. Sagittis vitae et leo duis ut diam quam nulla. Volutpat odio facilisis mauris sit. Congue quisque egestas diam in arcu cursus euismod quis viverra. Proin fermentum leo vel orci porta non pulvinar. Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. Sed cras ornare arcu dui vivamus. Enim blandit volutpat maecenas volutpat blandit aliquam etiam erat velit. Amet nisl purus in mollis nunc. Elementum curabitur vitae nunc sed velit dignissim. Convallis convallis tellus id interdum velit laoreet id donec ultrices.
+                @Model.Creator.Description
             </p>
         </div>
     </div>
@@ -63,11 +66,11 @@
                     <a style="display:block" href="#">
                         <div class="card">
                             <img class="card-img-top"
-                                 src="https://fakeimg.pl/500/"
-                                 alt="Card image cap"
-                                 @* style="max-height: 12rem; object-fit: cover" *@ />
+                                    src="https://fakeimg.pl/500/"
+                                    alt="Card image cap"
+                            @* style="max-height: 12rem; object-fit: cover" *@ />
                             <div class="card-body"
-                                 @* style="height: 10rem" *@ >
+                            @* style="height: 10rem" *@>
                                 <h5 class="card-title">作品標題</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">作品分類</h6>
                                 <p class="card-text">
@@ -117,27 +120,31 @@
         <!-- 內容Container with 3 Cards in 1 row -->
         <div class="card-container container">
             <div class="card-deck row p-3">
+            @foreach(var e in Model.Commission)
+            {
                 <div class="col-4">
                     <a style="display:block" href="#">
                         <div class="card">
                             <img class="card-img-top"
-                                 src="https://fakeimg.pl/500/"
-                                 alt="Card image cap"
+                                    src="https://fakeimg.pl/500/"
+                                    alt="Card image cap"
                             @* style="max-height: 12rem; object-fit: cover" *@ />
                             <div class="card-body"
                             @* style="height: 10rem" *@>
-                                <h5 class="card-title">委託標題</h5>
+                                <h5 class="card-title">@e.Title</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">委託分類</h6>
                                 <p class="card-text">
-                                    委託簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述簡述(多餘的要吃掉)
+                                    @e.Description
                                 </p>
                                 <h5 class="card-text commisionPrice" style="font-weight:bolder">
-                                    5000
+                                    @e.PriceMin
                                 </h5>
                             </div>
                         </div>
                     </a>
                 </div>
+            }
+                <!-- 重複 -->
                 <div class="col-4">
                     <div class="card">
                         <img class="card-img-top"
