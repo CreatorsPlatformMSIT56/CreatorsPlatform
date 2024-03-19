@@ -1,11 +1,16 @@
 ﻿using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
 {
     public class CreatorController : Controller
     {
+        
+
+
         // 導入Context
         private readonly ImaginkContext _context;
 
@@ -16,10 +21,15 @@ namespace CreatorsPlatform.Controllers
 
         public class CreatorDetailsViewModel
         {
-            public Creator Creator { get; set; }
-            public IEnumerable<Commission> Commissions { get; set; }
-            public byte[] UserAvatar { get; set; }
-            public string UserName { get; set; }
+            public string Name { get; set; } = "Error";
+            public string Email { get; set; } = "Error";
+            public string Password { get; set; } = "Error";
+
+
+            public Creator ?Creator { get; set; }
+            public IEnumerable<Commission> ?Commissions { get; set; }
+            public byte[] ?UserAvatar { get; set; }
+            public string ?UserName { get; set; }
         }
 
         // 創作者首頁
@@ -35,6 +45,9 @@ namespace CreatorsPlatform.Controllers
             var userName = creator?.Users.FirstOrDefault()?.UserName;
 
             var avatar = creator?.Users.FirstOrDefault()?.Avatar;
+
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
             var viewModel = new CreatorDetailsViewModel
             {

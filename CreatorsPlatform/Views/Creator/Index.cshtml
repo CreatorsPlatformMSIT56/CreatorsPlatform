@@ -56,7 +56,7 @@
         <div class="p-3">
             <!-- 創作者描述 -->
             <p>
-                @Model.Creator.Description
+                @Model.Creator?.Description
             </p>
         </div>
     </div>
@@ -125,7 +125,7 @@
             @foreach(var e in Model.Commissions)
             {
                 <div class="col-4">
-                    <a style="display:block" href="#">
+                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link">
                         <div class="card">
                             <img class="card-img-top"
                                     src="https://fakeimg.pl/500/"
@@ -134,7 +134,7 @@
                             <div class="card-body"
                             @* style="height: 10rem" *@>
                                 <h5 class="card-title">@e.Title</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">委託分類</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">@e.SubtitleId</h6>
                                 <p class="card-text commision-description">
                                     @e.Description
                                 </p>
