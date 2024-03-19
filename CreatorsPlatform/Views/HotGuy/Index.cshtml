@@ -109,7 +109,14 @@
             {
                 <li class="list-group-item" position-relative m-4>
                     <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                    <h3><span>@Html.DisplayFor(modelItem => item.EventName)</span></h3><br />
+                    <h3>
+                        <span>
+                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+                                @Html.DisplayFor(modelItem => item.EventName)
+                            </a>
+                        </span>
+                    </h3>
+                    <br />
                     <p class="EventDes">@Html.DisplayFor(modelItem => item.Description)</p>
                     <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
                 </li>

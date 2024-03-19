@@ -1,7 +1,37 @@
-﻿@model ImaginkContext;
+﻿@* @model ImaginkContext; *@
+@model IEnumerable<CreatorsPlatform.Models.EventsAndImage>
 @* 編輯器的套件 *@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
 	  rel="stylesheet" /> *@
+
+@* 新稱部分 *@
+@{
+    // 新增一個抓 id 並把他轉成 int32 之變數
+    int AAA = Convert.ToInt32(TempData["Eid"]);
+
+    // var BBB = Model.ToList();
+
+    IEnumerable<EventsAndImage> query = from CCC in Model
+                                        where CCC.EventId == AAA
+                                        select CCC;
+    // try
+    // {
+    // if (Model != null)
+    // {
+    //     query = from CCC in Model
+    //             where CCC.EventId == AAA
+    //             select CCC;
+    // }
+    // }
+    // catch (ArgumentNullException)
+    // {
+            //     return;
+    // }
+}
+
+@* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
+<h1>AAA</h1>
+<h1>@query.Single().EventName</h1>
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 @* 活動圖片 *@
