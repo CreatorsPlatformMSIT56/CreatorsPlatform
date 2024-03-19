@@ -7,13 +7,17 @@ public partial class EventImage
 {
     public int EventImageId { get; set; }
 
-    public byte[]? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public int EventId { get; set; }
 
     public bool? ImageSample { get; set; }
 
     public int CreatorId { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? ImageTitle { get; set; }
 
     public virtual Creator Creator { get; set; } = null!;
 

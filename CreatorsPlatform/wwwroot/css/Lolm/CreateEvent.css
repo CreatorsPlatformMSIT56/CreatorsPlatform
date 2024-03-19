@@ -20,10 +20,13 @@
 #preview_progressbarTW_img {
     width: 100%;
     object-fit: cover;
-    object-position: center -8rem;
+    object-position: 50% -8rem;
 }
 /*----------------上傳封面照片--------------------*/
 
+#editor{
+    height:200px;
+}
 /*----------------上傳範例圖片--------------------*/
 /*預覽圖片範圍*/
 .ExampleImgSection {
