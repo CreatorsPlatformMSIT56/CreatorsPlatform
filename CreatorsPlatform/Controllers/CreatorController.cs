@@ -17,7 +17,7 @@ namespace CreatorsPlatform.Controllers
         public class CreatorDetailsViewModel
         {
             public Creator Creator { get; set; }
-            public IEnumerable<Commission> Commission { get; set; }
+            public IEnumerable<Commission> Commissions { get; set; }
             public byte[] UserAvatar { get; set; }
             public string UserName { get; set; }
         }
@@ -29,8 +29,8 @@ namespace CreatorsPlatform.Controllers
                 .Include(c => c.Users)
                 .FirstOrDefault(c => c.CreatorId == id);
 
-            //var commision = _context.Commissions
-            //    .FirstOrDefault(c => c.CreatorId == id);
+            var commision = _context.Commissions
+                .FirstOrDefault(c => c.CreatorId == id);
 
             var userName = creator?.Users.FirstOrDefault()?.UserName;
 
@@ -40,7 +40,7 @@ namespace CreatorsPlatform.Controllers
             {
                 UserName = userName,
                 Creator = creator,
-                //Commission = commision,
+                Commissions = _context.Commissions.Where(c => c.CreatorId == id),
                 UserAvatar = avatar
             };
             return View(viewModel);
