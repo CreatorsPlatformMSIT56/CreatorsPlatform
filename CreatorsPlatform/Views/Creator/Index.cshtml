@@ -138,9 +138,10 @@
                                 <p class="card-text commision-description">
                                     @e.Description
                                 </p>
-                                <h5 class="card-text commisionPrice" style="font-weight:bolder">
-                                    @e.PriceMin
-                                </h5>
+                                <h5 class="card-text commisionPriceMin" style="font-weight:bolder">
+                                        @e.PriceMin.ToString("C0")
+                                        @(e.PriceMax.HasValue ? "~" + e.PriceMax?.ToString("N0") : "")
+                                    </h5>
                             </div>
                         </div>
                     </a>
