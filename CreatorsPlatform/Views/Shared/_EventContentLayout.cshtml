@@ -1,0 +1,147 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Imagink</title>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Shared/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CreatorsPlatform.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-0">
+            <div class="container">
+                @* 網站商標 *@
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img id="MainIcon" src="~/img/Shared/MainIconEx.jpg" /></a>
+                @* 網站名稱 *@
+                @* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><h2 class="mb-0">Imagink</h2></a> *@
+
+                @* 響應式的菜單按鈕 *@
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @* 響應式摺疊部分 *@
+                <div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
+                    <form class="d-flex" style="position: relative;">
+                        <input class="form-control SearchFormInput" type="search" placeholder="搜尋作品/創作者/標籤" aria-label="Search">
+                        <button class="SearchFormBtn" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                            </svg>
+                        </button>
+                    </form>
+                    <ul class="navbar-nav NavSection">
+                        <li class="nav-item" id="MemberSection">
+                            @* 如果登入 *@
+                            @if (1 == 2)
+                            {
+                                <a href="#" class="MemberDropdown">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                    </svg>
+                                </a>
+                                <ul class="d-grid gap-1 MemberDropdownList">
+                                    <li><a class="text-start p-2" href="#">訂閱中的方案</a></li>
+                                    <li><a class="text-start p-2" href="#">會員設定</a></li>
+                                    <li><a class="text-start p-2" href="#">登出</a></li>
+                                </ul>
+                            }
+                            @* 如果未登入 *@
+                            else
+                            {
+                                <a href="#" class="MemberDropdown">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                    </svg>
+                                </a>
+                                <ul class="MemberDropdownList">
+                                    <li><a asp-action="Login" asp-controller="Member" class="p-1">登入</a><a asp-action="Signup" asp-controller="Member">註冊</a></li>
+                                </ul>
+                            }
+                        </li>
+                        <!--方便通道開始-->
+                        <h3>以下是方便傳送道 開發完畢後請刪除</h3>
+                        <div>
+                            <p>組長做的頁面:</p>
+                            <a asp-action="IMAGINK" asp-controller="yhu" class="link-success">IMAGINK</a>
+                            <a asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a>
+                            <a asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a>
+                            <a asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a>
+                            <a asp-action="Login" asp-controller="yhu" class="link-success">Login</a>
+                            <a asp-action="Payment" asp-controller="yhu" class="link-success">Paymentr</a>
+                            <a asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a>
+                        </div>
+                        <div>
+                            <p>資料庫大師做的頁面:</p>
+                            <a asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a>
+                        </div>
+                        <div>
+                            <p>漫畫王做的頁面:</p>
+                            <a asp-action="CreateEvent" asp-controller="Lolm" class="link-success">發起活動</a>
+                            <a asp-action="EventContent" asp-controller="Lolm" class="link-success">活動內容</a>
+                        </div>
+                        <div>
+                            <p>波溜做的頁面:</p>
+                            <a asp-action="Index" asp-controller="Creator" class="link-success">Index</a>
+                            <a asp-action="AddPost" asp-controller="Creator" class="link-success">AddPost</a>
+                            <a asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">4</a>
+                            <a asp-action="GetPost" asp-controller="Creator" class="link-success">GetPost</a>
+                        </div>
+                        <div>
+                            <p>會員頁面:</p>
+                            <a asp-action="Login" asp-controller="Member" class="link-success">登入</a>
+                            <a asp-action="Signup" asp-controller="Member" class="link-success">註冊</a>
+                            <a asp-action="Individual" asp-controller="Member" class="link-success">個人設定</a>
+                        </div>
+                        <!--方便通道結束 不用洩了-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+
+    <footer class="border-top footer text-muted">
+        <div class="container py-2 FooterContainer">
+            <div class="d-flex">
+                <div class="me-3">
+                    &copy; 2024 - CreatorsPlatform - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <div class="me-3"><a href="#">聯絡我們</a></div>
+                <div class="me-3"><a href="#">隱私政策</a></div>
+                <div class="me-3">
+                    <a href="facebook.com">
+                        <i class="SocialIcon fs-4 bi bi-facebook"></i>
+                    </a>
+                    <a href="instagram">
+                        <i class="SocialIcon fs-4 bi bi-instagram"></i>
+                    </a>
+                    <a href="twitter">
+                        <i class="SocialIcon fs-4 bi bi-twitter-x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Shared/   .js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

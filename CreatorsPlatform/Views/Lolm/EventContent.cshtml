@@ -11,9 +11,11 @@
 
     // var BBB = Model.ToList();
 
-    IEnumerable<EventsAndImage> query = from CCC in Model
-                                        where CCC.EventId == AAA
-                                        select CCC;
+    // *************下面出錯了，先註解***************
+    // IEnumerable<EventsAndImage> query = from CCC in Model
+    //                                     where CCC.EventId == AAA
+    //                                     select CCC;
+
     // try
     // {
     // if (Model != null)
@@ -31,7 +33,8 @@
 
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
 <h1>AAA</h1>
-<h1>@query.Single().EventName</h1>
+<!--*************下面出錯了，先註解***************-->
+@* <h1>@query.Single().EventName</h1> *@
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 @* 活動圖片 *@

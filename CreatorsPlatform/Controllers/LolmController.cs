@@ -27,14 +27,17 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> EventContent(int? id)
         {
             TempData["Eid"] = id;
-            var imaginkContext = _context.EventsAndImages;
+            // *************下面出錯了，先註解***************
+            //var imaginkContext = _context.EventsAndImages;
 
             // 原本想在 controller 寫 LINQ，但不會傳到 view
             //IEnumerable<EventsAndImage> query = from CCC in imaginkContext
             //                                    where CCC.EventId == id
             //                                    select CCC;
 
-            return View(await imaginkContext.ToListAsync());
+            return View();
+            // *************下面出錯了，先註解***************
+            //return View(await imaginkContext.ToListAsync());
         }
 
         public IActionResult CreateEvent()
