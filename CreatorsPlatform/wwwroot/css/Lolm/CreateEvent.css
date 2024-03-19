@@ -6,6 +6,10 @@
 .SetEventTime > * {
     margin-right: 1rem;
 }
+/*選擇佈景顏色*/
+.EventColoerSection > *{
+    margin-right: 1rem;
+}
 /*----------------上傳封面照片--------------------*/
 /*限制上傳圖片顯示範圍*/
 .PreviewImgWarp {

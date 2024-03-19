@@ -10,7 +10,19 @@
 				<div class="mb-3" id="editor">
 				</div>
 			</div>
-			<div class="mb-3 d-flex SetEventTime"><b>時程設定</b><input type="datetime-local" name="name" value="" /><span>~</span><input type="datetime-local" name="name" value="" /></div>
+			<div class="mb-3 d-flex SetEventTime">
+				<b>時程設定</b>
+				<input type="datetime-local" name="name" value="" />
+				<span>~</span>
+				<input type="datetime-local" name="name" value="" />
+			</div>
+			<div class="mb-3 d-flex EventColoerSection">
+				<b>佈景顏色</b>
+				<label for="EventTitleColorInput">標題顏色</label>
+				<input type="color" id="EventTitleColorInput" name="EventTitleColor" value="" />
+				<label for="EventIntroColorInput">說明欄顏色</label>
+				<input type="color" id="EventIntroColorInput" name="EventIntroColor" value="" />
+			</div>
 		</div>
 		<div class="col-5">
 			<div>
@@ -54,6 +66,8 @@
 		</div>
 	</div>
 </div>
+
+
 
 <script src="~/js/Lolm/CreateEvent.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
