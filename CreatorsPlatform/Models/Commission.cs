@@ -22,6 +22,7 @@ public partial class Commission
     public int CreatorId { get; set; }
 
     public int UserId { get; set; }
+    public int SubtitleId { get; set; }
 
     public virtual ICollection<CommissionImage> CommissionImages { get; set; } = new List<CommissionImage>();
 
