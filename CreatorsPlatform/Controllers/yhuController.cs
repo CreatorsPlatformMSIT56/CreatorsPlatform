@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,9 +13,15 @@ namespace CreatorsPlatform.Controllers
 {
 	public class yhuController : Controller
 	{
-		
+        private readonly ImaginkContext _context;
 
-      
+        public yhuController(ImaginkContext context)
+        {
+            _context = context;
+        }
+
+
+
 
         public class Dftest
 		{
@@ -81,8 +90,16 @@ namespace CreatorsPlatform.Controllers
 			return Json(updateList);
 		}
 		public IActionResult IMAGINK()
-		{
-			return View();
+        {
+            var ContentsData = 
+								from CreatorsData in  _context.Creators
+                                join UserData in _context.Users on CreatorsData.CreatorId equals UserData.CreatorId
+                                select new { UserData.UserName, UserData.Avatar, CreatorsData.CreatorId, CreatorsData.Description };
+
+
+
+
+            return View();
 		}
 		public IActionResult Payment()
 		{

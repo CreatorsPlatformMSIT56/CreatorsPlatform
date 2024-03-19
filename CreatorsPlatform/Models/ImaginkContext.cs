@@ -35,6 +35,8 @@ public partial class ImaginkContext : DbContext
 
     public virtual DbSet<EventImage> EventImages { get; set; }
 
+    public virtual DbSet<EventsAndImage> EventsAndImages { get; set; }
+
     public virtual DbSet<FriendList> FriendLists { get; set; }
 
     public virtual DbSet<Plan> Plans { get; set; }
@@ -228,13 +230,11 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
-            entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventName).HasMaxLength(200);
             entity.Property(e => e.EventStyle)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.EventUrl).HasColumnName("EventURL");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Events)
@@ -254,6 +254,7 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
             entity.Property(e => e.EventId).HasColumnName("EventID");
+            entity.Property(e => e.ImageTitle).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
 
             entity.HasOne(d => d.Creator).WithMany(p => p.EventImages)
@@ -265,6 +266,22 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.EventId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__EventImag__Event__6383C8BA");
+        });
+
+        modelBuilder.Entity<EventsAndImage>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("EventsAndImages");
+
+            entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.EventDes).HasMaxLength(1000);
+            entity.Property(e => e.EventId).HasColumnName("EventID");
+            entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
+            entity.Property(e => e.EventName).HasMaxLength(200);
+            entity.Property(e => e.EvtImgId).HasColumnName("EvtImgID");
+            entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+            entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<FriendList>(entity =>
