@@ -66,7 +66,7 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者編輯訂閱方案
-        public IActionResult EditSubcriptionPlans()
+        public IActionResult EditSubscriptionPlans()
         {
             return View();
         }
