@@ -13,7 +13,7 @@ public partial class Event
 
     public DateTime EndDate { get; set; }
 
-    public byte[]? EventUrl { get; set; }
+    public string? Banner { get; set; }
 
     public string Description { get; set; } = null!;
 

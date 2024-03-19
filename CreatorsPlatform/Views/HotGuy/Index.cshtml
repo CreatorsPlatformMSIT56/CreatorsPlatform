@@ -6,6 +6,10 @@
     var result = (from e in Model
                   orderby e.StartDate
                   select e).Take(3);
+
+    var query = from c in Model
+                where c.EventId == 1
+                select c;
 }
 ﻿<style>
 
@@ -14,7 +18,7 @@
      #BBB,
      #CCC {
          /* max-height: inherit; */
-         height: 25vh !important;
+         height: 40vh !important;
      }
 
      .listImg {
@@ -120,7 +124,7 @@
         <ul class="list-group">
             <li class="list-group-item" position-relative m-4>
                 <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
+                <h3><span>@Html.DisplayFor(query => query.FirstOrDefault().EventName)</span></h3><br />
                 <p class="EventDes">Insert Event Description</p>
                 <p class="EventEndDate">截止日期</p>
             </li>
