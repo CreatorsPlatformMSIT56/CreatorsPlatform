@@ -36,6 +36,4 @@ public partial class Commission
     public virtual Subtitle? Subtitle { get; set; }
 
     public virtual User User { get; set; } = null!;
-    public virtual Subtitle Subtitle { get; set; } = null!;
-
 }

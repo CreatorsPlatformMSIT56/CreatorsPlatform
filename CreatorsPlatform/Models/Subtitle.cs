@@ -16,5 +16,4 @@ public partial class Subtitle
     public virtual ICollection<Commission> Commissions { get; set; } = new List<Commission>();
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
-    public virtual ICollection<Commission> Commissions { get; set; } = new List<Commission>();
 }
