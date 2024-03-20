@@ -33,4 +33,6 @@ public partial class Commission
     public virtual Creator Creator { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+    public virtual Subtitle Subtitle { get; set; } = null!;
+
 }

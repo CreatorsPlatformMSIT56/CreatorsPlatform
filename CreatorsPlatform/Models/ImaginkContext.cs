@@ -130,6 +130,11 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Commissio__UserI__59063A47");
+
+            entity.HasOne(d => d.Subtitle).WithMany(p => p.Commissions)
+                .HasForeignKey(d => d.SubtitleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Commissio__Subti__4D5F7D71");
         });
 
         modelBuilder.Entity<CommissionImage>(entity =>
