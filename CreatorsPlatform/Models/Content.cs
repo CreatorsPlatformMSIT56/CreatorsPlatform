@@ -15,7 +15,7 @@ public partial class Content
 
     public DateTime? PullOffDate { get; set; }
 
-    public byte[] ImageUrl { get; set; } = null!;
+    public byte[]? ImageUrl { get; set; }
 
     public int? Likes { get; set; }
 

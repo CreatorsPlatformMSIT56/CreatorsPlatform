@@ -13,5 +13,7 @@ public partial class Subtitle
 
     public virtual Category Category { get; set; } = null!;
 
+    public virtual ICollection<Commission> Commissions { get; set; } = new List<Commission>();
+
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
 }

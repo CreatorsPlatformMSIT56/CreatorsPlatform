@@ -19,13 +19,13 @@ public partial class EventsAndImage
 
     public int? EventCreator { get; set; }
 
-    public int EventImageId { get; set; }
+    public int? EventImageId { get; set; }
 
-    public byte[]? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public string? ImageDes { get; set; }
 
-    public int ImageCreator { get; set; }
+    public int? ImageCreator { get; set; }
 
     public bool? ImageSample { get; set; }
 }
