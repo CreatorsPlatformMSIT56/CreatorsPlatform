@@ -118,6 +118,7 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.CommissionId).HasColumnName("CommissionID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.SubtitleId).HasColumnName("SubtitleID");
             entity.Property(e => e.Title).HasMaxLength(500);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -125,6 +126,10 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.CreatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Commissio__Creat__5812160E");
+
+            entity.HasOne(d => d.Subtitle).WithMany(p => p.Commissions)
+                .HasForeignKey(d => d.SubtitleId)
+                .HasConstraintName("FK__Commissio__Subti__4D5F7D71");
 
             entity.HasOne(d => d.User).WithMany(p => p.Commissions)
                 .HasForeignKey(d => d.UserId)
@@ -280,7 +285,6 @@ public partial class ImaginkContext : DbContext
                 .ToView("EventsAndImages");
 
             entity.Property(e => e.EndDate).HasColumnType("datetime");
-            entity.Property(e => e.EventDes).HasMaxLength(1000);
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.EventName).HasMaxLength(200);
