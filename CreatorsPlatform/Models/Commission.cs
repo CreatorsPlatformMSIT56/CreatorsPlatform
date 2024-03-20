@@ -22,7 +22,8 @@ public partial class Commission
     public int CreatorId { get; set; }
 
     public int UserId { get; set; }
-    public int SubtitleId { get; set; }
+
+    public int? SubtitleId { get; set; }
 
     public virtual ICollection<CommissionImage> CommissionImages { get; set; } = new List<CommissionImage>();
 
@@ -32,5 +33,9 @@ public partial class Commission
 
     public virtual Creator Creator { get; set; } = null!;
 
+    public virtual Subtitle? Subtitle { get; set; }
+
     public virtual User User { get; set; } = null!;
+    public virtual Subtitle Subtitle { get; set; } = null!;
+
 }

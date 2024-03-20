@@ -34,22 +34,22 @@
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
 <h1>AAA</h1>
 <h1>@query.Single().EventName</h1>
-
-<link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
+@* <h1>@query.Single().EventName</h1> *@
+@* <h1>@query.Single().EventName</h1> *@
 @* <link href="~/css/Lolm/EventQuill.css" rel="stylesheet" /> *@
 
 
+@* <h1>@query.Single().EventName</h1> *@
+@* <h1>@query.Single().EventName</h1> *@
+
+<link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 @* 活動圖片 *@
 <div class="container-fluid px-0 EventHeaderImg"><img class="img-fluid" src="~/img/Lolm/EventContent/PekoraImg.jpg" alt="Alternate Text" /></div>
-@* 說明欄 *@
-<div class="container-fluid EventIntroSection">
-	<div class="row d-flex align-items-center pt-4">
-		@* 主辦 *@
-		<div class="col-3 d-flex align-items-center">
-			<a class="d-flex align-items-center" href="#"><img class="MidSizeHeadShot" src="~/img/Lolm/EventContent/MajoImg.jpg" alt="Alternate Text" /><b>Rust同好會</b></a>
-			<p class="mb-0">主辦</p>
-		</div>
-
+    <div class="row d-flex align-items-center pt-4">
+        @* 主辦 *@
+        <div class="col-3 d-flex align-items-center">
+            <a class="d-flex align-items-center" href="#"><img class="MidSizeHeadShot" src="~/img/Lolm/EventContent/MajoImg.jpg" alt="Alternate Text" /><b>Rust同好會</b></a>
+            <p class="mb-0">主辦</p>
 		<div class="col-6 d-flex justify-content-center EventTitle">
 			<h3>Rust最終日全面開戰名場面</h3>
 		</div>
@@ -71,6 +71,38 @@
 			</div>
 		</div>
 	</div>
+        <div class="col">
+            <h5 class="ms-5">範例圖片</h5>
+            <div class="row">
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="Alternate Text" /></div>
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="Alternate Text" /></div>
+            </div>
+        </div>        
+    </div>
+        <div class="col">
+            <h5 class="ms-5">範例圖片</h5>
+            <div class="row">
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="Alternate Text" /></div>
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="Alternate Text" /></div>
+            </div>
+        </div>        
+    </div>
+        <div class="col">
+            <h5 class="ms-5">範例圖片</h5>
+            <div class="row">
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="Alternate Text" /></div>
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="Alternate Text" /></div>
+            </div>
+        </div>        
+    </div>
+        <div class="col">
+            <h5 class="ms-5">範例圖片</h5>
+            <div class="row">
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="Alternate Text" /></div>
+                <div class="col-6 EventExampleImg"><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="Alternate Text" /></div>
+            </div>
+        </div>        
+    </div>
 </div>
 @* 投稿區 *@
 <div class="container-fluid">

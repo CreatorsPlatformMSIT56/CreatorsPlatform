@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Collections;
 using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
@@ -21,41 +22,41 @@ namespace CreatorsPlatform.Controllers
 
         public class CreatorDetailsViewModel
         {
-            public string Name { get; set; } = "Error";
-            public string Email { get; set; } = "Error";
-            public string Password { get; set; } = "Error";
+            //public string Name { get; set; } = "Error";
+            //public string Email { get; set; } = "Error";
+            //public string Password { get; set; } = "Error";
 
 
-            public Creator ?Creator { get; set; }
-            public IEnumerable<Commission> ?Commissions { get; set; }
-            public byte[] ?UserAvatar { get; set; }
-            public string ?UserName { get; set; }
+            public Creator? Creator { get; set; }
+            public string? UserName { get; set; }
+            public byte[]? UserAvatar { get; set; }
+            public IEnumerable<Commission>? Commissions { get; set; }
         }
 
         // 創作者首頁
         public IActionResult Index(int id)
         {
+            //var memberJson = HttpContext.Session.GetString("key");
+            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+
             var creator = _context.Creators
                 .Include(c => c.Users)
                 .FirstOrDefault(c => c.CreatorId == id);
 
-            var commision = _context.Commissions
-                .FirstOrDefault(c => c.CreatorId == id);
-
             var userName = creator?.Users.FirstOrDefault()?.UserName;
 
-            var avatar = creator?.Users.FirstOrDefault()?.Avatar;
+            var userAvatar = creator?.Users.FirstOrDefault()?.Avatar;
 
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var commisions = _context.Commissions.Where(c => c.CreatorId == id);
 
             var viewModel = new CreatorDetailsViewModel
             {
-                UserName = userName,
                 Creator = creator,
-                Commissions = _context.Commissions.Where(c => c.CreatorId == id),
-                UserAvatar = avatar
+                UserName = userName,
+                UserAvatar = userAvatar,
+                Commissions = commisions
             };
+
             return View(viewModel);
         }
 
