@@ -60,7 +60,7 @@
             </div>
             <div class="mt-1 CreateEventBtnSection">
                 <button class="btn" id="cancelButton" type="button">取消</button>
-                <button class="btn" id="PreviewButton" type="button" onclick="htmlch()">預覽</button>
+                <button class="btn" id="PreviewButton" type="button" onclick="getQuillContent()">預覽</button>
                 <button class="btn" id="okButton" type="button">發起活動</button>
             </div>
         </div>
@@ -73,8 +73,8 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script src="/js/Lolm/Quill.js"></script>
 <script>
-    function htmlch() {
-        const html = quill.getSemanticHTML();
-        console.log(html);
+    function getQuillContent() {
+        const QuillContent = quill.getContents();
+        @ViewData["ABC"]=QuillContent;
     }
 </script>
