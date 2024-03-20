@@ -15,16 +15,17 @@
     background-color: rgb(217 244 246);
 }
 /*範例圖片*/
-.EventExampleImg{
+.EventExampleImg {
     max-height: 20rem;
-    text-align:center;
+    text-align: center;
 }
-.EventExampleImg img {
-    height: 100%;
-    object-fit: contain;
-    /*    padding-left: 3rem;
+
+    .EventExampleImg img {
+        height: 100%;
+        object-fit: contain;
+        /*    padding-left: 3rem;
     padding-right: 3rem;*/
-}
+    }
 /*中型參加者頭像*/
 .MidSizeHeadShot {
     width: 40px;
@@ -70,8 +71,11 @@
     .EventPostImgPart img {
         object-fit: cover;
     }
-
-/*對話盒的樣式*/
+/*移到投稿上面的鼠標變化*/
+.EventPostImgPart, .EventPostTitle {
+    cursor: pointer;
+}
+/*進行投稿對話盒的樣式*/
 .modal-header {
     background-color: #c3e0fd;
     /*    color: white;
@@ -135,3 +139,11 @@
         box-shadow: none;
         border: none;
     }
+
+.PostContentModal {
+    max-width: 60%;
+}
+
+.EventPostModalImg {
+    max-height: 60vh;
+}
