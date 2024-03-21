@@ -47,7 +47,6 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public string CreateEvent(string DataFromClient)
 		{
-			TempData["DataFromClient"] = DataFromClient;
 			return DataFromClient;
 		}
 
