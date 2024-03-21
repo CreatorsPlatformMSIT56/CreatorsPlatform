@@ -34,8 +34,8 @@ namespace CreatorsPlatform.Controllers
 			//                                    where CCC.EventId == id
 			//                                    select CCC;
 
-
-
+			// 取得TempData裡面裝的字串
+			ViewBag.QuillContent = TempData.Peek("DataFromClient");			
 			return View(await imaginkContext.ToListAsync());
 		}
 
@@ -44,7 +44,13 @@ namespace CreatorsPlatform.Controllers
 			return View();
 		}
 
-		// 
+		[HttpPost]
+		public string CreateEvent(string DataFromClient)
+		{
+			TempData["DataFromClient"] = DataFromClient;
+			return DataFromClient;
+		}
+
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null)

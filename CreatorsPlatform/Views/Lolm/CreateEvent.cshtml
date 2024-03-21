@@ -72,10 +72,3 @@
 <script src="~/js/Lolm/CreateEvent.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script src="/js/Lolm/Quill.js"></script>
-<script>
-    function getQuillContent() {
-        const QuillContent = quill.getContents();
-        var DeltaJson = JSON.stringify(QuillContent);
-        TempData["QuillContent"] = DeltaJson;
-    }
-</script>
