@@ -139,7 +139,10 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/Shared/Quill.js" asp-append-version="true"></script>
+
+    @* 這是客製文字編輯器的引用，註解掉以免避免影響到其他View的客製化 *@
+    @* <script src="~/js/Shared/Quill.js" asp-append-version="true"></script> *@
+
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
