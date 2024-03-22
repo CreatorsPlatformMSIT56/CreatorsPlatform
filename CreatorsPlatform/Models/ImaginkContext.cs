@@ -27,6 +27,8 @@ public partial class ImaginkContext : DbContext
 
     public virtual DbSet<CommissionOrder> CommissionOrders { get; set; }
 
+    public virtual DbSet<CommissionWithImageAndWord> CommissionWithImageAndWords { get; set; }
+
     public virtual DbSet<Content> Contents { get; set; }
 
     public virtual DbSet<Creator> Creators { get; set; }
@@ -129,17 +131,13 @@ public partial class ImaginkContext : DbContext
 
             entity.HasOne(d => d.Subtitle).WithMany(p => p.Commissions)
                 .HasForeignKey(d => d.SubtitleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Commissio__Subti__4D5F7D71");
 
             entity.HasOne(d => d.User).WithMany(p => p.Commissions)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Commissio__UserI__59063A47");
-
-            entity.HasOne(d => d.Subtitle).WithMany(p => p.Commissions)
-                .HasForeignKey(d => d.SubtitleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Commissio__Subti__4D5F7D71");
         });
 
         modelBuilder.Entity<CommissionImage>(entity =>
@@ -174,6 +172,22 @@ public partial class ImaginkContext : DbContext
                 .HasForeignKey(d => d.CommissionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Commissio__Commi__59FA5E80");
+        });
+
+        modelBuilder.Entity<CommissionWithImageAndWord>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("CommissionWithImageAndWords");
+
+            entity.Property(e => e.CommissionId).HasColumnName("CommissionID");
+            entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+            entity.Property(e => e.SubtitleId).HasColumnName("SubtitleID");
+            entity.Property(e => e.SubtitleName).HasMaxLength(100);
+            entity.Property(e => e.Title).HasMaxLength(500);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Content>(entity =>

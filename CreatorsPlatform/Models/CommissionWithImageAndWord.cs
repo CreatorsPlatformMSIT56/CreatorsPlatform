@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CreatorsPlatform.Models;
 
-public partial class Commission
+public partial class CommissionWithImageAndWord
 {
     public int CommissionId { get; set; }
 
@@ -25,15 +25,7 @@ public partial class Commission
 
     public int SubtitleId { get; set; }
 
-    public virtual ICollection<CommissionImage> CommissionImages { get; set; } = new List<CommissionImage>();
+    public byte[]? ImageUrl { get; set; }
 
-    public virtual ICollection<CommissionOrder> CommissionOrders { get; set; } = new List<CommissionOrder>();
-
-    public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
-
-    public virtual Creator Creator { get; set; } = null!;
-
-    public virtual Subtitle Subtitle { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
+    public string? SubtitleName { get; set; }
 }

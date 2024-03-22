@@ -26,12 +26,27 @@ namespace CreatorsPlatform.Controllers
             //public string Email { get; set; } = "Error";
             //public string Password { get; set; } = "Error";
 
+            
 
             public Creator? Creator { get; set; }
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
             public IEnumerable<Commission>? Commissions { get; set; }
+            public IEnumerable<CommissionWithImageAndWord>? CommisionsWithWords { get; set; }
         }
+        //public class CommisionsWithWords
+        //{
+        //    public IEnumerable<Commission>? Comissions { get; set; }
+        //    public int ComID { get; set; }
+        //    public string? ComTitle { get; set; }
+        //    public int ComPriceMin { get; set; }
+        //    public int? ComPriceMax { get; set; }
+        //    public string? ComDes { get; set; }
+        //    public DateOnly ComPutUpDate { get; set; }
+        //    public DateOnly? ComOverDate { get; set; }
+        //    public byte[]? ImageUrl { get; set; }
+        //    public string? SubtitleName { get; set; }
+        //}
 
         // 創作者首頁
         public IActionResult Index(int id)
@@ -49,12 +64,33 @@ namespace CreatorsPlatform.Controllers
 
             var commisions = _context.Commissions.Where(c => c.CreatorId == id);
 
+            //var commisionsWithWords = from commission in _context.Commissions
+            //                        where commission.CreatorId == id
+            //                        join image in _context.CommissionImages
+            //                        on commission.CommissionId equals image.CommissionId
+            //                        join subtitle in _context.Subtitles
+            //                        on commission.SubtitleId equals subtitle.SubtitleId
+            //                        select new CommisionsWithWords
+            //                        {
+            //                            ComID = commission.CommissionId, 
+            //                            ComTitle = commission.Title,
+            //                            ComPriceMin = commission.PriceMin,
+            //                            ComPriceMax = commission.PriceMax,
+            //                            ComDes = commission.Description,
+            //                            ComPutUpDate = commission.PutUpDate,
+            //                            ComOverDate = commission.OverDate,
+            //                            ImageUrl = image.ImageUrl,
+            //                            SubtitleName = subtitle.SubtitleName
+            //                        };
+            var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
+
             var viewModel = new CreatorDetailsViewModel
             {
                 Creator = creator,
                 UserName = userName,
                 UserAvatar = userAvatar,
-                Commissions = commisions
+                Commissions = commisions,
+                CommisionsWithWords = commisionsWithWords
             };
 
             return View(viewModel);
