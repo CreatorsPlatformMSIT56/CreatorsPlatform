@@ -7,8 +7,9 @@
 
 <!-- Banner -->
 <div class="text-center" id="banner">
-    <img class="img-fluid" src="https://fakeimg.pl/1620x580/" alt="">
+    <img class="img-fluid" src="@(Model.Creator?.BannerUrl ?? "https://fakeimg.pl/1620x580/")" alt="" style="height: 580px; width:1620px; object-fit:cover;">
 </div>
+
 <!-- Creator介紹 -->
 <div class="container p-3">
     <div class="row">
@@ -122,27 +123,31 @@
         <!-- 內容Container with 3 Cards in 1 row -->
         <div class="card-container container">
             <div class="card-deck row p-3">
-                @foreach (var e in Model.CommisionsWithWords)
+                @foreach (var e in Model.CommissionsWithWords)
             {
                 <div class="col-4">
                     <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link">
                         <div class="card">
                             <img class="card-img-top"
+                                    src="@e.ImageUrl"
+                                    alt="Card image cap"
+                                    style="height: 24rem; width: auto; object-fit: cover" />
+                            @* <img class="card-img-top"
                                     src="https://fakeimg.pl/500/"
                                     alt="Card image cap"
-                            @* style="max-height: 12rem; object-fit: cover" *@ />
+                            style="max-height: 12rem; object-fit: cover" /> *@
                             <div class="card-body"
                             @* style="height: 10rem" *@>
                                 <h5 class="card-title">@e.Title</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">
-                                        委託分類: @e.SubtitleName
+                                        @e.SubtitleName
                                     </h6>
                                 <p class="card-text commision-description">
                                         @e.Description
                                 </p>
                                 <h5 class="card-text commisionPriceMin" style="font-weight:bolder">
                                         @e.PriceMin.ToString("C0")
-                                        @(e.PriceMax.HasValue ? "~" + e.PriceMax?.ToString("N0") : "")
+                                        @(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")
                                     </h5>
                             </div>
                         </div>

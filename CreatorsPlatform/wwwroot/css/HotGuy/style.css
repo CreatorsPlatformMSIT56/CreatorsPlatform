@@ -1,0 +1,36 @@
+﻿#AAA,
+#BBB,
+#CCC {
+    /* max-height: inherit; */
+    height: 40vh !important;
+}
+
+.listImg {
+    height: 80px !important;
+    width: 80px !important;
+}
+
+h3 {
+    display: inline-block;
+}
+
+.EventDes {
+    display: inline-block;
+    width: 70%;
+}
+
+.EventEndDate {
+    float: right;
+}
+
+.evtTitle {
+    height: 4vh;
+    background-color: red;
+    width: 1vh;
+    display: inline-block;
+}
+
+.evtStatus {
+    font-size: 3.5vh;
+    display: inline-block;
+}
