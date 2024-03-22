@@ -116,6 +116,7 @@ function UserIconColor(ToggleIcon) {
             Color = "#FFDAB9";
             break;
     }
+    
 
 
     $("#" + IconRecordOld + "Icon").css("fill", "currentColor");
@@ -129,7 +130,6 @@ function UserIconColor(ToggleIcon) {
    
     //});
 /*};*/
-MessagUpdata(_UserCurrentMsgtype, CurrentMsg);
 
 //$("#Main").css({
 //    "transition": "0.5s",

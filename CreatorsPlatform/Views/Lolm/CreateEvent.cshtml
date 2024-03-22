@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-7 d-flex flex-column">
             <div><h3>發起活動</h3></div>
-            <div class="mb-3 pe-5"><b>標題</b><br /> <input class="EventNameInput" type="type" name="name" value="" /></div>
+            <div class="mb-3 pe-5"><b>標題</b><br /> <input class="EventNameInput" type="type" name="EventName" value="" /></div>
             <div class="EventIntroSection">
                 <b>活動描述</b><br />
                 <div class="mb-3" id="editor">
@@ -12,9 +12,9 @@
             </div>
             <div class="mb-3 d-flex SetEventTime">
                 <b>時程設定</b>
-                <input type="datetime-local" name="name" value="" />
+                <input type="datetime-local" name="StartDate" value="" />
                 <span>~</span>
-                <input type="datetime-local" name="name" value="" />
+                <input type="datetime-local" name="EndDate" value="" />
             </div>
             <div class="mb-3 d-flex EventColoerSection">
                 <b>佈景顏色</b>
@@ -61,7 +61,7 @@
             <div class="mt-1 CreateEventBtnSection">
                 <button class="btn" id="cancelButton" type="button">取消</button>
                 <button class="btn" id="PreviewButton" type="button" onclick="getQuillContent()">預覽</button>
-                <button class="btn" id="okButton" type="button">發起活動</button>
+                <button class="btn" id="okButton" type="button" onclick="PostAllToSQL()">發起活動</button>
             </div>
         </div>
     </div>
@@ -72,9 +72,3 @@
 <script src="~/js/Lolm/CreateEvent.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script src="/js/Lolm/Quill.js"></script>
-<script>
-    function getQuillContent() {
-        const QuillContent = quill.getContents();
-    @ViewData["ABC"]=QuillContent;
-    }
-</script>

@@ -10,9 +10,9 @@ namespace CreatorsPlatform.Controllers
 	{
         public class MemberData
         {
-            public string Name { get; set; } = "Error";
-            public string Email { get; set; } = "Error";
-            public string Password { get; set; } = "Error";
+            public string Name { get; set; } = "¬¥¬è";
+            public string Email { get; set; } = "Loki@example.com";
+            public string Password { get; set; } = "password123";
 
         };
         private readonly ILogger<HomeController> _logger;
@@ -27,7 +27,11 @@ namespace CreatorsPlatform.Controllers
             var MemberData = new MemberData();
             string Member= JsonConvert.SerializeObject(MemberData);
 			HttpContext.Session.SetString("key", Member);
-
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            Console.WriteLine(member.Name);
+            Console.WriteLine(member.Email);
+            Console.WriteLine(member.Password);
             return View();
 		}
 

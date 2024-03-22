@@ -1,4 +1,6 @@
-﻿const initialData = {
+﻿// 僅用於Quill的設定
+
+const initialData = {
     // `content` is a Delta object
     // Learn more at: https://quilljs.com/docs/delta
     content: [

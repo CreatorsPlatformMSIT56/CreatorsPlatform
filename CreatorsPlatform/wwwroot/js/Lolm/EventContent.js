@@ -25,5 +25,12 @@
 
     // 讓參加活動的投稿的圖片與標題，點擊時可以顯示Modal
     $(".EventPostImgPart, .EventPostTitle").attr({ 'data-bs-toggle': 'modal', 'data-bs-target': '#EventPostModal' })
+    console.log('OK');
+
+    //Quill設定
+    /*< !--Initialize Quill editor-- >*/
+    const quill = new Quill("#editor", {
+        readOnly: true
+    });
 
 });

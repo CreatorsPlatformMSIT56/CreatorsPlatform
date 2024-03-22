@@ -40,19 +40,22 @@
         }
     }
 });
+// 獲得Quill內容
+function getQuillContent() {
+    // 拿到編輯器內容 Delta
+    const QuillContent = quill.getContents();
+    // Delta 轉 Json
+    var DeltaJson = JSON.stringify(QuillContent);
+    $.ajax({
+        url: "/Lolm/CreateEvent",
+        method: "post",
+        data: { DataFromClient: DeltaJson }
+    }).done(function (data) {
+        alert(data);
+    });
+}
 
+// 拿到所有的input內容並新增到資料庫
+function PostAllToSQL() {
 
-//document.getElementById('upload').addEventListener('change', function () {
-//    var file = this.files[0];
-//    if (file) {
-//        var reader = new FileReader();
-//        reader.onload = function (event) {
-//            var img = new Image();
-//            img.src = event.target.result;
-//            document.getElementById('preview').innerHTML = '';
-//            document.getElementById('preview').appendChild(img);
-//            document.getElementById('preview').style.display = 'block';
-//        }
-//        reader.readAsDataURL(file);
-//    }
-//});
+}
