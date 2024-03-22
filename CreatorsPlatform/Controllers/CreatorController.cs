@@ -32,7 +32,7 @@ namespace CreatorsPlatform.Controllers
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
             public IEnumerable<Commission>? Commissions { get; set; }
-            public IEnumerable<CommissionWithImageAndWord>? CommisionsWithWords { get; set; }
+            public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
         }
         //public class CommisionsWithWords
         //{
@@ -82,7 +82,13 @@ namespace CreatorsPlatform.Controllers
             //                            ImageUrl = image.ImageUrl,
             //                            SubtitleName = subtitle.SubtitleName
             //                        };
-            var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
+            //var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
+
+            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+                                       where c.CreatorId == id
+                                       select c;
+
+
 
             var viewModel = new CreatorDetailsViewModel
             {
@@ -90,7 +96,7 @@ namespace CreatorsPlatform.Controllers
                 UserName = userName,
                 UserAvatar = userAvatar,
                 Commissions = commisions,
-                CommisionsWithWords = commisionsWithWords
+                CommissionsWithWords = commissionsWithWords
             };
 
             return View(viewModel);

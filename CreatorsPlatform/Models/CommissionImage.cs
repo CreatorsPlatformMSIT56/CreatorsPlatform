@@ -7,7 +7,7 @@ public partial class CommissionImage
 {
     public int CommissionImageId { get; set; }
 
-    public byte[]? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public int CommissionId { get; set; }
 
