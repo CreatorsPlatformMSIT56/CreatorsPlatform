@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-7 d-flex flex-column">
             <div><h3>發起活動</h3></div>
-            <div class="mb-3 pe-5"><b>標題</b><br /> <input class="EventNameInput" type="type" name="EventName" value="" /></div>
+            <div class="mb-3 pe-5"><b>標題</b><br /> <input id="eventName" class="EventNameInput" type="type" name="EventName" value="" /></div>
             <div class="EventIntroSection">
                 <b>活動描述</b><br />
                 <div class="mb-3" id="editor">
@@ -12,14 +12,14 @@
             </div>
             <div class="mb-3 d-flex SetEventTime">
                 <b>時程設定</b>
-                <input type="datetime-local" name="StartDate" value="" />
+                <input id="startDate" type="datetime-local" name="StartDate" value="" />
                 <span>~</span>
-                <input type="datetime-local" name="EndDate" value="" />
+                <input id="endDate" type="datetime-local" name="EndDate" value="" />
             </div>
             <div class="mb-3 d-flex EventColoerSection">
                 <b>佈景顏色</b>
                 <label for="EventTitleColorInput">標題顏色</label>
-                <input type="color" id="EventTitleColorInput" name="EventTitleColor" value="" />
+                <input id="eventStyle" type="color" id="EventTitleColorInput" name="EventTitleColor" value="" />
                 <label for="EventIntroColorInput">說明欄顏色</label>
                 <input type="color" id="EventIntroColorInput" name="EventIntroColor" value="" />
             </div>
@@ -59,7 +59,7 @@
 
             </div>
             <div class="mt-1 CreateEventBtnSection">
-                <button class="btn" id="cancelButton" type="button">取消</button>
+                <button class="btn" id="cancelButton" type="button" onclick="PostAllToSQL02()">取消</button>
                 <button class="btn" id="PreviewButton" type="button" onclick="getQuillContent()">預覽</button>
                 <button class="btn" id="okButton" type="button" onclick="PostAllToSQL()">發起活動</button>
             </div>
@@ -68,6 +68,39 @@
 </div>
 
 
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="fileInput" accept="image/*">
+    <input type="file" id="fileInput2" name="fileInput" accept="image/*">
+    <button type="button" onclick="uploadPhoto()">Upload</button>
+</form>
+
+<script>
+    function uploadPhoto() {
+        var formData = new FormData();
+        formData.append("file", document.getElementById("fileInput").files[0]);
+        formData.append("file", document.getElementById("fileInput2").files[1]);
+        var count = Object.keys(formData).length();
+        console.log(formData.keys);
+        alert("AAA");
+        $.ajax({
+            method: "POST",
+            url: "/Lolm/Upload",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (a, response) {
+                // 上傳成功後的處理
+                console.log(response);
+                alert("CCC");
+            },
+            error: function (xhr, status, error) {
+                // 上傳失敗後的處理
+                console.log(error);
+                alert("DDD");
+            }
+        });
+    }
+</script>
 
 <script src="~/js/Lolm/CreateEvent.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
