@@ -3,18 +3,21 @@
 *@
 @{
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="/css/yhu/Login.css" rel="stylesheet" />
 <div id="Login">
     <div class="row VhHeight">
     </div>
     <div class="row">
         <div id="UserUI" class="ToMiddle VhHeight">
-            <form action="/" method="post">
-                <p> <label for="E_Mail">E-Mail</label></p>
-                <p><input id="E_Mail" type="text"></p>
-                <p><label for="Passwd"></label>Passwd</p>
-                <p><input id="Passwd" type="password"></p>
-                <p><input type="submit" value="Login"></p>
+            <form id="LoginList">
+                <p><label for="E_Mail">E-Mail:</label></p>
+                <p><input id="E_Mail" name="E_Mail" type="email"></p>
+                <p style="display: none;" id="EmailError">使用者信箱無效</p>
+                <p><label for="Passwd">Password:</label></p>
+                <p><input id="Passwd" name="Passwd" type="password"></p>
+                <p style="display: none;" id="PasswdError">密碼錯誤</p>
+                <p><input type="submit" value="submit" value="Login"></p>
             </form>
         </div>
     </div>
@@ -22,3 +25,4 @@
 
     </div>
 </div>
+<script src="/js/yhu/Login.js"></script>

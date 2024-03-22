@@ -2,7 +2,10 @@
     height: 60vh;
     min-height: 60vh;
 }
-
+#Avatar {
+    width: 200px;
+    height: 200px;
+}
 .ToMiddle {
     display: flex;
     justify-content: center;
