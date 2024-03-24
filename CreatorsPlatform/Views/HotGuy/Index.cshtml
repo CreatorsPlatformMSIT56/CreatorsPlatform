@@ -3,17 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 
-    var result = (from e in Model
-                  orderby e.StartDate
-                  select e).Take(3);
-
-    var query = from c in Model
-                where c.EventId == 1
-                select c;
+    var newEvents = ViewData["NewEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
+    var oldEvents = ViewData["OldEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
 }
 <link href="~/css/HotGuy/style.css" rel="stylesheet" />
 
 <div>
+    @* 輪播圖 *@
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -62,79 +58,78 @@
         </button>
     </div>
     <br />
+
+    @* 三筆最新的活動 *@
     <div>
         <div class="evtTitle"></div>
         <p class="evtStatus">最新活動</p>
         <ul class="list-group">
-            @foreach (var item in result)
+            @foreach (var item in newEvents)
             {
                 <li class="list-group-item" position-relative m-4>
                     <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
                     <h3>
                         <span>
                             <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-                                @Html.DisplayFor(modelItem => item.EventName)
+                                @Html.DisplayFor(newEvents => item.EventName)
                             </a>
                         </span>
                     </h3>
                     <br />
-                    <p class="EventDes">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
+                    <p class="EventDes">@Html.DisplayFor(newEvents => item.Description)</p>
+                    <p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
                 </li>
             }
         </ul>
     </div>
     <br />
 
+
+    @* 把目前所有的活動都列出來 *@
     <div>
         <div class="evtTitle"></div>
         <p class="evtStatus">進行中活動</p>
         <ul class="list-group">
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>@Html.DisplayFor(query => query.FirstOrDefault().EventName)</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
-
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
-            <li class="list-group-item" position-relative m-4>
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item" position-relative m-4>
+                    <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                    <h3><span>@Html.DisplayFor(Model => item.EventName)</span></h3><br />
+                    <p class="EventDes">@Html.DisplayFor(Model => item.Description)</p>
+                    <p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
+                </li>
+            }
+            @* <li class="list-group-item" position-relative m-4>
                 <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
                 <h3><span>Insert Event Name</span></h3><br />
                 <p class="EventDes">Insert Event Description</p>
                 <p class="EventEndDate">截止日期</p>
             </li>
+            <li class="list-group-item" position-relative m-4>
+                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                <h3><span>Insert Event Name</span></h3><br />
+                <p class="EventDes">Insert Event Description</p>
+                <p class="EventEndDate">截止日期</p>
+            </li> *@
         </ul>
     </div>
     <br />
+    
+
+    @* 三筆即將結束之活動 *@
     <div>
         <div class="evtTitle"></div>
         <p class="evtStatus">即將結束活動</p>
         <ul class="list-group">
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
-
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
+            @foreach (var item in oldEvents)
+            {
+                <li class="list-group-item" position-relative m-4>
+                    <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                    <h3><span>@Html.DisplayFor(modelItem => item.EventName)</span></h3><br />
+                    <p class="EventDes">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
+                </li>
+            }
         </ul>
     </div>
 
