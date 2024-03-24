@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -58,13 +59,8 @@ namespace CreatorsPlatform.Controllers
 		//		//var eventName = model.EventName;
 		//		//var startDate = model.StartDate;
 		//		//var endDate = model.EndDate;
-
-		//		// 先不要處理圖片
 		//		//var banner = model.Banner;
-
-		//		// 先不要處理描述
 		//		// var description = model.Description;
-
 		//		//var eventStyle = model.EventStyle;
 
 		//		// 創建 Event 對象並賦值
@@ -127,7 +123,7 @@ namespace CreatorsPlatform.Controllers
 						{
 							_context.EventImages.Add(photo);
 							await _context.SaveChangesAsync();
-							return RedirectToAction(nameof(EventContent));
+							return RedirectToAction("EventContent");
 						}
 						catch (Exception)
 						{
@@ -137,30 +133,51 @@ namespace CreatorsPlatform.Controllers
 					}
 				}
 			}
-			return RedirectToAction(nameof(EventContent));
+			return RedirectToAction("EventContent");
 		}
 
+		// 上傳input內容至資料庫
 		[HttpPost]
 		[Route("Lolm/Create")]
-		public IActionResult Create([FromBody] JsonElement json)
+		public IActionResult Create([FromBody] JsonElement NewEventJson)
 		{
-			Event @event = new Event
+			Event NewEvent = new Event
 			{
-				EventName = json.GetProperty("EventName").GetString(),
-				StartDate = json.GetProperty("StartDate").GetDateTime(),
-				EndDate = json.GetProperty("EndDate").GetDateTime(),
-				Description = json.GetProperty("Description").GetString(),
-				CategoryId = json.GetProperty("CategoryID").GetInt32()
+				EventName = NewEventJson.GetProperty("EventName").GetString(),
+				Description = NewEventJson.GetProperty("Description").GetString(),
+				StartDate = NewEventJson.GetProperty("StartDate").GetDateTime(),
+				EndDate = NewEventJson.GetProperty("EndDate").GetDateTime(),
+				EventStyle = NewEventJson.GetProperty("EventStyle").GetString(),
+				Banner = NewEventJson.GetProperty("Banner").GetString(),
+				CategoryId = NewEventJson.GetProperty("CategoryID").GetInt32()
 			};
+			// 將JSON字串還原為字串陣列
+			Console.WriteLine("1444");
+			//string[] ExImgArray = JsonConvert.DeserializeObject<string[]>(NewEventJson.GetProperty("ExImgURLArray").GetString());
+
 			if (ModelState.IsValid != null)
 			{
-				_context.Add(@event);
+				_context.Add(NewEvent);
+				//if (ExImgArray.Length > 0)
+				//{
+				//	for (int i = 0; i < ExImgArray.Length; i++)
+				//	{
+				//		EventImage NewEventImg = new EventImage
+				//		{
+				//			EventId = NewEvent.EventId,
+				//			ImageUrl = ExImgArray[i],
+				//			ImageSample = true
+				//		};
+				//		_context.Add(NewEventImg);
+				//	}
+				//}
 				_context.SaveChanges();
 				return Ok(); // 返回成功狀態碼 200
 			}
 
 			return BadRequest(); // 返回錯誤狀態碼 400
 		}
+
 
 		public async Task<IActionResult> Details(int? id)
 		{
