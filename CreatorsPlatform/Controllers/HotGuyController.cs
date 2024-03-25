@@ -18,6 +18,22 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> Index()
         {
             var imaginkContext = _context.Events.Include(Ex => Ex.Category);
+
+            IEnumerable<CreatorsPlatform.Models.Event> NewEventList = 
+                          (from e in imaginkContext
+                          orderby e.StartDate descending
+                          select e).Take(3);
+
+            IEnumerable<CreatorsPlatform.Models.Event> EndEventList =
+                          (from e in imaginkContext
+                           orderby e.EndDate
+                           select e).Take(3);
+
+
+            ViewData["NewEvents"] = NewEventList;
+
+            ViewData["OldEvents"] = EndEventList;
+
             return View(await imaginkContext.ToListAsync());
         }
 
