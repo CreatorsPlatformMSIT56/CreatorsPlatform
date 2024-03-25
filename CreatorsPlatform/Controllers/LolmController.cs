@@ -39,8 +39,6 @@ namespace CreatorsPlatform.Controllers
 			//                                    select CCC;
 
 			id = 1;
-			Event TheEvent = _context.Events.First( i => i.EventId == id);
-			EventImage TheEventImg = _context.EventImages.First( i => i.EventId == id);
 
 			return View(await imaginkContext.ToListAsync());
 		}
@@ -141,6 +139,24 @@ namespace CreatorsPlatform.Controllers
                 CreatorId = 1
             };
 			_context.EventImages.Add(NewEventImage);
+			_context.SaveChanges();
+			return "OK";
+		}
+
+		// 上傳活動參加者的投稿 到 EventImg表 到 資料庫
+		[HttpPost]
+		public string CreateEventPost(EventImage NewEventImageData)
+		{
+			EventImage NewEventImage = new EventImage()
+			{
+				ImageUrl = NewEventImageData.ImageUrl,
+				EventId = 1,
+				ImageSample = NewEventImageData.ImageSample,
+				CreatorId = 1,
+				Description = NewEventImageData.Description,
+				ImageTitle = NewEventImageData.ImageTitle
+			};
+			_context.Add(NewEventImage);
 			_context.SaveChanges();
 			return "OK";
 		}

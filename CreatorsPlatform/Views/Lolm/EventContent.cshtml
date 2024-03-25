@@ -35,11 +35,9 @@
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
 <h1>@ViewBag.QuillContent</h1>
 <h1>AAA</h1>
-<h1>@query.FirstOrDefault().EventName</h1>
+@* <h1>@query.FirstOrDefault().EventName</h1> *@
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
-@* <link href="~/css/Lolm/EventQuill.css" rel="stylesheet" /> *@
-
 
 @* 活動圖片 *@
 <div class="container-fluid px-0 EventHeaderImg"><img class="img-fluid" src="~/img/Lolm/EventContent/PekoraImg.jpg" alt="Alternate Text" /></div>
@@ -173,8 +171,6 @@
 						<textarea class="form-control" placeholder="請輸入內容"
 								  id="EventPostContentTextBox"></textarea>
 					</div>
-
-
 				</form>
 			</div>
 			<div class="modal-footer">
