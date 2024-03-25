@@ -257,10 +257,14 @@ namespace CreatorsPlatform.Controllers
             var Name = (from NameData in _context.Users
                               where NameData.Email == Email
                               select NameData.UserName).FirstOrDefault();
+            var ID = (from IDData in _context.Users
+                        where IDData.Email == Email
+                        select IDData.UserId).FirstOrDefault();
             if (EmailCheck && PasswdCheck)
             {
                 var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                member.id = ID;
                 member.Name = Name;
                 member.Email = Email;
                 member.Password = Passwd;

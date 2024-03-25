@@ -11,7 +11,7 @@ public partial class Creator
 
     public string Notice { get; set; } = null!;
 
-    public byte[]? BangerUrl { get; set; }
+    public string? BannerUrl { get; set; }
 
     public virtual ICollection<Commission> Commissions { get; set; } = new List<Commission>();
 

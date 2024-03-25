@@ -1,4 +1,7 @@
-﻿$(function () {
+﻿var BannerDataURL;
+var ExImgDataURLs = [];
+var ExImgDataURL;
+$(function () {
     // 上傳圖片並且預覽功能
     // 封面圖片
     $("#progressbarTWInput").change(function () {
@@ -12,27 +15,29 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $("#preview_progressbarTW_img").attr('src', e.target.result);
+                BannerDataURL = e.target.result;
+                $("#preview_progressbarTW_img").attr('src', BannerDataURL);
             }
 
             reader.readAsDataURL(input.files[0]);
 
         }
     }
-
+    // 範例圖片
     $(".ExampleImgSection input").change(
         function () {
             ReadExURL(this);
         }
     );
-
     function ReadExURL(TheEle) {
         if (TheEle.files && TheEle.files[0]) {
 
             var reader = new FileReader();
-            console.log($(TheEle).next("div").children("img"));
+            //console.log($(TheEle).next("div").children("img"));
             reader.onload = function (e) {
-                $(TheEle).next("div").children("img").attr('src', e.target.result);
+                ExImgDataURL = e.target.result;
+                $(TheEle).next("div").children("img").attr('src', ExImgDataURL);
+                GetAllExImgDataURL(ExImgDataURL);
             }
 
             reader.readAsDataURL(TheEle.files[0]);
@@ -46,16 +51,60 @@ function getQuillContent() {
     const QuillContent = quill.getContents();
     // Delta 轉 Json
     var DeltaJson = JSON.stringify(QuillContent);
-    $.ajax({
-        url: "/Lolm/CreateEvent",
-        method: "post",
-        data: { DataFromClient: DeltaJson }
-    }).done(function (data) {
-        alert(data);
-    });
+    return DeltaJson;
+    //$.ajax({
+    //    url: "/Lolm/CreateEvent",
+    //    method: "post",
+    //    data: { DataFromClient: DeltaJson }
+    //}).done(function (data) {
+    //    alert(data);
+    //});
+}
+
+function GetEventStyle() {
+    var eventStyleArray = [$("#EventTitleColorInput").val(), $("#EventIntroColorInput").val()];
+    return JSON.stringify(eventStyleArray);
+}
+
+function GetAllExImgDataURL(TheURL) {
+    ExImgDataURLs.push(TheURL);
 }
 
 // 拿到所有的input內容並新增到資料庫
 function PostAllToSQL() {
+    //var dataFromClient = {
+    //    EventName: '阿巴巴',
+    //    StartDate: "2024-03-22T10:04:35.123",
+    //    EndDate: "2024-03-23T10:04:35.123",
+    //    Description: "低死哭順",
+    //    CategoryID: 1
+    //};
 
+    var dataFromClient = {
+        EventName: $("#eventName").val(),
+        StartDate: $("#startDate").val(),
+        EndDate: $("#endDate").val(),
+        Description: getQuillContent(),
+        EventStyle: GetEventStyle(),
+        Banner: BannerDataURL,
+        CategoryID: 1,
+        ExImgURLArray: JSON.stringify(ExImgDataURLs)
+    };
+
+    $.ajax({
+        url: "/Lolm/Create",
+        method: "post",
+        contentType: 'application/json',
+        data: JSON.stringify(dataFromClient),
+        success: function (response) {
+            alert(response);
+        },
+        error: function (xhr, status, error) {
+            // 處理錯誤 
+            alert("fail");
+        }
+    });
+}
+function Test() {
+    console.log(JSON.stringify(ExImgDataURLs));
 }

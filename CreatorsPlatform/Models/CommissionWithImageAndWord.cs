@@ -25,7 +25,7 @@ public partial class CommissionWithImageAndWord
 
     public int SubtitleId { get; set; }
 
-    public byte[]? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public string? SubtitleName { get; set; }
 }

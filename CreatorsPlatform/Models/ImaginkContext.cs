@@ -244,7 +244,7 @@ public partial class ImaginkContext : DbContext
             entity.HasKey(e => e.CreatorId).HasName("PK__Creators__6C7548111D29706E");
 
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
-            entity.Property(e => e.BangerUrl).HasColumnName("BangerURL");
+            entity.Property(e => e.BannerUrl).HasColumnName("BannerURL");
         });
 
         modelBuilder.Entity<Event>(entity =>
