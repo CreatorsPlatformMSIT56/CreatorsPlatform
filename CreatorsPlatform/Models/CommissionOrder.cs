@@ -21,5 +21,9 @@ public partial class CommissionOrder
 
     public int CommissionId { get; set; }
 
+    public int UserId { get; set; }
+
     public virtual Commission Commission { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
 }
