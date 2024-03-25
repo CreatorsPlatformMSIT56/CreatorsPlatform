@@ -139,20 +139,19 @@ namespace CreatorsPlatform.Controllers
 		// 上傳input內容至資料庫
 		[HttpPost]
 		[Route("Lolm/Create")]
-		public IActionResult Create([FromBody] JsonElement NewEventJson)
+		public IActionResult Create(Event EventModelData)
 		{
 			Event NewEvent = new Event
 			{
-				EventName = NewEventJson.GetProperty("EventName").GetString(),
-				Description = NewEventJson.GetProperty("Description").GetString(),
-				StartDate = NewEventJson.GetProperty("StartDate").GetDateTime(),
-				EndDate = NewEventJson.GetProperty("EndDate").GetDateTime(),
-				EventStyle = NewEventJson.GetProperty("EventStyle").GetString(),
-				Banner = NewEventJson.GetProperty("Banner").GetString(),
-				CategoryId = NewEventJson.GetProperty("CategoryID").GetInt32()
+				EventName = EventModelData.EventName,
+				Description = EventModelData.Description,
+				StartDate = EventModelData.StartDate,
+				EndDate = EventModelData.EndDate,
+				EventStyle = EventModelData.EventStyle,
+				Banner = EventModelData.Banner,
+				CategoryId = EventModelData.CategoryId
 			};
-			// 將JSON字串還原為字串陣列
-			Console.WriteLine("1444");
+			// 將JSON字串還原為字串陣列			
 			//string[] ExImgArray = JsonConvert.DeserializeObject<string[]>(NewEventJson.GetProperty("ExImgURLArray").GetString());
 
 			if (ModelState.IsValid != null)

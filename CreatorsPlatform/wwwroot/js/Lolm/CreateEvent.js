@@ -80,7 +80,7 @@ function PostAllToSQL() {
     //    CategoryID: 1
     //};
 
-    var dataFromClient = {
+    var EventdataFromClient = {
         EventName: $("#eventName").val(),
         StartDate: $("#startDate").val(),
         EndDate: $("#endDate").val(),
@@ -88,16 +88,17 @@ function PostAllToSQL() {
         EventStyle: GetEventStyle(),
         Banner: BannerDataURL,
         CategoryID: 1,
-        ExImgURLArray: JSON.stringify(ExImgDataURLs)
+        
     };
+
+    //ExImgURLArray: JSON.stringify(ExImgDataURLs)
 
     $.ajax({
         url: "/Lolm/Create",
         method: "post",
-        contentType: 'application/json',
-        data: JSON.stringify(dataFromClient),
+        data: { EventModelData: EventdataFromClient},
         success: function (response) {
-            alert(response);
+            alert("活動發布成功");
         },
         error: function (xhr, status, error) {
             // 處理錯誤 
@@ -106,5 +107,5 @@ function PostAllToSQL() {
     });
 }
 function Test() {
-    console.log(JSON.stringify(ExImgDataURLs));
+    console.log(typeof ExImgDataURLs);
 }
