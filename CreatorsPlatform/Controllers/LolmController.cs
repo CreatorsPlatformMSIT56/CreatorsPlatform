@@ -114,13 +114,15 @@ namespace CreatorsPlatform.Controllers
 			if (ModelState.IsValid != null)
 			{
 				_context.Add(NewEvent);
-
-				// 將這個新增活動的id傳出來給範例圖片的ajax使用
-				TempData["TheNewEventID"] = NewEvent.EventId;
 				_context.SaveChanges();
+                // 將這個新增活動的id傳出來給範例圖片的ajax使用
+                TempData["TheNewEventID"] = NewEvent.EventId;
+                Console.WriteLine(NewEvent.EventId);
+				
 				return Ok(); // 返回成功狀態碼 200
 			}
-
+			
+			
 			return BadRequest(); // 返回錯誤狀態碼 400
 		}
 
@@ -129,14 +131,15 @@ namespace CreatorsPlatform.Controllers
 		//public string CreateEventExImg([FromBody]JsonElement ExImgDataURLs)
 		public string CreateEventExImg(EventImage NewEventImageData)
 		{
-			EventImage NewEventImage = new EventImage()
+            int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
+
+            EventImage NewEventImage = new EventImage()
 			{
-				ImageUrl = NewEventImageData.ImageUrl,
-				
-				EventId = 1,
-				ImageSample = true,
-				CreatorId = 1
-			};
+                ImageUrl = NewEventImageData.ImageUrl,
+                EventId = newEventId, // 使用从 TempData 中获取的 ID
+                ImageSample = true,
+                CreatorId = 1
+            };
 			_context.EventImages.Add(NewEventImage);
 			_context.SaveChanges();
 			return "OK";
