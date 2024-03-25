@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -50,50 +51,6 @@ namespace CreatorsPlatform.Controllers
 			return View();
 		}
 
-
-		// 取得input的值並上傳到資料庫
-		//[HttpPost]
-		//public async Task<IActionResult> Upload([FromBody]Event model)
-		//{
-		//	if (ModelState.IsValid)
-		//	{
-		//		// 從 ViewModel 中獲取表單數據
-		//		//var eventName = model.EventName;
-		//		//var startDate = model.StartDate;
-		//		//var endDate = model.EndDate;
-		//		//var banner = model.Banner;
-		//		// var description = model.Description;
-		//		//var eventStyle = model.EventStyle;
-
-		//		// 創建 Event 對象並賦值
-		//		//var NewEvent = new Event
-		//		//{
-		//		//	EventName = eventName,
-		//		//	StartDate = startDate,
-		//		//	EndDate = endDate,
-		//			// Banner = banner,
-		//			// Description = description,
-		//		//	EventStyle = eventStyle
-		//		//};
-
-		//		try
-		//		{
-		//			// 將對象添加到資料庫並保存更改
-		//			_context.Events.Add(model);
-		//			await _context.SaveChangesAsync();
-		//			return Ok();
-		//			//return RedirectToAction(nameof(EventContent));
-		//		}
-		//		catch (Exception ex)
-		//		{
-		//			// 處理例外情況
-		//			ModelState.AddModelError("", $"無法保存圖片：{ex.Message}");
-		//		}
-		//	}
-		//	// 如果模型狀態無效，返回表單頁面
-		//	return View(model);
-		//}
-
 		// 品旭的
 		[HttpPost]
 		public async Task<IActionResult> Upload([Bind("EventImageId,ImageUrl,EventId,ImageSample,CreatorId,Description,ImageTitle")] EventImage eventImage, int? id)
@@ -138,7 +95,7 @@ namespace CreatorsPlatform.Controllers
 			return RedirectToAction("EventContent");
 		}
 
-		// 上傳input內容至資料庫
+		// 上傳Event內容至資料庫
 		[HttpPost]
 		[Route("Lolm/Create")]
 		public IActionResult Create(Event EventModelData)
@@ -152,26 +109,14 @@ namespace CreatorsPlatform.Controllers
 				EventStyle = EventModelData.EventStyle,
 				Banner = EventModelData.Banner,
 				CategoryId = EventModelData.CategoryId
-			};
-			// 將JSON字串還原為字串陣列			
-			//string[] ExImgArray = JsonConvert.DeserializeObject<string[]>(NewEventJson.GetProperty("ExImgURLArray").GetString());
+			};			
 
 			if (ModelState.IsValid != null)
 			{
 				_context.Add(NewEvent);
-				//if (ExImgArray.Length > 0)
-				//{
-				//	for (int i = 0; i < ExImgArray.Length; i++)
-				//	{
-				//		EventImage NewEventImg = new EventImage
-				//		{
-				//			EventId = NewEvent.EventId,
-				//			ImageUrl = ExImgArray[i],
-				//			ImageSample = true
-				//		};
-				//		_context.Add(NewEventImg);
-				//	}
-				//}
+
+				// 將這個新增活動的id傳出來給範例圖片的ajax使用
+				TempData["TheNewEventID"] = NewEvent.EventId;
 				_context.SaveChanges();
 				return Ok(); // 返回成功狀態碼 200
 			}
@@ -179,6 +124,23 @@ namespace CreatorsPlatform.Controllers
 			return BadRequest(); // 返回錯誤狀態碼 400
 		}
 
+		// 上傳範例圖片至資料庫
+		[HttpPost]
+		//public string CreateEventExImg([FromBody]JsonElement ExImgDataURLs)
+		public string CreateEventExImg(EventImage NewEventImageData)
+		{
+			EventImage NewEventImage = new EventImage()
+			{
+				ImageUrl = NewEventImageData.ImageUrl,
+				
+				EventId = 1,
+				ImageSample = true,
+				CreatorId = 1
+			};
+			_context.EventImages.Add(NewEventImage);
+			_context.SaveChanges();
+			return "OK";
+		}
 
 		public async Task<IActionResult> Details(int? id)
 		{

@@ -88,7 +88,7 @@ function PostAllToSQL() {
         EventStyle: GetEventStyle(),
         Banner: BannerDataURL,
         CategoryID: 1,
-        
+
     };
 
     //ExImgURLArray: JSON.stringify(ExImgDataURLs)
@@ -96,7 +96,7 @@ function PostAllToSQL() {
     $.ajax({
         url: "/Lolm/Create",
         method: "post",
-        data: { EventModelData: EventdataFromClient},
+        data: EventdataFromClient,
         success: function (response) {
             alert("活動發布成功");
         },
@@ -107,5 +107,24 @@ function PostAllToSQL() {
     });
 }
 function Test() {
-    console.log(typeof ExImgDataURLs);
+    //var EventExImgformData = new FormData();
+    //for (var i = 0; i < ExImgDataURLs.length; i++) {
+    //    console.log(ExImgDataURLs[i]);
+    //    EventExImgformData.append("flies[]", ExImgDataURLs[i]);
+    //}
+    for (var i = 0; i < ExImgDataURLs.length; i++) {
+        $.ajax({
+            url: "/Lolm/CreateEventExImg",
+            method: "post",
+            /*processData: false, // 不对 FormData 进行处理*/
+            data: { ImageURL: ExImgDataURLs[i] },
+            success: function (response) {
+                alert(response);
+            },
+            error: function () {
+                alert("活動範例圖片上傳失敗");
+            }
+        })
+    }
+
 }
