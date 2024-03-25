@@ -37,8 +37,10 @@ namespace CreatorsPlatform.Controllers
 			//                                    where CCC.EventId == id
 			//                                    select CCC;
 
-			// 取得TempData裡面裝的字串
-			ViewBag.QuillContent = TempData.Peek("DataFromClient");
+			id = 1;
+			Event TheEvent = _context.Events.First( i => i.EventId == id);
+			EventImage TheEventImg = _context.EventImages.First( i => i.EventId == id);
+
 			return View(await imaginkContext.ToListAsync());
 		}
 
