@@ -10,6 +10,7 @@ namespace CreatorsPlatform.Controllers
 	{
         public class MemberData
         {
+            public int id { get; set; } = 1;
             public string Name { get; set; } = "¬¥¬è";
             public string Email { get; set; } = "Loki@example.com";
             public string Password { get; set; } = "password123";

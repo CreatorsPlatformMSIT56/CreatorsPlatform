@@ -26,7 +26,19 @@
     </div>
     <div id="Main" class="MainClose border">
         <ol id="Messages">
-         
+            @foreach (var item in ViewBag.NewmesgData)
+            {
+                <li>
+                    <div class="mb-3">
+                        <p>@item.UserName</p>
+                        <p>
+                            <img src="data:image/png;base64,@Convert.ToBase64String(@item.ImageUrl)" alt="">
+                            @item.Description
+                       </p>
+                        <p>@item.Title</p>
+                    </div>
+                </li>
+            }
         </ol>
     </div>
     <div id="Sidebar" class="SidebarClose">
