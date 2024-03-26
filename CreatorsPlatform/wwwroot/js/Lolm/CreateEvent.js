@@ -100,7 +100,6 @@ function PostAllToSQL() {
         success: function (response) {
             UploadEventExImg();
             alert("活動發布成功");
-            Test();
         },
         error: function (xhr, status, error) {
             // 處理錯誤 

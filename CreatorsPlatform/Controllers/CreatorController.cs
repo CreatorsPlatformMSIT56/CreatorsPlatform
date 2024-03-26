@@ -64,6 +64,11 @@ namespace CreatorsPlatform.Controllers
 
             var commisions = _context.Commissions.Where(c => c.CreatorId == id);
 
+            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+                                       where c.CreatorId == id
+                                       group c by c.Title into g
+                                       select g.OrderBy(x => x.CommissionId).First();
+
             //var commisionsWithWords = from commission in _context.Commissions
             //                        where commission.CreatorId == id
             //                        join image in _context.CommissionImages
@@ -84,11 +89,9 @@ namespace CreatorsPlatform.Controllers
             //                        };
             //var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
 
-            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
-                                       where c.CreatorId == id
-                                       select c;
-
-
+            //var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+            //                           where c.CreatorId == id
+            //                           select c;
 
             var viewModel = new CreatorDetailsViewModel
             {

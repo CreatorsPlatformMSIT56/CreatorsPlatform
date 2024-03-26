@@ -4,7 +4,12 @@
 @model CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel
 
 <link href="~/css/Creator/Index.css" rel="stylesheet" />
-
+<style>
+    .link-no-hover {
+        color: inherit !important; /* Inherit the current text color */
+        text-decoration: none !important; /* Remove underline */
+    }
+</style>
 <!-- Banner -->
 <div class="text-center" id="banner">
     <img class="img-fluid" src="@(Model.Creator?.BannerUrl ?? "https://fakeimg.pl/1620x580/")" alt="" style="height: 580px; width:1620px; object-fit:cover;">
@@ -126,18 +131,13 @@
                 @foreach (var e in Model.CommissionsWithWords)
             {
                 <div class="col-4">
-                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link">
-                        <div class="card">
+                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
+                        <div class="card mb-3">
                             <img class="card-img-top"
                                     src="@e.ImageUrl"
                                     alt="Card image cap"
                                     style="height: 24rem; width: auto; object-fit: cover" />
-                            @* <img class="card-img-top"
-                                    src="https://fakeimg.pl/500/"
-                                    alt="Card image cap"
-                            style="max-height: 12rem; object-fit: cover" /> *@
-                            <div class="card-body"
-                            @* style="height: 10rem" *@>
+                            <div class="card-body">
                                 <h5 class="card-title">@e.Title</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">
                                         @e.SubtitleName
