@@ -187,7 +187,6 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.SubtitleId).HasColumnName("SubtitleID");
             entity.Property(e => e.SubtitleName).HasMaxLength(100);
             entity.Property(e => e.Title).HasMaxLength(500);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Content>(entity =>
