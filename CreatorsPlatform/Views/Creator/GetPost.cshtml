@@ -1,33 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@* @model CreatorsPlatform.Controllers.CreatorController.ContentsDetailsViewModel *@
 <div class="container main-page">
     <div class="row">
         <div class="col-9" style="border:solid">
             <div class="pictures-container text-center" style="border:solid">
-                <img src="https://fakeimg.pl/900x1200/" alt="" class="img-fluid">
+                <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.ImageUrl ?? Array.Empty<byte>()))" alt="" class="img-fluid">
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-row-reverse bd-highlight">
                         <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
-                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i></div>
+                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.Likes</span></div>
                     </div>
                 </div>
                 <div class="col-12 px-5 py-3">
-                    <h4>標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題標題</h4>
+                    <h4>@Model.Content?.Title</h4>
                 </div>
-                <div class="col-12 px-5 mb-3">tags</div>
+                <div class="col-12 px-5 mb-3">
+                    <h4>Tags</h4>
+                    </div>
             </div>
             <!-- 作者 -->
             <div class="row p-3">
                 <div class="col-2 avatar text-center">
-                    <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
+                    <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.Creator.Users.SingleOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                         style="max-width:100px; max-height:100px;">
                 </div>
                 <div class="col-8 creator-name d-inline-flex align-items-center">
-                    <h4>Creator Name</h4>
+                    <h4>@Model.Content?.Creator.Users.SingleOrDefault()?.UserName</h4>
                 </div>
                 <div class="col-2 d-inline-flex align-items-center justify-content-center">
                     <button type="button" class="btn btn-primary">關注</button>
