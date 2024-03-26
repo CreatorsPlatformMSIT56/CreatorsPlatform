@@ -19,17 +19,9 @@ public partial class EventsAndImage
 
     public int? EventCreator { get; set; }
 
-    public string? Banner { get; set; }
-
-    public string? EventStyle { get; set; }
-
-    public int CategoryId { get; set; }
-
     public int? EventImageId { get; set; }
 
     public string? ImageUrl { get; set; }
-
-    public string? ImageTitle { get; set; }
 
     public string? ImageDes { get; set; }
 

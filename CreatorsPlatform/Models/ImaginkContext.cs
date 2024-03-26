@@ -298,16 +298,11 @@ public partial class ImaginkContext : DbContext
                 .HasNoKey()
                 .ToView("EventsAndImages");
 
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.EventName).HasMaxLength(200);
-            entity.Property(e => e.EventStyle)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.EvtImgId).HasColumnName("EvtImgID");
-            entity.Property(e => e.ImageTitle).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
