@@ -38,8 +38,6 @@ namespace CreatorsPlatform.Controllers
 			//                                    where CCC.EventId == id
 			//                                    select CCC;
 
-			id = 1;
-
 			return View(await imaginkContext.ToListAsync());
 		}
 
@@ -143,7 +141,7 @@ namespace CreatorsPlatform.Controllers
 			return "OK";
 		}
 
-		// 上傳活動參加者的投稿 到 EventImg表 到 資料庫
+		// 上傳活動參加者的投稿 到 資料庫的EventImg表
 		[HttpPost]
 		public string CreateEventPost(EventImage NewEventImageData)
 		{

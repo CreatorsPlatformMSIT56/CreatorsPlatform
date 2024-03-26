@@ -98,6 +98,7 @@ function PostAllToSQL() {
         method: "post",
         data: EventdataFromClient,
         success: function (response) {
+            UploadEventExImg();
             alert("活動發布成功");
         },
         error: function (xhr, status, error) {
@@ -106,12 +107,7 @@ function PostAllToSQL() {
         }
     });
 }
-function Test() {
-    //var EventExImgformData = new FormData();
-    //for (var i = 0; i < ExImgDataURLs.length; i++) {
-    //    console.log(ExImgDataURLs[i]);
-    //    EventExImgformData.append("flies[]", ExImgDataURLs[i]);
-    //}
+function UploadEventExImg() {
     for (var i = 0; i < ExImgDataURLs.length; i++) {
         $.ajax({
             url: "/Lolm/CreateEventExImg",
