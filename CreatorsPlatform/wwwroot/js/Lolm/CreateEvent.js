@@ -52,13 +52,12 @@ function getQuillContent() {
     // Delta 轉 Json
     var DeltaJson = JSON.stringify(QuillContent);
     return DeltaJson;
-    //$.ajax({
-    //    url: "/Lolm/CreateEvent",
-    //    method: "post",
-    //    data: { DataFromClient: DeltaJson }
-    //}).done(function (data) {
-    //    alert(data);
-    //});
+}
+
+// 獲得Quill內容的純文字
+function getQuillText() {
+    const QuillText = quill.getText();
+    return QuillText;
 }
 
 function GetEventStyle() {
@@ -88,7 +87,7 @@ function PostAllToSQL() {
         EventStyle: GetEventStyle(),
         Banner: BannerDataURL,
         CategoryID: 1,
-
+        DescriptionString: getQuillText()
     };
 
     //ExImgURLArray: JSON.stringify(ExImgDataURLs)

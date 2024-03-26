@@ -108,7 +108,8 @@ namespace CreatorsPlatform.Controllers
 				EndDate = EventModelData.EndDate,
 				EventStyle = EventModelData.EventStyle,
 				Banner = EventModelData.Banner,
-				CategoryId = EventModelData.CategoryId
+				CategoryId = EventModelData.CategoryId,
+				DescriptionString = EventModelData.DescriptionString
 			};			
 
 			if (ModelState.IsValid != null)
