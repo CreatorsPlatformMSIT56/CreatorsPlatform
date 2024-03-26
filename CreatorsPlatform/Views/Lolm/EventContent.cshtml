@@ -1,5 +1,5 @@
 ﻿﻿@* @model ImaginkContext; *@
-@model IEnumerable<CreatorsPlatform.Models.Event>
+@model EventViewModel
 
 @* 編輯器的套件 *@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
@@ -35,13 +35,13 @@
 	var EventIdStocker = @AAA
 </script>
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
-<h1>@ViewBag.QuillContent</h1>
+<h1>@Model.</h1>
 
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 
 @* 活動圖片 *@
-<div class="container-fluid px-0 EventHeaderImg"><img class="img-fluid" src="~/img/Lolm/EventContent/PekoraImg.jpg" alt="Alternate Text" /></div>
+<div class="container-fluid px-0 EventHeaderImg"><img class="img-fluid" src="@Model.Banner" alt="Alternate Text" /></div>
 @* 說明欄 *@
 <div class="container-fluid EventIntroSection">
 	<div class="row d-flex align-items-center pt-4">

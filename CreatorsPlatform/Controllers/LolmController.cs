@@ -31,18 +31,23 @@ namespace CreatorsPlatform.Controllers
 		//    return View();
 		//}
 
+
 		// 新增存 id 的變數，並想把他丟到 View
 		public async Task<IActionResult> EventContent(int? id)
 		{
 			ViewBag.Eid = id;
-			var EventContext = _context.Events;
 
-			// 原本想在 controller 寫 LINQ，但不會傳到 view
-			//IEnumerable<EventsAndImage> query = from CCC in imaginkContext
-			//                                    where CCC.EventId == id
-			//                                    select CCC;			
-
-			return View(await EventContext.ToListAsync());
+			var result = await (from e in _context.Events
+								join ei in _context.EventImages on e.EventId equals ei.EventId into eGroup
+								where e.EventId == id
+								select new { Event = e, EventImages = eGroup }).ToListAsync();
+			return View(result);
+			//▼沒有Banner所以擱置
+			//var TheEventContext = _context.EventsAndImages;
+			//var TheEventData = await (from o in TheEventContext
+			//						  where o.EventId == id
+			//						  select o).FirstOrDefaultAsync();
+			//return View(TheEventData);
 		}
 
 		public IActionResult CreateEvent()
@@ -110,20 +115,20 @@ namespace CreatorsPlatform.Controllers
 				Banner = EventModelData.Banner,
 				CategoryId = EventModelData.CategoryId,
 				DescriptionString = EventModelData.DescriptionString
-			};			
+			};
 
 			if (ModelState.IsValid != null)
 			{
 				_context.Add(NewEvent);
 				_context.SaveChanges();
-                // 將這個新增活動的id傳出來給範例圖片的ajax使用
-                TempData["TheNewEventID"] = NewEvent.EventId;
-                Console.WriteLine(NewEvent.EventId);
-				
+				// 將這個新增活動的id傳出來給範例圖片的ajax使用
+				TempData["TheNewEventID"] = NewEvent.EventId;
+				Console.WriteLine(NewEvent.EventId);
+
 				return Ok(); // 返回成功狀態碼 200
 			}
-			
-			
+
+
 			return BadRequest(); // 返回錯誤狀態碼 400
 		}
 
@@ -132,15 +137,15 @@ namespace CreatorsPlatform.Controllers
 		//public string CreateEventExImg([FromBody]JsonElement ExImgDataURLs)
 		public string CreateEventExImg(EventImage NewEventImageData)
 		{
-            int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
+			int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
 
-            EventImage NewEventImage = new EventImage()
+			EventImage NewEventImage = new EventImage()
 			{
-                ImageUrl = NewEventImageData.ImageUrl,
-                EventId = newEventId, // 使用从 TempData 中获取的 ID
-                ImageSample = true,
-                CreatorId = 1
-            };
+				ImageUrl = NewEventImageData.ImageUrl,
+				EventId = newEventId, // 使用从 TempData 中获取的 ID
+				ImageSample = true,
+				CreatorId = 1
+			};
 			_context.EventImages.Add(NewEventImage);
 			_context.SaveChanges();
 			return "OK";
