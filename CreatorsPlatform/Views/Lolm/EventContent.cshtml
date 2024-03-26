@@ -8,7 +8,7 @@
 @* 新稱部分 *@
 @{
 	// 新增一個抓 id 並把他轉成 int32 之變數
-	int AAA = Convert.ToInt32(TempData["Eid"]);
+	int AAA = Convert.ToInt32(@ViewBag.Eid);
 
 	// var BBB = Model.ToList();
 
@@ -31,7 +31,9 @@
 	//     return;
 	// }
 }
-
+<script>
+	var EventIdStocker = @AAA
+</script>
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
 <h1>@ViewBag.QuillContent</h1>
 <h1>AAA</h1>

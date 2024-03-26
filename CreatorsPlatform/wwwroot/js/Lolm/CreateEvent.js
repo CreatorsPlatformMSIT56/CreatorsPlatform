@@ -99,6 +99,7 @@ function PostAllToSQL() {
         data: EventdataFromClient,
         success: function (response) {
             alert("活動發布成功");
+            Test();
         },
         error: function (xhr, status, error) {
             // 處理錯誤 

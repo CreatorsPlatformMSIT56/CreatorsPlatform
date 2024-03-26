@@ -1,4 +1,5 @@
 ﻿var ImgDataURL;
+var EventIdSaver = EventIdStocker; 
 $(function () {
     // 上傳圖片並且預覽功能
     $("#progressbarTWInput").change(function () {
@@ -40,7 +41,8 @@ $(function () {
             ImageUrl: ImgDataURL,
             ImageSample: false,
             Description: $("#EventPostContentTextBox").val(),
-            ImageTitle: $("#titleTextBox").val()
+            ImageTitle: $("#titleTextBox").val(),
+            EventID: EventIdSaver
         }
         $.ajax({
             url: "/Lolm/CreateEventPost",
