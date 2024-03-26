@@ -1,5 +1,5 @@
 ﻿﻿@* @model ImaginkContext; *@
-@model IEnumerable<CreatorsPlatform.Models.EventsAndImage>
+@model IEnumerable<CreatorsPlatform.Models.Event>
 
 @* 編輯器的套件 *@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
@@ -13,9 +13,9 @@
 	// var BBB = Model.ToList();
 
 
-	IEnumerable<EventsAndImage> query = from CCC in Model
-										where CCC.EventId == AAA
-										select CCC;
+	// IEnumerable<EventsAndImage> query = from CCC in Model
+	// 									where CCC.EventId == AAA
+	// 									select CCC;
 
 	// try
 	// {
@@ -36,8 +36,7 @@
 </script>
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
 <h1>@ViewBag.QuillContent</h1>
-<h1>AAA</h1>
-@* <h1>@query.FirstOrDefault().EventName</h1> *@
+
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 

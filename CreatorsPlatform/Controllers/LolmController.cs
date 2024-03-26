@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
 
 namespace CreatorsPlatform.Controllers
 {
@@ -32,14 +35,14 @@ namespace CreatorsPlatform.Controllers
 		public async Task<IActionResult> EventContent(int? id)
 		{
 			ViewBag.Eid = id;
-			var imaginkContext = _context.EventsAndImages;
+			var EventContext = _context.Events;
 
 			// 原本想在 controller 寫 LINQ，但不會傳到 view
 			//IEnumerable<EventsAndImage> query = from CCC in imaginkContext
 			//                                    where CCC.EventId == id
-			//                                    select CCC;
+			//                                    select CCC;			
 
-            return View(await imaginkContext.ToListAsync());
+			return View(await EventContext.ToListAsync());
 		}
 
 		public IActionResult CreateEvent()
