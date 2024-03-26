@@ -127,17 +127,12 @@
             {
                 <div class="col-4">
                     <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link">
-                        <div class="card">
+                        <div class="card mb-3">
                             <img class="card-img-top"
                                     src="@e.ImageUrl"
                                     alt="Card image cap"
                                     style="height: 24rem; width: auto; object-fit: cover" />
-                            @* <img class="card-img-top"
-                                    src="https://fakeimg.pl/500/"
-                                    alt="Card image cap"
-                            style="max-height: 12rem; object-fit: cover" /> *@
-                            <div class="card-body"
-                            @* style="height: 10rem" *@>
+                            <div class="card-body">
                                 <h5 class="card-title">@e.Title</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">
                                         @e.SubtitleName
