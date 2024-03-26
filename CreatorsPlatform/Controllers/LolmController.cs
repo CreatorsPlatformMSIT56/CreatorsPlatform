@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -30,7 +31,7 @@ namespace CreatorsPlatform.Controllers
 		// 新增存 id 的變數，並想把他丟到 View
 		public async Task<IActionResult> EventContent(int? id)
 		{
-			TempData["Eid"] = id;
+			ViewBag.Eid = id;
 			var imaginkContext = _context.EventsAndImages;
 
 			// 原本想在 controller 寫 LINQ，但不會傳到 view
@@ -38,7 +39,7 @@ namespace CreatorsPlatform.Controllers
 			//                                    where CCC.EventId == id
 			//                                    select CCC;
 
-			return View(await imaginkContext.ToListAsync());
+            return View(await imaginkContext.ToListAsync());
 		}
 
 		public IActionResult CreateEvent()
@@ -143,12 +144,14 @@ namespace CreatorsPlatform.Controllers
 
 		// 上傳活動參加者的投稿 到 資料庫的EventImg表
 		[HttpPost]
-		public string CreateEventPost(EventImage NewEventImageData)
+		public IActionResult CreateEventPost(EventImage NewEventImageData, int eventId)
 		{
+			int PostEventId = NewEventImageData.EventId;
+
 			EventImage NewEventImage = new EventImage()
 			{
 				ImageUrl = NewEventImageData.ImageUrl,
-				EventId = 1,
+				EventId = PostEventId,
 				ImageSample = NewEventImageData.ImageSample,
 				CreatorId = 1,
 				Description = NewEventImageData.Description,
@@ -156,7 +159,7 @@ namespace CreatorsPlatform.Controllers
 			};
 			_context.Add(NewEventImage);
 			_context.SaveChanges();
-			return "OK";
+			return Ok();
 		}
 
 		public async Task<IActionResult> Details(int? id)
