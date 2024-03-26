@@ -51,9 +51,9 @@ public partial class ImaginkContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=(local);Database=Imagink;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=(local);Database=Imagink;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -187,6 +187,7 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.SubtitleId).HasColumnName("SubtitleID");
             entity.Property(e => e.SubtitleName).HasMaxLength(100);
             entity.Property(e => e.Title).HasMaxLength(500);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Content>(entity =>
@@ -297,11 +298,16 @@ public partial class ImaginkContext : DbContext
                 .HasNoKey()
                 .ToView("EventsAndImages");
 
+            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.EndDate).HasColumnType("datetime");
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.EventName).HasMaxLength(200);
+            entity.Property(e => e.EventStyle)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.EvtImgId).HasColumnName("EvtImgID");
+            entity.Property(e => e.ImageTitle).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
