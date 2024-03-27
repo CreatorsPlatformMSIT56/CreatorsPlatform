@@ -9,33 +9,12 @@
 @{
 	// 新增一個抓 id 並把他轉成 int32 之變數
 	int AAA = Convert.ToInt32(@ViewBag.Eid);
-
-	// var BBB = Model.ToList();
-
-
-	// IEnumerable<EventsAndImage> query = from CCC in Model
-	// 									where CCC.EventId == AAA
-	// 									select CCC;
-
-	// try
-	// {
-	// if (Model != null)
-	// {
-	//     query = from CCC in Model
-	//             where CCC.EventId == AAA
-	//             select CCC;
-	// }
-	// }
-	// catch (ArgumentNullException)
-	// {
-	//     return;
-	// }
 }
 <script>
 	var EventIdStocker = @AAA
 </script>
 @* ↓ ↓ ↓ <h1>測試用程式碼，可刪 ↓ ↓ ↓  *@
-<h1></h1>
+<h1>@Model.EventName</h1>
 
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
@@ -51,16 +30,16 @@
 			<p class="mb-0">主辦</p>
 		</div>
 
-		<div class="col-6 d-flex justify-content-center EventTitle">
-			<h3>Rust最終日全面開戰名場面</h3>
+		<div class="col-6 d-flex ju3>stify-content-center EventTitle">
+			<h3>@Model.EventName</h3>
 		</div>
 		<div class="col-3 d-flex align-items-center">
-			<b>2024.03.06(五)~2024.04.19(五)</b>
+			<b>@Model.StartDate~@Model.EndDate</b>
 		</div>
 	</div>
 	<div class="row">
 		<div id="editor" class="col EventDE">
-			<p class="ql-align-center">HoloLive 在 Rust 伺服器關閉的最後一天舉辦了一場讓人難忘的活動，吸引著眾多參與者投入戰場。</p><p class="ql-align-center">當太陽西沉，晚霞映紅了天際，戰場上火光四起，參與者們展現出技能和勇氣。</p><p class="ql-align-center">每個人在虛擬世界中都綻放出耀眼的光芒，帶來精彩紛呈的戰鬥場景。</p><p class="ql-align-center">這場戰鬥盛宴充滿了挑戰與驚奇，讓人永生難忘。</p><p class="ql-align-center">現在，讓我們一同投稿，用插畫來捕捉這震撼人心的時刻吧！</p>
+			
 		</div>
 	</div>
 	<div class="row">
@@ -232,8 +211,19 @@
 		</div>
 	</div>
 </div>
+
+
 <script src="~/js/Lolm/EventContent.js"></script>
 
+<script defer>
+
+		const quill = new Quill("#editor", {
+		readOnly: true
+	});
+	console.log(@Html.Raw(Model.EventDes));
+	quill.setContents(@Html.Raw(Model.EventDes));		
+	
+</script>
 <!-- 編輯器的套件 -->
 <!-- Include the Quill library -->
 @* <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script> *@

@@ -44,7 +44,6 @@ namespace CreatorsPlatform.Controllers
 			//					select new { Event = e, EventImages = eGroup }).ToListAsync();
 			//return View(result);
 
-			//▼沒有Banner所以擱置
 			var TheEventContext = _context.EventsAndImages;
 			var TheEventData = await (from o in TheEventContext
 									  where o.EventId == id
