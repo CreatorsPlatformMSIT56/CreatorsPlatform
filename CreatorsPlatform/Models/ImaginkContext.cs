@@ -276,6 +276,7 @@ public partial class ImaginkContext : DbContext
 
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
+            entity.Property(e => e.EvePostLike).HasDefaultValue(0);
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.ImageTitle).HasMaxLength(100);
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
@@ -298,11 +299,13 @@ public partial class ImaginkContext : DbContext
                 .ToView("EventsAndImages");
 
             entity.Property(e => e.EndDate).HasColumnType("datetime");
+            entity.Property(e => e.EveCreName).HasMaxLength(40);
             entity.Property(e => e.EventId).HasColumnName("EventID");
             entity.Property(e => e.EventImageId).HasColumnName("EventImageID");
             entity.Property(e => e.EventName).HasMaxLength(200);
             entity.Property(e => e.EvtImgId).HasColumnName("EvtImgID");
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+            entity.Property(e => e.ImgCreName).HasMaxLength(40);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
 

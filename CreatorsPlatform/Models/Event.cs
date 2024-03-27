@@ -25,6 +25,8 @@ public partial class Event
 
     public string? DescriptionString { get; set; }
 
+    public bool? EventCancel { get; set; }
+
     public virtual Category Category { get; set; } = null!;
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();

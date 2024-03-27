@@ -19,6 +19,10 @@ public partial class EventImage
 
     public string? ImageTitle { get; set; }
 
+    public int? EvePostLike { get; set; }
+
+    public bool? EveImgCancel { get; set; }
+
     public virtual Creator Creator { get; set; } = null!;
 
     public virtual Event Event { get; set; } = null!;

@@ -60,7 +60,7 @@
                         </span>
                     </h3>
                     <br />
-                    <p class="EventDes">@Html.DisplayFor(newEvents => item.Description)</p>
+                    <p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
                     <p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
                 </li>
             }
@@ -85,7 +85,7 @@
                             </a>
                         </span>
                     </h3><br />
-                    <p class="EventDes">@Html.DisplayFor(Model => item.Description)</p>
+                    <p class="EventDes">@Html.DisplayFor(Model => item.DescriptionString)</p>
                     <p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
                 </li>
             }
@@ -112,7 +112,7 @@
                         </span>
                     </h3>
                     <br />
-                    <p class="EventDes">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="EventDes">@Html.DisplayFor(modelItem => item.DescriptionString)</p>
                     <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
                 </li>
             }
