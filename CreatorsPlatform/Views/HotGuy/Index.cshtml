@@ -78,23 +78,18 @@
             {
                 <li class="list-group-item" position-relative m-4>
                     <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                    <h3><span>@Html.DisplayFor(Model => item.EventName)</span></h3><br />
+                    <h3>
+                        <span>
+                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+                                @Html.DisplayFor(Model => item.EventName)
+                            </a>
+                        </span>
+                    </h3><br />
                     <p class="EventDes">@Html.DisplayFor(Model => item.Description)</p>
                     <p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
                 </li>
             }
-            @* <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li>
-            <li class="list-group-item" position-relative m-4>
-                <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                <h3><span>Insert Event Name</span></h3><br />
-                <p class="EventDes">Insert Event Description</p>
-                <p class="EventEndDate">截止日期</p>
-            </li> *@
+
         </ul>
     </div>
     <br />
@@ -109,7 +104,14 @@
             {
                 <li class="list-group-item" position-relative m-4>
                     <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
-                    <h3><span>@Html.DisplayFor(modelItem => item.EventName)</span></h3><br />
+                    <h3>
+                        <span>
+                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+								@Html.DisplayFor(modelItem => item.EventName)
+                            </a>
+                        </span>
+                    </h3>
+                    <br />
                     <p class="EventDes">@Html.DisplayFor(modelItem => item.Description)</p>
                     <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
                 </li>
