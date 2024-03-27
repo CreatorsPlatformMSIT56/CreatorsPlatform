@@ -51,12 +51,12 @@ $(function () {
     })
 
     // Modal更新
-    function RefrashPostModal() {
-        console.log($(this).closest(".EventPost").prop("id"))
+    function RefrashPostModal(TheEle) {
+        console.log($(TheEle).closest(".EventPost").prop("id"));
     }
 
     // 點擊投稿讓Modal內容更新
     $(".EventPostImgPart, .EventPostTitle").on("click", function () {
-        RefrashPostModal();
+        RefrashPostModal(this);
     })
 });

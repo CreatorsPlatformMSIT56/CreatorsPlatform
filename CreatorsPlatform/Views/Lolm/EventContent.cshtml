@@ -21,7 +21,7 @@
 {
     <div class="container-fluid px-0 EventHeaderImg">
         <img class="img-fluid" src="@Model[0].Banner
-                        " alt="Alternate Text" />
+                            " alt="Alternate Text" />
     </div>
 }
 @* 說明欄 *@
@@ -85,29 +85,29 @@
             @foreach (var item in Model.FindAll(model => model.ImageSample == null && model.ImageUrl != null))
             {
                 <div class="col EventPost" id="@("Post" + item.EventImageId)">
-                @* 投稿圖片*@
-                <div class="EventPostImgPart">
-                    <div><img class="img-fluid p-1" src="@item.ImageUrl" /></div>
-                </div>
-                @* 標題與愛心數 *@
-                <div class="d-flex justify-content-between px-1">
-                    <div><span class="EventPostTitle"><b>@item.ImgTitle</b></span></div>
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex justify-content-center align-items-center me-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                            </svg>
+                    @* 投稿圖片*@
+                    <div class="EventPostImgPart">
+                        <div><img class="img-fluid p-1" src="@item.ImageUrl" /></div>
+                    </div>
+                    @* 標題與愛心數 *@
+                    <div class="d-flex justify-content-between px-1">
+                        <div><span class="EventPostTitle"><b>@item.ImgTitle</b></span></div>
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex justify-content-center align-items-center me-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                                </svg>
+                            </div>
+                            <p class="mb-0">@item.EvePostLike</p>
                         </div>
-                        <p class="mb-0">@item.EvePostLike</p>
+                    </div>
+                    @* 作者 *@
+                    <div class="d-flex align-items-center px-1 EventParticipant">
+                        <a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="data:image/*;base64,@(Convert.ToBase64String(item.ImgCreAvatar))" alt="Alternate Text" />@item.ImgCreName</a>
                     </div>
                 </div>
-                @* 作者 *@
-                <div class="d-flex align-items-center px-1 EventParticipant">
-                        <a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="data:image/*;base64,@(Convert.ToBase64String(item.ImgCreAvatar))" alt="Alternate Text" />@item.ImgCreName</a>
-                </div>
-            </div>
             }
-            
+
             <!--
                 <div class="col EventPost">
             @* 投稿圖片*@
@@ -139,7 +139,7 @@
             <div class="col-12">
                 <h2 class="text-black-50 py-5">快來搶頭香，成為第一個投稿的人！</h2>
             </div>
-        }        
+        }
     </div>
 </div>
 @* 投稿按鈕 *@
@@ -247,9 +247,9 @@
 <!-- Include the Quill library -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script defer>
-                    //Quill設定
-                    // Initialize Quill editor
-                    const quill = new Quill("#editor", {
+                        //Quill設定
+                        // Initialize Quill editor
+                        const quill = new Quill("#editor", {
         readOnly: true
     });
     console.log(@Html.Raw(Model[0].EventDes));
