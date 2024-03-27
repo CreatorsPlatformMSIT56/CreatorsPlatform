@@ -28,10 +28,6 @@ $(function () {
     // 讓參加活動的投稿的圖片與標題，點擊時可以顯示Modal
     $(".EventPostImgPart, .EventPostTitle").attr({ 'data-bs-toggle': 'modal', 'data-bs-target': '#EventPostModal' });
 
-    //Quill設定
-    /*< !--Initialize Quill editor-- >*/
-    
-
     // 參加活動投稿OKbtn
     $("#okButton").on("click", function () {
         var EventPostData = {

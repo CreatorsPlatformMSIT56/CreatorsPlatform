@@ -39,7 +39,6 @@
 	</div>
 	<div class="row">
 		<div id="editor" class="col EventDE">
-			
 		</div>
 	</div>
 	<div class="row">
@@ -215,17 +214,18 @@
 
 <script src="~/js/Lolm/EventContent.js"></script>
 
-<script defer>
-
-		const quill = new Quill("#editor", {
-		readOnly: true
-	});
-	console.log(@Html.Raw(Model.EventDes));
-	quill.setContents(@Html.Raw(Model.EventDes));		
-	
-</script>
 <!-- 編輯器的套件 -->
 <!-- Include the Quill library -->
-@* <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script> *@
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script defer>
+	//Quill設定
+	// Initialize Quill editor
+	const quill = new Quill("#editor", {
+	readOnly: true
+	});
+	console.log(@Html.Raw(Model.EventDes));
+	quill.setContents(@Html.Raw(Model.EventDes));
+
+</script>
 
 
