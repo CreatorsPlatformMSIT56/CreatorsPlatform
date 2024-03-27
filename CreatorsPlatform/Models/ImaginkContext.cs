@@ -306,6 +306,7 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.EvtImgId).HasColumnName("EvtImgID");
             entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
             entity.Property(e => e.ImgCreName).HasMaxLength(40);
+            entity.Property(e => e.ImgTitle).HasMaxLength(100);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
         });
 

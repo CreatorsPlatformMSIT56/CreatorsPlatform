@@ -13,7 +13,7 @@
 /*----------------上傳封面照片--------------------*/
 /*限制上傳圖片顯示範圍*/
 .PreviewImgWarp {
-    height: 16rem;
+    height: 20rem;
     overflow: hidden;
 }
 /*沒連結圖片時不要顯示*/

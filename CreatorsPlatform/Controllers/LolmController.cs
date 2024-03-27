@@ -47,7 +47,7 @@ namespace CreatorsPlatform.Controllers
 			var TheEventContext = _context.EventsAndImages;
 			var TheEventData = await (from o in TheEventContext
 									  where o.EventId == id
-									  select o).FirstOrDefaultAsync();
+									  select o).ToListAsync();
 			return View(TheEventData);
 		}
 
