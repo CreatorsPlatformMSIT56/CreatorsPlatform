@@ -37,17 +37,19 @@ namespace CreatorsPlatform.Controllers
 		{
 			ViewBag.Eid = id;
 
-			var result = await (from e in _context.Events
-								join ei in _context.EventImages on e.EventId equals ei.EventId into eGroup
-								where e.EventId == id
-								select new { Event = e, EventImages = eGroup }).ToListAsync();
-			return View(result);
+			// ▼不知道@model的型態所以擱置
+			//var result = await (from e in _context.Events
+			//					join ei in _context.EventImages on e.EventId equals ei.EventId into eGroup
+			//					where e.EventId == id
+			//					select new { Event = e, EventImages = eGroup }).ToListAsync();
+			//return View(result);
+
 			//▼沒有Banner所以擱置
-			//var TheEventContext = _context.EventsAndImages;
-			//var TheEventData = await (from o in TheEventContext
-			//						  where o.EventId == id
-			//						  select o).FirstOrDefaultAsync();
-			//return View(TheEventData);
+			var TheEventContext = _context.EventsAndImages;
+			var TheEventData = await (from o in TheEventContext
+									  where o.EventId == id
+									  select o).FirstOrDefaultAsync();
+			return View(TheEventData);
 		}
 
 		public IActionResult CreateEvent()
