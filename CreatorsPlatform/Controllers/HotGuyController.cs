@@ -29,7 +29,6 @@ namespace CreatorsPlatform.Controllers
                            orderby e.EndDate
                            select e).Take(3);
 
-
             ViewData["NewEvents"] = NewEventList;
 
             ViewData["OldEvents"] = EndEventList;

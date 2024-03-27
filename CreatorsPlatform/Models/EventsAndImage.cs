@@ -17,6 +17,10 @@ public partial class EventsAndImage
 
     public DateTime EndDate { get; set; }
 
+    public string? Banner { get; set; }
+
+    public int EventCategory { get; set; }
+
     public int? EventCreator { get; set; }
 
     public int? EventImageId { get; set; }

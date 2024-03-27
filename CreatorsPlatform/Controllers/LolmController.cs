@@ -2,9 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
 
 namespace CreatorsPlatform.Controllers
 {
@@ -26,20 +31,24 @@ namespace CreatorsPlatform.Controllers
 		//    return View();
 		//}
 
+
 		// 新增存 id 的變數，並想把他丟到 View
 		public async Task<IActionResult> EventContent(int? id)
 		{
-			TempData["Eid"] = id;
-			var imaginkContext = _context.EventsAndImages;
+			ViewBag.Eid = id;
 
-			// 原本想在 controller 寫 LINQ，但不會傳到 view
-			//IEnumerable<EventsAndImage> query = from CCC in imaginkContext
-			//                                    where CCC.EventId == id
-			//                                    select CCC;
+			// ▼不知道@model的型態所以擱置
+			//var result = await (from e in _context.Events
+			//					join ei in _context.EventImages on e.EventId equals ei.EventId into eGroup
+			//					where e.EventId == id
+			//					select new { Event = e, EventImages = eGroup }).ToListAsync();
+			//return View(result);
 
-			// 取得TempData裡面裝的字串
-			ViewBag.QuillContent = TempData.Peek("DataFromClient");
-			return View(await imaginkContext.ToListAsync());
+			var TheEventContext = _context.EventsAndImages;
+			var TheEventData = await (from o in TheEventContext
+									  where o.EventId == id
+									  select o).FirstOrDefaultAsync();
+			return View(TheEventData);
 		}
 
 		public IActionResult CreateEvent()
@@ -47,50 +56,6 @@ namespace CreatorsPlatform.Controllers
 
 			return View();
 		}
-
-
-		// 取得input的值並上傳到資料庫
-		//[HttpPost]
-		//public async Task<IActionResult> Upload([FromBody]Event model)
-		//{
-		//	if (ModelState.IsValid)
-		//	{
-		//		// 從 ViewModel 中獲取表單數據
-		//		//var eventName = model.EventName;
-		//		//var startDate = model.StartDate;
-		//		//var endDate = model.EndDate;
-		//		//var banner = model.Banner;
-		//		// var description = model.Description;
-		//		//var eventStyle = model.EventStyle;
-
-		//		// 創建 Event 對象並賦值
-		//		//var NewEvent = new Event
-		//		//{
-		//		//	EventName = eventName,
-		//		//	StartDate = startDate,
-		//		//	EndDate = endDate,
-		//			// Banner = banner,
-		//			// Description = description,
-		//		//	EventStyle = eventStyle
-		//		//};
-
-		//		try
-		//		{
-		//			// 將對象添加到資料庫並保存更改
-		//			_context.Events.Add(model);
-		//			await _context.SaveChangesAsync();
-		//			return Ok();
-		//			//return RedirectToAction(nameof(EventContent));
-		//		}
-		//		catch (Exception ex)
-		//		{
-		//			// 處理例外情況
-		//			ModelState.AddModelError("", $"無法保存圖片：{ex.Message}");
-		//		}
-		//	}
-		//	// 如果模型狀態無效，返回表單頁面
-		//	return View(model);
-		//}
 
 		// 品旭的
 		[HttpPost]
@@ -136,48 +101,76 @@ namespace CreatorsPlatform.Controllers
 			return RedirectToAction("EventContent");
 		}
 
-		// 上傳input內容至資料庫
+		// 上傳Event內容至資料庫
 		[HttpPost]
 		[Route("Lolm/Create")]
-		public IActionResult Create([FromBody] JsonElement NewEventJson)
+		public IActionResult Create(Event EventModelData)
 		{
 			Event NewEvent = new Event
 			{
-				EventName = NewEventJson.GetProperty("EventName").GetString(),
-				Description = NewEventJson.GetProperty("Description").GetString(),
-				StartDate = NewEventJson.GetProperty("StartDate").GetDateTime(),
-				EndDate = NewEventJson.GetProperty("EndDate").GetDateTime(),
-				EventStyle = NewEventJson.GetProperty("EventStyle").GetString(),
-				Banner = NewEventJson.GetProperty("Banner").GetString(),
-				CategoryId = NewEventJson.GetProperty("CategoryID").GetInt32()
+				EventName = EventModelData.EventName,
+				Description = EventModelData.Description,
+				StartDate = EventModelData.StartDate,
+				EndDate = EventModelData.EndDate,
+				EventStyle = EventModelData.EventStyle,
+				Banner = EventModelData.Banner,
+				CategoryId = EventModelData.CategoryId,
+				DescriptionString = EventModelData.DescriptionString
 			};
-			// 將JSON字串還原為字串陣列
-			Console.WriteLine("1444");
-			//string[] ExImgArray = JsonConvert.DeserializeObject<string[]>(NewEventJson.GetProperty("ExImgURLArray").GetString());
 
 			if (ModelState.IsValid != null)
 			{
 				_context.Add(NewEvent);
-				//if (ExImgArray.Length > 0)
-				//{
-				//	for (int i = 0; i < ExImgArray.Length; i++)
-				//	{
-				//		EventImage NewEventImg = new EventImage
-				//		{
-				//			EventId = NewEvent.EventId,
-				//			ImageUrl = ExImgArray[i],
-				//			ImageSample = true
-				//		};
-				//		_context.Add(NewEventImg);
-				//	}
-				//}
 				_context.SaveChanges();
+				// 將這個新增活動的id傳出來給範例圖片的ajax使用
+				TempData["TheNewEventID"] = NewEvent.EventId;
+				Console.WriteLine(NewEvent.EventId);
+
 				return Ok(); // 返回成功狀態碼 200
 			}
+
 
 			return BadRequest(); // 返回錯誤狀態碼 400
 		}
 
+		// 上傳範例圖片至資料庫
+		[HttpPost]
+		//public string CreateEventExImg([FromBody]JsonElement ExImgDataURLs)
+		public string CreateEventExImg(EventImage NewEventImageData)
+		{
+			int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
+
+			EventImage NewEventImage = new EventImage()
+			{
+				ImageUrl = NewEventImageData.ImageUrl,
+				EventId = newEventId, // 使用从 TempData 中获取的 ID
+				ImageSample = true,
+				CreatorId = 1
+			};
+			_context.EventImages.Add(NewEventImage);
+			_context.SaveChanges();
+			return "OK";
+		}
+
+		// 上傳活動參加者的投稿 到 資料庫的EventImg表
+		[HttpPost]
+		public IActionResult CreateEventPost(EventImage NewEventImageData, int eventId)
+		{
+			int PostEventId = NewEventImageData.EventId;
+
+			EventImage NewEventImage = new EventImage()
+			{
+				ImageUrl = NewEventImageData.ImageUrl,
+				EventId = PostEventId,
+				ImageSample = NewEventImageData.ImageSample,
+				CreatorId = 1,
+				Description = NewEventImageData.Description,
+				ImageTitle = NewEventImageData.ImageTitle
+			};
+			_context.Add(NewEventImage);
+			_context.SaveChanges();
+			return Ok();
+		}
 
 		public async Task<IActionResult> Details(int? id)
 		{

@@ -21,8 +21,6 @@ public partial class CommissionWithImageAndWord
 
     public int CreatorId { get; set; }
 
-    public int UserId { get; set; }
-
     public int SubtitleId { get; set; }
 
     public string? ImageUrl { get; set; }

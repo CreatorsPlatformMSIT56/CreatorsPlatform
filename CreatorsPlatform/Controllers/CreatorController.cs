@@ -9,9 +9,6 @@ namespace CreatorsPlatform.Controllers
 {
     public class CreatorController : Controller
     {
-        
-
-
         // 導入Context
         private readonly ImaginkContext _context;
 
@@ -31,7 +28,6 @@ namespace CreatorsPlatform.Controllers
             public Creator? Creator { get; set; }
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
-            public IEnumerable<Commission>? Commissions { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
         }
         //public class CommisionsWithWords
@@ -62,7 +58,10 @@ namespace CreatorsPlatform.Controllers
 
             var userAvatar = creator?.Users.FirstOrDefault()?.Avatar;
 
-            var commisions = _context.Commissions.Where(c => c.CreatorId == id);
+            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+                                       where c.CreatorId == id
+                                       group c by c.Title into g
+                                       select g.OrderBy(x => x.CommissionId).First();
 
             //var commisionsWithWords = from commission in _context.Commissions
             //                        where commission.CreatorId == id
@@ -84,18 +83,15 @@ namespace CreatorsPlatform.Controllers
             //                        };
             //var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
 
-            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
-                                       where c.CreatorId == id
-                                       select c;
-
-
+            //var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+            //                           where c.CreatorId == id
+            //                           select c;
 
             var viewModel = new CreatorDetailsViewModel
             {
                 Creator = creator,
                 UserName = userName,
                 UserAvatar = userAvatar,
-                Commissions = commisions,
                 CommissionsWithWords = commissionsWithWords
             };
 
@@ -122,9 +118,14 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者貼文頁面
-        public IActionResult GetPost()
+        public IActionResult GetPost(int id)
         {
-            return View();
+            var content = _context.Contents
+                //.Include(c => c.SubtitleId)
+                .FirstOrDefault(c => c.ContentId == id);
+
+
+            return View(content);
         }
 
         // 創作者建立接受委託表單(修改位置待訂)

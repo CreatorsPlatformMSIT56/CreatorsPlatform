@@ -35,7 +35,7 @@ public partial class User
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Commission> Commissions { get; set; } = new List<Commission>();
+    public virtual ICollection<CommissionOrder> CommissionOrders { get; set; } = new List<CommissionOrder>();
 
     public virtual Creator? Creator { get; set; }
 

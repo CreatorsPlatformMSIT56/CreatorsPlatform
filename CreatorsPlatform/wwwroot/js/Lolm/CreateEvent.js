@@ -52,13 +52,12 @@ function getQuillContent() {
     // Delta 轉 Json
     var DeltaJson = JSON.stringify(QuillContent);
     return DeltaJson;
-    //$.ajax({
-    //    url: "/Lolm/CreateEvent",
-    //    method: "post",
-    //    data: { DataFromClient: DeltaJson }
-    //}).done(function (data) {
-    //    alert(data);
-    //});
+}
+
+// 獲得Quill內容的純文字
+function getQuillText() {
+    const QuillText = quill.getText();
+    return QuillText;
 }
 
 function GetEventStyle() {
@@ -80,7 +79,7 @@ function PostAllToSQL() {
     //    CategoryID: 1
     //};
 
-    var dataFromClient = {
+    var EventdataFromClient = {
         EventName: $("#eventName").val(),
         StartDate: $("#startDate").val(),
         EndDate: $("#endDate").val(),
@@ -88,16 +87,18 @@ function PostAllToSQL() {
         EventStyle: GetEventStyle(),
         Banner: BannerDataURL,
         CategoryID: 1,
-        ExImgURLArray: JSON.stringify(ExImgDataURLs)
+        DescriptionString: getQuillText()
     };
+
+    //ExImgURLArray: JSON.stringify(ExImgDataURLs)
 
     $.ajax({
         url: "/Lolm/Create",
         method: "post",
-        contentType: 'application/json',
-        data: JSON.stringify(dataFromClient),
+        data: EventdataFromClient,
         success: function (response) {
-            alert(response);
+            UploadEventExImg();
+            alert("活動發布成功");
         },
         error: function (xhr, status, error) {
             // 處理錯誤 
@@ -105,6 +106,20 @@ function PostAllToSQL() {
         }
     });
 }
-function Test() {
-    console.log(JSON.stringify(ExImgDataURLs));
+function UploadEventExImg() {
+    for (var i = 0; i < ExImgDataURLs.length; i++) {
+        $.ajax({
+            url: "/Lolm/CreateEventExImg",
+            method: "post",
+            /*processData: false, // 不对 FormData 进行处理*/
+            data: { ImageURL: ExImgDataURLs[i] },
+            success: function (response) {
+                alert(response);
+            },
+            error: function () {
+                alert("活動範例圖片上傳失敗");
+            }
+        })
+    }
+
 }
