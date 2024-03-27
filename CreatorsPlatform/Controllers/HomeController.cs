@@ -30,6 +30,7 @@ namespace CreatorsPlatform.Controllers
 			HttpContext.Session.SetString("key", Member);
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			Console.WriteLine(member.id);
             Console.WriteLine(member.Name);
             Console.WriteLine(member.Email);
             Console.WriteLine(member.Password);
