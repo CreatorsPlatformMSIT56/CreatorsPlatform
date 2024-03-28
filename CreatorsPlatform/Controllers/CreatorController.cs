@@ -16,6 +16,7 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
+
         // 創作者首頁
         public class CreatorDetailsViewModel
         {
@@ -80,6 +81,7 @@ namespace CreatorsPlatform.Controllers
 
             return View(viewModel);
         }
+
         // 創作者建立貼文(修改位置待訂)
         public IActionResult AddPost()
         {
@@ -94,7 +96,6 @@ namespace CreatorsPlatform.Controllers
             public IEnumerable<Plan>? Plans { get; set; }
             public IEnumerable<Comment>? Comments { get; set; }
         }
-
         public IActionResult GetPost(int id)
         {
             var content = _context.Contents
