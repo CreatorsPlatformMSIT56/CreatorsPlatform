@@ -174,10 +174,62 @@ namespace CreatorsPlatform.Controllers
             return Json(DefaultContentsData);
         }
         public IActionResult Payment()
-		{
-			return View();
-		}
-		public IActionResult EntrustPayment()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+
+            var subPayment = (from p in _context.Plans
+                              join i in _context.Users on p.CreatorId equals i.CreatorId
+                              where p.PlanId == 3
+                              select new
+                              {
+                                  planId = p.PlanId,
+                                  planName = p.PlanName,
+                                  planPrice = p.PlanPrice,
+                                  planDes = p.Description,
+                                  creatorName = i.UserName,
+                                  creatorAvatar = i.Avatar
+                              });
+
+            ViewBag.subPay = subPayment.ToList();
+            ViewBag.Id = member.id;
+
+            return View();
+        }
+
+
+        [HttpPost]
+        [Route("yhu/SubPayments")]
+        public ActionResult SubPayments(Subscription subPay)
+        {
+            Console.WriteLine("我要進來囉");
+            var sDate = DateTime.Now;
+            DateOnly? ssDate = DateOnly.FromDateTime(sDate);
+            var eDate = sDate.AddMonths(1);
+            DateOnly? eeDate = DateOnly.FromDateTime(eDate);
+
+            Subscription NewSub = new Subscription
+            {
+                StartDate = ssDate,
+                EndDate = eeDate,
+                PaymentMade = true,
+                CreatorId = subPay.UserId,
+                PlanId = subPay.PlanId,
+                UserId = subPay.UserId
+            };
+
+            if (ModelState.IsValid != null)
+            {
+                _context.Add(NewSub);
+                _context.SaveChanges();
+
+                Console.WriteLine("杰哥不要");
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+        public IActionResult EntrustPayment()
 		{
 			return View();
 		}

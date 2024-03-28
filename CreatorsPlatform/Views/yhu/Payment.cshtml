@@ -2,25 +2,42 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    int UserId = ViewBag.Id;
 }
-<form action="/submit-form" method="post">
+<style>
+    img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    p {
+        display: inline-block
+    }
+
+    #planPrice {
+        float: right;
+    }
+</style>
+<div class="container">
     <div class="row">
-        <div class="col-md-7">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="..." class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    </div>
-                </div>
-            </div>
-            <hr />
+        <div class="col-8">
+            <ul class="list-group">
+                <li class="list-group-item" position-relative m-4>
+                    <img class="listImg float-md-start me-md-3" src="data:image/*;base64,@(Convert.ToBase64String(@ViewBag.subPay[0].creatorAvatar))" />
+                    <h3>
+                        <span>
+                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="">
+                                @ViewBag.subPay[0].planName
+                            </a>
+                        </span>
+                    </h3>
+                    <p id="planDes">@ViewBag.subPay[0].planDes</p>
+                    <p id="creatorName">創作者：@ViewBag.subPay[0].creatorName</p>
+                    <h5 id="planPrice">$@ViewBag.subPay[0].planPrice</h5>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-4">
+        <div class="col-4">
             <div class="row border">
                 <div class="row">
                     <p> <label for="CardNumber">卡號</label></p>
@@ -28,7 +45,7 @@
                 </div>
                 <div class="row">
                     <p><label for="CardholderName">持卡人名</label></p>
-                    <p><input type="text" name="CardholderName"></p>               
+                    <p><input type="text" name="CardholderName"></p>
                 </div>
                 <div class="row">
                     <p><label for="ExpiryDate">有效期限</label></p>
@@ -38,11 +55,87 @@
                     <p><label label for="SecurityCode">安全碼</label></p>
                     <p> <input type="text" name="SecurityCode"></p>
                 </div>
-            </div>
-            <hr />
-            <div class="row">
-                <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+                <br /><br /><br />
+                <div class="row">
+                    <input id="subBtn" type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+                </div>
             </div>
         </div>
     </div>
-</form>
+
+
+    @* <div class="row">
+    <div class="col-md-7">
+    <div class="row g-0">
+    <div class="col-md-4">
+    <a class="d-flex align-items-center" href="#">
+    @if (@ViewBag.subPay[0].creatorAvatar != null)
+    {
+    <img src="data:image/*;base64,@(Convert.ToBase64String(@ViewBag.subPay[0].creatorAvatar))" class="img-fluid img-fluid float-start rounded-start" alt="...">
+    }<b>@ViewBag.subPay[0].creatorName</b>
+    </a>
+    </div>
+    <div class="col-md-8">
+    <div class="card-body">
+    <h5 class="card-title">@ViewBag.subPay[0].planName</h5>
+    <p class="card-text">@ViewBag.subPay[0].planDes</p>
+    <p class="card-text">@ViewBag.subPay[0].planPrice</p>
+    </div>
+    </div>
+    </div>
+    <hr />
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+    <div class="row border">
+    <div class="row">
+    <p> <label for="CardNumber">卡號</label></p>
+    <p><input type="text" name="CardNumber"></p>
+    </div>
+    <div class="row">
+    <p><label for="CardholderName">持卡人名</label></p>
+    <p><input type="text" name="CardholderName"></p>
+    </div>
+    <div class="row">
+    <p><label for="ExpiryDate">有效期限</label></p>
+    <p>  <input type="text" name="ExpiryDate"></p>
+    </div>
+    <div class="row">
+    <p><label label for="SecurityCode">安全碼</label></p>
+    <p> <input type="text" name="SecurityCode"></p>
+    </div>
+    </div>
+    <hr />
+    <div class="row">
+    <input id="subBtn" type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+    </div>
+    </div>
+    </div> *@
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#subBtn").click(function () {
+                alert("Start");
+                var PlanDataToServer = {
+                    PlanID: 23,
+                    UserID: @UserId,
+                    CreatorID: 7
+                };
+                alert("AAA");
+
+                $.ajax({
+                    url: "/yhu/SubPayments",
+                    method: "post",
+                    data: PlanDataToServer,
+                    success: function (response) {
+                        alert(response + "成功");
+                    },
+                    error: function () {
+                        alert('新增失敗');
+                    }
+                });
+            });
+        });
+    </script>

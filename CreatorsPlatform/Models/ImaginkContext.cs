@@ -267,6 +267,7 @@ public partial class ImaginkContext : DbContext
 
             entity.HasOne(d => d.Creator).WithMany(p => p.Events)
                 .HasForeignKey(d => d.CreatorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Events__CreatorI__3493CFA7");
         });
 
