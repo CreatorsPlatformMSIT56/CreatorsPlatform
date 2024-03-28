@@ -234,7 +234,7 @@ namespace CreatorsPlatform.Controllers
                                     join PlanData in _context.Plans on WorkRead.PlanId equals PlanData.PlanId
                                     where WorkRead.CreatorId == CreatorId
                                     select new
-                                          {WorkRead.Title, WorkRead.Description, PlanData.PlanLevel});
+                                          {WorkRead.CategoryId, WorkRead.Title, WorkRead.Description, PlanData.PlanLevel});
                     return Json(WorkData.ToList());
                 case "OrderData1":
                     var OrderProject = (from OrderData in _context.Commissions
