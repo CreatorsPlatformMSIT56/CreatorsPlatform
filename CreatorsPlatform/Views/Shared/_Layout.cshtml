@@ -33,8 +33,8 @@
 
                 @* 響應式摺疊部分 *@
                 <div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
-                    <form class="d-flex" style="position: relative;">
-                        <input class="form-control SearchFormInput" type="search" placeholder="搜尋作品/創作者/標籤" aria-label="Search">
+                    <form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
+                        <input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/標籤" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
                         <button class="SearchFormBtn" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />

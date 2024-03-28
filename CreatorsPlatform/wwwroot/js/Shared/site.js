@@ -1,16 +1,15 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+// 檢查 sessionStorage 是否包含搜索關鍵字並填充輸入框
+window.onload = function () {
+    var searchKey = sessionStorage.getItem('searchKey');
+    if (searchKey) {
+        document.querySelector('.SearchFormInput').value = searchKey;
+    }
+};
 
-// Write your JavaScript code.
-const quill = new Quill('#editor', {
-    modules: {
-        toolbar: [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['image', 'code-block', 'video', 'link'],
-        ],
-    },
-    placeholder: 'Compose an epic...',
-    theme: 'snow', // or 'bubble'
+// 在提交表單時將搜索關鍵字存儲到 sessionStorage 中
+document.querySelector('form').addEventListener('submit', function (event) {
+    var searchKey = document.querySelector('.SearchFormInput').value;
+    sessionStorage.setItem('searchKey', searchKey);
 });
 

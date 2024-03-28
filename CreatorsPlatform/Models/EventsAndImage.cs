@@ -35,6 +35,8 @@ public partial class EventsAndImage
 
     public string? ImgDes { get; set; }
 
+    public string? ImgTitle { get; set; }
+
     public int? ImgCreator { get; set; }
 
     public bool? ImageSample { get; set; }

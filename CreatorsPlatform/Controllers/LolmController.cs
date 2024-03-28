@@ -47,7 +47,7 @@ namespace CreatorsPlatform.Controllers
 			var TheEventContext = _context.EventsAndImages;
 			var TheEventData = await (from o in TheEventContext
 									  where o.EventId == id
-									  select o).FirstOrDefaultAsync();
+									  select o).ToListAsync();
 			return View(TheEventData);
 		}
 
@@ -170,6 +170,15 @@ namespace CreatorsPlatform.Controllers
 			_context.Add(NewEventImage);
 			_context.SaveChanges();
 			return Ok();
+		}
+
+		[HttpGet]
+		public EventsAndImage? EventPostContent(string EventAndImgId)
+		{
+			int EventAndImgIntId = Convert.ToInt32(EventAndImgId);
+			var TheEventPostSQL = _context.EventsAndImages;
+			var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EvtImgId == EventAndImgIntId);
+			return TheEventPost;
 		}
 
 		public async Task<IActionResult> Details(int? id)

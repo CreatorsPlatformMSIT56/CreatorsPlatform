@@ -16,35 +16,18 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
-
+        // 創作者首頁
         public class CreatorDetailsViewModel
         {
             //public string Name { get; set; } = "Error";
             //public string Email { get; set; } = "Error";
             //public string Password { get; set; } = "Error";
 
-            
-
             public Creator? Creator { get; set; }
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
         }
-        //public class CommisionsWithWords
-        //{
-        //    public IEnumerable<Commission>? Comissions { get; set; }
-        //    public int ComID { get; set; }
-        //    public string? ComTitle { get; set; }
-        //    public int ComPriceMin { get; set; }
-        //    public int? ComPriceMax { get; set; }
-        //    public string? ComDes { get; set; }
-        //    public DateOnly ComPutUpDate { get; set; }
-        //    public DateOnly? ComOverDate { get; set; }
-        //    public byte[]? ImageUrl { get; set; }
-        //    public string? SubtitleName { get; set; }
-        //}
-
-        // 創作者首頁
         public IActionResult Index(int id)
         {
             //var memberJson = HttpContext.Session.GetString("key");
@@ -97,19 +80,6 @@ namespace CreatorsPlatform.Controllers
 
             return View(viewModel);
         }
-
-        //這是測試
-        public IActionResult Test(int id)
-        {
-            //假設這是PlanId
-            var p = (from c in _context.Plans
-                    where c.PlanId == id
-                    select c).ToList();
-            
-            var query = _context.Plans.ToList();
-            return View(p);
-        }
-
         // 創作者建立貼文(修改位置待訂)
         public IActionResult AddPost()
         {
@@ -118,14 +88,67 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者貼文頁面
+        public class ContentDetailsViewModel
+        {
+            public IEnumerable<Content>? Content { get; set; }
+            public IEnumerable<Plan>? Plans { get; set; }
+            public IEnumerable<Comment>? Comments { get; set; }
+        }
+
         public IActionResult GetPost(int id)
         {
             var content = _context.Contents
-                //.Include(c => c.SubtitleId)
+                .Include(c => c.Creator)
+                .ThenInclude(cr => cr.Users)
                 .FirstOrDefault(c => c.ContentId == id);
 
+            var comments = _context.Comments
+                .Include(u => u.User)
+                .Where(c => c.ContentId == id)
+                .Select(cm => new Comment
+                {
+                    Comment1 = cm.Comment1,
+                    ContentId = cm.CommentId,
+                    User = new User
+                    {
+                        UserId = cm.UserId,
+                        UserName = cm.User.UserName,
+                        Avatar = cm.User.Avatar
+                    }
+                }).ToList();
 
-            return View(content);
+            var plans = _context.Plans
+                .Include(p => p.Creator)
+                .ThenInclude(c => c.Users)
+                .Where(p => p.Creator.CreatorId == content.CreatorId)
+                .Select(p => new Plan
+                {
+                    PlanId = p.PlanId,
+                    CreatorId = p.CreatorId,
+                    PlanName = p.PlanName,
+                    PlanPrice = p.PlanPrice,
+                    PlanLevel = p.PlanLevel,
+                    Creator = new Creator
+                    {
+                        CreatorId = p.Creator.CreatorId,
+                        Users = p.Creator.Users.Select(u => new User
+                        {
+                            UserId = u.UserId,
+                            UserName = u.UserName,
+                            Avatar = u.Avatar
+                        }).ToList()
+                    }
+                }).ToList();
+            
+            
+            var viewModel = new ContentDetailsViewModel
+            {
+                Content = new List<Content> { content },
+                Plans = plans,
+                Comments = comments
+            };
+
+            return View(viewModel);
         }
 
         // 創作者建立接受委託表單(修改位置待訂)
