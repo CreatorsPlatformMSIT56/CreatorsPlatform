@@ -172,6 +172,15 @@ namespace CreatorsPlatform.Controllers
 			return Ok();
 		}
 
+		[HttpGet]
+		public EventsAndImage? EventPostContent(string EventAndImgId)
+		{
+			int EventAndImgIntId = Convert.ToInt32(EventAndImgId);
+			var TheEventPostSQL = _context.EventsAndImages;
+			var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EvtImgId == EventAndImgIntId);
+			return TheEventPost;
+		}
+
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null)
