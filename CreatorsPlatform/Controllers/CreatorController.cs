@@ -105,12 +105,14 @@ namespace CreatorsPlatform.Controllers
 
             var comments = _context.Comments
                 .Include(u => u.User)
+                .Where(c => c.ContentId == id)
                 .Select(cm => new Comment
                 {
                     Comment1 = cm.Comment1,
                     ContentId = cm.CommentId,
                     User = new User
                     {
+                        UserId = cm.UserId,
                         UserName = cm.User.UserName,
                         Avatar = cm.User.Avatar
                     }

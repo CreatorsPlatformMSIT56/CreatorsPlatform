@@ -25,11 +25,15 @@
             <!-- 作者 -->
             <div class="row p-3">
                 <div class="col-2 avatar text-center">
-                    <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
-                         style="max-width:100px; max-height:100px;">
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Content?.FirstOrDefault()?.Creator.CreatorId">
+                        <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                             style="max-width:100px; max-height:100px;">
+                    </a>
                 </div>
                 <div class="col-8 creator-name d-inline-flex align-items-center">
-                    <h4>@Model.Content?.FirstOrDefault()?.Creator.Users.SingleOrDefault()?.UserName</h4>
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Content?.FirstOrDefault()?.Creator.CreatorId">
+                        <h4>@Model.Content?.FirstOrDefault()?.Creator.Users.SingleOrDefault()?.UserName</h4>
+                    </a>
                 </div>
                 <div class="col-2 d-inline-flex align-items-center justify-content-center">
                     <button type="button" class="btn btn-primary">關注</button>
@@ -48,12 +52,16 @@
                     <div class="row g-0">
                         <div class="col-md-2 avatar text-center">
                             @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
-                            <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
-                                 style="max-width:100px; max-height:100px;">
+                            <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
+                                <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                                        style="max-width:100px; max-height:100px;">
+                            </a>
                         </div>
                         <div class="col-md-10">
                             <div class="card-body">
-                                <h5 class="card-title mb-1">@e.User.UserName</h5>
+                                <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
+                                    <h5 class="card-title mb-1">@e.User.UserName</h5>
+                                </a>
                                 <p class="card-text mb-2">
                                     @e.Comment1
                                 </p>
@@ -65,7 +73,7 @@
         }
             
             <!-- 重複 -->
-            @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                 <div class="row g-0">
                     <div class="col-md-2 avatar text-center">
                         <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
@@ -82,7 +90,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+         @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                 <div class="row g-0">
                     <div class="col-md-2 avatar text-center">
                         <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
