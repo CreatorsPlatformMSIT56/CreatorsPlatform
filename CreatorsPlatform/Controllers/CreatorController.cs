@@ -81,10 +81,22 @@ namespace CreatorsPlatform.Controllers
             return View(viewModel);
         }
 
+        //這是測試
+        public IActionResult Test(int id)
+        {
+            //假設這是PlanId
+            var p = (from c in _context.Plans
+                    where c.PlanId == id
+                    select c).ToList();
+            
+            var query = _context.Plans.ToList();
+            return View(p);
+        }
+
         // 創作者建立貼文(修改位置待訂)
         public IActionResult AddPost()
         {
-
+            
             return View();
         }
 

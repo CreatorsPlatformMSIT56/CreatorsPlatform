@@ -19,17 +19,33 @@ public partial class EventsAndImage
 
     public string? Banner { get; set; }
 
-    public int EventCategory { get; set; }
+    public bool? EventCancel { get; set; }
 
-    public int? EventCreator { get; set; }
+    public int EveCategory { get; set; }
+
+    public int? EveCreator { get; set; }
+
+    public string? EveCreName { get; set; }
+
+    public byte[]? EveCreAvatar { get; set; }
 
     public int? EventImageId { get; set; }
 
     public string? ImageUrl { get; set; }
 
-    public string? ImageDes { get; set; }
+    public string? ImgDes { get; set; }
 
-    public int? ImageCreator { get; set; }
+    public string? ImgTitle { get; set; }
+
+    public int? ImgCreator { get; set; }
 
     public bool? ImageSample { get; set; }
+
+    public bool? EveImgCancel { get; set; }
+
+    public int? EvePostLike { get; set; }
+
+    public byte[]? ImgCreAvatar { get; set; }
+
+    public string? ImgCreName { get; set; }
 }

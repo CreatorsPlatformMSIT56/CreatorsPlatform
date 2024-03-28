@@ -1,6 +1,6 @@
 ﻿/*活動主視覺圖片*/
 .EventHeaderImg {
-    height: 16rem;
+    height: 20rem;
     overflow: hidden;
 }
 
@@ -45,6 +45,11 @@
 .EventTitle > h3 {
     color: white;
     background-color: #206896;
+}
+
+/*文字編輯器基礎內容調整*/
+#editor > div p{
+  font-size: 1.1rem;  
 }
 
 /*預留的活動投稿部分導覽列*/

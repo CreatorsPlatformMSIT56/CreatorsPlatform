@@ -51,6 +51,7 @@ function getQuillContent() {
     const QuillContent = quill.getContents();
     // Delta 轉 Json
     var DeltaJson = JSON.stringify(QuillContent);
+    console.log(DeltaJson);
     return DeltaJson;
 }
 
