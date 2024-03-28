@@ -103,7 +103,7 @@ function PostAllToSQL() {
         },
         error: function (xhr, status, error) {
             // 處理錯誤 
-            alert("fail");
+            alert("活動發布失敗");
         }
     });
 }
@@ -118,7 +118,6 @@ function UploadEventExImg() {
                 ImageSample: 1
             },
             success: function (response) {
-                alert(response);
             },
             error: function () {
                 alert("活動範例圖片上傳失敗");

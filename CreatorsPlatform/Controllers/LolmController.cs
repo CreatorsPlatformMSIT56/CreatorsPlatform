@@ -107,31 +107,40 @@ namespace CreatorsPlatform.Controllers
         [Route("Lolm/Create")]
         public IActionResult Create(Event EventModelData)
         {
-            Event NewEvent = new Event
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
+            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+            if (NowCreatorId == null)
             {
-                EventName = EventModelData.EventName,
-                Description = EventModelData.Description,
-                StartDate = EventModelData.StartDate,
-                EndDate = EventModelData.EndDate,
-                EventStyle = EventModelData.EventStyle,
-                Banner = EventModelData.Banner,
-                CategoryId = EventModelData.CategoryId,
-                DescriptionString = EventModelData.DescriptionString
-            };
-
-            if (ModelState.IsValid != null)
+                return BadRequest(); // 返回錯誤狀態碼 400;
+            }
+            else
             {
-                _context.Add(NewEvent);
-                _context.SaveChanges();
-                // 將這個新增活動的id傳出來給範例圖片的ajax使用
-                TempData["TheNewEventID"] = NewEvent.EventId;
-                Console.WriteLine(NewEvent.EventId);
+                Event NewEvent = new Event
+                {
+                    EventName = EventModelData.EventName,
+                    Description = EventModelData.Description,
+                    StartDate = EventModelData.StartDate,
+                    EndDate = EventModelData.EndDate,
+                    EventStyle = EventModelData.EventStyle,
+                    Banner = EventModelData.Banner,
+                    CreatorId = (int)NowCreatorId,
+                    CategoryId = EventModelData.CategoryId,
+                    DescriptionString = EventModelData.DescriptionString,
+                    EventCancel = false
+                };
 
+                if (ModelState.IsValid != null)
+                {
+                    _context.Add(NewEvent);
+                    _context.SaveChanges();
+                    // 將這個新增活動的id傳出來給範例圖片的ajax使用
+                    TempData["TheNewEventID"] = NewEvent.EventId;
+                    Console.WriteLine(NewEvent.EventId);
+
+                }
                 return Ok(); // 返回成功狀態碼 200
             }
-
-
-            return BadRequest(); // 返回錯誤狀態碼 400
         }
 
         // 上傳範例圖片至資料庫
@@ -174,7 +183,8 @@ namespace CreatorsPlatform.Controllers
                     ImageSample = NewEventImageData.ImageSample,
                     CreatorId = (int)NowCreatorId,
                     Description = NewEventImageData.Description,
-                    ImageTitle = NewEventImageData.ImageTitle
+                    ImageTitle = NewEventImageData.ImageTitle,
+                    EveImgCancel = false
                 };
                 _context.Add(NewEventImage);
                 _context.SaveChanges();

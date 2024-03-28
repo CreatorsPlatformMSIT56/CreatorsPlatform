@@ -82,7 +82,7 @@
     <div class="row row-cols-5 EventPostSection">
         @if (Model.Any(item =>item.ImageUrl != null))
         {
-            @foreach (var item in Model.FindAll(model => model.ImageSample == null && model.ImageUrl != null))
+            @foreach (var item in Model.FindAll(model => model.ImageSample == false && model.ImageUrl != null))
             {
                 <div class="col EventPost" id="@("Post" + item.EvtImgId)">
                     @* 投稿圖片*@
