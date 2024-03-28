@@ -112,7 +112,30 @@
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
-                大概是放訂閱方案吧
+                <h3>訂閱方案: </h3>
+                @foreach (var e in Model.Plans)
+                {
+                <div class="col-12">
+                    <div class="card mb-3">
+                        @* <img class="card-img-top"
+                    src="https://fakeimg.pl/500/"
+                    alt="Card image cap"
+                    style="height: 24rem; width: auto; object-fit: cover" /> *@
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @e.PlanName
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @e.Description
+                            </h6>
+                            <p class="card-text plan-price">
+                                @e.PlanPrice.ToString("C0")
+                            </p>
+                            <button>加入</button>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
         </div>
     </div>

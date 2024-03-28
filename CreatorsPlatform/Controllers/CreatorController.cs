@@ -133,6 +133,7 @@ namespace CreatorsPlatform.Controllers
             var plans = _context.Plans
                 .Include(p => p.Creator)
                 .ThenInclude(c => c.Users)
+                .Where(p => p.Creator.CreatorId == content.CreatorId)
                 .Select(p => new Plan
                 {
                     PlanId = p.PlanId,
