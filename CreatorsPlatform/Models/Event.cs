@@ -21,9 +21,9 @@ public partial class Event
 
     public string? EventStyle { get; set; }
 
-    public int? CreatorId { get; set; }
+    public int CreatorId { get; set; }
 
-    public string? DescriptionString { get; set; }
+    public string DescriptionString { get; set; } = null!;
 
     public bool? EventCancel { get; set; }
 
@@ -31,7 +31,7 @@ public partial class Event
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
 
-    public virtual Creator? Creator { get; set; }
+    public virtual Creator Creator { get; set; } = null!;
 
     public virtual ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
 }
