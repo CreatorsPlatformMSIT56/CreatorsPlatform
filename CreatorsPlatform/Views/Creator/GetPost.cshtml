@@ -1,32 +1,39 @@
-﻿@* @model CreatorsPlatform.Controllers.CreatorController.ContentsDetailsViewModel *@
+﻿@model CreatorsPlatform.Controllers.CreatorController.ContentDetailsViewModel
 <div class="container main-page">
     <div class="row">
         <div class="col-9" style="border:solid">
             <div class="pictures-container text-center" style="border:solid">
-                <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.ImageUrl ?? Array.Empty<byte>()))" alt="" class="img-fluid">
+                <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.ImageUrl ?? Array.Empty<byte>()))" alt="" class="img-fluid">
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-row-reverse bd-highlight">
                         <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
-                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.Likes</span></div>
+                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.FirstOrDefault()?.Likes</span></div>
                     </div>
                 </div>
-                <div class="col-12 px-5 py-3">
-                    <h4>@Model.Content?.Title</h4>
+                <div class="col-12 px-5 py-3 title-container">
+                    <h4>@Model.Content?.FirstOrDefault()?.Title</h4>
                 </div>
-                <div class="col-12 px-5 mb-3">
-                    <h4>Tags</h4>
+                <div class="col-12 px-5 py-3 descr-containrer">
+                    <p>@Model.Content?.FirstOrDefault()?.Description</p>
+                </div>
+                <div class="col-12 px-5 mb-3 tags-container">
+                    <h4>#Tags</h4>
                     </div>
             </div>
             <!-- 作者 -->
             <div class="row p-3">
                 <div class="col-2 avatar text-center">
-                    <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.Creator.Users.SingleOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
-                         style="max-width:100px; max-height:100px;">
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Content?.FirstOrDefault()?.Creator.CreatorId">
+                        <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                             style="max-width:100px; max-height:100px;">
+                    </a>
                 </div>
                 <div class="col-8 creator-name d-inline-flex align-items-center">
-                    <h4>@Model.Content?.Creator.Users.SingleOrDefault()?.UserName</h4>
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Content?.FirstOrDefault()?.Creator.CreatorId">
+                        <h4>@Model.Content?.FirstOrDefault()?.Creator.Users.SingleOrDefault()?.UserName</h4>
+                    </a>
                 </div>
                 <div class="col-2 d-inline-flex align-items-center justify-content-center">
                     <button type="button" class="btn btn-primary">關注</button>
@@ -38,26 +45,35 @@
                     <h4>留言</h4>
                 </div>
             </div>
-
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
-                <div class="row g-0">
-                    <div class="col-md-2 avatar text-center">
-                        <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
-                    </div>
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <h5 class="card-title mb-1">粉絲名稱</h5>
-                            <p class="card-text mb-2">
-                                This is a wider card with supporting text below as a natural
-                                lead-in to additional content. This content is a little bit longer.
-                            </p>
-                            <p class="card-text"><small class="text-muted">留言時間</small></p>
+            <!-- comment 1 -->
+        @foreach (var e in Model.Comments)
+        {
+                <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                    <div class="row g-0">
+                        <div class="col-md-2 avatar text-center">
+                            @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+                            @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                                        style="max-width:100px; max-height:100px;">
+                            @* </a> *@
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                    <h5 class="card-title mb-1">@e.User.UserName</h5>
+                                @* </a> *@
+                                <p class="card-text mb-2">
+                                    @e.Comment1
+                                </p>
+                                <p class="card-text"><small class="text-muted">留言時間</small></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+        }
+            
             <!-- 重複 -->
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+            @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                 <div class="row g-0">
                     <div class="col-md-2 avatar text-center">
                         <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
@@ -73,8 +89,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+            </div> *@
+
+         @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                 <div class="row g-0">
                     <div class="col-md-2 avatar text-center">
                         <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
@@ -90,13 +107,36 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> *@
             <!-- 重複結束 -->
         </div>
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
-                Dance
+                <h3>訂閱方案: </h3>
+                @foreach (var e in Model.Plans)
+                {
+                <div class="col-12">
+                    <div class="card mb-3">
+                        @* <img class="card-img-top"
+                    src="https://fakeimg.pl/500/"
+                    alt="Card image cap"
+                    style="height: 24rem; width: auto; object-fit: cover" /> *@
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @e.PlanName
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @e.Description
+                            </h6>
+                            <p class="card-text plan-price">
+                                @e.PlanPrice.ToString("C0")
+                            </p>
+                            <button>加入</button>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
         </div>
     </div>

@@ -1,0 +1,212 @@
+﻿:root {
+    --gradient-color: linear-gradient(90deg, hsl(333, 57%, 77%)0%, hsl(242, 68%, 79%));
+    --black-color: hsl(225,15%,6%);
+    --reflection-color: hsla(48,30%,95%,.3);
+    --body-color: hsl(48,100%,98%);
+}
+
+.body_background {
+    background-color: rgb(255, 255, 255)
+}
+
+/*設置圖片大小*/
+._card_A {
+    width: 18rem;
+    border-radius: 20px;
+    margin: 1%;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    height: 16rem;
+}
+
+._card_B {
+    width: 18rem;
+    border-radius: 20px;
+    margin: 1%;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    height: 22rem;
+}
+
+._card_A a {
+    text-decoration: none;
+}
+
+._card_B a {
+    text-decoration: none;
+}
+
+.img_Card {
+    width: 15vw;
+    height: 25vh;
+    border-radius: 20px;
+}
+
+.input-group a {
+    margin-right: 1vw;
+    margin-bottom: 1vh;
+    background-color: rgb(255, 255, 255);
+    padding: 3px;
+}
+/*-------按鈕----------*/
+._categoryButton {
+    height: 5vh;
+}
+
+
+.button_a {
+    position: relative;
+    transition: transform .4s;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.button__content {
+    position: relative;
+    background-color: aliceblue;
+    padding: 0.5rem 1rem;
+    border-radius: 4rem;
+    border: 1px solid var(--black-color);
+    color: var(--black-color);
+    column-gap: .5rem;
+    overflow: hidden;
+}
+
+.button__text,
+.button__icon {
+    position: relative;
+    z-index: 2;
+}
+
+/* 按鈕線條1,2 */
+.button__reflection-1,
+.button__reflection-2 {
+    width: 8px;
+    height: 120px;
+    background-color: var(--reflection-color);
+    /*rotate:30deg;*/
+    position: absolute;
+    inset: 0;
+    top: 0;
+    left: -300%;
+    margin: auto;
+    transition: left .6s cubic-bezier(.2,.5,.2,1.2);
+}
+
+    /* 按鈕線條1 */
+    .button__reflection-1::after {
+        content: '';
+        width: 26px;
+        height: 100%;
+        background-color: var(--reflection-color);
+        position: absolute;
+        top: -1rem;
+        left: 1.25rem;
+    }
+
+    /* 按鈕線條2 */
+    .button__reflection-2::after {
+        content: '';
+        width: 40px;
+        height: 100%;
+        background-color: var(--reflection-color);
+        position: absolute;
+        top: -1rem;
+        left: .8rem;
+    }
+
+/* 按鈕周圍圖片 */
+.button_a img {
+    position: absolute;
+    opacity: 0; /*隱藏圖片*/
+    pointer-events: none;
+    transition: transform .5s, opacity .5s;
+}
+
+.button__star-1 {
+    width: 15px;
+    top: -13px;
+    left: 30px;
+    transform: rotate(48deg) /*cale(.1);*/
+}
+
+.button__star-4 {
+    width: 20px;
+}
+
+.button__star-4 {
+    top: 40px;
+    left: -10px;
+    transform: scale(1.1);
+}
+
+.button__star-5 {
+    width: 20px;
+    top: -15px;
+    left: 75px;
+    transform: scale(.1);
+}
+
+/*Button後面的背景動畫與樣式*/
+.button__shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0;
+    background: var(--gradient-color);
+    border-radius: 4rem;
+    border: 3px solid var(--black-color);
+    z-index: -1;
+    transition: transform .3s;
+}
+
+.button__content:hover {
+    background: var(--gradient-color);
+    border: 3px solid var(--black-color);
+}
+
+.button_a:hover .button__shadow {
+    transform: translate(-.5rem,.5rem);
+}
+
+.button_a:hover .button__reflection-1 {
+    left: 110%;
+}
+
+.button_a:hover .button__reflection-2 {
+    left: 20%;
+}
+
+/*背景圖片顯示*/
+.button_a:hover img {
+    opacity: 1;
+}
+
+.button_a:hover .button__star-1 {
+    transform: scale(1.1);
+    transition-delay: .1s;
+}
+
+.button_a:hover .button__star-4 {
+    transform: translateY(-20px, 20px) scale(1.1);
+}
+
+.button_a:hover .button__star-5 {
+    transform: translateY(7px) rotate(-24deg) scale(1.1);
+}
+
+.input-group > a {
+    text-decoration: none;
+    color: black;
+}
+
+/*側邊欄縮放*/
+.dropdown-container {
+    display: none;
+}
+
+/* 搜尋結果替換 創作者 - 作品 - 委託 */
+#_button_container_PriceSort, #_button_container_TimeSort, #_button_container_TimeSortB, #_button_container_PriceSortB {
+    display: none;
+}
