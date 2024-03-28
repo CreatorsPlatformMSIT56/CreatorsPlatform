@@ -113,7 +113,10 @@ function UploadEventExImg() {
             url: "/Lolm/CreateEventExImg",
             method: "post",
             /*processData: false, // 不对 FormData 进行处理*/
-            data: { ImageURL: ExImgDataURLs[i] },
+            data: {
+                ImageURL: ExImgDataURLs[i],
+                ImageSample: 1
+            },
             success: function (response) {
                 alert(response);
             },

@@ -80,7 +80,7 @@
     </div>
 
     <div class="row row-cols-5 EventPostSection">
-        @if (Model.Any(item => item.ImageSample == null && item.ImageUrl != null))
+        @if (Model.Any(item => item.ImageSample == 0 && item.ImageUrl != null))
         {
             @foreach (var item in Model.FindAll(model => model.ImageSample == null && model.ImageUrl != null))
             {

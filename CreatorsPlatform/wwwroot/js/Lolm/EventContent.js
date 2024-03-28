@@ -32,7 +32,7 @@ $(function () {
     $("#okButton").on("click", function () {
         var EventPostData = {
             ImageUrl: ImgDataURL,
-            ImageSample: false,
+            ImageSample: 0,
             Description: $("#EventPostContentTextBox").val(),
             ImageTitle: $("#titleTextBox").val(),
             EventID: EventIdSaver
