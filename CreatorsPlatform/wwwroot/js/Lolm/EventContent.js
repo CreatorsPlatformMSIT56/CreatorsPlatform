@@ -1,5 +1,6 @@
 ﻿var ImgDataURL;
 var EventIdSaver = EventIdStocker; 
+
 $(function () {
     // 上傳圖片並且預覽功能
     $("#progressbarTWInput").change(function () {

@@ -18,10 +18,14 @@
             </div>
             <div class="mb-3 d-flex EventColoerSection">
                 <b>佈景顏色</b>
-                <label for="EventTitleColorInput">標題顏色</label>
-                <input type="color" id="EventTitleColorInput" name="EventTitleColor"/>
-                <label for="EventIntroColorInput">說明欄顏色</label>
-                <input type="color" id="EventIntroColorInput" name="EventIntroColor"/>
+                <input type="checkbox" name="SetColorOrNot" value="" id="SetColorOrNot" />
+                <label for="SetColorOrNot">設定佈景顏色</label>
+                <div class="d-flex">
+                    <label for="EventTitleColorInput">標題背景色</label>
+                    <input type="color" id="EventTitleColorInput" name="EventTitleColor" />
+                    <label for="EventIntroColorInput">說明欄背景色</label>
+                    <input type="color" id="EventIntroColorInput" name="EventIntroColor" />
+                </div>                
             </div>
         </div>
         <div class="col-5">

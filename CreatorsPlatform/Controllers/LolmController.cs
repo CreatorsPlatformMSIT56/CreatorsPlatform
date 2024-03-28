@@ -37,11 +37,15 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> EventContent(int? id)
         {
             ViewBag.Eid = id;
+            string ThePageStyle;            
             // 把style丟到前面
             if (_context.Events.FirstOrDefault(m => m.EventId == id)!.EventStyle != null)
             {
-
-            }
+                ThePageStyle = _context.Events.FirstOrDefault(m => m.EventId == id)!.EventStyle!;
+                string[] JsonArray = JsonConvert.DeserializeObject<string[]>(ThePageStyle)!;
+                ViewBag.TitleStyle = JsonArray[0];
+                ViewBag.IntroStyle = JsonArray[1];
+            };
             var TheEventContext = _context.EventsAndImages;
             var TheEventData = await (from o in TheEventContext
                                       where o.EventId == id

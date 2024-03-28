@@ -1,5 +1,4 @@
-﻿﻿@* @model ImaginkContext; *@
-@model List<EventsAndImage>
+﻿@model List<EventsAndImage>
 
 @* 編輯器的套件 *@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
@@ -16,6 +15,9 @@
 
 <link href="~/css/Lolm/EventContent.css" rel="stylesheet" />
 
+<h1>@ViewBag.TitleStyle</h1>
+<h1>@ViewBag.IntroStyle</h1>
+
 @* 活動圖片 *@
 @if (Model[0].Banner != null)
 {
@@ -25,7 +27,7 @@
     </div>
 }
 @* 說明欄 *@
-<div class="container-fluid EventIntroSection">
+<div class="container-fluid EventIntroSection" style="background-color: @ViewBag.IntroStyle;">
     <div class="row d-flex align-items-center pt-4">
         @* 主辦 *@
         <div class="col-3 d-flex align-items-center">
@@ -39,7 +41,7 @@
         </div>
 
         <div class="col-6 d-flex justify-content-center text-center EventTitle">
-            <h3>@Model[0].EventName</h3>
+            <h3 style="background-color: @ViewBag.TitleStyle;">@Model[0].EventName</h3>
         </div>
         <div class="col-3 d-flex align-items-center justify-content-center">
             <b>&nbsp;&nbsp;@Html.DisplayFor(model => model[0].StartDate)</br>~@Html.DisplayFor(model => model[0].EndDate)</b>

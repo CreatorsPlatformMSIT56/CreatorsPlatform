@@ -72,27 +72,28 @@ function GetAllExImgDataURL(TheURL) {
 
 // 拿到所有的input內容並新增到資料庫
 function PostAllToSQL() {
-    //var dataFromClient = {
-    //    EventName: '阿巴巴',
-    //    StartDate: "2024-03-22T10:04:35.123",
-    //    EndDate: "2024-03-23T10:04:35.123",
-    //    Description: "低死哭順",
-    //    CategoryID: 1
-    //};
-
-    var EventdataFromClient = {
-        EventName: $("#eventName").val(),
-        StartDate: $("#startDate").val(),
-        EndDate: $("#endDate").val(),
-        Description: getQuillContent(),
-        EventStyle: GetEventStyle(),
-        Banner: BannerDataURL,
-        CategoryID: 1,
-        DescriptionString: getQuillText()
-    };
-
-    //ExImgURLArray: JSON.stringify(ExImgDataURLs)
-
+    if ($("#SetColorOrNot").prop("checked") == true) {
+        var EventdataFromClient = {
+            EventName: $("#eventName").val(),
+            StartDate: $("#startDate").val(),
+            EndDate: $("#endDate").val(),
+            Description: getQuillContent(),
+            EventStyle: GetEventStyle(),
+            Banner: BannerDataURL,
+            CategoryID: 1,
+            DescriptionString: getQuillText()
+        };
+    } else {
+        var EventdataFromClient = {
+            EventName: $("#eventName").val(),
+            StartDate: $("#startDate").val(),
+            EndDate: $("#endDate").val(),
+            Description: getQuillContent(),
+            Banner: BannerDataURL,
+            CategoryID: 1,
+            DescriptionString: getQuillText()
+        };
+    }
     $.ajax({
         url: "/Lolm/Create",
         method: "post",
