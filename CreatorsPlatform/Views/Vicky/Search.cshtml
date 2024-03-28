@@ -1,0 +1,351 @@
+﻿@model CreatorsPlatform.CsMod.Vicky.WorkListViewModel
+
+@{
+}
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/Vicky/VickySearch.css">
+
+<body class="body_background">
+	<main>
+		<!-- 主要內容 -->
+		<div class="container">
+			<div class="row">
+				<div class="col-3 border">
+					<ul class="d-flex list-unstyled justify-content-between mt-3 _categoryButton">
+						<li>
+							<div class="button_container" id="button_container_Works" onclick="WorkOn()">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">作品</span>
+										<i class="ri-mark-pen-fill"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<img src="~/img/VickyImg/music-2-fill.png" alt="" class="button__star-1">
+									<img src="~/img/VickyImg/shining-2-fill.png" alt="" class="button__star-4">
+									<img src="~/img/VickyImg/star-fill.png" alt="" class="button__star-5">
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+						</li>
+						<li>
+							<div class="button_container" id="button_container_Commission" onclick="CommissionOn()">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">委託</span>
+										<i class="ri-money-dollar-circle-fill"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<img src="~/img/VickyImg/music-2-fill.png" alt="" class="button__star-1">
+									<img src="~/img/VickyImg/shining-2-fill.png" alt="" class="button__star-4">
+									<img src="~/img/VickyImg/star-fill.png" alt="" class="button__star-5">
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-9 border">
+					<div class="row d-flex justify-content-between mt-3 ">
+						<div class="col-auto  mx-3 fs-5" id="_searchAmount">
+							<!--顯示幾筆結果-->
+						</div>
+						<div class="col-auto d-flex mx-2 ">
+							<div class="button_container mx-3" id="_button_container_TimeSort">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">時間排序</span>
+										<i class="ri-arrow-down-double-line"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+							<div class="button_container mx-3" id="_button_container_TimeSortB">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">時間排序</span>
+										<i class="ri-arrow-up-double-line"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+							<div class="button_container mx-3" id="_button_container_PriceSort">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">價格排序</span>
+										<i class="ri-arrow-down-double-line"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+							<div class="button_container mx-3" id="_button_container_PriceSortB">
+								<a href="#" class="button_a">
+									<div class="button__content">
+										<span class="button__text">價格排序</span>
+										<i class="ri-arrow-up-double-line"></i>
+										<div class="button__reflection-1"></div>
+										<div class="button__reflection-2"></div>
+									</div>
+									<div class="button__shadow"></div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row list-unstyled">
+				<div class="col-lg-3 border">
+					<ul class="d-flex">
+						<label for="" class="fs-4 fw-bold mt-3">繪圖</label>
+						<button class="btn border-0 mt-3" data-bs-toggle="collapse" data-bs-target="#collapse_Draw"
+								aria-expanded="false" aria-controls="collapse_Draw">
+							<i class="ri-arrow-down-s-fill"></i>
+						</button>
+					</ul>
+					<div class="collapse" id="collapse_Draw">
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="1" id="flexCheckDefault_Original">
+								<label class="form-check-label" for="flexCheckDefault_Original">原創</label>
+							</li>
+							<li id="filterAmount"><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="2" id="flexCheckDefault_doujin">
+								<label class="form-check-label" for="flexCheckDefault_doujin">同人</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="3" id="flexCheckDefault_AI">
+								<label class="form-check-label" for="flexCheckDefault_AI">AI繪圖</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="16" id="flexCheckDefault_Live2D">
+								<label class="form-check-label" for="flexCheckDefault_Live2D">Live2D</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+					</div>
+
+					<ul class="d-flex">
+						<label for="" class="fs-4 fw-bold mt-3">影片</label>
+						<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample_Video" aria-expanded="false"
+								aria-controls="collapseExample_Video">
+							<i class="ri-arrow-down-s-fill"></i>
+						</button>
+					</ul>
+					<div class="collapse" id="collapseExample_Video">
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="4" id="flexCheckDefault_2D">
+								<label class="form-check-label" for="flexCheckDefault_2D">2D動畫</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="5" id="flexCheckDefault_3D">
+								<label class="form-check-label" for="flexCheckDefault_3D">3D動畫</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="6" id="flexCheckDefault_YT">
+								<label class="form-check-label" for="flexCheckDefault_YT">YT</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="7" id="flexCheckDefault_VT">
+								<label class="form-check-label" for="flexCheckDefault_VT">VT</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+					</div>
+
+					<ul class="d-flex">
+						<label for="" class="fs-4 fw-bold mt-3">聲音</label>
+						<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample_Sound" aria-expanded="false"
+								aria-controls="collapseExample_Sound">
+							<i class="ri-arrow-down-s-fill"></i>
+						</button>
+					</ul>
+					<div class="collapse" id="collapseExample_Sound">
+						<div class="form-check d-flex justify-content-between ">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="8" id="flexCheckDefault_Music">
+								<label class="form-check-label" for="flexCheckDefault_Music">音樂</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="9" id="flexCheckDefault_Sound">
+								<label class="form-check-label" for="flexCheckDefault_Sound">聲音</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="10" id="flexCheckDefault_ASMR">
+								<label class="form-check-label" for="flexCheckDefault_Music">ASMR</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+					</div>
+
+					<ul class="d-flex">
+						<label for="" class="fs-4 fw-bold mt-3">教學</label>
+						<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample_Teach" aria-expanded="false"
+								aria-controls="collapseExample_Teach">
+							<i class="ri-arrow-down-s-fill"></i>
+						</button>
+					</ul>
+					<div class="collapse" id="collapseExample_Teach">
+						<div class="form-check d-flex justify-content-between ">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="11" id="flexCheckDefault_Draw">
+								<label class="form-check-label" for="flexCheckDefault_Draw">繪圖</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="12" id="flexCheckDefault_Video">
+								<label class="form-check-label" for="flexCheckDefault_Video">影片製作</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="13" id="flexCheckDefault_Soundmade">
+								<label class="form-check-label" for="flexCheckDefault_Soundmade">聲音製作</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="14" id="flexCheckDefault_Musicmade">
+								<label class="form-check-label" for="flexCheckDefault_Musicmade">音樂製作</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+						<div class="form-check d-flex justify-content-between">
+							<li>
+								<input class="form-check-input" type="radio" name="input_Filter" value="15" id="flexCheckDefault_Handmade">
+								<label class="form-check-label" for="flexCheckDefault_Handmade">手作</label>
+							</li>
+							<li><i>N筆資料</i></li>
+						</div>
+					</div>
+					<ul class="d-flex">
+						<label for="" class="fs-4 fw-bold  mt-3">標籤</label>
+						<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample_Label" aria-expanded="false"
+								aria-controls="collapseExample_Label">
+							<i class="ri-arrow-down-s-fill"></i>
+						</button>
+					</ul>
+					<div class="collapse" id="collapseExample_Label">
+						<li class="input-group fs-5 mx-4">
+							<a href="">
+								AAAA
+							</a>
+							<a href="">
+								BBBB
+							</a>
+							<a href="">
+								CCCC
+							</a>
+							<a href="">
+								DDDD
+							</a>
+							<a href="">
+								EEEE
+							</a>
+							<a href="">
+								FFFF
+							</a>
+						</li>
+					</div>
+				</div>
+
+				<!-- 作品內容 -->
+				<div class="col-lg-9 border">
+					<div class="row d-flex justify-content-center" id="_worksConent">
+
+						<!-- 從Ajax加入作品內容 -->
+						@foreach (var i in Model.WorkList!)
+						{
+							<div class="col-4 border d-flex justify-content-center card _card_B">
+								<a href=""><img src="data:image/*;base64,@(Convert.ToBase64String(i.ImageUrl!))" class="img_Card ard-img-top img-fluid" alt="..."></a>
+								<div class="card-body text-center position-relative">
+									<a href="" class="fs-4">@i.Title</a>
+									<p class="position-absolute top-50 start-0">
+										<small class="text-muted fs-5">@i.UploadDate</small>
+									</p>
+									<a href="" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+								</div>
+							</div>
+						}
+
+					</div>
+				</div>
+			</div>
+			<div class="row border ">
+				<div class="col d-flex justify-content-center  mt-3">
+					<nav aria-label="Page navigation" id="_pageNavigation">
+						<ul class="pagination">
+							@for (int i = 1; i <= Math.Ceiling((double)Model.TotalPages); i++) //浮点数向上取整
+							{
+								<li class="@(i == Model.PageNumber ? "active" : "")" style="border:4px solid">
+									<a href="@Url.Action("Search", new { page = i, pageSize = Model.PageSize })">@i</a>
+								</li>
+							}
+
+							@* <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+							<a class="page-link" href="#" tabindex="-1" onclick="changePage(@Model.PageNumber - 1)">Previous</a>
+							</li>
+							@for (int i = 1; i <= Model.TotalPages; i++)
+							{
+							<li class="page-item @(i == Model.PageNumber ? "active" : "")">
+							<a class="page-link" href="#" onclick="changePage(@i)">@i</a>
+							</li>
+							}
+							<li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+							<a class="page-link" href="#" onclick="changePage(@Model.PageNumber + 1)">Next</a>
+							</li> *@
+						</ul>
+					</nav>
+				</div>
+			</div>
+	</main>
+	<footer id="footerr">
+
+<div id="contentList">
+    <!-- 显示内容列表的部分 -->
+</div>
+	</footer>
+
+	<script src="~/js/Vicky/VickySearch.js">
+	</script>
+</body>
