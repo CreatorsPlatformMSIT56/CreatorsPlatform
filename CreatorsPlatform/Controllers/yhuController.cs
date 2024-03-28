@@ -224,17 +224,18 @@ namespace CreatorsPlatform.Controllers
                 case "AuthorSettings":
                             var AuthorSettings=(from AuthorSettingsData in _context.Plans
                                                 where AuthorSettingsData.CreatorId== CreatorId
-                                                select new { AuthorSettingsData.PlanName,AuthorSettingsData.Description
+                                                orderby AuthorSettingsData.PlanLevel
+                                                select new {AuthorSettingsData.PlanId, AuthorSettingsData.PlanName,AuthorSettingsData.Description
                                                 ,AuthorSettingsData.PlanLevel,AuthorSettingsData.PlanPrice} );
                     return Json(AuthorSettings.ToList());
-                case "WorkRead":               
-                    var WorkRead = (from WorkData in _context.Contents
-                                    join UserData in _context.Users on WorkData.CreatorId equals UserData.CreatorId
-                                    join PlanData in _context.Plans on  WorkData.PlanId equals PlanData.PlanId
-                                    where WorkData.CreatorId == 7
+                case "WorkData":               
+                    var WorkData = (from WorkRead in _context.Contents
+                                    join UserData in _context.Users on WorkRead.CreatorId equals UserData.CreatorId
+                                    join PlanData in _context.Plans on WorkRead.PlanId equals PlanData.PlanId
+                                    where WorkRead.CreatorId == CreatorId
                                     select new
-                                          {WorkData.TagId ,WorkData.Description, PlanData.PlanLevel});
-                    return Json(WorkRead.ToList());
+                                          {WorkRead.Title, WorkRead.Description, PlanData.PlanLevel});
+                    return Json(WorkData.ToList());
                 case "OrderData1":
                     var OrderProject = (from OrderData in _context.Commissions
                                         where OrderData.CreatorId == CreatorId
@@ -255,15 +256,19 @@ namespace CreatorsPlatform.Controllers
                                         OrderData.OrderDate,
                                         OrderData.DeadlineDate,
                                         OrderData.WorkStatus,
-                                        OrderData.Description
+                                        Description = OrderData.Description.Length>10 ?OrderData.Description.Substring(0, 10) : OrderData.Description
                                     });
                     return Json( OrderAsk.ToList() );
                 case "EventData":
                     var EventRead = (from EventData in _context.Events
-                                     where EventData.CategoryId == CreatorId
-                                     select new {EventData.EventName,EventData.StartDate
-                                     ,EventData.EndDate,EventData.Description});
-                    return Json(EventRead);
+                                     where EventData.CategoryId == 1
+                                     select new {EventData.EventName,
+                                         EventData.StartDate,
+                                         EventData.EndDate,
+                                          Description = EventData.Description.Length > 10 ?
+                                            EventData.Description.Substring(0, 10) : EventData.Description
+                                     });
+                    return Json(EventRead.ToList());
                 default:
                     return Json("Eeeor");
 
@@ -318,16 +323,15 @@ namespace CreatorsPlatform.Controllers
             string PlanDescription = data[3]["value"];
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-            var CategoryId = (from AvatarData in _context.Users
+            var CreatorId = (from AvatarData in _context.Users
                                 where AvatarData.UserId == member.id
-                                select AvatarData.CategoryId).FirstOrDefault();
+                                select AvatarData.CreatorId).FirstOrDefault();
             var PlanData = (from UserPlan in _context.Plans
-                            where UserPlan.CreatorId == CategoryId
+                            where UserPlan.CreatorId == CreatorId
                             select UserPlan);
             var Plancheck = (from Plan in PlanData
                              where Plan.PlanLevel == PlanLevel
                              select Plan).FirstOrDefault();
-
             if (Plancheck != null)
             {
                 Plancheck.PlanName = PlanName;
@@ -343,13 +347,36 @@ namespace CreatorsPlatform.Controllers
                     PlanName = PlanName,
                     PlanLevel = PlanLevel,
                     PlanPrice = PlanPrice,
-                   Description = PlanDescription
-            };
+                   Description = PlanDescription,
+                    CreatorId = (int)CreatorId
+                };
                 _context.Plans.Add(PlansDataNew);
                 _context.SaveChanges();
             }
-          
-            return Json(new {Name = PlanName, Level = PlanLevel , Price=PlanPrice, Description = PlanDescription });
+            var PlanDataCheck = (from UserPlan in _context.Plans
+                                 where UserPlan.CreatorId == CreatorId
+                                 orderby UserPlan.PlanLevel
+                                 select new
+                                 {
+                                     UserPlan.PlanId,
+                                     UserPlan.PlanName,
+                                     UserPlan.PlanLevel,
+                                     UserPlan.PlanPrice,
+                                     UserPlan.Description,
+                                 });
+            return Json(PlanDataCheck.ToList());
+        }
+        [HttpPost]
+        public ActionResult PlanRowRecord(string type, int id)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                    var TargetData = (from PlanData in _context.Plans
+                                      join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId
+                                      where PlanData.PlanId == id 
+                                      orderby PlanData.PlanLevel
+                                      select PlanData);
+                    return Json(TargetData.ToList());
         }
         [HttpPost]
         public ActionResult DataDelete(string type,int id)
@@ -360,18 +387,20 @@ namespace CreatorsPlatform.Controllers
             {
                 case "Plan":
                     var TargetData = (from PlanData in _context.Plans
-                                      where PlanData.PlanLevel == id
+                                      join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId
+                                      where PlanData.PlanId == id 
                                       select PlanData).FirstOrDefault();
                     if (TargetData != null)
                     {
-                        TargetData.PlanLevel = 0;
+                        _context.Plans.Remove(TargetData);
                         _context.SaveChanges();
                     }
                     var ReturnFor = (from PlanData in _context.Plans
                                      join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId
                                      where UserData.UserId == member.id
-                                     select new { PlanData.PlanName, PlanData.PlanLevel, PlanData.PlanPrice, PlanData.Description });
-                    return Json(ReturnFor);
+                                     orderby PlanData.PlanLevel
+                                     select new { PlanData.PlanId,PlanData.PlanName, PlanData.PlanLevel, PlanData.PlanPrice, PlanData.Description });
+                    return Json(ReturnFor.ToList());
             }
 
             return Json("OK");
