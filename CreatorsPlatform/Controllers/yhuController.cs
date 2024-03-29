@@ -41,8 +41,8 @@ namespace CreatorsPlatform.Controllers
             {
                 var NewmesgData = (from Newmesg in _context.Contents
                                    join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-                                   select new {UserData.UserName, Newmesg.Title, Newmesg.Description, Newmesg.ImageUrl, Newmesg.UploadDate })
-                                   .OrderByDescending(item => item.UploadDate).Take(5).ToList();
+                                   select new { Newmesg.Title, Newmesg.Description, UserData.UserName, Newmesg.ImageUrl, Newmesg.UploadDate })
+                                       .OrderByDescending(item => item.UploadDate).Take(5).ToList();
                 ViewBag.NewmesgData = NewmesgData;
                 return View("PersonalUser");
             }
@@ -58,36 +58,36 @@ namespace CreatorsPlatform.Controllers
             {
                 case "newmsg":
                     var NewmesgData = (from Newmesg in _context.Contents
-                                       select new { Newmesg.TagId, Newmesg.Description, Newmesg.ImageUrl, Newmesg.UploadDate })
+                                       join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
+                                       select new { Newmesg.Title, Newmesg.Description,UserData.UserName,Newmesg.ImageUrl, Newmesg.UploadDate })
                                        .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
-                    return Json(NewmesgData, "newmsg");
+                    return Json(NewmesgData.ToList());
                 case "subscribemsg":
 
                     var memberJson = HttpContext.Session.GetString("key");
                     MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-					var UserId = (from UserIdData in _context.Users
-								  where UserIdData.Email == member.Email
-								  select new { UserIdData.UserId }).FirstOrDefault();
-					var SubscriptionDataList = (from SubscriptionData in _context.Subscriptions
-                                                where SubscriptionData.UserId == UserId.UserId
-												select SubscriptionData.CreatorId);
+					var SubscriptionDataList = (from ContentsData in _context.Contents
+                                                join SubscriptionsData in _context.Subscriptions on ContentsData.CategoryId equals SubscriptionsData.CategoryId
+                                                where SubscriptionsData.UserId == member.id
+												select SubscriptionsData.CreatorId);
 
                     var subscribemsgData = (from Contents in _context.Contents
+                                            join UserData in _context.Users on Contents.CategoryId equals UserData.CategoryId
                                             where SubscriptionDataList.Contains(Contents.CreatorId)
-                                            select new { Contents.Title, Contents.Description, Contents.ImageUrl }
-                                           ).ToList();
-                    return Json(subscribemsgData, "subscribemsg");
+                                            select new { Contents.Title, Contents.Description, UserData.UserName, Contents.ImageUrl, Contents.UploadDate })
+                                       .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
+                    return Json(subscribemsgData);
                 case "eventmsg":
                     var eventmsgData = (from eventmsg in _context.Events
-                                        join evenimg in _context.EventImages on eventmsg.EventId equals evenimg.EventId
                                         select new
                                         {
                                             eventmsg.EventName,
                                             eventmsg.Description,
+                                            eventmsg.Banner,
                                             eventmsg.StartDate,
                                             eventmsg.EndDate
                                         }).ToList();
-                    return Json(eventmsgData, "eventmsg");
+                    return Json(eventmsgData);
                 default:
                     return Json("Eeeor");
 
