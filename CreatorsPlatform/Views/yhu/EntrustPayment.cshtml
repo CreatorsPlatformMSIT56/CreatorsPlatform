@@ -2,57 +2,147 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    int UserId = ViewBag.Id;
+    string maxPrice = "0";
+    if (ViewBag.ComCheck[0].comPriceMax == null) 
+    { maxPrice = "∞"; }else { maxPrice = ViewBag.ComCheck[0].comPriceMax; }
 }
-<form action="/submit-form" method="post">
+
+<style>
+    #comTitle{
+        display: inline-block;
+    }
+    img {
+        display: inline-block;
+        max-width: 100px;
+    }
+
+    #comPrice {
+        float: right;
+    }
+
+    #comDes, #userNotice {
+        display: inline-block;
+        width: 90%;
+    }
+
+    #comBtn{
+        display: inline-block;
+        float:right;
+    }
+
+</style>
+
+<div class="container">
     <div class="row">
-        <div class="col-md-7">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="..." class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <div class="col-12">
+            <ul class="list-group">
+                <li class="list-group-item" position-relative m-4>
+                    <div class="col-md-3">
+						<img class="listImg float-md-start me-md-3" src="data:image/*;base64,@(Convert.ToBase64String(@ViewBag.ComCheck[0].creatorAvatar))" />
                     </div>
-                </div>
-            </div>
-            <div>
-                <label for="EstimatedAmount">金額預計</label>
-                <input type="number" name="EstimatedAmount  ">
-            </div>
-            <hr />
-            <div class="row">
-                <h5>委託內容描述</h5>
-                <div id="editor"></div>
-            </div>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-4">
-            <div class="row border">
-                <div class="row mt-3 mb-3">
-                    <p><label for="CardNumber">卡號</label></p>
-                    <p><input type="text" name="CardNumber"></p>
-                </div>
-                <div class="row mb-3">
-                    <p> <label for="CardholderName">持卡人名</label></p>
-                    <p> <input type="text" name="CardholderName"></p> 
-                </div>
-                <div class="row mb-3">
-                    <p><label for="ExpiryDate">有效期限</label></p>
-                    <p><input type="text" name="ExpiryDate"></p>         
-                </div>
-                <div class="row mb-3">
-                    <p> <label label for="SecurityCode">安全碼</label></p>
-                    <p><input type="text" name="SecurityCode"></p>                  
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
-            </div>
+                    <br />
+                    <div class="text-start">
+						<h3 id="comTitle">
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="">
+									@ViewBag.ComCheck[0].commissionTitle
+								</a>
+							</span>
+						</h3>
+						<p id="creatorName">創作者：@ViewBag.ComCheck[0].creatorName</p>
+						<p id="comDes"> @ViewBag.ComCheck[0].comDescription</p>
+						<h5 id="comPrice">@ViewBag.ComCheck[0].comPriceMin - @maxPrice</h5>
+                        <hr />
+                        <p>約稿內容</p>
+                        <textarea id="userNotice" rows="5" class="d-block" placeholder="把想看到的主題或角色特徵傳達給創作者吧。&#10註明用途可以讓創作者根據您的用途來創作作品。"></textarea>
+                        <button id="comBtn">確認</button>
+                    </div>
+                </li>
+            </ul>
+            
         </div>
     </div>
-</form>
-<button onclick="htmlch()">確認</button>
-<script src="/js/yhu/EntrustPayment.js"></script>
+</div>
+
+
+@*  <form action="/submit-form" method="post">
+     <div class="row">
+         <div class="col-md-7">
+             <div class="row g-0">
+                 <div class="col-md-4">
+                     <img src="..." class="img-fluid rounded-start" alt="...">
+                 </div>
+                 <div class="col-md-8">
+                     <div class="card-body">
+                         <h5 class="card-title">Card title</h5>
+                         <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                     </div>
+                 </div>
+             </div>
+             <div>
+                 <label for="EstimatedAmount">金額預計</label>
+                 <input type="number" name="EstimatedAmount  ">
+             </div>
+             <hr />
+             <div class="row">
+                 <h5>委託內容描述</h5>
+                 <div id="editor"></div>
+             </div>
+         </div>
+         <div class="col-md-1"></div>
+         <div class="col-md-4">
+             <div class="row border">
+                 <div class="row mt-3 mb-3">
+                     <p><label for="CardNumber">卡號</label></p>
+                     <p><input type="text" name="CardNumber"></p>
+                 </div>
+                 <div class="row mb-3">
+                     <p> <label for="CardholderName">持卡人名</label></p>
+                     <p> <input type="text" name="CardholderName"></p> 
+                 </div>
+                 <div class="row mb-3">
+                     <p><label for="ExpiryDate">有效期限</label></p>
+                     <p><input type="text" name="ExpiryDate"></p>         
+                 </div>
+                 <div class="row mb-3">
+                     <p> <label label for="SecurityCode">安全碼</label></p>
+                     <p><input type="text" name="SecurityCode"></p>                  
+                 </div>
+             </div>
+             <hr />
+             <div class="row">
+                 <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
+             </div>
+         </div>
+     </div>
+ </form> *@
+
+@* <script src="/js/yhu/EntrustPayment.js"></script> *@
+<script>
+    $(document).ready(function () {
+        $("#comBtn").click(function () {
+            alert("Start");
+            var comText = $("#userNotice").val()
+            var ComDataToServer = {
+                Description: comText,
+                UserId: @UserId,
+                CommissionId: @ViewBag.ComCheck[0].commissionId,
+                PriceMin: @ViewBag.ComCheck[0].comPriceMin
+            };
+            alert(comText);
+
+            $.ajax({
+                url: "/yhu/ComOrders",
+                method: "post",
+                data: ComDataToServer,
+                success: function (response) {
+                    alert(response + "成功");
+                },
+                error: function () {
+                    alert('新增失敗');
+                }
+            });
+        });
+    });
+</script>

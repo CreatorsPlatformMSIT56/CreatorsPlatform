@@ -42,34 +42,11 @@ namespace CreatorsPlatform.Controllers
 
             var userAvatar = creator?.Users.FirstOrDefault()?.Avatar;
 
+            // 取得委託資料並取用第一筆資料
             var commissionsWithWords = from c in _context.CommissionWithImageAndWords
                                        where c.CreatorId == id
                                        group c by c.Title into g
                                        select g.OrderBy(x => x.CommissionId).First();
-
-            //var commisionsWithWords = from commission in _context.Commissions
-            //                        where commission.CreatorId == id
-            //                        join image in _context.CommissionImages
-            //                        on commission.CommissionId equals image.CommissionId
-            //                        join subtitle in _context.Subtitles
-            //                        on commission.SubtitleId equals subtitle.SubtitleId
-            //                        select new CommisionsWithWords
-            //                        {
-            //                            ComID = commission.CommissionId, 
-            //                            ComTitle = commission.Title,
-            //                            ComPriceMin = commission.PriceMin,
-            //                            ComPriceMax = commission.PriceMax,
-            //                            ComDes = commission.Description,
-            //                            ComPutUpDate = commission.PutUpDate,
-            //                            ComOverDate = commission.OverDate,
-            //                            ImageUrl = image.ImageUrl,
-            //                            SubtitleName = subtitle.SubtitleName
-            //                        };
-            //var commisionsWithWords = _context.CommissionWithImageAndWords.Where(c => c.CreatorId == id);
-
-            //var commissionsWithWords = from c in _context.CommissionWithImageAndWords
-            //                           where c.CreatorId == id
-            //                           select c;
 
             var viewModel = new CreatorDetailsViewModel
             {
@@ -98,11 +75,13 @@ namespace CreatorsPlatform.Controllers
         }
         public IActionResult GetPost(int id)
         {
+            // 取得作品資料
             var content = _context.Contents
                 .Include(c => c.Creator)
                 .ThenInclude(cr => cr.Users)
                 .FirstOrDefault(c => c.ContentId == id);
 
+            // 取得留言資料
             var comments = _context.Comments
                 .Include(u => u.User)
                 .Where(c => c.ContentId == id)
@@ -118,6 +97,7 @@ namespace CreatorsPlatform.Controllers
                     }
                 }).ToList();
 
+            // 取得訂閱方案資料
             var plans = _context.Plans
                 .Include(p => p.Creator)
                 .ThenInclude(c => c.Users)
@@ -141,7 +121,7 @@ namespace CreatorsPlatform.Controllers
                     }
                 }).ToList();
             
-            
+            // 整合取得的資料
             var viewModel = new ContentDetailsViewModel
             {
                 Content = new List<Content> { content },

@@ -8,8 +8,106 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <br />
 <div class="row">
-	<div id="Toggle" class="col-md-1">
-		<p><a href="#">aaaaa</a>,<a href="#">aaaaa</a><a href="#">aaaaa</a><a href="#">aaaaa</a><a href="#">aaaaa</a><a href="#">aaaaa</a></p>
+	<div class="col-md-1">	
+			<button class="btn border-0 " data-bs-toggle="collapse" data-bs-target="#collapse_Draw"
+					aria-expanded="false" aria-controls="collapse_Draw">繪圖
+			</button>
+		<div class="collapse" id="collapse_Draw">
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="1" id="flexCheckDefault_Original"> <label class="form-check-label" for="flexCheckDefault_Original" onclick="ddddd()">原創</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="2" id="flexCheckDefault_doujin"> <label class="form-check-label" for="flexCheckDefault_doujin">同人</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="3" id="flexCheckDefault_AI"> <label class="form-check-label" for="flexCheckDefault_AI">AI繪圖</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="16" id="flexCheckDefault_Live2D"> <label class="form-check-label" for="flexCheckDefault_Live2D">Live2D</label></p>
+			</div>
+		</div>
+			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample_Video" aria-expanded="false"
+					aria-controls="collapseExample_Video">
+				影片
+			</button>
+		<div class="collapse" id="collapseExample_Video">
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="4" id="flexCheckDefault_2D"> <label class="form-check-label" for="flexCheckDefault_2D">2D動畫</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="5" id="flexCheckDefault_3D"> <label class="form-check-label" for="flexCheckDefault_3D">3D動畫</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="6" id="flexCheckDefault_YT"> <label class="form-check-label" for="flexCheckDefault_YT">YT</label></p>	
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="7" id="flexCheckDefault_VT"> <label class="form-check-label" for="flexCheckDefault_VT">VT</label></p>		
+			</div>
+		</div>
+			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample_Sound" aria-expanded="false"
+					aria-controls="collapseExample_Sound">
+				<i class="ri-arrow-down-s-fill"></i>聲音
+			</button>
+		<div class="collapse" id="collapseExample_Sound">
+			<div class="form-check d-flex justify-content-between ">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="8" id="flexCheckDefault_Music"> <label class="form-check-label" for="flexCheckDefault_Music">音樂</label></p>	
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="9" id="flexCheckDefault_Sound"> <label class="form-check-label" for="flexCheckDefault_Sound">聲音</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="10" id="flexCheckDefault_ASMR"> <label class="form-check-label" for="flexCheckDefault_Music">ASMR</label></p>
+			</div>
+		</div>
+			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample_Teach" aria-expanded="false"
+					aria-controls="collapseExample_Teach">
+				<i class="ri-arrow-down-s-fill"></i>教學
+			</button>
+		<div class="collapse" id="collapseExample_Teach">
+			<div class="form-check d-flex justify-content-between ">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="11" id="flexCheckDefault_Draw"> <label class="form-check-label" for="flexCheckDefault_Draw">繪圖</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="12" id="flexCheckDefault_Video"> <label class="form-check-label" for="flexCheckDefault_Video">影片製作</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="13" id="flexCheckDefault_Soundmade"> <label class="form-check-label" for="flexCheckDefault_Soundmade">聲音製作</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="14" id="flexCheckDefault_Musicmade"> <label class="form-check-label" for="flexCheckDefault_Musicmade">音樂製作</label></p>
+			</div>
+			<div class="form-check d-flex justify-content-between">
+				<p><input class="form-check-input" type="radio" name="input_Filter" value="15" id="flexCheckDefault_Handmade"> <label class="form-check-label" for="flexCheckDefault_Handmade">手作</label></p>	
+			</div>
+		</div>
+			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample_Label" aria-expanded="false"
+					aria-controls="collapseExample_Label">
+				<i class="ri-arrow-down-s-fill"></i>標籤
+			</button>
+		<div class="collapse" id="collapseExample_Label">
+				<a href="">
+					AAAA
+				</a>
+				<a href="">
+					BBBB
+				</a>
+				<a href="">
+					CCCC
+				</a>
+				<a href="">
+					DDDD
+				</a>
+				<a href="">
+					EEEE
+				</a>
+				<a href="">
+					FFFF
+				</a>
+		</div>
 	</div>
 	<div id="Main" class="border mt-5">
 		<div class="row">

@@ -14,22 +14,81 @@ function MessagUpdata(UserCurrentMsgtype){
             _CurrentMsg: CurrentMsg,
             tapy:UserCurrentMsgtype,
         }, success: function (response) {
-            for (i = CurrentMsg; i < response.length; i++) {
-                let MsgHtml =
-                    `<li>
+            console.log(response);
+            let cont = 0;
+            switch (UserCurrentMsgtype) {
+                case "newmsg":
+                    response.forEach(function () {
+                        $('#Messages').append(
+                            `<li>
                     <div class="mb-3">
-                    <p>${response[i].nickname}</p>
-                    <p>${response[i].description}</p>
-                    <img src="${response[i].imageURL}" alt="">
-                    <p>${response[i].title}</p>
+                    <p>${response[cont].userName}</p>
+                    <p>${response[cont].description}</p>
+                    <div class="image-container">
+                            <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                    </div>
+                    <p>${response[cont].title}${response[cont].uploadDate}</p>
                     </div>            
-                    </li>`;
-                $('#Messages').append(MsgHtml);
+                    </li>`
+                        );
+                        cont++;
+                    });
+                    ImgCssRest();
+                    break
+                case "subscribemsg":
+                    response.forEach(function () {
+                        $('#Messages').append(
+                            `<li>
+                    <div class="mb-3">
+                    <p>${response[cont].userName}</p>
+                    <p>${response[cont].description}</p>
+                    <div class ="image-container">
+                          <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                    </div>                
+                    <p>${response[cont].title}${response[cont].uploadDate}</p>
+                    </div>            
+                    </li>`
+                        );
+                        cont++;
+                    });
+                    ImgCssRest();
+                    break
+                case "eventmsg":
+                    response.forEach(function () {
+                        $('#Messages').append(
+                            `<li>
+                              <div class="mb-3">
+                                  <p>${response[cont].eventName}</p>
+                                  <p>${response[cont].description}</p>
+                                  <div class ="image-container">
+                                           <img class="image-containerImg" src="${response[cont].banner}" alt="">
+                                  </div>
+                                    <p>${response[cont].startDate}${response[cont].endDate}</p>
+                                </div>            
+                            </li>`
+                        );
+                        cont++;
+                    });
+                    ImgCssRest();
+                    break
+                default:
+                    break;
             }
         }
     })
-    
 };
+
+function ImgCssRest() {
+    $(".image-container").css({
+        "height": "250px",
+        "overflow": "hidden"
+    });
+    $(".image-containerImg").css({
+        "height": "100%",
+        "width": "100%",
+        "object-fit": "cover"
+    });
+}
 function Messagloading(UserCurrentMsgtype, CurrentMsg) {
     CurrentMsg += 2;
     $.ajax({
