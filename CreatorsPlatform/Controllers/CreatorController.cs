@@ -101,7 +101,7 @@ namespace CreatorsPlatform.Controllers
             var plans = _context.Plans
                 .Include(p => p.Creator)
                 .ThenInclude(c => c.Users)
-                .Where(p => p.Creator.CreatorId == content.CreatorId)
+                .Where(p => p.Creator.CreatorId == content!.CreatorId)
                 .Select(p => new Plan
                 {
                     PlanId = p.PlanId,
@@ -132,8 +132,76 @@ namespace CreatorsPlatform.Controllers
             return View(viewModel);
         }
 
-        // 創作者建立接受委託表單(修改位置待訂)
-        public IActionResult AddCommisionForm()
+
+		//----------------------------------------------------------------
+		//委託貼文頁面
+		public class CommissionDetailsViewModel
+		{
+			public IEnumerable<Commission>? Commission { get; set; }
+			public IEnumerable<Plan>? Plans { get; set; }
+			public IEnumerable<Comment>? Comments { get; set; }
+		}
+
+		public IActionResult GetCommission(int id = 1)
+		{
+			var commission = _context.Commissions
+				.Include(c => c.Creator)
+				.ThenInclude(cr => cr.Users)
+				.Include(c => c.Subtitle)
+				.Include(c => c.CommissionImages)
+				.FirstOrDefault(c => c.CommissionId == id);
+
+			var comments = _context.Comments
+				.Include(u => u.User)
+				.Where(c => c.UserId == id)
+				.Select(cm => new Comment
+				{
+					Comment1 = cm.Comment1,
+					ContentId = cm.CommentId,
+					User = new User
+					{
+						UserId = cm.UserId,
+						UserName = cm.User.UserName,
+						Avatar = cm.User.Avatar
+					}
+				}).ToList();
+
+			var plans = _context.Plans
+				.Include(p => p.Creator)
+				.ThenInclude(c => c.Users)
+				.Select(p => new Plan
+				{
+					PlanId = p.PlanId,
+					CreatorId = p.CreatorId,
+					PlanName = p.PlanName,
+					PlanPrice = p.PlanPrice,
+					PlanLevel = p.PlanLevel,
+					Creator = new Creator
+					{
+						CreatorId = p.Creator.CreatorId,
+						Users = p.Creator.Users.Select(u => new User
+						{
+							UserId = u.UserId,
+							UserName = u.UserName,
+							Avatar = u.Avatar
+						}).ToList()
+					}
+				}).ToList();
+
+
+			var viewModel = new CommissionDetailsViewModel
+			{
+				Commission = new List<Commission> { commission! },
+				Plans = plans,
+				Comments = comments
+			};
+
+			return View(viewModel);
+		}
+
+
+		// 創作者建立接受委託表單(修改位置待訂)
+		public IActionResult AddCommisionForm()
         {
             return View();
         }

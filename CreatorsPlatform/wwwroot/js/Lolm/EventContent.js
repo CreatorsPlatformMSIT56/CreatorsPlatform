@@ -75,12 +75,12 @@ $(function () {
                 $("#PostCreatorAvatar").prop("src", e => (e = "data: image / jpg; base64," + ThePostModel.imgCreAvatar));
                 $("#PostCreatorName").text(ThePostModel.imgCreName);
                 $("#PostLikeInt").text(ThePostModel.evePostLike);
-                return ThePostId;
             },
             error: function () {
                 alert("讀取失敗");
             }
-        });        
+        });
+        return ThePostId;
     }
 
     // 當前點擊的post的id
@@ -119,11 +119,16 @@ $(function () {
     //PostMadl上的愛心按鈕
     $(".LikeModalBtn").on("click", function () {
         var CheckedPostId = parseInt(NowCheckedPost);
+        var TheSameSmallPostId = "#Post" + NowCheckedPost;
+        console.log(TheSameSmallPostId);
+        $(TheSameSmallPostId).find(".LikeBtn").toggleClass("LikeChecked");
         $(this).toggleClass("LikeChecked");
         if ($(this).hasClass("LikeChecked")) {
             $(this).children('p').text(parseInt($(this).children('p').text()) + 1);
+            $(TheSameSmallPostId).find(".LikeBtn").children('p').text(parseInt($(TheSameSmallPostId).find(".LikeBtn").children('p').text()) + 1);
         } else {
             $(this).children('p').text(parseInt($(this).children('p').text()) - 1);
+            $(TheSameSmallPostId).find(".LikeBtn").children('p').text(parseInt($(TheSameSmallPostId).find(".LikeBtn").children('p').text()) - 1);
         }
         var PostLike = parseInt($(this).children('p').text());
         //console.log(PostLike);
