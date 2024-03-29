@@ -37,14 +37,15 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> EventContent(int? id)
         {
             ViewBag.Eid = id;
-
-            // ▼不知道@model的型態所以擱置
-            //var result = await (from e in _context.Events
-            //					join ei in _context.EventImages on e.EventId equals ei.EventId into eGroup
-            //					where e.EventId == id
-            //					select new { Event = e, EventImages = eGroup }).ToListAsync();
-            //return View(result);
-
+            string ThePageStyle;            
+            // 把style丟到前面
+            if (_context.Events.FirstOrDefault(m => m.EventId == id)!.EventStyle != null)
+            {
+                ThePageStyle = _context.Events.FirstOrDefault(m => m.EventId == id)!.EventStyle!;
+                string[] JsonArray = JsonConvert.DeserializeObject<string[]>(ThePageStyle)!;
+                ViewBag.TitleStyle = JsonArray[0];
+                ViewBag.IntroStyle = JsonArray[1];
+            };
             var TheEventContext = _context.EventsAndImages;
             var TheEventData = await (from o in TheEventContext
                                       where o.EventId == id
@@ -102,7 +103,7 @@ namespace CreatorsPlatform.Controllers
             return RedirectToAction("EventContent");
         }
 
-        // 上傳Event內容至資料庫
+        // 活動創建(上傳Event內容至資料庫)
         [HttpPost]
         [Route("Lolm/Create")]
         public IActionResult Create(Event EventModelData)
@@ -143,9 +144,8 @@ namespace CreatorsPlatform.Controllers
             }
         }
 
-        // 上傳範例圖片至資料庫
-        [HttpPost]
-        //public string CreateEventExImg([FromBody]JsonElement ExImgDataURLs)
+        // 活動創建(上傳範例圖片至資料庫)
+        [HttpPost]        
         public string CreateEventExImg(EventImage NewEventImageData)
         {
             int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
@@ -162,7 +162,7 @@ namespace CreatorsPlatform.Controllers
             return "OK";
         }
 
-        // 上傳活動參加者的投稿 到 資料庫的EventImg表
+        // 新增投稿(上傳活動參加者的投稿 到 資料庫的EventImg表)
         [HttpPost]
         public IActionResult CreateEventPost(EventImage NewEventImageData, int eventId)
         {
@@ -192,6 +192,7 @@ namespace CreatorsPlatform.Controllers
             }
         }
 
+        // 獲得投稿內容
         [HttpGet]
         public EventsAndImage? EventPostContent(string EventAndImgId)
         {
@@ -199,6 +200,13 @@ namespace CreatorsPlatform.Controllers
             var TheEventPostSQL = _context.EventsAndImages;
             var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EvtImgId == EventAndImgIntId);
             return TheEventPost;
+        }
+
+        // 刷新Like數
+        [HttpPost]
+        public void PostLikeChange()
+        {
+
         }
 
         public async Task<IActionResult> Details(int? id)

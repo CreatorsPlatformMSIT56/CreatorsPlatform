@@ -1,5 +1,6 @@
 ﻿var ImgDataURL;
 var EventIdSaver = EventIdStocker; 
+
 $(function () {
     // 上傳圖片並且預覽功能
     $("#progressbarTWInput").change(function () {
@@ -50,18 +51,22 @@ $(function () {
         })
     })
 
-    // Modal更新
+    // 抓點的是哪個投稿
+    function WhatPost(InputEle) {
+        var ThatPostPartId = $(InputEle).closest(".EventPost").prop("id");
+        var ThePostIdString = ThatPostPartId.substring(4);
+        return ThePostIdString;
+    }
+
+    // Modal更新 
     function RefrashPostModal(TheEle) {
-        console.log($(TheEle).closest(".EventPost").prop("id"));
-        var ThatPostPartId = $(TheEle).closest(".EventPost").prop("id");
-        var ThePostId = ThatPostPartId.substring(4);
-        console.log(ThePostId);
+        var ThePostId = WhatPost(TheEle);
         $.ajax({
             url: "/Lolm/EventPostContent",
             method: "get",
             data: {
                 EventAndImgId: ThePostId
-            },                
+            },
             success: function (ThePostModel) {
                 $("#exampleModalLabel").text(ThePostModel.imgTitle);
                 $("#PostDescription").text(ThePostModel.imgDes);
@@ -74,11 +79,31 @@ $(function () {
             error: function () {
                 alert("讀取失敗");
             }
-        })
+        });
+        return ThePostId;
     }
+
+    // 當前點擊的post的id
+    var NowCheckedPost;
 
     // 點擊投稿讓Modal內容更新
     $(".EventPostImgPart, .EventPostTitle").on("click", function () {
-        RefrashPostModal(this);
-    })
+        NowCheckedPost = RefrashPostModal(this);
+    });
+
+
+    // 愛心按鈕
+    $(".LikeBtn").on("click", function () {
+        var CheckedPostId = WhatPost(this);
+        $(".LikeBtn").toggleClass("LikeChecked");
+        if ($(".LikeBtn").hasClass("LikeChecked")) {
+            $(this).children('p').text(parseInt($(this).children('p').text()) + 1);
+        } else {
+            $(this).children('p').text(parseInt($(this).children('p').text()) - 1);
+        }
+        
+        //if ($(".LikeBtn").hasClass("LikeChecked")) {
+
+        //}
+    });
 });
