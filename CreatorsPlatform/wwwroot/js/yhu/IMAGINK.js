@@ -5,6 +5,17 @@
     });
     
 });
+function CreatorsChange() {
+    $.ajax({
+        url: '/yhu/IndividualDataUP',
+        method: 'POST',
+        data: JSON.stringify(UserData),
+        contentType: 'application/json',
+        success: function (response) {
+            $("#UserEMail").val(response.email);
+            $("#UserName").val(response.name);
+        }
+    };
 
 divElement.addEventListener('scroll', function () {
     let divElement = document.getElementById('Userlist');
@@ -14,9 +25,7 @@ divElement.addEventListener('scroll', function () {
         // 在这里执行您希望在滚动到底部时执行的操作
     }
 });
-function ddddd() {
-    console.log($('input[name="input_Filter"]:checked').val());
-}
+
 $('input[name="input_Filter"]').on("change", function () {
     var selectedOption = $('input[name="input_Filter"]:checked').val(); // 获取选中的选项的值
     window.location.href = "/Vicky/Search";

@@ -23,7 +23,17 @@
                 <div class="col-md-4">
                     <p>頭像:</p>
                         <input id="AvatarUpData" style="display: none;" type="file" accept="image/*" onchange="readFile(event)" />
-                        <label for="AvatarUpData"><img id="Avatar" src="data:image/png;base64,@ViewBag.Avatar" /></label>
+                    <label for="AvatarUpData">
+                        <img id="Avatar" @if (ViewBag.Avatar != null)
+                        {
+                            <text>src="data:image/png;base64,@ViewBag.Avatar"</text>
+                        }
+                        else
+                        {
+                            <text>src="/img/Shared/person-circle.svg"</text>
+                        }
+                       >
+                    </label>
                 </div>
                 <div class="col-md-8">    
                     <form id="UserData">
