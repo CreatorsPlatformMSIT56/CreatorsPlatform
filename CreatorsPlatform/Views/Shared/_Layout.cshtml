@@ -41,6 +41,76 @@
                             </svg>
                         </button>
                     </form>
+                    
+                    <!--方便通道開始-->
+                    <!-- <h3>以下是方便傳送道 開發完畢後請刪除</h3> -->
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-yhu" data-bs-toggle="dropdown" aria-expanded="false">
+                            組長
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-yhu">
+                            <li><a class="dropdown-item" asp-action="IMAGINK" asp-controller="yhu" class="link-success">IMAGINK</a></li>
+                            <li><a class="dropdown-item" asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a></li>
+                            <li><a class="dropdown-item" asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a></li>
+                            <li><a class="dropdown-item" asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a></li>
+                            <li><a class="dropdown-item" asp-action="Login" asp-controller="yhu" class="link-success">Login</a></li>
+                            <li><a class="dropdown-item" asp-action="Payment" asp-controller="yhu" class="link-success">Payment</a></li>
+                            <li><a class="dropdown-item" asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-HotGuy" data-bs-toggle="dropdown" aria-expanded="false">
+                            資料庫大師
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-HotGuy">
+                            <li><a class="dropdown-item" asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a></li>
+                        </ul>
+                    </div>
+                        
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Lolm" data-bs-toggle="dropdown" aria-expanded="false">
+                            漫畫王
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Lolm">
+                            <li><a class="dropdown-item" asp-action="CreateEvent" asp-controller="Lolm" class="link-success">發起活動</a></li>
+                            <li><a class="dropdown-item" asp-action="EventContent" asp-controller="Lolm" class="link-success">活動內容</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Creator" data-bs-toggle="dropdown" aria-expanded="false">
+                            波溜[創作者]
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Creator">
+                            <li><a class="dropdown-item" asp-action="Index" asp-controller="Creator" class="link-success">創作者首頁</a></li>
+                            <li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布文章</a></li>
+                            <li><a class="dropdown-item" asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">發布委託</a></li>
+                            <li><a class="dropdown-item" asp-action="GetPost" asp-controller="Creator" class="link-success">作品展示頁面</a></li>
+                            <li><a class="dropdown-item" asp-action="EditSubscriptionPlans" asp-controller="Creator" class="link-success">編輯訂閱方案頁面(似乎已放進會員介面)</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Member" data-bs-toggle="dropdown" aria-expanded="false">
+                            會員
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Member">
+                            <li><a class="dropdown-item" asp-action="Login" asp-controller="Member" class="link-success">登入</a></li>
+                            <li><a class="dropdown-item" asp-action="Signup" asp-controller="Member" class="link-success">註冊</a></li>
+                            <li><a class="dropdown-item" asp-action="Individual" asp-controller="Member" class="link-success">個人設定</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Vicky" data-bs-toggle="dropdown" aria-expanded="false">
+                            Vicky
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Vicky">
+                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" class="link-success">檢索頁</a></li>
+                        </ul>
+                    </div>
+                    <!--方便通道結束 不用洩了-->
                     <ul class="navbar-nav NavSection">
                         <li class="nav-item" id="MemberSection">
                             @* 如果登入 *@
@@ -68,48 +138,11 @@
                                     </svg>
                                 </a>
                                 <ul class="MemberDropdownList">
-                                    <li><a asp-action="Login" asp-controller="Member" class="p-1">登入</a><a asp-action="Signup" asp-controller="Member">註冊</a></li>
+                                    <li><a asp-action="Login" asp-controller="Member" class="p-1">登入</a></li>
+                                    <li><a asp-action="Signup" asp-controller="Member">註冊</a></li>
                                 </ul>
                             }
                         </li>
-                        <!--方便通道開始-->
-                        <h3>以下是方便傳送道 開發完畢後請刪除</h3>
-                        <div>
-                            <p>組長做的頁面:</p>
-                            <a asp-action="IMAGINK" asp-controller="yhu" class="link-success">IMAGINK</a>
-                            <a asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a>
-                            <a asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a>
-                            <a asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a>
-                            <a asp-action="Login" asp-controller="yhu" class="link-success">Login</a>
-                            <a asp-action="Payment" asp-controller="yhu" class="link-success">Paymentr</a>
-                            <a asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a>
-                        </div>
-                        <div>
-                            <p>資料庫大師做的頁面:</p>
-                            <a asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a>
-                        </div>
-                        <div>
-                            <p>漫畫王做的頁面:</p>
-                            <a asp-action="CreateEvent" asp-controller="Lolm" class="link-success">發起活動</a>
-                            <a asp-action="EventContent" asp-controller="Lolm" class="link-success">活動內容</a>
-                        </div>
-                        <div>
-                            <p>波溜做的頁面:</p>
-                            <a asp-action="Index" asp-controller="Creator" class="link-success">Index</a>
-                            <a asp-action="AddPost" asp-controller="Creator" class="link-success">AddPost</a>
-                            <a asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">4</a>
-                            <a asp-action="GetPost" asp-controller="Creator" class="link-success">GetPost</a>
-                            <a asp-action="EditSubscriptionPlans" asp-controller="Creator" class="link-success">EditSubscriptionPlans</a>
-                        </div>
-                        <div>
-                            <p>會員頁面:</p>
-                            <a asp-action="Login" asp-controller="Member" class="link-success">登入</a>
-                            <a asp-action="Signup" asp-controller="Member" class="link-success">註冊</a>
-                            <a asp-action="Individual" asp-controller="Member" class="link-success">個人設定</a>
-                        </div>
-                        <p>Vicky</p>
-                        <a asp-action="Search" asp-controller="Vicky" class="link-success">登入</a>
-                        <!--方便通道結束 不用洩了-->
                     </ul>
                 </div>
             </div>
