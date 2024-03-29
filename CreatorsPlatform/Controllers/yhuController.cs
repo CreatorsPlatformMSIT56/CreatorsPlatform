@@ -134,33 +134,32 @@ namespace CreatorsPlatform.Controllers
         //                        });
         //    return Json(CreatorsData.ToList());
         //}
-        [HttpPost]
-        public ActionResult CreatorsChange(int x)
-        {
-            var CATCreatorsData =
-                             (from DefaultContents in _context.Contents
-                              where DefaultContents.CategoryId == x
-                              group DefaultContents by DefaultContents.CreatorId into PopularityRranking
-                              select new
-                              {
-                                  UserID = PopularityRranking.Key,
-                                  UserLikes = PopularityRranking.Sum(r => r.Likes)
-                              }).OrderByDescending(item => item.UserLikes).Take(6);
-            var userIDsArray = CATCreatorsData.Select(data => data.UserID).ToArray();
-\
-                var CreatorsData = (from UserData in _context.Users
-                                    join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-                                    where (userIDsArray).Concat(UserData.UserId)
-                                    select new
-                                    {
-                                        UserData.UserId,
-                                        UserData.Avatar,
-                                        UserData.UserName,
-                                        Description = Creators.Description.Length > 10 ? Creators.Description.Substring(0, 10) : Creators.Description
-                                    });
+        //[HttpPost]
+        //public ActionResult CreatorsChange(int x)
+        //{
+        //    var CATCreatorsData =
+        //                     (from DefaultContents in _context.Contents
+        //                      where DefaultContents.CategoryId == x
+        //                      group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+        //                      select new
+        //                      {
+        //                          UserID = PopularityRranking.Key,
+        //                          UserLikes = PopularityRranking.Sum(r => r.Likes)
+        //                      }).OrderByDescending(item => item.UserLikes).Take(6);
+      
+        //        var CreatorsData = (from UserData in _context.Users
+        //                            join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
+        //                            where (CATCreatorsData.id).Contains(UserData.UserId)
+        //                            select new
+        //                            {
+        //                                UserData.UserId,
+        //                                UserData.Avatar,
+        //                                UserData.UserName,
+        //                                Description = Creators.Description.Length > 10 ? Creators.Description.Substring(0, 10) : Creators.Description
+        //                            });
 
-            return Json(DefaultCreatorsDataList);
-        }
+        //    return Json(DefaultCreatorsDataList);
+        //}
         [HttpPost]
         public ActionResult IMAGINK(string x)
         {
