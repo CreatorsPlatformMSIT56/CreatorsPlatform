@@ -25,7 +25,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     <p>${response[cont].userName}</p>
                     <p>${response[cont].description}</p>
                     <div class="image-container">
-                            <img src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                            <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
                     </div>
                     <p>${response[cont].title}${response[cont].uploadDate}</p>
                     </div>            
@@ -33,6 +33,7 @@ function MessagUpdata(UserCurrentMsgtype){
                         );
                         cont++;
                     });
+                    ImgCssRest();
                     break
                 case "subscribemsg":
                     response.forEach(function () {
@@ -41,8 +42,8 @@ function MessagUpdata(UserCurrentMsgtype){
                     <div class="mb-3">
                     <p>${response[cont].userName}</p>
                     <p>${response[cont].description}</p>
-                    <div class="image-container">
-                          <img  src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                    <div class ="image-container">
+                          <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
                     </div>                
                     <p>${response[cont].title}${response[cont].uploadDate}</p>
                     </div>            
@@ -50,31 +51,44 @@ function MessagUpdata(UserCurrentMsgtype){
                         );
                         cont++;
                     });
+                    ImgCssRest();
                     break
                 case "eventmsg":
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
-                    <div class="mb-3">
-                    <p>${response[cont].eventName}</p>
-                    <p>${response[cont].description}</p>
-                    <div class="image-container" >
-                            <img src="${response[cont].banner}" alt="">
-                    </div>
-                    <p>${response[cont].startDate}${response[cont].endDate}</p>
-                    </div>            
-                    </li>`
+                              <div class="mb-3">
+                                  <p>${response[cont].eventName}</p>
+                                  <p>${response[cont].description}</p>
+                                  <div class ="image-container">
+                                           <img class="image-containerImg" src="${response[cont].banner}" alt="">
+                                  </div>
+                                    <p>${response[cont].startDate}${response[cont].endDate}</p>
+                                </div>            
+                            </li>`
                         );
                         cont++;
                     });
+                    ImgCssRest();
                     break
                 default:
                     break;
             }
         }
     })
-    
 };
+
+function ImgCssRest() {
+    $(".image-container").css({
+        "height": "250px",
+        "overflow": "hidden"
+    });
+    $(".image-containerImg").css({
+        "height": "100%",
+        "width": "100%",
+        "object-fit": "cover"
+    });
+}
 function Messagloading(UserCurrentMsgtype, CurrentMsg) {
     CurrentMsg += 2;
     $.ajax({
