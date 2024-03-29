@@ -97,7 +97,13 @@ $(function () {
         var CheckedPostId = WhatPost(this);
         $(".LikeBtn").toggleClass("LikeChecked");
         if ($(".LikeBtn").hasClass("LikeChecked")) {
-
+            $(this).children('p').text(parseInt($(this).children('p').text()) + 1);
+        } else {
+            $(this).children('p').text(parseInt($(this).children('p').text()) - 1);
         }
+        
+        //if ($(".LikeBtn").hasClass("LikeChecked")) {
+
+        //}
     });
 });
