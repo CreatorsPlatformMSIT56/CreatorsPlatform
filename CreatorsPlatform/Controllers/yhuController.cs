@@ -230,9 +230,57 @@ namespace CreatorsPlatform.Controllers
 
         }
         public IActionResult EntrustPayment()
-		{
-			return View();
-		}
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+
+            var ComCheck = (from c in _context.Commissions
+                            join i in _context.Users on c.CreatorId equals i.CreatorId
+                            where c.CommissionId == 1
+                            select new
+                            {
+                                commissionId = c.CommissionId,
+                                creatorName = i.UserName,
+                                creatorAvatar = i.Avatar,
+                                comPriceMin = c.PriceMin,
+                                comPriceMax = c.PriceMax,
+                                commissionTitle = c.Title,
+                                comDescription = c.Description
+                            });
+
+            ViewBag.ComCheck = ComCheck.ToList();
+            ViewBag.Id = member.id;
+
+            return View();
+        }
+        [HttpPost]
+        [Route("yhu/ComOrders")]
+        public ActionResult ComOrders(CommissionOrder ComOrder)
+        {
+            Console.WriteLine("我要進來囉");
+            var sDate = DateTime.Now;
+            DateOnly ssDate = DateOnly.FromDateTime(sDate);
+
+            CommissionOrder cOrder = new CommissionOrder
+            {
+                Price = ComOrder.Price,
+                OrderDate = ssDate,
+                Description = ComOrder.Description,
+                CommissionId = ComOrder.CommissionId,
+                UserId = ComOrder.UserId
+            };
+
+            if (ModelState.IsValid != null)
+            {
+                _context.Add(cOrder);
+                _context.SaveChanges();
+
+                Console.WriteLine("杰哥不要");
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         public IActionResult Individual()
         {
             var memberJson = HttpContext.Session.GetString("key");
