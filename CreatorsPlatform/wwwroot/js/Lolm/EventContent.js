@@ -1,5 +1,5 @@
 ﻿var ImgDataURL;
-var EventIdSaver = EventIdStocker; 
+var EventIdSaver = EventIdStocker;
 
 $(function () {
     // 上傳圖片並且預覽功能
@@ -65,7 +65,7 @@ $(function () {
             url: "/Lolm/EventPostContent",
             method: "get",
             data: {
-                EventAndImgId: ThePostId
+                EventPostId: ThePostId
             },
             success: function (ThePostModel) {
                 $("#exampleModalLabel").text(ThePostModel.imgTitle);
@@ -74,13 +74,13 @@ $(function () {
                 //var PostCreatorAvatar64 = hexToDataURL(ThePostModel.imgCreAvatar);
                 $("#PostCreatorAvatar").prop("src", e => (e = "data: image / jpg; base64," + ThePostModel.imgCreAvatar));
                 $("#PostCreatorName").text(ThePostModel.imgCreName);
-                $("#PostLikeInt").text(ThePostModel.evePostLike)
+                $("#PostLikeInt").text(ThePostModel.evePostLike);
+                return ThePostId;
             },
             error: function () {
                 alert("讀取失敗");
             }
-        });
-        return ThePostId;
+        });        
     }
 
     // 當前點擊的post的id
@@ -92,18 +92,51 @@ $(function () {
     });
 
 
-    // 愛心按鈕
+    // Post上的愛心按鈕
     $(".LikeBtn").on("click", function () {
-        var CheckedPostId = WhatPost(this);
-        $(".LikeBtn").toggleClass("LikeChecked");
-        if ($(".LikeBtn").hasClass("LikeChecked")) {
+        var CheckedPostId = parseInt(WhatPost(this));
+        $(this).toggleClass("LikeChecked");
+        if ($(this).hasClass("LikeChecked")) {
             $(this).children('p').text(parseInt($(this).children('p').text()) + 1);
         } else {
             $(this).children('p').text(parseInt($(this).children('p').text()) - 1);
         }
-        
-        //if ($(".LikeBtn").hasClass("LikeChecked")) {
+        var PostLike = parseInt($(this).children('p').text());
+        //console.log(PostLike);
+        $.ajax({
+            url: "/Lolm/PostLikeChange",
+            method: "POST",
+            data: { LikeChange: PostLike, TheCheckedPostId: CheckedPostId },
+            success: function () {
+                alert(OK);
+            },
+            error: function () {
+                alert('按愛心失敗');
+            }
+        });
+    });
 
-        //}
+    //PostMadl上的愛心按鈕
+    $(".LikeModalBtn").on("click", function () {
+        var CheckedPostId = parseInt(NowCheckedPost);
+        $(this).toggleClass("LikeChecked");
+        if ($(this).hasClass("LikeChecked")) {
+            $(this).children('p').text(parseInt($(this).children('p').text()) + 1);
+        } else {
+            $(this).children('p').text(parseInt($(this).children('p').text()) - 1);
+        }
+        var PostLike = parseInt($(this).children('p').text());
+        //console.log(PostLike);
+        $.ajax({
+            url: "/Lolm/PostLikeChange",
+            method: "POST",
+            data: { LikeChange: PostLike, TheCheckedPostId: CheckedPostId },
+            success: function () {
+                alert(OK);
+            },
+            error: function () {
+                alert('按愛心失敗');
+            }
+        });
     });
 });

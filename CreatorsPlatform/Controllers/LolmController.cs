@@ -194,19 +194,23 @@ namespace CreatorsPlatform.Controllers
 
         // 獲得投稿內容
         [HttpGet]
-        public EventsAndImage? EventPostContent(string EventAndImgId)
+        public EventsAndImage? EventPostContent(string EventPostId)
         {
-            int EventAndImgIntId = Convert.ToInt32(EventAndImgId);
+            int EventPostIntId = Convert.ToInt32(EventPostId);
             var TheEventPostSQL = _context.EventsAndImages;
-            var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EvtImgId == EventAndImgIntId);
+            var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EventImageId == EventPostIntId);
             return TheEventPost;
         }
 
         // 刷新Like數
         [HttpPost]
-        public void PostLikeChange()
+        public IActionResult PostLikeChange(int LikeChange , int TheCheckedPostId)
         {
-
+            var ThePostModel = _context.EventImages.FirstOrDefault(m => m.EventImageId == TheCheckedPostId);
+            ThePostModel!.EvePostLike = LikeChange;
+            _context.Update(ThePostModel);
+            _context.SaveChanges();
+            return Ok();
         }
 
         public async Task<IActionResult> Details(int? id)
