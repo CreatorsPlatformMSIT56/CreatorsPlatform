@@ -1,0 +1,130 @@
+﻿@model CreatorsPlatform.Controllers.CreatorController.CommissionDetailsViewModel
+<div class="container main-page">
+    <div class="row">
+        <div class="col-9" style="border:solid">
+            <div class="pictures-container text-center" style="border:solid">
+                @if (Model.Commission!.FirstOrDefault()!.CommissionImages.Any())
+                {
+                    <img src="@Model.Commission!.FirstOrDefault()!.CommissionImages.First().ImageUrl" alt="" class="img-fluid">
+                }
+                else
+                {
+                    <p>No image available</p>
+                }
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-row-reverse bd-highlight">
+                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
+                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Commission?.FirstOrDefault()?.PutUpDate</span></div>
+                    </div>
+                </div>
+                <div class="col-12 px-5 py-3 title-container">
+                    <div class="d-flex">
+						<h4>@Model.Commission?.FirstOrDefault()?.Title</h4>
+                    </div>
+                    <div>
+                        <h4>@Model.Commission?.FirstOrDefault()?.Title</h4>
+                    </div>
+                </div>
+                <div class="col-12 px-5 mb-3 tags-container">
+                    <a asp-action="Search" asp-controller="Vicky" asp-route-id="@Model.Commission?.FirstOrDefault()?.Subtitle.SubtitleId">
+                    <h4>#@Model.Commission?.FirstOrDefault()?.Subtitle.SubtitleName</h4>
+                    </a>
+                </div>
+            </div>
+            <!-- 作者 -->
+            <div class="row p-3">
+                <div class="col-2 avatar text-center">
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Commission?.FirstOrDefault()?.Creator.CreatorId">
+                        <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Commission?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                             style="max-width:100px; max-height:100px;">
+                    </a>
+                </div>
+                <div class="col-8 creator-name d-inline-flex align-items-center">
+                    <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Commission?.FirstOrDefault()?.Creator.CreatorId">
+                        <h4>@Model.Commission?.FirstOrDefault()?.Creator.Users.SingleOrDefault()?.UserName</h4>
+                    </a>
+                </div>
+                <div class="col-2 d-inline-flex align-items-center justify-content-center">
+                    <button type="button" class="btn btn-primary">關注</button>
+                </div>
+            </div>
+            <!-- comments -->
+            <div class="row">
+                <div class="col-12 px-5 py-3 comments">
+                    <h4>留言</h4>
+                </div>
+            </div>
+            <!-- comment 1 -->
+            @foreach (var e in Model.Comments!)
+            {
+                <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                    <div class="row g-0">
+                        <div class="col-md-2 avatar text-center">
+                            @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+                            <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
+                                <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                                     style="max-width:100px; max-height:100px;">
+                            </a>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
+                                    <h5 class="card-title mb-1">@e.User.UserName</h5>
+                                </a>
+                                <p class="card-text mb-2">
+                                    @e.Comment1
+                                </p>
+                                <p class="card-text"><small class="text-muted">留言時間</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- 重複 -->
+            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                <div class="row g-0">
+                    <div class="col-md-2 avatar text-center">
+                        <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">粉絲名稱</h5>
+                            <p class="card-text mb-2">
+                                This is a wider card with supporting text below as a natural
+                                lead-in to additional content. This content is a little bit longer.
+                            </p>
+                            <p class="card-text"><small class="text-muted">留言時間</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+            <div class="row g-0">
+            <div class="col-md-2 avatar text-center">
+            <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
+            </div>
+            <div class="col-md-10">
+            <div class="card-body">
+            <h5 class="card-title mb-1">粉絲名稱</h5>
+            <p class="card-text mb-2">
+            This is a wider card with supporting text below as a natural
+            lead-in to additional content. This content is a little bit longer.
+            </p>
+            <p class="card-text"><small class="text-muted">留言時間</small></p>
+            </div>
+            </div>
+            </div>
+            </div> *@
+            <!-- 重複結束 -->
+        </div>
+        <!-- aside -->
+        <div class="col-3" style="border:solid">
+            <div class="row">
+                <p>@Model.Commission?.FirstOrDefault()?.Description</p>
+            </div>
+        </div>
+    </div>
+</div>
