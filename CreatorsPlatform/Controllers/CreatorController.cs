@@ -140,9 +140,10 @@ namespace CreatorsPlatform.Controllers
 			public IEnumerable<Commission>? Commission { get; set; }
 			public IEnumerable<Plan>? Plans { get; set; }
 			public IEnumerable<Comment>? Comments { get; set; }
-		}
+            public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
+        }
 
-		public IActionResult GetCommission(int id = 1)
+        public IActionResult GetCommission(int id = 1)
 		{
 			var commission = _context.Commissions
 				.Include(c => c.Creator)
@@ -188,13 +189,18 @@ namespace CreatorsPlatform.Controllers
 					}
 				}).ToList();
 
+            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+                                       where c.CreatorId == id
+                                       group c by c.Title into g
+                                       select g.OrderBy(x => x.CommissionId).First();
 
-			var viewModel = new CommissionDetailsViewModel
+            var viewModel = new CommissionDetailsViewModel
 			{
 				Commission = new List<Commission> { commission! },
 				Plans = plans,
-				Comments = comments
-			};
+				Comments = comments,
+                CommissionsWithWords = commissionsWithWords
+            };
 
 			return View(viewModel);
 		}

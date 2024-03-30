@@ -1,4 +1,7 @@
 ﻿@model CreatorsPlatform.Controllers.CreatorController.CommissionDetailsViewModel
+
+<link href="~/css/Creator/GetCommission.css" rel="stylesheet" />
+
 <div class="container main-page">
     <div class="row">
         <div class="col-9" style="border:solid">
@@ -15,17 +18,17 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-row-reverse bd-highlight">
+                        <div class="p-2 bd-highlight uploadDate text-muted">@Model.Commission?.FirstOrDefault()?.PutUpDate</div>
                         <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
-                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Commission?.FirstOrDefault()?.PutUpDate</span></div>
                     </div>
                 </div>
                 <div class="col-12 px-5 py-3 title-container">
                     <div class="d-flex">
 						<h4>@Model.Commission?.FirstOrDefault()?.Title</h4>
                     </div>
-                    <div>
+                    @* <div>
                         <h4>@Model.Commission?.FirstOrDefault()?.Title</h4>
-                    </div>
+                    </div> *@
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
                     <a asp-action="Search" asp-controller="Vicky" asp-route-id="@Model.Commission?.FirstOrDefault()?.Subtitle.SubtitleId">
@@ -51,19 +54,19 @@
                 </div>
             </div>
             <!-- comments -->
-            <div class="row">
+            @* <div class="row">
                 <div class="col-12 px-5 py-3 comments">
                     <h4>留言</h4>
                 </div>
-            </div>
+            </div> *@
             <!-- comment 1 -->
-            @foreach (var e in Model.Comments!)
+            @* @foreach (var e in Model.Comments!)
             {
                 <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                     <div class="row g-0">
-                        <div class="col-md-2 avatar text-center">
+                        <div class="col-md-2 avatar text-center"> *@
                             @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
-                            <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
+                            @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId">
                                 <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
                                      style="max-width:100px; max-height:100px;">
                             </a>
@@ -81,10 +84,10 @@
                         </div>
                     </div>
                 </div>
-            }
+            } *@
 
             <!-- 重複 -->
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+            @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                 <div class="row g-0">
                     <div class="col-md-2 avatar text-center">
                         <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
@@ -100,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> *@
             @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
             <div class="row g-0">
             <div class="col-md-2 avatar text-center">
@@ -119,10 +122,50 @@
             </div>
             </div> *@
             <!-- 重複結束 -->
+            <!-- 創作者其他委託 -->
+
+            <div class="row">
+                <div class="col-12 px-5 py-3 commssion-from-creator">
+                    <h4>創作者其他委託</h4>
+                    <div class="row">
+                        <!-- 寫一個判斷 只顯示前三個委託 將其他隱藏或點按鈕顯示 -->
+                    @foreach (var e in Model.CommissionsWithWords)
+                    {
+                        <div class="col-4">
+                            <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
+                                <div class="card mb-3">
+                                    <img class="card-img-top"
+                                            src="@e.ImageUrl"
+                                            alt="Card image cap"
+                                            style="height: 12rem; width: auto; object-fit: cover" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">@e.Title</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            @e.SubtitleName
+                                        </h6>
+                                        <p class="card-text commision-description">
+                                            @e.Description
+                                        </p>
+                                        <h5 class="card-text commisionPriceMin" style="font-weight:bolder">
+                                            @e.PriceMin.ToString("C0")
+                                            @(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")
+                                        </h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                        <!-- 寫一個判斷 只顯示前三個委託 將其他隱藏或點按鈕顯示 -->
+                    </div>
+                </div>
+
+            </div>
+
         </div>
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
+                <h4>委託說明: </h4>
                 <p>@Model.Commission?.FirstOrDefault()?.Description</p>
             </div>
         </div>

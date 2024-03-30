@@ -132,7 +132,7 @@
                 @foreach (var e in Model.CommissionsWithWords)
             {
                 <div class="col-4">
-                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
+                    <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
                         <div class="card mb-3">
                             <img class="card-img-top"
                                     src="@e.ImageUrl"
