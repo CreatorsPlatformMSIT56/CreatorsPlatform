@@ -38,4 +38,8 @@
     <Folder Include="wwwroot\js\Creator\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\yhu\IMAGINK.css" />
+  </ItemGroup>
+
 </Project>

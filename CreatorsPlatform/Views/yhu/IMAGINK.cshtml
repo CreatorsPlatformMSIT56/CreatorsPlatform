@@ -3,9 +3,8 @@
 *@
 @{
 }
-
-@* <link rel="stylesheet" href="/css/yhu/IMAGINK.css" /> *@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="/css/yhu/IMAGINK.css" rel="stylesheet" />
 <br />
 <div class="row">
 	<div class="col-md-1">	
@@ -118,20 +117,19 @@
 					<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
 				</div>
 				<div class="carousel-inner">
-					<div class="carousel-item active">
+					<div id="Woklist1img" class="carousel-item active">
 						<div class="ToMiddle">
 							<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg" >
 						</div>
-						<div class="carousel-caption d-none d-md-block">
+						<div id="Woklist1text" class="carousel-caption d-none d-md-block">
 							<h5>@ViewBag.DefaultContentsData[0].Title</h5>
-							<p>@ViewBag.DefaultContentsData[0].Description</p>
 							<p>@ViewBag.DefaultContentsData[0].UploadDate</p>
 						</div>
 					</div>
-					<div class="carousel-item">
+					<div id="Woklist2img" class="carousel-item">
 						<div class="ToMiddle">
 							@if (ViewBag.DefaultContentsData != null 
-							&& ViewBag.DefaultContentsData.Count > 2 
+							&& ViewBag.DefaultContentsData.Count > 0 
 							&& ViewBag.DefaultContentsData[1] != null 
 							&& ViewBag.DefaultContentsData[1].ImageUrl != null)
 							{
@@ -144,16 +142,13 @@
 								</svg>
 							}
 						</div>
-						<div class="carousel-caption d-none d-md-block">
-							<div class="carousel-caption d-none d-md-block">
+						<div id="Woklist2text" class="carousel-caption d-none d-md-block">
 								@if (ViewBag.DefaultContentsData != null && ViewBag.DefaultContentsData.Count > 2 
 								&& ViewBag.DefaultContentsData[1] != null 
 								&& ViewBag.DefaultContentsData[1].Title != null 
-								&& ViewBag.DefaultContentsData[1].Description != null
 								&& ViewBag.DefaultContentsData[1].UploadDate != null)
 								{
 									<h5>@ViewBag.DefaultContentsData[1].Title</h5>
-									<p>@ViewBag.DefaultContentsData[1].Description</p>
 									<p>@ViewBag.DefaultContentsData[1].UploadDate</p>
 								}
 								else
@@ -162,13 +157,12 @@
 									<p>Error</p>
 									<p>Error</p>
 								}
-						</div>
 					</div>
 					</div>
-					<div class="carousel-item">
+					<div id="Woklist3img" class="carousel-item">
 						<div class="ToMiddle">
 							@if (ViewBag.DefaultContentsData != null 
-							&& ViewBag.DefaultContentsData.Count >3 
+							&& ViewBag.DefaultContentsData.Count >1
 							&& ViewBag.DefaultContentsData[2] != null 
 							&&ViewBag.DefaultContentsData[2].ImageUrl != null)
 							{								
@@ -181,20 +175,18 @@
 								</svg>
 							}
 						</div>
-						<div class="carousel-caption d-none d-md-block">
+						<div id="Woklist3text" class="carousel-caption d-none d-md-block">
 								@if (ViewBag.DefaultContentsData != null
-								&& ViewBag.DefaultContentsData.Count > 3
+								&& ViewBag.DefaultContentsData.Count > 2
 								&& ViewBag.DefaultContentsData[2] != null
-								&&ViewBag.DefaultContentsData[2].Title != null && ViewBag.DefaultContentsData[2].Description != null && ViewBag.DefaultContentsData[2].UploadDate != null)
+								)
 							{
 								<h5>@ViewBag.DefaultContentsData[2].Title</h5>
-								<p>@ViewBag.DefaultContentsData[2].Description</p>
 								<p>@ViewBag.DefaultContentsData[2].UploadDate</p>
 							}
 							else
 							{
 								<h5>Error</h5>
-								<p>Error</p>
 								<p>Error</p>
 							}
 						</div>
@@ -219,18 +211,18 @@
 						<div class="carousel-item active">
 							<div class="row">
 								<div class="col-md-2"></div>
-								<div class="col-md-2 "><a onclick="">熱門</a></div>
-								<div class="col-md-2 "><a href="#">繪圖</a></div>
-								<div class="col-md-2 "><a href="#">影片</a></div>
-								<div class="col-md-2 "><a href="#">聲音</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(7)"><a>熱門</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(1)"><a >繪圖</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(2)"><a >影片</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(3)"><a >聲音</a></div>
 								<div class="col-md-2 "></div>
 							</div>
 						</div>
 						<div class="carousel-item">
 							<div class="row d-flex  justify-content-center">
 								<div class="col-md-2 "></div>
-								<div class="col-md-2"><a href="#">新人</a></div>
-								<div class="col-md-2"><a href="#">教學</a></div>
+								<div class="col-md-2" onclick="CreatorsChange(8)"><a>新人</a></div>
+								<div class="col-md-2" onclick="CreatorsChange(6)"><a>教學</a></div>
 								<div class="col-md-2"></div>
 							</div>
 						</div>
@@ -248,10 +240,10 @@
 			</div>
 		</div>
 		<div id="Userlist" class="border">
-			<div class="card mb-3 border-0  p-2">
+			<div id="UserlistDetail" class="card mb-3 border-0  p-2">
 				@foreach (var item in ViewBag.AuthorProfile)
 				{
-					<div class="row">
+					<div id="@item.UserId" class="row" onclick="WorkChanges(this)">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
 							<img src="data:image/png;base64,@Convert.ToBase64String(@item.Avatar)" class="UserIcon rounded-2" alt="...">
 						</div>
@@ -262,6 +254,7 @@
 							</div>
 						</div>
 					</div>
+					<hr />
 				}			
 			</div>
 		</div>

@@ -28,6 +28,7 @@ namespace CreatorsPlatform.Controllers
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
+            public IEnumerable<Content>? Contents { get; set; }
         }
         public IActionResult Index(int id)
         {
@@ -48,12 +49,19 @@ namespace CreatorsPlatform.Controllers
                                        group c by c.Title into g
                                        select g.OrderBy(x => x.CommissionId).First();
 
+            var contents = from c in _context.Contents
+                               //join s in _context.Subtitles
+                               //on c.SubtitleId equals s.SubtitleId
+                           where c.CreatorId == id
+                           select c;
+
             var viewModel = new CreatorDetailsViewModel
             {
                 Creator = creator,
                 UserName = userName,
                 UserAvatar = userAvatar,
-                CommissionsWithWords = commissionsWithWords
+                CommissionsWithWords = commissionsWithWords,
+                Contents = contents.ToList()
             };
 
             return View(viewModel);
