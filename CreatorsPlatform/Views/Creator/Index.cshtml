@@ -71,57 +71,28 @@
         <!-- 內容Container with 3 Cards in 1 row -->
         <div class="card-container container">
             <div class="card-deck row p-3">
+                @foreach(var e in Model.Contents)
+                {
                 <div class="col-4">
-                    <a style="display:block" href="#">
-                        <div class="card">
+                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
+                            <div class="card mb-3">
                             <img class="card-img-top"
-                                    src="https://fakeimg.pl/500/"
+                                     src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
                                     alt="Card image cap"
-                            @* style="max-height: 12rem; object-fit: cover" *@ />
+                                    style="height: 24rem; width: auto; object-fit: cover" />
                             <div class="card-body"
                             @* style="height: 10rem" *@>
-                                <h5 class="card-title">作品標題</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">作品分類</h6>
+                                <h5 class="card-title">@e.Title</h5>
+                                <!-- 改寫LINQ讓Subtitle能放進去 -->
+                                    <h6 class="card-subtitle mb-2 text-muted"></h6>
                                 <p class="card-text">
-                                    作品簡述
+                                    @e.Description
                                 </p>
                             </div>
                         </div>
                     </a>
                 </div>
-                <!-- 重複 -->
-                <div class="col-4">
-                    <div class="card">
-                        <img class="card-img-top"
-                             src="https://fakeimg.pl/500/"
-                             alt="Card image cap"
-                        @* style="max-height: 12rem; object-fit: cover" *@ />
-                        <div class="card-body"
-                        @* style="height: 10rem" *@>
-                            <h5 class="card-title">作品標題</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">作品分類</h6>
-                            <p class="card-text">
-                                作品簡述
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="card">
-                        <img class="card-img-top"
-                             src="https://fakeimg.pl/500/"
-                             alt="Card image cap"
-                        @* style="max-height: 12rem; object-fit: cover" *@ />
-                        <div class="card-body"
-                        @* style="height: 10rem" *@>
-                            <h5 class="card-title">作品標題</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">作品分類</h6>
-                            <p class="card-text">
-                                作品簡述
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
