@@ -11,6 +11,10 @@
     flex: 0 0 auto;
     width: 56%;
 }
+#StallMain {
+    flex: 0 0 auto;
+    width: 56%;
+}
 
 #Userlist {
     height: 50vh;

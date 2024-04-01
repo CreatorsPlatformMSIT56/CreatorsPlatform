@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Composition;
 using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
@@ -93,24 +94,26 @@ namespace CreatorsPlatform.Controllers
                                {
                                    UserID = PopularityRranking.Key,
                                    UserLikes = PopularityRranking.Sum(r => r.Likes)
-                               }).OrderByDescending(item => item.UserLikes).Take(6)).ToList();
+                               }).OrderByDescending(item => item.UserLikes).Take(6).ToList());
             var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
             //作者依喜歡數排序並取則頭像等
             var AuthorProfile = (from UsersData in _context.Users
                                  join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
                                  where (topCreatorUserIds).Contains(Introduction.CreatorId)
-                                 select new { UsersData.UserId, UsersData.Avatar, UsersData.UserName, Introduction.Description }
-                                     );
+                                 select new { UsersData.UserId,
+                                     UsersData.Avatar, 
+                                     UsersData.UserName,
+									 Description = Introduction.Description.Length > 10 ?
+										Introduction.Description.Substring(0, 10) : Introduction.Description
+								 });
             Console.WriteLine(AuthorProfile.ToList().Count);
             //依作者照第一個作者群找作品
             var DefaultContentsData = ((from DefaultContents in _context.Contents
                                         where DefaultContents.CreatorId == DefaultCreatorsData[0].UserID
                                         select new
                                         {
-                                            DefaultContents.CreatorId,
                                             DefaultContents.ImageUrl,
                                             DefaultContents.Title,
-                                            DefaultContents.Description,
                                             DefaultContents.UploadDate
                                         }).OrderByDescending(item => item.UploadDate).Take(3));
 
@@ -123,7 +126,7 @@ namespace CreatorsPlatform.Controllers
             ViewBag.AuthorProfile = AuthorProfile.ToList();
             return View();
         }
-        [HttpPost]
+        //[HttpPost]
         //public ActionResult CreatorsChange(int data)
         //{
         //    var CreatorsData = (from UserData in _context.Users
@@ -134,50 +137,114 @@ namespace CreatorsPlatform.Controllers
         //                        });
         //    return Json(CreatorsData.ToList());
         //}
-        //[HttpPost]
-        //public ActionResult CreatorsChange(int x)
-        //{
-        //    var CATCreatorsData =
-        //                     (from DefaultContents in _context.Contents
-        //                      where DefaultContents.CategoryId == x
-        //                      group DefaultContents by DefaultContents.CreatorId into PopularityRranking
-        //                      select new
-        //                      {
-        //                          UserID = PopularityRranking.Key,
-        //                          UserLikes = PopularityRranking.Sum(r => r.Likes)
-        //                      }).OrderByDescending(item => item.UserLikes).Take(6);
-      
-        //        var CreatorsData = (from UserData in _context.Users
-        //                            join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-        //                            where (CATCreatorsData.id).Contains(UserData.UserId)
-        //                            select new
-        //                            {
-        //                                UserData.UserId,
-        //                                UserData.Avatar,
-        //                                UserData.UserName,
-        //                                Description = Creators.Description.Length > 10 ? Creators.Description.Substring(0, 10) : Creators.Description
-        //                            });
-
-        //    return Json(DefaultCreatorsDataList);
-        //}
         [HttpPost]
-        public ActionResult IMAGINK(string x)
+        public ActionResult CreatorsChange(int data)
+        {
+            if (data > 6)
+            {
+                switch (data)
+                {
+                    case 7:
+                        var DefaultCreatorsData =
+                          (from DefaultContents in _context.Contents
+                           group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+                           select new
+                           {
+                               UserID = PopularityRranking.Key,
+                               UserLikes = PopularityRranking.Sum(r => r.Likes)
+                           }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
+                        var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                        var AuthorProfile = (from UsersData in _context.Users
+                                             join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                             where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                             select new { 
+                                                 UsersData.UserId,
+												 Avatar = Convert.ToBase64String(UsersData.Avatar), 
+                                                 UsersData.UserName,
+												 Description = Introduction.Description.Length > 10 ?
+										         Introduction.Description.Substring(0, 10) : Introduction.Description
+											 }
+                                   );
+                        return Json(AuthorProfile.ToList());
+                    case 8:
+                        var NewReportData = (from NewReport in _context.Users
+                                             join UserDescription in _context.Creators on NewReport.CreatorId equals UserDescription.CreatorId
+                                             select new { NewReport.UserId,
+												 Avatar = Convert.ToBase64String(NewReport.Avatar),
+                                                 NewReport.UserName,
+                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
+                                             }).OrderByDescending(u => u.UserId).Take(6);
+                        return Json(NewReportData.ToList());
+                    default:
+                        return Json(null);
+              }
+            }
+			else
+            {
+                var CATCreatorsData =
+                           (from DefaultContents in _context.Contents
+                            where DefaultContents.CategoryId == data
+							group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+                            select new
+                            {
+                                UserID = PopularityRranking.Key,
+                                UserLikes = PopularityRranking.Sum(r => r.Likes)
+                            }).OrderByDescending(item => item.UserLikes).Take(6);
+
+                var userIDsArray = CATCreatorsData.Select(data => data.UserID).ToArray();
+                var CreatorsData = (from UserData in _context.Users
+                                    join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
+                                    where (userIDsArray).Contains(UserData.UserId)
+                                    select new
+                                    {
+                                        UserData.UserId,
+										Avatar = Convert.ToBase64String(UserData.Avatar),
+                                        UserData.UserName,
+                                        Description = Creators.Description.Length > 10 ? 
+                                        Creators.Description.Substring(0, 10) : Creators.Description
+                                    });
+                if (CreatorsData== null) {
+					var DefaultCreatorsData =
+							(from DefaultContents in _context.Contents
+							 group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+							 select new
+							 {
+								 UserID = PopularityRranking.Key,
+								 UserLikes = PopularityRranking.Sum(r => r.Likes)
+							 }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
+					var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+					var AuthorProfile = (from UsersData in _context.Users
+										 join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+										 where (topCreatorUserIds).Contains(Introduction.CreatorId)
+										 select new { 
+                                             UsersData.UserId,
+                                             UsersData.Avatar,
+                                             UsersData.UserName,
+											 Description = Introduction.Description.Length > 10 ?
+										     Introduction.Description.Substring(0, 10) : Introduction.Description
+										 }
+							   );
+					return Json(AuthorProfile.ToList());
+				}
+				return Json(CreatorsData.ToList());
+			}
+
+
+		}
+        [HttpPost]
+        public ActionResult WorkChanges(int data)
         {
             var CreatorsID = (from Creators in _context.Users
-                              where Creators.UserName == x
-                              select Creators);
-            var CreatorsList = CreatorsID.ToList();
+                              where Creators.UserId == data
+							  select Creators.CreatorId).FirstOrDefault();
             var DefaultContentsData = (from DefaultContents in _context.Contents
-                                       where DefaultContents.CreatorId == CreatorsList[0].CreatorId
-                                       select new
+                                       where DefaultContents.CreatorId == CreatorsID
+									   select new
                                        {
-                                           DefaultContents.ImageUrl,
+                                           ImageUrl= Convert.ToBase64String(DefaultContents.ImageUrl),
                                            DefaultContents.Title,
-                                           DefaultContents.Description,
                                            DefaultContents.UploadDate
                                        }).OrderByDescending(item => item.UploadDate).Take(3);
-            var DefaultContentsDataList = DefaultContentsData.ToList();
-            Console.WriteLine(DefaultContentsData);
             return Json(DefaultContentsData);
         }
         public IActionResult Payment()

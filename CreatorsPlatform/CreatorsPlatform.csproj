@@ -37,5 +37,4 @@
     <Folder Include="wwwroot\css\Shared\" />
     <Folder Include="wwwroot\js\Creator\" />
   </ItemGroup>
-
 </Project>
