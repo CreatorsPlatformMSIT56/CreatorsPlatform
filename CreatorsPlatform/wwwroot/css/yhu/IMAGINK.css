@@ -33,8 +33,9 @@
 }
 
 .WorkImg {
-    height: 50vh;
-    max-height: 50vh;
+    width: 100%; /* 图像宽度填充容器 */
+    height: 100%; /* 图像高度填充容器 */
+    object-fit: cover; /* 保持原始比例，填充容器 */
 }
 
 .ToMiddle {
@@ -57,4 +58,13 @@
 }
 ul {
     margin: 0;
-}   
+}
+.image-container {
+    height: 80vh; /* 设置容器高度 */
+    overflow: hidden; /* 超出容器部分隐藏 */
+}
+.TextDiv {
+    display:block;
+    backdrop-filter: blur(8px);
+}
+

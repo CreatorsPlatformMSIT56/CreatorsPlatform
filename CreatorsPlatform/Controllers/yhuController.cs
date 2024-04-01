@@ -167,9 +167,9 @@ namespace CreatorsPlatform.Controllers
                                    );
                         return Json(AuthorProfile.ToList());
                     case 8:
-                        var NewReportData = (from NewReport in _context.Users
-                                             join UserDescription in _context.Creators on NewReport.CreatorId equals UserDescription.CreatorId
-                                             select new { NewReport.UserId,
+                        var NewReportData = (from UserDescription in _context.Creators
+											 join NewReport in _context.Users on UserDescription.CreatorId equals NewReport.CreatorId
+											 select new { NewReport.UserId,
 												 Avatar = Convert.ToBase64String(NewReport.Avatar),
                                                  NewReport.UserName,
                                                  Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
@@ -436,7 +436,9 @@ namespace CreatorsPlatform.Controllers
                 case "EventData":
                     var EventRead = (from EventData in _context.Events
                                      where EventData.CategoryId == 1
-                                     select new {EventData.EventName,
+                                     select new {
+										 EventData.EventId,
+										 EventData.EventName,
                                          EventData.StartDate,
                                          EventData.EndDate,
                                           Description = EventData.Description.Length > 10 ?

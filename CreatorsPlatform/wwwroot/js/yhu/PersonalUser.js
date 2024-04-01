@@ -55,11 +55,19 @@ function MessagUpdata(UserCurrentMsgtype){
                     break
                 case "eventmsg":
                     response.forEach(function () {
+                        var content = new Quill(`#content${cont}`, {
+                            theme: 'snow',
+                            readOnly: true,// 设置为只读模式以显示内容
+                            modules: {
+                                toolbar: false // 隐藏工具栏
+                            }
+                        });
+                        var importedDelta = JSON.parse(response[cont].description);
                         $('#Messages').append(
                             `<li>
                               <div class="mb-3">
                                   <p>${response[cont].eventName}</p>
-                                  <p>${response[cont].description}</p>
+                                   <div id="content${cont}"></div>
                                   <div class ="image-container">
                                            <img class="image-containerImg" src="${response[cont].banner}" alt="">
                                   </div>
@@ -67,6 +75,7 @@ function MessagUpdata(UserCurrentMsgtype){
                                 </div>            
                             </li>`
                         );
+                        $(`#content${cont}`).setContents(importedDelta);
                         cont++;
                     });
                     ImgCssRest();

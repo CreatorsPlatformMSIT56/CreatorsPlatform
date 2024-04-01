@@ -8,7 +8,7 @@
 <div class="row">
 	<div class="col-md-1"></div>
 	<div id="StallMain"></div>
-	<div class="col-md-4 me-2">
+	<div class="col-md-4 me-2 ms-2">
 		<div id="SmallTour" class="row">
 			<div>
 				<div id="SmallTourCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -48,9 +48,9 @@
 
 <div class="row mt-2">
 	<div class="col-md-1">	
-			<button class="btn border-0 " data-bs-toggle="collapse" data-bs-target="#collapse_Draw"
+			<p class="btn border-0 " data-bs-toggle="collapse" data-bs-target="#collapse_Draw"
 					aria-expanded="false" aria-controls="collapse_Draw">繪圖
-			</button>
+			</p>
 		<div class="collapse" id="collapse_Draw">
 			<div class="form-check d-flex justify-content-between">
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="1" id="flexCheckDefault_Original"> <label class="form-check-label" for="flexCheckDefault_Original" onclick="ddddd()">原創</label></p>
@@ -65,11 +65,11 @@
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="16" id="flexCheckDefault_Live2D"> <label class="form-check-label" for="flexCheckDefault_Live2D">Live2D</label></p>
 			</div>
 		</div>
-			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+			<p class="btn border-0 mt-3" data-bs-toggle="collapse"
 					data-bs-target="#collapseExample_Video" aria-expanded="false"
 					aria-controls="collapseExample_Video">
 				影片
-			</button>
+			</p>
 		<div class="collapse" id="collapseExample_Video">
 			<div class="form-check d-flex justify-content-between">
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="4" id="flexCheckDefault_2D"> <label class="form-check-label" for="flexCheckDefault_2D">2D動畫</label></p>
@@ -84,11 +84,11 @@
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="7" id="flexCheckDefault_VT"> <label class="form-check-label" for="flexCheckDefault_VT">VT</label></p>		
 			</div>
 		</div>
-			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+			<p class="btn border-0 mt-3" data-bs-toggle="collapse"
 					data-bs-target="#collapseExample_Sound" aria-expanded="false"
 					aria-controls="collapseExample_Sound">
 				<i class="ri-arrow-down-s-fill"></i>聲音
-			</button>
+			</p>
 		<div class="collapse" id="collapseExample_Sound">
 			<div class="form-check d-flex justify-content-between ">
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="8" id="flexCheckDefault_Music"> <label class="form-check-label" for="flexCheckDefault_Music">音樂</label></p>	
@@ -100,11 +100,11 @@
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="10" id="flexCheckDefault_ASMR"> <label class="form-check-label" for="flexCheckDefault_Music">ASMR</label></p>
 			</div>
 		</div>
-			<button class="btn border-0 mt-3" data-bs-toggle="collapse"
+			<p class="btn border-0 mt-3" data-bs-toggle="collapse"
 					data-bs-target="#collapseExample_Teach" aria-expanded="false"
 					aria-controls="collapseExample_Teach">
 				<i class="ri-arrow-down-s-fill"></i>教學
-			</button>
+			</p>
 		<div class="collapse" id="collapseExample_Teach">
 			<div class="form-check d-flex justify-content-between ">
 				<p><input class="form-check-input" type="radio" name="input_Filter" value="11" id="flexCheckDefault_Draw"> <label class="form-check-label" for="flexCheckDefault_Draw">繪圖</label></p>
@@ -158,16 +158,16 @@
 				</div>
 				<div class="carousel-inner">
 					<div id="Woklist1img" class="carousel-item active">
-						<div class="ToMiddle">
+						<div class="ToMiddle image-container">
 							<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg" >
 						</div>
-						<div id="Woklist1text" class="carousel-caption d-none d-md-block">
+						<div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
 							<h5>@ViewBag.DefaultContentsData[0].Title</h5>
-							<p>@ViewBag.DefaultContentsData[0].UploadDate</p>
+							<p class="text-end">@ViewBag.DefaultContentsData[0].UploadDate</p>
 						</div>
 					</div>
 					<div id="Woklist2img" class="carousel-item">
-						<div class="ToMiddle">
+						<div class="ToMiddle image-container">
 							@if (ViewBag.DefaultContentsData != null 
 							&& ViewBag.DefaultContentsData.Count > 0 
 							&& ViewBag.DefaultContentsData[1] != null 
@@ -182,7 +182,7 @@
 								</svg>
 							}
 						</div>
-						<div id="Woklist2text" class="carousel-caption d-none d-md-block">
+						<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
 								@if (ViewBag.DefaultContentsData != null && ViewBag.DefaultContentsData.Count > 2 
 								&& ViewBag.DefaultContentsData[1] != null 
 								&& ViewBag.DefaultContentsData[1].Title != null 
@@ -200,7 +200,7 @@
 					</div>
 					</div>
 					<div id="Woklist3img" class="carousel-item">
-						<div class="ToMiddle">
+						<div class="ToMiddle image-container">
 							@if (ViewBag.DefaultContentsData != null 
 							&& ViewBag.DefaultContentsData.Count >1
 							&& ViewBag.DefaultContentsData[2] != null 
@@ -215,7 +215,7 @@
 								</svg>
 							}
 						</div>
-						<div id="Woklist3text" class="carousel-caption d-none d-md-block">
+						<div id="Woklist3text" class="carousel-caption d-none d-md-block TextDiv">
 								@if (ViewBag.DefaultContentsData != null
 								&& ViewBag.DefaultContentsData.Count > 2
 								&& ViewBag.DefaultContentsData[2] != null
