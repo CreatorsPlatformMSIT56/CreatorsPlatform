@@ -6,6 +6,7 @@ using Microsoft.SqlServer.Server;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -49,7 +50,7 @@ namespace CreatorsPlatform.Controllers
             var TheEventContext = _context.EventsAndImages;
             var TheEventData = await (from o in TheEventContext
                                       where o.EventId == id
-                                      select o).ToListAsync();
+                                      select o).OrderByDescending(n => n.EvtImgId).ToListAsync();
             return View(TheEventData);
         }
 
@@ -228,6 +229,35 @@ namespace CreatorsPlatform.Controllers
             }
 
             return View(eventsAndImages);
+        }
+
+        // 更新活動中的投稿排序
+        [HttpGet]
+        public List<EventsAndImage> PostOrderBy(string OrderByWhat, int id)
+        {
+            var PostResult = (from o in _context.EventsAndImages
+                             where o.EventId == id
+                             select o);
+            List<EventsAndImage> AfterOrderBy = new List<EventsAndImage>();
+            switch (OrderByWhat)
+            {
+                case "HighLike":
+                    AfterOrderBy = PostResult.OrderByDescending(n => n.EvePostLike).ToList();
+                    break;
+                case "LowLike":
+                    AfterOrderBy = PostResult.OrderBy(n => n.EvePostLike).ToList();
+                    break;
+                case "NewPost":
+                    AfterOrderBy = PostResult.OrderByDescending(n => n.EventImageId).ToList();
+                    break;
+                case "OldPost":
+                    AfterOrderBy = PostResult.OrderBy(n => n.EventImageId).ToList();
+                    break;
+                default:
+                    // 处理未知情况
+                    break;
+            }
+            return AfterOrderBy;
         }
     }
 }
