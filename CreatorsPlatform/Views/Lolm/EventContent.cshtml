@@ -20,7 +20,7 @@
 {
     <div class="container-fluid px-0 EventHeaderImg">
         <img class="img-fluid" src="@Model[0].Banner
-                                " alt="Alternate Text" />
+                                    " alt="Alternate Text" />
     </div>
 }
 @* 說明欄 *@
@@ -69,10 +69,12 @@
     @* 預留給投稿區的導覽列 *@
     <div class="row EventNav justify-content-end align-items-center">
         <div class="" style="width:12rem;">
-            <select class="form-select">
-                <option value="value">以人氣排序</option>
-                <option value="value">以發布日期排序</option>
-            </select>
+                <select class="form-select" id="PostOrderBy">
+                    <option value="NewPost">以發布日期排序(新→舊)</option>
+                    <option value="OldPost">以發布日期排序(舊→新)</option>
+                    <option value="HighLike">以人氣排序(高→低)</option>
+                    <option value="LowLike">以人氣排序(低→高)</option>
+                </select>
         </div>
 
 
@@ -215,20 +217,22 @@
 </div>
 
 
-<script src="~/js/Lolm/EventContent.js"></script>
-
 <!-- 編輯器的套件 -->
 <!-- Include the Quill library -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script defer>
-//Quill設定
-// Initialize Quill editor
-const quill = new Quill("#editor", {
+    //Quill設定
+    // Initialize Quill editor
+    const quill = new Quill("#editor", {
         readOnly: true
     });
     console.log(@Html.Raw(Model[0].EventDes));
     quill.setContents(@Html.Raw(Model[0].EventDes));
 
+    var id = @Model.First().EventId;
 </script>
+
+<script src="~/js/Lolm/EventContent.js"></script>
+
 
 

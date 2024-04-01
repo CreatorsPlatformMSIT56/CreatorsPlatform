@@ -5,8 +5,48 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="/css/yhu/IMAGINK.css" rel="stylesheet" />
-<br />
 <div class="row">
+	<div class="col-md-1"></div>
+	<div id="StallMain"></div>
+	<div class="col-md-4 me-2">
+		<div id="SmallTour" class="row">
+			<div>
+				<div id="SmallTourCarousel" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-2 " onclick="CreatorsChange(7)"><a>熱門</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(1)"><a>繪圖</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(2)"><a>影片</a></div>
+								<div class="col-md-2 " onclick="CreatorsChange(3)"><a>聲音</a></div>
+								<div class="col-md-2 "></div>
+							</div>
+						</div>
+						<div class="carousel-item">
+							<div class="row d-flex  justify-content-center">
+								<div class="col-md-2 "></div>
+								<div class="col-md-2" onclick="CreatorsChange(8)"><a>新人</a></div>
+								<div class="col-md-2" onclick="CreatorsChange(6)"><a>教學</a></div>
+								<div class="col-md-2"></div>
+							</div>
+						</div>
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#SmallTourCarousel" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#SmallTourCarousel" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-2">
 	<div class="col-md-1">	
 			<button class="btn border-0 " data-bs-toggle="collapse" data-bs-target="#collapse_Draw"
 					aria-expanded="false" aria-controls="collapse_Draw">繪圖
@@ -108,7 +148,7 @@
 				</a>
 		</div>
 	</div>
-	<div id="Main" class="border mt-5">
+	<div id="Main" class="border">
 		<div class="row">
 			<div id="carouselExampleCaptions" class="carousel slide " data-bs-ride="carousel">
 				<div class="carousel-indicators">
@@ -204,41 +244,6 @@
 		</div>
 	</div>
 	<div id="Sidebar" class="col-md-4 me-2 ms-2">
-		<div id="SmallTour" class="row mb-3">
-			<div>
-				<div id="SmallTourCarousel" class="carousel slide" data-bs-ride="carousel">
-					<div class="carousel-inner">
-						<div class="carousel-item active">
-							<div class="row">
-								<div class="col-md-2"></div>
-								<div class="col-md-2 " onclick="CreatorsChange(7)"><a>熱門</a></div>
-								<div class="col-md-2 " onclick="CreatorsChange(1)"><a >繪圖</a></div>
-								<div class="col-md-2 " onclick="CreatorsChange(2)"><a >影片</a></div>
-								<div class="col-md-2 " onclick="CreatorsChange(3)"><a >聲音</a></div>
-								<div class="col-md-2 "></div>
-							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="row d-flex  justify-content-center">
-								<div class="col-md-2 "></div>
-								<div class="col-md-2" onclick="CreatorsChange(8)"><a>新人</a></div>
-								<div class="col-md-2" onclick="CreatorsChange(6)"><a>教學</a></div>
-								<div class="col-md-2"></div>
-							</div>
-						</div>
-					</div>
-					<button class="carousel-control-prev" type="button" data-bs-target="#SmallTourCarousel" data-bs-slide="prev">
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Previous</span>
-					</button>
-					<button class="carousel-control-next" type="button" data-bs-target="#SmallTourCarousel" data-bs-slide="next">
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Next</span>
-					</button>
-				</div>
-
-			</div>
-		</div>
 		<div id="Userlist" class="border">
 			<div id="UserlistDetail" class="card mb-3 border-0  p-2">
 				@foreach (var item in ViewBag.AuthorProfile)
