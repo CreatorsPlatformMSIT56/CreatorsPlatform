@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections;
+using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
 using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
@@ -18,6 +19,20 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者首頁
+        public class ContentsModel
+        {
+            public int ContentId { get; set; }
+            public string? Title { get; set; }
+            public string? Description { get; set; }
+            public DateTime? UploadDate { get; set; }
+            public byte[]? ImageUrl { get; set; }
+            public int? Likes { get; set; }
+            public int CategoryId { get; set; }
+            public int? SubtitleId { get; set; }
+            public string? SubtitleName { get; set; }
+            public int CreatorId { get; set; }
+            public int PlanId { get; set; }
+        }
         public class CreatorDetailsViewModel
         {
             //public string Name { get; set; } = "Error";
@@ -28,7 +43,8 @@ namespace CreatorsPlatform.Controllers
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
-            public IEnumerable<Content>? Contents { get; set; }
+            public IEnumerable<ContentsModel>? ContentsModel { get; set; }
+
         }
         public IActionResult Index(int id)
         {
@@ -50,10 +66,23 @@ namespace CreatorsPlatform.Controllers
                                        select g.OrderBy(x => x.CommissionId).First();
 
             var contents = from c in _context.Contents
-                               //join s in _context.Subtitles
-                               //on c.SubtitleId equals s.SubtitleId
+                           join s in _context.Subtitles
+                           on c.SubtitleId equals s.SubtitleId
                            where c.CreatorId == id
-                           select c;
+                           select new ContentsModel
+                           { 
+                               ContentId = c.CreatorId,
+                               Title = c.Title,
+                               Description = c.Description,
+                               UploadDate = c.UploadDate,
+                               ImageUrl = c.ImageUrl,
+                               Likes = c.Likes,
+                               CategoryId = c.CategoryId,
+                               SubtitleId = c.SubtitleId,
+                               SubtitleName = s.SubtitleName,
+                               CreatorId = c.CreatorId,
+                               PlanId = c.PlanId,
+                           };
 
             var viewModel = new CreatorDetailsViewModel
             {
@@ -61,7 +90,7 @@ namespace CreatorsPlatform.Controllers
                 UserName = userName,
                 UserAvatar = userAvatar,
                 CommissionsWithWords = commissionsWithWords,
-                Contents = contents.ToList()
+                ContentsModel = contents.ToList()
             };
 
             return View(viewModel);
