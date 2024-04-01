@@ -1,6 +1,7 @@
 ﻿var ImgDataURL;
 var EventIdSaver = EventIdStocker;
-
+// 當前點擊的post的id
+var NowCheckedPost;
 $(function () {
     // 上傳圖片並且預覽功能
     $("#progressbarTWInput").change(function () {
@@ -165,9 +166,6 @@ function PostSet() {
         });
         return ThePostId;
     }
-
-    // 當前點擊的post的id
-    var NowCheckedPost;
 
     // 點擊投稿讓Modal內容更新
     $(".EventPostImgPart, .EventPostTitle").on("click", function () {
