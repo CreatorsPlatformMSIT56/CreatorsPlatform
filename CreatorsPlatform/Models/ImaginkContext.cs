@@ -31,6 +31,8 @@ public partial class ImaginkContext : DbContext
 
     public virtual DbSet<Content> Contents { get; set; }
 
+    public virtual DbSet<ContentTag> ContentTags { get; set; }
+
     public virtual DbSet<Creator> Creators { get; set; }
 
     public virtual DbSet<Event> Events { get; set; }
@@ -238,6 +240,19 @@ public partial class ImaginkContext : DbContext
                 .HasConstraintName("FK__Contents__TagID__5535A963");
         });
 
+        modelBuilder.Entity<ContentTag>(entity =>
+        {
+            entity.HasKey(e => e.ContentTagId).HasName("PK__ContentT__8FE5748599013713");
+
+            entity.HasOne(d => d.Content).WithMany(p => p.ContentTags)
+                .HasForeignKey(d => d.ContentId)
+                .HasConstraintName("FK__ContentTa__Conte__54CB950F");
+
+            entity.HasOne(d => d.Tag).WithMany(p => p.ContentTags)
+                .HasForeignKey(d => d.TagId)
+                .HasConstraintName("FK__ContentTa__TagId__55BFB948");
+        });
+
         modelBuilder.Entity<Creator>(entity =>
         {
             entity.HasKey(e => e.CreatorId).HasName("PK__Creators__6C7548111D29706E");
@@ -394,13 +409,7 @@ public partial class ImaginkContext : DbContext
             entity.HasKey(e => e.TagId).HasName("PK__Tags__657CFA4CBEA41F21");
 
             entity.Property(e => e.TagId).HasColumnName("TagID");
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.TagName).HasMaxLength(50);
-
-            entity.HasOne(d => d.Category).WithMany(p => p.Tags)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Tags__CategoryID__619B8048");
         });
 
         modelBuilder.Entity<User>(entity =>

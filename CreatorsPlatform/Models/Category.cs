@@ -17,7 +17,5 @@ public partial class Category
 
     public virtual ICollection<Subtitle> Subtitles { get; set; } = new List<Subtitle>();
 
-    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
-
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

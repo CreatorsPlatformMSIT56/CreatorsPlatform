@@ -9,9 +9,7 @@ public partial class Tag
 
     public string TagName { get; set; } = null!;
 
-    public int CategoryId { get; set; }
-
-    public virtual Category Category { get; set; } = null!;
+    public virtual ICollection<ContentTag> ContentTags { get; set; } = new List<ContentTag>();
 
     public virtual ICollection<Content> Contents { get; set; } = new List<Content>();
 }
