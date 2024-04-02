@@ -74,7 +74,8 @@ namespace CreatorsPlatform.Controllers
                                             eventmsg.StartDate,
                                             eventmsg.EndDate
                                         }).ToList();
-                    return Json(eventmsgData);
+					Console.WriteLine(eventmsgData[1]);
+					return Json(eventmsgData);
                 default:
                     return Json("Eeeor");
 

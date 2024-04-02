@@ -49,6 +49,8 @@ public partial class Content
 
     public virtual Commission? Commission { get; set; }
 
+    public virtual ICollection<ContentTag> ContentTags { get; set; } = new List<ContentTag>();
+
     public virtual Creator Creator { get; set; } = null!;
 
     public virtual Event? Event { get; set; }
