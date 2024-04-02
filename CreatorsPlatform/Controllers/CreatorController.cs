@@ -77,7 +77,7 @@ namespace CreatorsPlatform.Controllers
                            where c.CreatorId == id
                            select new ContentsModel
                            { 
-                               ContentId = c.CreatorId,
+                               ContentId = c.ContentId,
                                Title = c.Title,
                                Description = c.Description,
                                UploadDate = c.UploadDate,
