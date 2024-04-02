@@ -11,7 +11,6 @@
 
 /*設置圖片大小*/
 ._card_A {
-    width: 18rem;
     border-radius: 20px;
     margin: 1%;
     padding-top: 1vh;
@@ -27,6 +26,7 @@
     padding-bottom: 1vh;
     height: 22rem;
 }
+
 
 ._card_A a {
     text-decoration: none;
