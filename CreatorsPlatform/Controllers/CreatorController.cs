@@ -33,6 +33,12 @@ namespace CreatorsPlatform.Controllers
             public int CreatorId { get; set; }
             public int PlanId { get; set; }
         }
+        public class ContentTagsModel
+        {
+            public string? Title { get; set; }
+            public string? TagName { get; set; }
+            public int TagId {  get; set; }
+        }
         public class CreatorDetailsViewModel
         {
             //public string Name { get; set; } = "Error";
@@ -84,6 +90,9 @@ namespace CreatorsPlatform.Controllers
                                PlanId = c.PlanId,
                            };
 
+            
+
+
             var viewModel = new CreatorDetailsViewModel
             {
                 Creator = creator,
@@ -109,6 +118,8 @@ namespace CreatorsPlatform.Controllers
             public IEnumerable<Content>? Content { get; set; }
             public IEnumerable<Plan>? Plans { get; set; }
             public IEnumerable<Comment>? Comments { get; set; }
+            public IEnumerable<ContentTagsModel>? ContentTagsModel { get; set; }
+
         }
         public IActionResult GetPost(int id)
         {
@@ -157,13 +168,28 @@ namespace CreatorsPlatform.Controllers
                         }).ToList()
                     }
                 }).ToList();
-            
+
+            var contentTags = from c in _context.Contents
+                              join ct in _context.ContentTags
+                              on c.ContentId equals ct.ContentId
+                              join t in _context.Tags
+                              on ct.TagId equals t.TagId
+                              where c.ContentId == id
+                              select new ContentTagsModel
+                              {
+                                  Title = c.Title,
+                                  TagName = t.TagName,
+                                  TagId = t.TagId
+                              };
+
+
             // 整合取得的資料
             var viewModel = new ContentDetailsViewModel
             {
                 Content = new List<Content> { content },
                 Plans = plans,
-                Comments = comments
+                Comments = comments,
+                ContentTagsModel = contentTags.ToList()
             };
 
             return View(viewModel);
