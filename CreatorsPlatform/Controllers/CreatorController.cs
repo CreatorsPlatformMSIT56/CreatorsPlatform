@@ -106,10 +106,32 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者建立貼文(修改位置待訂)
+        [HttpGet]
         public IActionResult AddPost()
-        {
-            
+        {    
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddPost(Content content, IFormFile ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await ImageFile.CopyToAsync(stream);
+                        content.ImageUrl = stream.ToArray();
+                    }
+
+                    // 存 Content 進DB
+                    _context.Contents.Add(content);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(content);
         }
 
         // 創作者貼文頁面

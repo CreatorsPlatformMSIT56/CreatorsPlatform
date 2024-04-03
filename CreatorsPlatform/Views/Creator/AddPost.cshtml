@@ -1,12 +1,14 @@
-﻿@* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet"> *@
+﻿@model Content
+
+@* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet"> *@
 <link rel="stylesheet" href="/css/Shared/Quill.css" />
 
 
 <h1>發布文章</h1>
 
 <div class="quillcontainer">
-    <form action="https://httpbin.org/post" method="post">
-        <div class="form-group">
+    <form asp-action="AddPost" asp-controller="Creator" method="post" enctype="multipart/form-data">
+        <div class="form-group"> <!-- 類別與子類別選擇 -->
             <div class="row">
                 <div class="col">
                     <label class="font-weight-bold">
@@ -21,7 +23,7 @@
                 </div>
                 <div class="col">
                     <label class="font-weight-bold">
-                        子類別<span class="text-danger ml-1"> *</span>
+                        子類別
                     </label>
                     <select class="form-select" aria-label="category">
                         <option selected>請選擇子類別</option>
@@ -32,14 +34,22 @@
                 </div>
             </div>
         </div>
+        <!-- 上傳圖像(先一張) -->
+        <div class="form-group"> 
+            <label for="ImageFile" class="font-weight-bold">
+                上傳圖片<span class="text-danger ml-1"> *</span>
+            </label>
+            <input type="file" id="ImageFile" name="ImageFile" />
+        </div>
+        <!-- 上傳圖像(先一張) END -->
         <div class="form-group">
-            <label for="postTitle" class="form-label">
+            <label asp-for="Title" class="form-label">
                 標題<span class="text-danger ml-1"> *</span>
             </label>
-            <input type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
+            <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
         </div>
         <div class="form-group">
-            <label>內文</label>
+            <label>內文<span class="text-danger ml-1"> *</span></label>
             <!-- Quill Editor Start -->
             <div id="editor"></div>
             <!-- Quill Editor End -->
