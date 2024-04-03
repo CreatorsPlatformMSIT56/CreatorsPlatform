@@ -1,5 +1,6 @@
 ﻿using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections;
@@ -106,10 +107,35 @@ namespace CreatorsPlatform.Controllers
         }
 
         // 創作者建立貼文(修改位置待訂)
-        public IActionResult AddPost()
+        [HttpGet]
+        public async Task<IActionResult> AddPost()
         {
-            
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPost(Content content, IFormFile ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await ImageFile.CopyToAsync(stream);
+                        content.ImageUrl = stream.ToArray();
+                    }
+
+                    // 存 Content 進DB
+                    _context.Contents.Add(content);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            return View(content);
         }
 
         // 創作者貼文頁面
