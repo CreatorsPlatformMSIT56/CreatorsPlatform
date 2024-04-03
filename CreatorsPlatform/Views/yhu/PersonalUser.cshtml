@@ -29,16 +29,18 @@
             @foreach (var item in ViewBag.NewmesgData)
             {
                 <li>
-                    <div class="mb-3">
-                        <p>@item.UserName</p>
-                        <p>@item.Description</p>
-                        <p>
-                            <div class ="image-container">
-                                <img class="image-containerImg" src="data:image/png;base64,@Convert.ToBase64String(@item.ImageUrl)" alt="">
-                            </div>
-                       </p>
-                        <p>@item.Title @item.UploadDate</p>
-                    </div>
+                    <a class="dropdown-item" asp-route-id="@item.ContentId" asp-action="GetPost" asp-controller="Creator">
+                        <div class="mb-3">
+                            <p>@item.UserName</p>
+                            <p>@item.Description</p>
+                            <p>
+                                <div class="image-container">
+                                    <img class="image-containerImg" src="data:image/png;base64,@Convert.ToBase64String(@item.ImageUrl)" alt="">
+                                </div>
+                            </p>
+                            <p>@item.Title @item.UploadDate</p>
+                        </div>
+                    </a>
                 </li>
             }
         </ol>

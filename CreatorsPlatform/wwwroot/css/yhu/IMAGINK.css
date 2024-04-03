@@ -60,11 +60,11 @@ ul {
     margin: 0;
 }
 .image-container {
-    height: 80vh; /* 设置容器高度 */
+    height: 100vh !important; /* 设置容器高度 */
     overflow: hidden; /* 超出容器部分隐藏 */
 }
 .TextDiv {
-    display:block;
+    display: block;
     backdrop-filter: blur(8px);
 }
 
