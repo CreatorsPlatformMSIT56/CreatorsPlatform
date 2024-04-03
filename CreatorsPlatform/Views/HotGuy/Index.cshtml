@@ -51,7 +51,7 @@
             @foreach (var item in newEvents)
             {
                 <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
                     <h3>
                         <span>
                             <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
@@ -77,7 +77,7 @@
             @foreach (var item in Model)
             {
                 <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
                     <h3>
                         <span>
                             <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
@@ -103,7 +103,7 @@
             @foreach (var item in oldEvents)
             {
                 <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="https://via.placeholder.com/80x80" />
+                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
                     <h3>
                         <span>
                             <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">

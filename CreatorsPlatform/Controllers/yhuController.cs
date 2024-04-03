@@ -410,7 +410,7 @@ namespace CreatorsPlatform.Controllers
                                     join PlanData in _context.Plans on WorkRead.PlanId equals PlanData.PlanId
                                     where WorkRead.CreatorId == CreatorId
                                     select new
-                                          {WorkRead.CategoryId, WorkRead.Title, WorkRead.Description, PlanData.PlanLevel});
+                                          {WorkRead.CategoryId, WorkRead.Title, WorkRead.Description, PlanData.PlanLevel, WorkRead.ContentId});
                     return Json(WorkData.ToList());
                 case "OrderData1":
                     var OrderProject = (from OrderData in _context.Commissions
@@ -563,31 +563,33 @@ namespace CreatorsPlatform.Controllers
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
             switch (type)
             {
+                case "Works":
+                    var WorkTargetData = (from WorkRead in _context.Contents
+                                          join UserData in _context.Users on WorkRead.CreatorId equals UserData.CreatorId
+                                          join PlanData in _context.Plans on WorkRead.PlanId equals PlanData.PlanId
+                                          where WorkRead.ContentId == id
+                                          select WorkRead).FirstOrDefault();
+
+                    if (WorkTargetData != null)
+                    {
+                        _context.Contents.Remove(WorkTargetData);
+                        _context.SaveChanges();
+                    }
+
+                    var ReturnWork = (from WorkRead in _context.Contents
+                                      join UserData in _context.Users on WorkRead.CreatorId equals UserData.CreatorId
+                                      join PlanData in _context.Plans on WorkRead.PlanId equals PlanData.PlanId
+                                      where WorkRead.CreatorId == member.id
+                                      select new
+                                      { WorkRead.CategoryId, WorkRead.Title, WorkRead.Description, PlanData.PlanLevel, WorkRead.ContentId });
+
+                    return Json(ReturnWork.ToList());
+
                 case "Event":
                     var EventTargetData = (from EventData in _context.Events
                                            join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
                                            where EventData.EventId == id
                                            select EventData).FirstOrDefault();
-
-                    //Event DeleteEvent = new Event
-                    //{
-                    //    EventId = EventTargetData.EventId,
-                    //    EventName = EventTargetData.EventName,
-                    //    EventCancel = true,
-                    //    Banner = EventTargetData.Banner,
-                    //    Description = EventTargetData.Description,
-                    //    DescriptionString = EventTargetData.DescriptionString,
-                    //    CreatorId = EventTargetData.CreatorId,
-                    //    CategoryId = EventTargetData.CategoryId,
-                    //    StartDate = EventTargetData.StartDate,
-                    //    EndDate = EventTargetData.EndDate,
-                    //    EventStyle = EventTargetData.EventStyle
-                    //};
-                    //if (EventTargetData != null)
-                    //{
-                    //    _context.Events.Update(DeleteEvent);
-                    //    _context.SaveChanges();
-                    //}
 
                     if (EventTargetData != null)
                     {
@@ -603,6 +605,8 @@ namespace CreatorsPlatform.Controllers
 
                     Console.WriteLine(ReturnEvent.ToList());
                     return Json(ReturnEvent.ToList());
+
+
                 case "Plan":
                     var TargetData = (from PlanData in _context.Plans
                                       join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId
