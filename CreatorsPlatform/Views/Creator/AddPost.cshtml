@@ -3,7 +3,7 @@
 @* <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet"> *@
 <link rel="stylesheet" href="/css/Shared/Quill.css" />
 
-
+<!-- 還必須讀取目前創作者的資料 串回到Content -->
 <h1>發布作品</h1>
 
 <div class="quillcontainer">
@@ -17,20 +17,7 @@
                     <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
                         <option selected>請選擇類別</option>
                     </select>
-                    @* <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
-                    </select> *@
                 </div>
-                @* <div class="col">
-                    <label class="font-weight-bold">
-                        類別<span class="text-danger ml-1"> *</span>
-                    </label>
-                    <select class="form-select" aria-label="category">
-                        <option selected>請選擇類別</option>
-                        <option value="1">繪圖</option>
-                        <option value="2">影片</option>
-                        <option value="3">文字</option>
-                    </select>
-                </div> *@
                 <div class="col">
                     <label class="font-weight-bold">
                         子類別
@@ -64,6 +51,9 @@
             <div id="editor"></div>
             <!-- Quill Editor End -->
         </div>
+        <!-- 放置Quill內容 -->
+        <input type="hidden" id="quill-content" name="Quill-content" />
+        <!-- 放置Quill內容END -->
         <button id="submitInput" class="mb-3 btn btn-primary" type="button"
                 data-bs-toggle="modal" data-bs-target="#submitModal">
             發送文章
@@ -84,12 +74,15 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">確認</button>
+                <button type="submit" class="btn btn-primary">確認</button><!-- 還要串出去 -->
             </div>
         </div>
     </div>
 </div>
 <!-- 自訂 js -->
+<script>
+
+</script>
 <script>
     var submitModal = document.getElementById('submitModal')
     var submitInput = document.getElementById('submitInput')

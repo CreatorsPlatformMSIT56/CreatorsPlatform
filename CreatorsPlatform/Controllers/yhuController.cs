@@ -125,15 +125,19 @@ namespace CreatorsPlatform.Controllers
                                             DefaultContents.Title,
                                             DefaultContents.UploadDate
                                         }).OrderByDescending(item => item.UploadDate).Take(3));
-            var EventDataList = (from EventData in _context.Contents
-                                 select new { EventData.ImageUrl });
+            var EventDataList = (from EventData in _context.Events
+                                 select new
+                                 {
+                                     EventData.EventId,
+                                     EventData.Banner
+                                 }).OrderByDescending(x => x.EventId).Take(3);
 
 
+            var DefaultContentsDatalist = DefaultContentsData.ToList();
 
+            Console.WriteLine(DefaultContentsDatalist[1].Title);
 
-			Console.WriteLine(DefaultContentsData.ToList().Count);
-
-
+            ViewBag.EventDataList = EventDataList.ToList();
             ViewBag.DefaultContentsData = DefaultContentsData.ToList();
             ViewBag.AuthorProfile = AuthorProfile.ToList();
             return View();
@@ -182,7 +186,7 @@ namespace CreatorsPlatform.Controllers
                         var NewReportData = (from UserDescription in _context.Creators
 											 join NewReport in _context.Users on UserDescription.CreatorId equals NewReport.CreatorId
 											 select new { NewReport.UserId,
-												 Avatar = Convert.ToBase64String(NewReport.Avatar),
+												 Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
                                                  NewReport.UserName,
                                                  Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
@@ -611,7 +615,11 @@ namespace CreatorsPlatform.Controllers
                                        join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
                                        where UserData.UserId == member.id && EventData.EventCancel == false
                                        orderby EventData.EventId
-                                       select new { EventData.EventId, EventData.EventName, EventData.StartDate, EventData.EndDate });
+                                       select new { 
+                                           EventData.EventId,
+                                           EventData.EventName, 
+                                           EventData.StartDate, 
+                                           EventData.EndDate });
 
                     return Json(ReturnEvent.ToList());
 
