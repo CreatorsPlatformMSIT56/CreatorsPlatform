@@ -1,5 +1,6 @@
 ﻿using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections;
@@ -107,11 +108,13 @@ namespace CreatorsPlatform.Controllers
 
         // 創作者建立貼文(修改位置待訂)
         [HttpGet]
-        public IActionResult AddPost()
-        {    
+        public async Task<IActionResult> AddPost()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPost(Content content, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
@@ -131,6 +134,7 @@ namespace CreatorsPlatform.Controllers
                     return RedirectToAction("Index");
                 }
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View(content);
         }
 

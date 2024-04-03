@@ -4,13 +4,23 @@
 <link rel="stylesheet" href="/css/Shared/Quill.css" />
 
 
-<h1>發布文章</h1>
+<h1>發布作品</h1>
 
 <div class="quillcontainer">
     <form asp-action="AddPost" asp-controller="Creator" method="post" enctype="multipart/form-data">
         <div class="form-group"> <!-- 類別與子類別選擇 -->
             <div class="row">
-                <div class="col">
+                <div class="col form-group">
+                    <label asp-for="CategoryId" class="control-label font-weight-bold">
+                        類別<span class="text-danger ml-1"> *</span>
+                    </label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
+                        <option selected>請選擇類別</option>
+                    </select>
+                    @* <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
+                    </select> *@
+                </div>
+                @* <div class="col">
                     <label class="font-weight-bold">
                         類別<span class="text-danger ml-1"> *</span>
                     </label>
@@ -20,7 +30,7 @@
                         <option value="2">影片</option>
                         <option value="3">文字</option>
                     </select>
-                </div>
+                </div> *@
                 <div class="col">
                     <label class="font-weight-bold">
                         子類別
@@ -49,7 +59,7 @@
             <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
         </div>
         <div class="form-group">
-            <label>內文<span class="text-danger ml-1"> *</span></label>
+            <label>作品描述<span class="text-danger ml-1"> *</span></label>
             <!-- Quill Editor Start -->
             <div id="editor"></div>
             <!-- Quill Editor End -->
@@ -66,11 +76,11 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">發布文章</h5>
+                <h5 class="modal-title">發布作品</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>確認發布文章？</p>
+                <p>確認發布作品？</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
