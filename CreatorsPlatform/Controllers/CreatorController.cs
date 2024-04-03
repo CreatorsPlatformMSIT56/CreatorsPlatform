@@ -33,6 +33,12 @@ namespace CreatorsPlatform.Controllers
             public int CreatorId { get; set; }
             public int PlanId { get; set; }
         }
+        public class ContentTagsModel
+        {
+            public string? Title { get; set; }
+            public string? TagName { get; set; }
+            public int TagId {  get; set; }
+        }
         public class CreatorDetailsViewModel
         {
             //public string Name { get; set; } = "Error";
@@ -71,7 +77,7 @@ namespace CreatorsPlatform.Controllers
                            where c.CreatorId == id
                            select new ContentsModel
                            { 
-                               ContentId = c.CreatorId,
+                               ContentId = c.ContentId,
                                Title = c.Title,
                                Description = c.Description,
                                UploadDate = c.UploadDate,
@@ -83,6 +89,9 @@ namespace CreatorsPlatform.Controllers
                                CreatorId = c.CreatorId,
                                PlanId = c.PlanId,
                            };
+
+            
+
 
             var viewModel = new CreatorDetailsViewModel
             {
@@ -109,6 +118,9 @@ namespace CreatorsPlatform.Controllers
             public IEnumerable<Content>? Content { get; set; }
             public IEnumerable<Plan>? Plans { get; set; }
             public IEnumerable<Comment>? Comments { get; set; }
+            public IEnumerable<ContentTagsModel>? ContentTagsModel { get; set; }
+            public IEnumerable<ContentsModel>? Contents { get; set; }
+
         }
         public IActionResult GetPost(int id)
         {
@@ -157,13 +169,49 @@ namespace CreatorsPlatform.Controllers
                         }).ToList()
                     }
                 }).ToList();
-            
+
+            // 取得作品Tags
+            var contentTags = from c in _context.Contents
+                              join ct in _context.ContentTags
+                              on c.ContentId equals ct.ContentId
+                              join t in _context.Tags
+                              on ct.TagId equals t.TagId
+                              where c.ContentId == id
+                              select new ContentTagsModel
+                              {
+                                  Title = c.Title,
+                                  TagName = t.TagName,
+                                  TagId = t.TagId
+                              };
+
+            // 取得創作者其他作品
+            var contents = from c in _context.Contents
+                           join s in _context.Subtitles
+                           on c.SubtitleId equals s.SubtitleId
+                           where c.CreatorId == content.CreatorId
+                           select new ContentsModel
+                           {
+                               ContentId = c.ContentId,
+                               Title = c.Title,
+                               Description = c.Description,
+                               UploadDate = c.UploadDate,
+                               ImageUrl = c.ImageUrl,
+                               Likes = c.Likes,
+                               CategoryId = c.CategoryId,
+                               SubtitleId = c.SubtitleId,
+                               SubtitleName = s.SubtitleName,
+                               CreatorId = c.CreatorId,
+                               PlanId = c.PlanId,
+                           };
+
             // 整合取得的資料
             var viewModel = new ContentDetailsViewModel
             {
                 Content = new List<Content> { content },
                 Plans = plans,
-                Comments = comments
+                Comments = comments,
+                ContentTagsModel = contentTags.ToList(),
+                Contents = contents.ToList()
             };
 
             return View(viewModel);
@@ -226,10 +274,10 @@ namespace CreatorsPlatform.Controllers
 					}
 				}).ToList();
 
-            var commissionsWithWords = from c in _context.CommissionWithImageAndWords
+            var commissionsWithWords = (from c in _context.CommissionWithImageAndWords
                                        where c.CreatorId == id
                                        group c by c.Title into g
-                                       select g.OrderBy(x => x.CommissionId).First();
+                                       select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
 
             var viewModel = new CommissionDetailsViewModel
 			{

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Composition;
+using System.Diagnostics.Tracing;
+using System.Reflection;
 using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
@@ -28,7 +30,13 @@ namespace CreatorsPlatform.Controllers
             {
                 var NewmesgData = (from Newmesg in _context.Contents
                                    join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-                                   select new { Newmesg.Title, Newmesg.Description, UserData.UserName, Newmesg.ImageUrl, Newmesg.UploadDate })
+                                   select new { 
+                                       Newmesg.Title, 
+                                       Newmesg.Description, 
+                                       UserData.UserName, 
+                                       Newmesg.ImageUrl, 
+                                       Newmesg.UploadDate,
+                                       Newmesg.ContentId})
                                        .OrderByDescending(item => item.UploadDate).Take(5).ToList();
                 ViewBag.NewmesgData = NewmesgData;
                 return View("PersonalUser");
@@ -117,10 +125,13 @@ namespace CreatorsPlatform.Controllers
                                             DefaultContents.Title,
                                             DefaultContents.UploadDate
                                         }).OrderByDescending(item => item.UploadDate).Take(3));
+            var EventDataList = (from EventData in _context.Contents
+                                 select new { EventData.ImageUrl });
 
 
 
-            Console.WriteLine(DefaultContentsData.ToList().Count);
+
+			Console.WriteLine(DefaultContentsData.ToList().Count);
 
 
             ViewBag.DefaultContentsData = DefaultContentsData.ToList();
@@ -436,7 +447,7 @@ namespace CreatorsPlatform.Controllers
                     return Json( OrderAsk.ToList() );
                 case "EventData":
                     var EventRead = (from EventData in _context.Events
-                                     where EventData.CategoryId == 1
+                                     where EventData.EventCancel == false
                                      select new {
 										 EventData.EventId,
 										 EventData.EventName,
@@ -562,6 +573,46 @@ namespace CreatorsPlatform.Controllers
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
             switch (type)
             {
+                case "Event":
+                    var EventTargetData = (from EventData in _context.Events
+                                           join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
+                                           where EventData.EventId == id
+                                           select EventData).FirstOrDefault();
+
+                    //Event DeleteEvent = new Event
+                    //{
+                    //    EventId = EventTargetData.EventId,
+                    //    EventName = EventTargetData.EventName,
+                    //    EventCancel = true,
+                    //    Banner = EventTargetData.Banner,
+                    //    Description = EventTargetData.Description,
+                    //    DescriptionString = EventTargetData.DescriptionString,
+                    //    CreatorId = EventTargetData.CreatorId,
+                    //    CategoryId = EventTargetData.CategoryId,
+                    //    StartDate = EventTargetData.StartDate,
+                    //    EndDate = EventTargetData.EndDate,
+                    //    EventStyle = EventTargetData.EventStyle
+                    //};
+                    //if (EventTargetData != null)
+                    //{
+                    //    _context.Events.Update(DeleteEvent);
+                    //    _context.SaveChanges();
+                    //}
+
+                    if (EventTargetData != null)
+                    {
+                        EventTargetData.EventCancel = true;
+                        _context.SaveChanges();
+                    }
+
+                    var ReturnEvent = (from EventData in _context.Events
+                                       join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
+                                       where UserData.UserId == member.id && EventData.EventCancel == false
+                                       orderby EventData.EventId
+                                       select new { EventData.EventId, EventData.EventName, EventData.StartDate, EventData.EndDate });
+
+                    Console.WriteLine(ReturnEvent.ToList());
+                    return Json(ReturnEvent.ToList());
                 case "Plan":
                     var TargetData = (from PlanData in _context.Plans
                                       join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId

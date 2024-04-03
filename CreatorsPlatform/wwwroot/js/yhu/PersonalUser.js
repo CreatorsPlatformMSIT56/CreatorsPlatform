@@ -25,7 +25,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     <p>${response[cont].userName}</p>
                     <p>${response[cont].description}</p>
                     <div class="image-container">
-                            <img class="image-containerImg" src="${response[cont].imageUrl}" alt="">
+                            <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
                     </div>
                     <p>${response[cont].title}${response[cont].uploadDate}</p>
                     </div>            

@@ -19,8 +19,13 @@
                     <p>@Model.Content?.FirstOrDefault()?.Description</p>
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
-                    <h4>#Tags</h4>
-                    </div>
+                    <h5>
+                        @foreach (var e in Model.ContentTagsModel)
+                        {
+                            <a asp-action="Search" asp-controller="Vicky" asp-route-id="@e.TagId"><span style="color:darkorange">#@e.TagName</span></a>
+                        }
+                    </h5>
+                </div>
             </div>
             <!-- 作者 -->
             <div class="row p-3">
@@ -48,67 +53,59 @@
             <!-- comment 1 -->
         @foreach (var e in Model.Comments)
         {
-                <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
-                    <div class="row g-0">
-                        <div class="col-md-2 avatar text-center">
-                            @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                <div class="row g-0">
+                    <div class="col-md-2 avatar text-center">
+                        @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+                        @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                            <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                                    style="max-width:100px; max-height:100px;">
+                        @* </a> *@
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
                             @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                                <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
-                                        style="max-width:100px; max-height:100px;">
+                                <h5 class="card-title mb-1">@e.User.UserName</h5>
                             @* </a> *@
+                            <p class="card-text mb-2">
+                                @e.Comment1
+                            </p>
+                            <p class="card-text"><small class="text-muted">留言時間</small></p>
                         </div>
-                        <div class="col-md-10">
+                    </div>
+                </div>
+            </div>
+        }
+            <div class="row">
+                <div class="col-12 px-5 py-3 other-commissions">
+                    <h4>創作者其他作品</h4>
+                </div>
+            </div>
+            <!-- 創作者其他委託 -->
+            <div class="row">
+            @foreach (var e in Model.Contents)
+            {
+                <div class="col-4">
+                    <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
+                        <div class="card mb-3">
+                            <img class="card-img-top"
+                                 src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
+                                 alt="Card image cap"
+                                 style="height: 12rem; width: auto; object-fit: cover" />
                             <div class="card-body">
-                                @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                                    <h5 class="card-title mb-1">@e.User.UserName</h5>
-                                @* </a> *@
-                                <p class="card-text mb-2">
-                                    @e.Comment1
+                                <h5 class="card-title">@e.Title</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    @e.SubtitleName
+                                </h6>
+                                <p class="card-text commision-description">
+                                    @e.Description
                                 </p>
-                                <p class="card-text"><small class="text-muted">留言時間</small></p>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-        }
-            
-            <!-- 重複 -->
-            @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
-                <div class="row g-0">
-                    <div class="col-md-2 avatar text-center">
-                        <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
-                    </div>
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <h5 class="card-title mb-1">粉絲名稱</h5>
-                            <p class="card-text mb-2">
-                                This is a wider card with supporting text below as a natural
-                                lead-in to additional content. This content is a little bit longer.
-                            </p>
-                            <p class="card-text"><small class="text-muted">留言時間</small></p>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
-
-         @* <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
-                <div class="row g-0">
-                    <div class="col-md-2 avatar text-center">
-                        <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle">
-                    </div>
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <h5 class="card-title mb-1">粉絲名稱</h5>
-                            <p class="card-text mb-2">
-                                This is a wider card with supporting text below as a natural
-                                lead-in to additional content. This content is a little bit longer.
-                            </p>
-                            <p class="card-text"><small class="text-muted">留言時間</small></p>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
-            <!-- 重複結束 -->
+            }
+            </div>
         </div>
         <!-- aside -->
         <div class="col-3" style="border:solid">
