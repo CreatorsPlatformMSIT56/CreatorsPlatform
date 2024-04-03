@@ -30,7 +30,13 @@ namespace CreatorsPlatform.Controllers
             {
                 var NewmesgData = (from Newmesg in _context.Contents
                                    join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-                                   select new { Newmesg.Title, Newmesg.Description, UserData.UserName, Newmesg.ImageUrl, Newmesg.UploadDate })
+                                   select new { 
+                                       Newmesg.Title, 
+                                       Newmesg.Description, 
+                                       UserData.UserName, 
+                                       Newmesg.ImageUrl, 
+                                       Newmesg.UploadDate,
+                                       Newmesg.ContentId})
                                        .OrderByDescending(item => item.UploadDate).Take(5).ToList();
                 ViewBag.NewmesgData = NewmesgData;
                 return View("PersonalUser");
@@ -76,7 +82,8 @@ namespace CreatorsPlatform.Controllers
                                             eventmsg.StartDate,
                                             eventmsg.EndDate
                                         }).ToList();
-                    return Json(eventmsgData);
+					Console.WriteLine(eventmsgData[1]);
+					return Json(eventmsgData);
                 default:
                     return Json("Eeeor");
 
@@ -118,10 +125,13 @@ namespace CreatorsPlatform.Controllers
                                             DefaultContents.Title,
                                             DefaultContents.UploadDate
                                         }).OrderByDescending(item => item.UploadDate).Take(3));
+            var EventDataList = (from EventData in _context.Contents
+                                 select new { EventData.ImageUrl });
 
 
 
-            Console.WriteLine(DefaultContentsData.ToList().Count);
+
+			Console.WriteLine(DefaultContentsData.ToList().Count);
 
 
             ViewBag.DefaultContentsData = DefaultContentsData.ToList();
@@ -588,8 +598,8 @@ namespace CreatorsPlatform.Controllers
                 case "Event":
                     var EventTargetData = (from EventData in _context.Events
                                            join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
-                                           where EventData.EventId == id
-                                           select EventData).FirstOrDefault();
+                                           where EventData.EventId == id && EventData.EventCancel == false
+										   select EventData).FirstOrDefault();
 
                     if (EventTargetData != null)
                     {
@@ -603,7 +613,6 @@ namespace CreatorsPlatform.Controllers
                                        orderby EventData.EventId
                                        select new { EventData.EventId, EventData.EventName, EventData.StartDate, EventData.EndDate });
 
-                    Console.WriteLine(ReturnEvent.ToList());
                     return Json(ReturnEvent.ToList());
 
 

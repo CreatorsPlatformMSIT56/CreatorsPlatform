@@ -231,7 +231,7 @@ function DataDelete(e) {
         // 提取数字之前的部分
         let input = e.className;
         var Category = input.substring(0, match.index);
-        alert(Category);
+        /*alert(Category);*/
         
     } else {
         console.log("找不到数字部分。");
@@ -244,10 +244,10 @@ function DataDelete(e) {
             id: TargetID
         },
         success: function (response) {
+            console.log(response);
             switch (Category) {
                 case "Plan":
                     let cont = 0;
-                    console.log(response);
                     $("#AuthorSettings_List").empty();
                     response.forEach(function () {
                         $("#AuthorSettings_List").append(`
@@ -311,7 +311,7 @@ function DataDelete(e) {
                     break;
                 case " OrderTow":
                     break;
-                case " Event":
+                case "Event":
                     let Evecont = 0;
                     console.log(response);
                     $("#Event_List").empty();
@@ -354,7 +354,7 @@ function WorkRead() {
             type: "WorkData"
         },
         success: function (response) {
-            console.log(response[0]);
+            console.log(response);
             let cont = 0;
             $("#Works_List").empty();
             response.forEach(function () {
