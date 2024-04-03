@@ -140,9 +140,11 @@ namespace CreatorsPlatform.Controllers
                     TempData["TheNewEventID"] = NewEvent.EventId;
                     Console.WriteLine(NewEvent.EventId);
 
+                    return RedirectToAction("Index", "HotGuy");
                 }
-                return Ok(); // 返回成功狀態碼 200
-            }
+				return BadRequest();
+
+			}
         }
 
         // 活動創建(上傳範例圖片至資料庫)
