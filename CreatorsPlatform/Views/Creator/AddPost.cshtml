@@ -37,6 +37,8 @@
                 上傳圖片<span class="text-danger ml-1"> *</span>
             </label>
             <input type="file" id="ImageFile" name="ImageFile" />
+            <div class="PreviewImgWarp"><img id="preview-ImageFile" src="#"/></div>
+            @* <img id="post-img" src="#" alt="" /> *@
         </div>
         <!-- 上傳圖像(先一張) END -->
         <div class="form-group">
@@ -54,6 +56,13 @@
         <!-- 放置Quill內容 -->
         <input type="hidden" id="quill-content" name="Quill-content" />
         <!-- 放置Quill內容END -->
+        <!-- 預計放Tags -->
+        <div class="form-group">
+            <label @* asp-for="Tags" *@ class="form-label">
+                標籤
+            </label>
+            @* <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle"> *@
+        </div>
         <button id="submitInput" class="mb-3 btn btn-primary" type="button"
                 data-bs-toggle="modal" data-bs-target="#submitModal">
             發送文章
@@ -81,7 +90,28 @@
 </div>
 <!-- 自訂 js -->
 <script>
+    $(function () {
+        // 上傳圖片並且預覽功能
+        // 封面圖片
+        $("#ImageFile").change(function () {
+            readURL(this);
+            // this是改變的那個元素(input)
+        });
+        function readURL(input) {
 
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    img = e.target.result;
+                    $("#preview-ImageFile").attr('src', img);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+
+            }
+        }
 </script>
 <script>
     var submitModal = document.getElementById('submitModal')
@@ -93,4 +123,4 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
-<script src="/js/Shared/Quill.js"></script>
+<script src="/js/Creator/Quill.js"></script>
