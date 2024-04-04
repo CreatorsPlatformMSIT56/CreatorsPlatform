@@ -12,7 +12,7 @@
     width: 10%;
     transform-origin: right;
     transition: 0.5s;
-    background-color: aqua;
+    background-color: aliceblue;
 }
 
 .MainClose {
@@ -28,7 +28,7 @@
     width: 2%;
     transform-origin: right;
     transition: 0.3s;
-    background-color: aqua;
+    background-color:slategray;
 }
 
 ol {

@@ -8,14 +8,7 @@ namespace CreatorsPlatform.Controllers
 {
 	public class HomeController : Controller
 	{
-        public class MemberData
-        {
-            public int id { get; set; } = 1;
-            public string Name { get; set; } = "¬¥¬è";
-            public string Email { get; set; } = "Loki@example.com";
-            public string Password { get; set; } = "password123";
-
-        };
+     
         private readonly ILogger<HomeController> _logger;
 
 		public HomeController(ILogger<HomeController> logger)
@@ -23,18 +16,9 @@ namespace CreatorsPlatform.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public void Index()
 		{
-            var MemberData = new MemberData();
-            string Member= JsonConvert.SerializeObject(MemberData);
-			HttpContext.Session.SetString("key", Member);
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-			Console.WriteLine(member.id);
-            Console.WriteLine(member.Name);
-            Console.WriteLine(member.Email);
-            Console.WriteLine(member.Password);
-            return View();
+          
 		}
 
 		public IActionResult Privacy()

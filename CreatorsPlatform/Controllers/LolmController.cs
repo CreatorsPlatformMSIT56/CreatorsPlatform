@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using static CreatorsPlatform.Controllers.HomeController;
+using static CreatorsPlatform.Controllers.yhuController;
 
 
 namespace CreatorsPlatform.Controllers
@@ -261,5 +261,35 @@ namespace CreatorsPlatform.Controllers
             }
             return AfterOrderBy;
         }
-    }
+
+        // 編輯活動內容
+        public IActionResult EventEdit(int? id)
+        {
+			if (id == null)
+			{
+				return NotFound();
+			}
+			var FindEventResult = ( from e in _context.Events
+                                        join eImg in _context.EventImages on e.EventId equals eImg.EventId
+                                        where e.EventId == id
+                                        select new
+                                        {
+                                            EventName = e.EventName,
+                                            Description = e.Description,
+                                            StartDate = e.StartDate,
+                                            EndDate = e.EndDate,
+                                            Style = e.EventStyle,
+                                            Banner = e.Banner,
+                                            SampleImg = eImg.ImageUrl
+                                        }).ToList();
+			if (FindEventResult == null)
+			{
+				return NotFound();
+			}
+            ViewBag.Event = FindEventResult;
+
+			return View();
+		}
+
+	}
 }
