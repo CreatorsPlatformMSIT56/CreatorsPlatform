@@ -397,14 +397,22 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Individual()
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-            var Avatar = (from UserData in _context.Users
-                                   where UserData.Email == member.Email
-                                   select UserData.Avatar).FirstOrDefault();
-            ViewBag.Email = member.Email;
-            ViewBag.Name = member.Name;
-            ViewBag.Avatar = Convert.ToBase64String(Avatar);
-            return View();
+            if(memberJson != null)
+            {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var Avatar = (from UserData in _context.Users
+                              where UserData.Email == member.Email
+                              select UserData.Avatar).FirstOrDefault();
+                ViewBag.Email = member.Email;
+                ViewBag.Name = member.Name;
+                ViewBag.Avatar = Convert.ToBase64String(Avatar);
+                return View();
+            }
+            else
+            {
+                return View("Login");
+            }
+          
         }
         [HttpPost]
         public ActionResult IndividualData(string type)

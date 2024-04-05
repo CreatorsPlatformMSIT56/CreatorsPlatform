@@ -31,7 +31,7 @@ function CreatorsChange(Category) {
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
-							<a class="dropdown-item" href="/Creator/Index/${response[cont].categoryId}">
+							<a href="/Creator/Index/${response[cont].categoryId}">
 								<h5 class="card-title">${response[cont].userName}</h5>
 							</a>
 								<p class="card-text">${response[cont].description}</p>
