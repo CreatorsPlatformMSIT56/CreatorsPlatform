@@ -157,7 +157,7 @@
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
-								<a class="dropdown-item" asp-route-id="@item.CreatorId" asp-action="Index" asp-controller="Creator">
+								<a  asp-route-id="@item.CreatorId" asp-action="Index" asp-controller="Creator">
 									<h5 class="card-title">@item.UserName</h5>
 								</a>
 								<p class="card-text">@item.Description</p>
@@ -172,15 +172,21 @@
 			<h3>最新活動</h3>
 		</div>
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[0].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[0].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[0].Banner" class="d-block WorkImg">
+			</a>
 		</div>
 		<hr />
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[1].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[1].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[1].Banner" class="d-block WorkImg">
+			</a>			
 		</div>		
 		<hr />
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[2].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[2].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[2].Banner" class="d-block WorkImg">
+			</a>
 		</div>
 	
 	</div>
