@@ -60,16 +60,19 @@
 				</div>
 				<div class="carousel-inner">
 					<div id="Woklist1img" class="carousel-item active">
-						<div class="ToMiddle image-container">
-							<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg" >
+							<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[0].ContentId" asp-action="GetPost" asp-controller="Creator">
+								<div class="ToMiddle image-container">
+									<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg">
+								</div>
+							</a>
+							<div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
+								<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[0].Title</h3>
+								<h5 class="text-end">@ViewBag.DefaultContentsData[0].UploadDate</h5>
+							</div>
 						</div>
-						<div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
-							<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[0].Title</h3>
-							<h5 class="text-end">@ViewBag.DefaultContentsData[0].UploadDate</h5>
-						</div>
-					</div>
 					<div id="Woklist2img" class="carousel-item">
-						<div class="ToMiddle image-container">
+						<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[1].ContentId" asp-action="GetPost" asp-controller="Creator">
+							<div class="ToMiddle image-container">
 							@if (ViewBag.DefaultContentsData != null 
 							&& ViewBag.DefaultContentsData.Count > 0 
 							&& ViewBag.DefaultContentsData[1] != null 
@@ -84,6 +87,7 @@
 								</svg>
 							}
 						</div>
+						</a>
 						<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
 								@if (ViewBag.DefaultContentsData != null && ViewBag.DefaultContentsData.Count > 2 
 								&& ViewBag.DefaultContentsData[1] != null 
@@ -99,7 +103,8 @@
 					</div>
 					</div>
 					<div id="Woklist3img" class="carousel-item">
-						<div class="ToMiddle image-container">
+						<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[2].ContentId" asp-action="GetPost" asp-controller="Creator">
+							<div class="ToMiddle image-container">
 							@if (ViewBag.DefaultContentsData != null 
 							&& ViewBag.DefaultContentsData.Count >1
 							&& ViewBag.DefaultContentsData[2] != null 
@@ -114,6 +119,7 @@
 								</svg>
 							}
 						</div>
+						</a>
 						<div id="Woklist3text" class="carousel-caption d-none d-md-block TextDiv">
 								@if (ViewBag.DefaultContentsData != null
 								&& ViewBag.DefaultContentsData.Count > 2
@@ -151,7 +157,9 @@
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
-								<h5 class="card-title">@item.UserName</h5>
+								<a  asp-route-id="@item.CreatorId" asp-action="Index" asp-controller="Creator">
+									<h5 class="card-title">@item.UserName</h5>
+								</a>
 								<p class="card-text">@item.Description</p>
 							</div>
 						</div>
@@ -164,15 +172,21 @@
 			<h3>最新活動</h3>
 		</div>
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[0].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[0].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[0].Banner" class="d-block WorkImg">
+			</a>
 		</div>
 		<hr />
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[1].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[1].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[1].Banner" class="d-block WorkImg">
+			</a>			
 		</div>		
 		<hr />
 		<div class="row image-containerEvent">
-			<img class="image-containerEventImg" src="@ViewBag.EventDataList[2].Banner" class="d-block WorkImg">
+			<a asp-route-id="@ViewBag.EventDataList[2].EventId" asp-action="EventContent" asp-controller="Lolm">
+				<img class="image-containerEventImg" src="@ViewBag.EventDataList[2].Banner" class="d-block WorkImg">
+			</a>
 		</div>
 	
 	</div>

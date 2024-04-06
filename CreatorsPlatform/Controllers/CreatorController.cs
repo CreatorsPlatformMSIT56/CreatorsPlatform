@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
 using static CreatorsPlatform.Controllers.HomeController;
+using static CreatorsPlatform.Controllers.yhuController;
 
 namespace CreatorsPlatform.Controllers
 {
@@ -322,6 +323,64 @@ namespace CreatorsPlatform.Controllers
         {
             return View();
         }
+
+        // 新稱委託
+        [HttpPost]
+        public IActionResult CommissionCreate(Commission CreateCommissionModel)
+        {
+            // 取得 member 對應之 creatorId
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+
+            // 發布時間在這邊取得並轉換成資料庫要的型態
+            var sDate = DateTime.Now;
+            DateOnly ssDate = DateOnly.FromDateTime(sDate);
+
+
+            var CreateCommission = new Commission
+            {
+                Title = CreateCommissionModel.Title,
+                PriceMin = CreateCommissionModel.PriceMin,
+                PriceMax = CreateCommissionModel.PriceMax,
+                CreatorId = NowCreatorId,
+                Description = CreateCommissionModel.Description,
+                PutUpDate = ssDate,
+                OverDate = CreateCommissionModel.OverDate,
+                SubtitleId = CreateCommissionModel.SubtitleId
+            };
+
+            if (ModelState.IsValid != null)
+            {
+                _context.Add(CreateCommission);
+                _context.SaveChanges();
+
+                // 拿到對應新委託Id 新增範例圖片要用
+                TempData["TheNewCommissionID"] = CreateCommission.CommissionId;
+                return Ok();
+            }
+            return BadRequest();
+
+        }
+
+        // 新增範例圖片
+        [HttpPost]
+        public IActionResult CreateCommissionExImg(CommissionImage commissionImage)
+        {
+            int newCommissionId = Convert.ToInt32(TempData["TheNewCommissionID"]);
+
+            var CommissionImageToDB = new CommissionImage
+            {
+                ImageUrl = commissionImage.ImageUrl,
+                CommissionId = newCommissionId
+            };
+
+            _context.Add(CommissionImageToDB);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
 
         // 創作者編輯訂閱方案
         public IActionResult EditSubscriptionPlans()

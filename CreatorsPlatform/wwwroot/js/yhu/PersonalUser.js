@@ -21,14 +21,23 @@ function MessagUpdata(UserCurrentMsgtype){
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
+                    <a class="dropdown-item" asp-route-id="${response[cont].contentId}" asp-action="GetPost" asp-controller="Creator">
                     <div class="mb-3">
-                    <p>${response[cont].userName}</p>
-                    <p>${response[cont].description}</p>
+                    <h5 class="fw-bold">${response[cont].title}</h5>
+                
                     <div class="image-container">
                             <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
                     </div>
-                    <p>${response[cont].title}${response[cont].uploadDate}</p>
-                    </div>            
+                        <div class="row">
+                             <div class="col-md-6">
+                                  <h5 class="fw-bold">by :${response[cont].userName}</h5>
+                            </div>
+                            <div class="col-md-6">
+                                    <p class="text-end">${response[cont].uploadDate}</p>
+                            </div>
+                         </div>
+                    </div> 
+                    </a>
                     </li>`
                         );
                         cont++;
@@ -39,14 +48,23 @@ function MessagUpdata(UserCurrentMsgtype){
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
+                    <a class="dropdown-item" asp-route-id="${response[cont].contentId}" asp-action="GetPost" asp-controller="Creator">
                     <div class="mb-3">
-                    <p>${response[cont].userName}</p>
-                    <p>${response[cont].description}</p>
+                    <h5 class="fw-bold">${response[cont].title}</h5>
+                  
                     <div class ="image-container">
                           <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
                     </div>                
-                    <p>${response[cont].title}${response[cont].uploadDate}</p>
-                    </div>            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="fw-bold">by :${response[cont].userName}</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-end">${response[cont].uploadDate}</p>
+                                </div>
+                            </div>
+                    </div>
+                    </a>
                     </li>`
                         );
                         cont++;
@@ -65,14 +83,16 @@ function MessagUpdata(UserCurrentMsgtype){
 /*                        var importedDelta = JSON.parse(response[cont].description);*/
                         $('#Messages').append(
                             `<li>
+                            <a class="dropdown-item" href="/Lolm/EventContent/${response[cont].eventId}">
                               <div class="mb-3">
-                                  <p>${response[cont].eventName}</p>
+                                  <h3>${response[cont].eventName}</h3>
                                    <div id="content${cont}"></div>
                                   <div class ="image-container">
                                            <img class="image-containerImg" src="${response[cont].banner}" alt="">
                                   </div>
-                                    <p>${response[cont].startDate}${response[cont].endDate}</p>
-                                </div>            
+                                    <p class="text-end">${response[cont].startDate.match(/^\d{4}-\d{2}-\d{2}/)[0]}~${response[cont].endDate.match(/^\d{4}-\d{2}-\d{2}/)[0]}</p>
+                                </div>
+                                </a>
                             </li>`
                         );
 /*                        $(`#content${cont}`).setContents(importedDelta);*/
@@ -123,14 +143,18 @@ function Messagloading(UserCurrentMsgtype, CurrentMsg) {
 };
 $("#Sidebar").on("mouseover",
     function () {
+        clearTimeout(mouseoutTimer);
         $("#Main").removeClass("MainClose").addClass("MainOpen");
         $("#Sidebar").removeClass("SidebarClose").addClass("SidebarOpen");
     }
 );
 $("#Sidebar").on("mouseout",
     function () {
-        $("#Main").removeClass("MainOpen").addClass("MainClose");
-        $("#Sidebar").removeClass("SidebarOpen").addClass("SidebarClose");
+        mouseoutTimer = setTimeout(function () {
+            $("#Main").removeClass("MainOpen").addClass("MainClose");
+            $("#Sidebar").removeClass("SidebarOpen").addClass("SidebarClose");
+            $("#navbarToggleExternalContent").removeClass("show");
+        }, 1000); // 设置500毫秒的延迟
     }
 );
 

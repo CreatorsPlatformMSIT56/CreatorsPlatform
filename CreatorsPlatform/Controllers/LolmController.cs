@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using static CreatorsPlatform.Controllers.HomeController;
+using static CreatorsPlatform.Controllers.yhuController;
 
 
 namespace CreatorsPlatform.Controllers
