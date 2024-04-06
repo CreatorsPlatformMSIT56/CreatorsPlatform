@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using System.Composition;
 using System.Diagnostics.Tracing;
 using System.Reflection;
-using static CreatorsPlatform.Controllers.HomeController;
 
 namespace CreatorsPlatform.Controllers
 {
@@ -16,16 +15,47 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
+        public class MemberData
+        {
+            public int id { get; set; } 
+            public string Name { get; set; } 
+            public string Email { get; set; } 
+            public string Password { get; set; } 
 
+        };
+
+        public string MembersIcon(int x) {
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select  UserData.Avatar).FirstOrDefault();
+         string Avatar =   Convert.ToBase64String(MembersIcon);
+            return Avatar;
+        }
+        public bool MembersOnline()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public IActionResult PersonalUser()
         {
             var memberJson = HttpContext.Session.GetString("key");
-            Console.WriteLine(memberJson);
+            if (memberJson == null)
+            {
+				ViewBag.MembersOnline = MembersOnline();
+				return View("Login");
+            }
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
             var UserPasswd = (from UserPasswdData in _context.Users
                               where UserPasswdData.Email == member.Email
-                              select new { UserPasswdData.Password }).ToList();
+                              select new { UserPasswdData.Password , UserPasswdData.CreatorId}).ToList();
             if (member.Password == UserPasswd[0].Password.ToString())
             {
                 var NewmesgData = (from Newmesg in _context.Contents
@@ -39,10 +69,14 @@ namespace CreatorsPlatform.Controllers
                                        Newmesg.ContentId})
                                        .OrderByDescending(item => item.UploadDate).Take(5).ToList();
                 ViewBag.NewmesgData = NewmesgData;
+                ViewBag.MemberCreatorId = UserPasswd[0].CreatorId;
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
                 return View("PersonalUser");
             }
             else
             {
+                ViewBag.MembersOnline = MembersOnline();
                 return View("Login");
             };
         }
@@ -54,7 +88,7 @@ namespace CreatorsPlatform.Controllers
                 case "newmsg":
                     var NewmesgData = (from Newmesg in _context.Contents
                                        join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-                                       select new { Newmesg.Title, Newmesg.Description,UserData.UserName,Newmesg.ImageUrl, Newmesg.UploadDate })
+                                       select new { Newmesg.ContentId, Newmesg.Title, Newmesg.Description,UserData.UserName,Newmesg.ImageUrl, Newmesg.UploadDate })
                                        .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
                     return Json(NewmesgData.ToList());
                 case "subscribemsg":
@@ -76,6 +110,7 @@ namespace CreatorsPlatform.Controllers
                     var eventmsgData = (from eventmsg in _context.Events
                                         select new
                                         {
+                                            eventmsg.EventId,
                                             eventmsg.EventName,
                                             eventmsg.Description,
                                             eventmsg.Banner,
@@ -109,11 +144,13 @@ namespace CreatorsPlatform.Controllers
             var AuthorProfile = (from UsersData in _context.Users
                                  join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
                                  where (topCreatorUserIds).Contains(Introduction.CreatorId)
-                                 select new { UsersData.UserId,
+                                 select new { 
+                                     UsersData.UserId,
                                      UsersData.Avatar, 
                                      UsersData.UserName,
+                                     UsersData.CreatorId,
 									 Description = Introduction.Description.Length > 10 ?
-										Introduction.Description.Substring(0, 10) : Introduction.Description
+									Introduction.Description.Substring(0, 10) : Introduction.Description
 								 });
             Console.WriteLine(AuthorProfile.ToList().Count);
             //依作者照第一個作者群找作品
@@ -121,6 +158,7 @@ namespace CreatorsPlatform.Controllers
                                         where DefaultContents.CreatorId == DefaultCreatorsData[0].UserID
                                         select new
                                         {
+                                            DefaultContents.ContentId,
                                             DefaultContents.ImageUrl,
                                             DefaultContents.Title,
                                             DefaultContents.UploadDate
@@ -140,6 +178,17 @@ namespace CreatorsPlatform.Controllers
             ViewBag.EventDataList = EventDataList.ToList();
             ViewBag.DefaultContentsData = DefaultContentsData.ToList();
             ViewBag.AuthorProfile = AuthorProfile.ToList();
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+           
             return View();
         }
         //[HttpPost]
@@ -177,6 +226,7 @@ namespace CreatorsPlatform.Controllers
                                                  UsersData.UserId,
 												 Avatar = Convert.ToBase64String(UsersData.Avatar), 
                                                  UsersData.UserName,
+                                                 UsersData.CreatorId,
 												 Description = Introduction.Description.Length > 10 ?
 										         Introduction.Description.Substring(0, 10) : Introduction.Description
 											 }
@@ -185,10 +235,12 @@ namespace CreatorsPlatform.Controllers
                     case 8:
                         var NewReportData = (from UserDescription in _context.Creators
 											 join NewReport in _context.Users on UserDescription.CreatorId equals NewReport.CreatorId
-											 select new { NewReport.UserId,
+											 select new {
+                                                 NewReport.UserId,
 												 Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
                                                  NewReport.UserName,
-                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
+												 NewReport.CategoryId,
+												 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
                         return Json(NewReportData.ToList());
                     default:
@@ -216,7 +268,8 @@ namespace CreatorsPlatform.Controllers
                                         UserData.UserId,
 										Avatar = Convert.ToBase64String(UserData.Avatar),
                                         UserData.UserName,
-                                        Description = Creators.Description.Length > 10 ? 
+										UserData.CategoryId,
+										Description = Creators.Description.Length > 10 ? 
                                         Creators.Description.Substring(0, 10) : Creators.Description
                                     });
                 if (CreatorsData== null) {
@@ -234,8 +287,9 @@ namespace CreatorsPlatform.Controllers
 										 where (topCreatorUserIds).Contains(Introduction.CreatorId)
 										 select new { 
                                              UsersData.UserId,
-                                             UsersData.Avatar,
+                                             Avatar = Convert.ToBase64String(UsersData.Avatar),
                                              UsersData.UserName,
+											 UsersData.CategoryId,
 											 Description = Introduction.Description.Length > 10 ?
 										     Introduction.Description.Substring(0, 10) : Introduction.Description
 										 }
@@ -257,34 +311,39 @@ namespace CreatorsPlatform.Controllers
                                        where DefaultContents.CreatorId == CreatorsID
 									   select new
                                        {
+                                           DefaultContents.ContentId,
                                            ImageUrl= Convert.ToBase64String(DefaultContents.ImageUrl),
                                            DefaultContents.Title,
                                            DefaultContents.UploadDate
                                        }).OrderByDescending(item => item.UploadDate).Take(3);
             return Json(DefaultContentsData);
         }
-        public IActionResult Payment()
+        public IActionResult Payment(int id)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            if (memberJson == null) {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var subPayment = (from p in _context.Plans
+                                  join i in _context.Users on p.CreatorId equals i.CreatorId
+                                  where p.PlanId == id
+                                  select new
+                                  {
+                                      planId = p.PlanId,
+                                      planName = p.PlanName,
+                                      planPrice = p.PlanPrice,
+                                      planDes = p.Description,
+                                      creatorName = i.UserName,
+                                      creatorAvatar = i.Avatar
+                                  });
 
-            var subPayment = (from p in _context.Plans
-                              join i in _context.Users on p.CreatorId equals i.CreatorId
-                              where p.PlanId == 3
-                              select new
-                              {
-                                  planId = p.PlanId,
-                                  planName = p.PlanName,
-                                  planPrice = p.PlanPrice,
-                                  planDes = p.Description,
-                                  creatorName = i.UserName,
-                                  creatorAvatar = i.Avatar
-                              });
-
-            ViewBag.subPay = subPayment.ToList();
-            ViewBag.Id = member.id;
-
-            return View();
+                ViewBag.subPay = subPayment.ToList();
+                ViewBag.Id = member.id;
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+                return View();
+            }
+            ViewBag.MembersOnline = MembersOnline();
+            return View("Login");
         }
 
 
@@ -292,56 +351,69 @@ namespace CreatorsPlatform.Controllers
         [Route("yhu/SubPayments")]
         public ActionResult SubPayments(Subscription subPay)
         {
-            Console.WriteLine("我要進來囉");
-            var sDate = DateTime.Now;
-            DateOnly? ssDate = DateOnly.FromDateTime(sDate);
-            var eDate = sDate.AddMonths(1);
-            DateOnly? eeDate = DateOnly.FromDateTime(eDate);
-
-            Subscription NewSub = new Subscription
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson == null)
             {
-                StartDate = ssDate,
-                EndDate = eeDate,
-                PaymentMade = true,
-                CreatorId = subPay.UserId,
-                PlanId = subPay.PlanId,
-                UserId = subPay.UserId
-            };
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                Console.WriteLine("我要進來囉");
+                var sDate = DateTime.Now;
+                DateOnly? ssDate = DateOnly.FromDateTime(sDate);
+                var eDate = sDate.AddMonths(1);
+                DateOnly? eeDate = DateOnly.FromDateTime(eDate);
 
-            if (ModelState.IsValid != null)
-            {
-                _context.Add(NewSub);
-                _context.SaveChanges();
+                Subscription NewSub = new Subscription
+                {
+                    StartDate = ssDate,
+                    EndDate = eeDate,
+                    PaymentMade = true,
+                    CreatorId = subPay.UserId,
+                    PlanId = subPay.PlanId,
+                    UserId = subPay.UserId
+                };
 
-                Console.WriteLine("杰哥不要");
-                return Ok();
+                if (ModelState.IsValid != null)
+                {
+                    _context.Add(NewSub);
+                    _context.SaveChanges();
+
+                    Console.WriteLine("杰哥不要");
+                    return Ok();
+                }
+                return BadRequest();
+
             }
             return BadRequest();
-
         }
-        public IActionResult EntrustPayment()
+        public IActionResult EntrustPayment( int id)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            if (memberJson != null) {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
-            var ComCheck = (from c in _context.Commissions
-                            join i in _context.Users on c.CreatorId equals i.CreatorId
-                            where c.CommissionId == 1
-                            select new
-                            {
-                                commissionId = c.CommissionId,
-                                creatorName = i.UserName,
-                                creatorAvatar = i.Avatar,
-                                comPriceMin = c.PriceMin,
-                                comPriceMax = c.PriceMax,
-                                commissionTitle = c.Title,
-                                comDescription = c.Description
-                            });
+                var ComCheck = (from c in _context.Commissions
+                                join i in _context.Users on c.CreatorId equals i.CreatorId
+                                where c.CommissionId == id
+                                select new
+                                {
+                                    commissionId = c.CommissionId,
+                                    creatorName = i.UserName,
+                                    creatorAvatar = i.Avatar,
+                                    comPriceMin = c.PriceMin,
+                                    comPriceMax = c.PriceMax,
+                                    commissionTitle = c.Title,
+                                    comDescription = c.Description
+                                });
 
-            ViewBag.ComCheck = ComCheck.ToList();
-            ViewBag.Id = member.id;
+                ViewBag.ComCheck = ComCheck.ToList();
+                ViewBag.Id = member.id;
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
 
-            return View();
+                return View();
+            }
+            ViewBag.MembersOnline = MembersOnline();
+            return View("Login");
+            
         }
         [HttpPost]
         [Route("yhu/ComOrders")]
@@ -357,7 +429,8 @@ namespace CreatorsPlatform.Controllers
                 OrderDate = ssDate,
                 Description = ComOrder.Description,
                 CommissionId = ComOrder.CommissionId,
-                UserId = ComOrder.UserId
+                UserId = ComOrder.UserId,
+                WorkStatus="待確認中"
             };
 
             if (ModelState.IsValid != null)
@@ -374,17 +447,28 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Individual()
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-            var Avatar = (from UserData in _context.Users
-                                   where UserData.Email == member.Email
-                                   select UserData.Avatar).FirstOrDefault();
-            ViewBag.Email = member.Email;
-            ViewBag.Name = member.Name;
-            ViewBag.Avatar = Convert.ToBase64String(Avatar);
-            return View();
+            if(memberJson != null)
+            {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var Avatar = (from UserData in _context.Users
+                              where UserData.Email == member.Email
+                              select UserData.Avatar).FirstOrDefault();
+                ViewBag.Email = member.Email;
+                ViewBag.Name = member.Name;
+                ViewBag.Avatar = Convert.ToBase64String(Avatar);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+                return View();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+                return View("Login");
+            }
+          
         }
         [HttpPost]
-        public ActionResult IndividualData(string type)
+        public ActionResult IndividualData(string type,int step)
         {
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
@@ -402,15 +486,40 @@ namespace CreatorsPlatform.Controllers
                     
                     return Json(new { Email = member.Email, Name = member.Name, Avatar= Convert.ToBase64String(Avatar) });
                 case "ConsumptionRecord":
-                    var Subscription = (from SubscriptionData in _context.Subscriptions
-                                        where SubscriptionData.UserId == member.id
-                                        join PlansData in _context.Plans on SubscriptionData.PlanId equals PlansData.PlanId
-                                        join UserData in _context.Users on SubscriptionData.CreatorId equals UserData.CreatorId
-                                        select new { PlansData.PlanName, UserData.UserName, PlansData.Description
-                                        , PlansData.PlanLevel, PlansData.PlanPrice, SubscriptionData.EndDate });
-                    //var Commissions = (from CommissionsData in _context.CommissionOrders 
-                    //                   where CommissionsData.)
-                    return Json(Subscription.ToList());
+                    switch (step)
+                    {
+                        case 1:
+                            var Subscription = (from SubscriptionData in _context.Subscriptions
+                                                where SubscriptionData.UserId == member.id
+                                                join PlansData in _context.Plans on SubscriptionData.PlanId equals PlansData.PlanId
+                                                join UserData in _context.Users on SubscriptionData.CreatorId equals UserData.CreatorId
+                                                select new
+                                                {
+                                                    PlansData.PlanName,
+                                                    UserData.UserName,
+                                                    PlansData.Description
+                                                ,
+                                                    PlansData.PlanLevel,
+                                                    PlansData.PlanPrice,
+                                                    SubscriptionData.EndDate
+                                                });
+                            return Json(Subscription.ToList());
+                        case 2:
+                            var Order = (from OrderData in _context.CommissionOrders
+                                         join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
+                                         where OrderData.UserId == member.id
+                                         select new
+                                         {
+                                             OrderProjectCons.Title,
+                                             OrderData.Price,
+                                             OrderData.OrderDate,
+                                             OrderData.WorkStatus
+                                         });
+                            return Json(Order.ToList());
+                        default:
+                            break;
+                    }
+                    return Json("Eeeor");
                 case "AuthorSettings":
                             var AuthorSettings=(from AuthorSettingsData in _context.Plans
                                                 where AuthorSettingsData.CreatorId== CreatorId
@@ -439,14 +548,12 @@ namespace CreatorsPlatform.Controllers
                 case "OrderData2":
                     var OrderAsk = (from OrderData in _context.CommissionOrders
                                     join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
-                                    where OrderData2.CreatorId == CreatorId
+                                    where OrderData2.CreatorId == CreatorId&& OrderData.WorkStatus=="接受"
                                     select new
                                     {
                                         OrderData.Title,
                                         OrderData.OrderDate,
-                                        OrderData.DeadlineDate,
                                         OrderData.WorkStatus,
-                                        Description = OrderData.Description.Length>10 ?OrderData.Description.Substring(0, 10) : OrderData.Description
                                     });
                     return Json( OrderAsk.ToList() );
                 case "EventData":
@@ -647,6 +754,7 @@ namespace CreatorsPlatform.Controllers
         
         public IActionResult Login()
         {
+            ViewBag.MembersOnline = MembersOnline();
             return View();
         }
         [HttpPost]
@@ -668,15 +776,23 @@ namespace CreatorsPlatform.Controllers
                         select IDData.UserId).FirstOrDefault();
             if (EmailCheck && PasswdCheck)
             {
+                var MemberData = new MemberData();
+                string Member = JsonConvert.SerializeObject(MemberData);
+                HttpContext.Session.SetString("key", Member);
                 var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                /////////
                 member.id = ID;
                 member.Name = Name;
                 member.Email = Email;
                 member.Password = Passwd;
-                string Member = JsonConvert.SerializeObject(member);
+                Member = JsonConvert.SerializeObject(member);
                 HttpContext.Session.SetString("key", Member);
-                return Json("PersonalUser");
+                var MemberUi = (from UserData in _context.Users
+                                where UserData.UserId == ID
+                                select new { Avatar = Convert.ToBase64String(UserData.Avatar) }).FirstOrDefault();
+                
+                return Json(MemberUi);
             }
             else if (!EmailCheck) { 
                 return Json("EmailCheck");
@@ -685,6 +801,12 @@ namespace CreatorsPlatform.Controllers
                 return Json("PasswdCheck");
             }
         }
+		[HttpPost]
+		public ActionResult LogOut() {
+            ViewBag.MembersOnline = MembersOnline();
+            HttpContext.Session.Clear();
+            return Json("ok");
+		}
         public IActionResult Signup()
         {
             return View();

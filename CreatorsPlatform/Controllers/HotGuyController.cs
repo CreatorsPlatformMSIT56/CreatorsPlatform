@@ -1,6 +1,8 @@
 ﻿using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using static CreatorsPlatform.Controllers.yhuController;
 
 namespace CreatorsPlatform.Controllers
 {
@@ -13,7 +15,28 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
-
+        //臨時增加
+        public string MembersIcon(int x)
+        {
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select UserData.Avatar).FirstOrDefault();
+            string Avatar = Convert.ToBase64String(MembersIcon);
+            return Avatar;
+        }
+        public bool MembersOnline()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //
         // GET: Events
         public async Task<IActionResult> Index()
         {
@@ -32,6 +55,19 @@ namespace CreatorsPlatform.Controllers
             ViewData["NewEvents"] = NewEventList;
 
             ViewData["OldEvents"] = EndEventList;
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
 
             return View(await imaginkContext.ToListAsync());
         }
@@ -51,7 +87,30 @@ namespace CreatorsPlatform.Controllers
             {
                 return NotFound();
             }
-
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View(@event);
         }
     }
