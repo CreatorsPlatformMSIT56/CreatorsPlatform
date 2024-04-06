@@ -74,56 +74,55 @@ function GetAllExImgDataURL(TheURL) {
 function PostAllToSQL() {
     if ($("#SetColorOrNot").prop("checked") == true) {
         var EventdataFromClient = {
+            EventId: TheEventId,
             EventName: $("#eventName").val(),
             StartDate: $("#startDate").val(),
             EndDate: $("#endDate").val(),
             Description: getQuillContent(),
             EventStyle: GetEventStyle(),
             Banner: BannerDataURL,
-            CategoryID: 1,
+            //CategoryID: 1,
             DescriptionString: getQuillText()
         };
     } else {
         var EventdataFromClient = {
+            EventId: TheEventId,
             EventName: $("#eventName").val(),
             StartDate: $("#startDate").val(),
             EndDate: $("#endDate").val(),
             Description: getQuillContent(),
             Banner: BannerDataURL,
-            CategoryID: 1,
+            //CategoryID: 1,
             DescriptionString: getQuillText()
         };
     }
     $.ajax({
-        url: "/Lolm/Create",
-        method: "post",
+        url: "/Lolm/UpdateEvent",
+        method: "put",
         data: EventdataFromClient,
         success: function (response) {
-            UploadEventExImg();
-            alert("活動發布成功");
+            UpdateEventExImg();
+            alert("活動修改成功");
         },
         error: function (xhr, status, error) {
             // 處理錯誤 
-            alert("活動發布失敗");
+            alert("活動修改失敗");
         }
     });
 }
-function UploadEventExImg() {
-    for (var i = 0; i < ExImgDataURLs.length; i++) {
-        $.ajax({
-            url: "/Lolm/CreateEventExImg",
-            method: "post",
-            /*processData: false, // 不对 FormData 进行处理*/
-            data: {
-                ImageURL: ExImgDataURLs[i],
-                ImageSample: 1
-            },
-            success: function (response) {
-            },
-            error: function () {
-                alert("活動範例圖片上傳失敗");
-            }
-        })
-    }
 
+function UpdateEventExImg() {
+    var TheDataString = JSON.stringify(ExImgDataURLs);
+    $.ajax({
+        url: "/Lolm/UpdateEventImg",
+        method: "post",
+        //contentType: 'application/json',
+        data: { EventImgArray: TheDataString, Id: TheEventId },
+        success: function (response) {
+            //alert('OK');
+        },
+        error: function () {
+            alert("活動範例圖片上傳失敗");
+        }
+    });
 }

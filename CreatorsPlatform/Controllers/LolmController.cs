@@ -38,7 +38,7 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> EventContent(int? id)
         {
             ViewBag.Eid = id;
-            string ThePageStyle;            
+            string ThePageStyle;
             // 把style丟到前面
             if (_context.Events.FirstOrDefault(m => m.EventId == id)!.EventStyle != null)
             {
@@ -142,13 +142,13 @@ namespace CreatorsPlatform.Controllers
 
                     return RedirectToAction("Index", "HotGuy");
                 }
-				return BadRequest();
+                return BadRequest();
 
-			}
+            }
         }
 
         // 活動創建(上傳範例圖片至資料庫)
-        [HttpPost]        
+        [HttpPost]
         public string CreateEventExImg(EventImage NewEventImageData)
         {
             int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
@@ -207,7 +207,7 @@ namespace CreatorsPlatform.Controllers
 
         // 刷新Like數
         [HttpPost]
-        public IActionResult PostLikeChange(int LikeChange , int TheCheckedPostId)
+        public IActionResult PostLikeChange(int LikeChange, int TheCheckedPostId)
         {
             var ThePostModel = _context.EventImages.FirstOrDefault(m => m.EventImageId == TheCheckedPostId);
             ThePostModel!.EvePostLike = LikeChange;
@@ -238,8 +238,8 @@ namespace CreatorsPlatform.Controllers
         public List<EventsAndImage> PostOrderBy(string OrderByWhat, int id)
         {
             var PostResult = (from o in _context.EventsAndImages
-                             where o.EventId == id
-                             select o);
+                              where o.EventId == id
+                              select o);
             List<EventsAndImage> AfterOrderBy = new List<EventsAndImage>();
             switch (OrderByWhat)
             {
@@ -262,34 +262,95 @@ namespace CreatorsPlatform.Controllers
             return AfterOrderBy;
         }
 
-        // 編輯活動內容
+        // 編輯活動內容頁面
         public IActionResult EventEdit(int? id)
         {
-			if (id == null)
-			{
-				return NotFound();
-			}
-			var FindEventResult = ( from e in _context.Events
-                                        join eImg in _context.EventImages on e.EventId equals eImg.EventId
-                                        where e.EventId == id
-                                        select new
-                                        {
-                                            EventName = e.EventName,
-                                            Description = e.Description,
-                                            StartDate = e.StartDate,
-                                            EndDate = e.EndDate,
-                                            Style = e.EventStyle,
-                                            Banner = e.Banner,
-                                            SampleImg = eImg.ImageUrl
-                                        }).ToList();
-			if (FindEventResult == null)
-			{
-				return NotFound();
-			}
+            if (id == null)
+            {
+                return NotFound();
+            }
+            // 找對應id的活動
+            var FindEventResult = (from e in _context.Events
+                                   where e.EventId == id
+                                   select new
+                                   {
+                                       TheEventId = e.EventId,
+                                       EventName = e.EventName,
+                                       Description = e.Description,
+                                       StartDate = e.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                                       EndDate = e.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                                       Style = e.EventStyle,
+                                       EventTitleColor = e.EventStyle != null ? e.EventStyle.Substring(2, 7) : null,
+                                       EventIntroColor = e.EventStyle != null ? e.EventStyle.Substring(12, 7) : null,
+                                       Banner = e.Banner
+                                   }).ToList();
+            if (FindEventResult == null)
+            {
+                return NotFound();
+            }
             ViewBag.Event = FindEventResult;
+            // 找對應id的範例圖片
+            var FindEventSampleImg = (from i in _context.EventImages
+                                      where i.EventId == id && i.ImageSample == true && i.EveImgCancel == false
+                                      select i).ToList();
+            if (FindEventSampleImg != null)
+            {
+                ViewBag.SampleImg = FindEventSampleImg;
+            }
 
-			return View();
-		}
+            //FindEventResult.FindAll(a => a.EventImages.ImageSample == true).ToList();
+            return View();
+        }
 
-	}
+        // 編輯活動內容put:Event表
+        [HttpPut]
+        public string UpdateEvent(Event EventUpdateData)
+        {
+            var result = _context.Events.First(e => e.EventId == EventUpdateData.EventId);
+            result.EventName = EventUpdateData.EventName;
+            result.StartDate = EventUpdateData.StartDate;
+            result.EndDate = EventUpdateData.EndDate;
+            result.Description = EventUpdateData.Description;
+            result.EventStyle = EventUpdateData.EventStyle;
+            result.Banner = EventUpdateData.Banner;
+            result.DescriptionString = EventUpdateData.DescriptionString;
+            _context.Update(result);
+            _context.SaveChanges();
+            return "活動內容變更完成";
+        }
+
+        // 編輯活動內容post:EventImage表
+        [HttpPost]
+        public string UpdateEventImg(string EventImgArray, int Id)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
+            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+
+            string[] TheArray = JsonConvert.DeserializeObject<string[]>(EventImgArray);
+            if (_context.EventImages.Any(e => e.EventId == Id && e.ImageSample == true))
+            {
+                var result = _context.EventImages.Where(e => e.EventId == Id && e.ImageSample == true).ToList();
+                foreach (var item in result)
+                {
+                    item.EveImgCancel = true;
+                    _context.Update(item);
+                }                
+            }
+            for (int i = 0; i < TheArray.Length; i++)
+            {
+                EventImage NewEventImage = new EventImage()
+                {
+                    ImageUrl = TheArray[i],
+                    EventId = Id, // 使用从 TempData 中获取的 ID
+                    ImageSample = true,
+                    CreatorId = (int)NowCreatorId,
+                    EveImgCancel = false
+                };
+                _context.EventImages.Add(NewEventImage);
+            }
+            _context.SaveChanges();
+            return "活動圖片內容變更完成";
+        }
+    }
 }
