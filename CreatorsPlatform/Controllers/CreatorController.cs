@@ -207,8 +207,6 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
