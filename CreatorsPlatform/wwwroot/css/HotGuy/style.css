@@ -1,11 +1,4 @@
-﻿#AAA,
-#BBB,
-#CCC {
-    /* max-height: inherit; */
-    height: 40vh !important;
-}
-
-.listImg {
+﻿.listImg {
     height: 80px !important;
     width: 80px !important;
 }
