@@ -5,10 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections;
 using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
-<<<<<<< HEAD
-
-=======
->>>>>>> d1f6f54ef8f18bc941b89aa8951bdf7307b3a41f
 using static CreatorsPlatform.Controllers.yhuController;
 
 namespace CreatorsPlatform.Controllers
