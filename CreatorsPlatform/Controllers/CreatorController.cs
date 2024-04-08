@@ -77,8 +77,8 @@ namespace CreatorsPlatform.Controllers
         }
         public IActionResult Index(int id)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            //var memberJson = HttpContext.Session.GetString("key");
+            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);                
 
 			var creator = _context.Creators
 				.Include(c => c.Users)
@@ -127,18 +127,70 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                //var memberJson = HttpContext.Session.GetString("key");
-                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-                ViewBag.MembersIcon = MembersIcon(member.id);
+				var memberJson = HttpContext.Session.GetString("key");
+				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
+
+				// 如果有登入，傳登入的資料過去
+				ViewBag.UserId = member.id;
+				ViewBag.CreatorId = id;
+				// 如果有登入，把檢查是否追蹤結果傳到前端
+				var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+				if (Follow)
+				{
+					var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+					ViewBag.UnFollow = TheFollow;
+				}
+				else
+				{
+                    ViewBag.UnFollow = true;
+                }				
             }
             else
             {
-                ViewBag.MembersOnline = MembersOnline();
+                ViewBag.UnFollow = true;
+                ViewBag.MembersOnline = MembersOnline();                
             };
             //
             return View(viewModel);
         }
+		// 關注功能
+		[HttpPost]
+		public string FollowCreator(int TheUserId, int TheCreatorId)
+		{
+			// 如果已經存在資料表裡
+			var result = _context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId);
+            if (result)
+            {
+				// 取關就關注，關注就取關
+                if (_context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId&& e.Unfollow == true))
+                {
+					var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == true);
+					TheFollow.Unfollow = false;
+					_context.Follows.Update(TheFollow);
+				}
+				else
+				{
+					var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == false);
+                    TheFollow.Unfollow = true;
+                    _context.Follows.Update(TheFollow);
+                }
+            }
+			// 沒有就new一個加關注
+            else
+			{
+				Follow NewFollow = new Follow {
+					UserId = TheUserId,
+					CreatorId = TheCreatorId,
+					Unfollow = false
+				};
+				_context.Follows.Add(NewFollow);
+			}
+			_context.SaveChanges();
+			return "OK";
+        } 
+
 
         // 創作者建立貼文(修改位置待訂)
         [HttpGet]
@@ -519,5 +571,7 @@ namespace CreatorsPlatform.Controllers
 			//
 			return View();
 		}
+
+
 	}
 }
