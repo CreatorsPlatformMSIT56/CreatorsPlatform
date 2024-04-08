@@ -74,11 +74,11 @@ namespace CreatorsPlatform.Controllers
 			public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
 			public IEnumerable<ContentsModel>? ContentsModel { get; set; }
 
-		}
-		public IActionResult Index(int id)
-		{
-			//var memberJson = HttpContext.Session.GetString("key");
-			//MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+        }
+        public IActionResult Index(int id)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
 			var creator = _context.Creators
 				.Include(c => c.Users)
@@ -113,121 +113,112 @@ namespace CreatorsPlatform.Controllers
 							   PlanId = c.PlanId,
 						   };           
 
-			var viewModel = new CreatorDetailsViewModel
-			{
-				Creator = creator,
-				UserName = userName,
-				UserAvatar = userAvatar,
-				CommissionsWithWords = commissionsWithWords,
-				ContentsModel = contents.ToList()
-			};
-			//
-			if (MembersOnline())
-			{
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-				ViewBag.MembersIcon = MembersIcon(member.id);
-				ViewBag.MembersOnline = MembersOnline();
-				// 將用戶ID傳到前端
-				ViewBag.UserID = member.id;
-				// 判斷使用者是否已經關注該作者
-				var Follow = _context.Follows.Any(c => c.CreatorId == id && c.UserId == member.id && c.Unfollow == false);
-				if (Follow)
-				{
-					ViewBag.Follow = true;
-				}
-				else
-				{
-					ViewBag.Follow = false;
-				}
-			}
-			else
-			{
-				ViewBag.MembersOnline = MembersOnline();
-				// 使用者未登入(沒有關注該作者)
-				ViewBag.Follow = false;
-			};
-			//
-			return View(viewModel);
-		}
+            
 
-		// 創作者建立貼文(修改位置待訂)
-		[HttpGet]
-		public async Task<IActionResult> AddPost()
-		{
-			ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-			//
-			if (MembersOnline())
-			{
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-				ViewBag.MembersIcon = MembersIcon(member.id);
-				ViewBag.MembersOnline = MembersOnline();
-			}
-			else
-			{
-				ViewBag.MembersOnline = MembersOnline();
-			};
-			//
-			return View();
-		}
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreatePost(Content content, IFormFile ImageFile)
-		{
-			// 取得 member 對應之 creatorId
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-			int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+
+            var viewModel = new CreatorDetailsViewModel
+            {
+                Creator = creator,
+                UserName = userName,
+                UserAvatar = userAvatar,
+                CommissionsWithWords = commissionsWithWords,
+                ContentsModel = contents.ToList()
+            };
+            //
+            if (MembersOnline())
+            {
+                //var memberJson = HttpContext.Session.GetString("key");
+                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
+            return View(viewModel);
+        }
+
+        // 創作者建立貼文(修改位置待訂)
+        [HttpGet]
+        public async Task<IActionResult> AddPost()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+          //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePost(Content content)
+        {
+            // 取得 member 對應之 creatorId
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
 
 			// 發布時間在這邊取得並轉換成資料庫要的型態
 			var sDate = DateTime.Now;
 			DateOnly ssDate = DateOnly.FromDateTime(sDate);
 
-			var Newcontent = new Content
-			{
-				Title = content.Title,
-				Description = content.Description,
-				UploadDate = sDate,
-				//ImageUrl = , // 要轉二進制
-				Likes = 0,
-				SubtitleId = content.SubtitleId,
-				CreatorId = NowCreatorId,
-				PlanId = content.PlanId, // AddPost沒放
+            if (ModelState.IsValid)
+            {
+                if (content.ImageFile != null && content.ImageFile.Length > 0)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        await content.ImageFile.CopyToAsync(stream);
+                        content.ImageUrl = stream.ToArray();
+                    }
+                }
 
-			};
+                var Newcontent = new Content
+                {
+                    Title = content.Title,
+                    Description = content.Description,
+                    UploadDate = sDate,
+                    Likes = 0,
+                    SubtitleId = content.SubtitleId,
+                    CreatorId = NowCreatorId,
+                    /*PlanId = content.PlanId,*/ // AddPost沒放
+                    PlanId = 3, // AddPost沒放 先隨便放
 
-			if (ModelState.IsValid)
-			{
-				if (ImageFile != null && ImageFile.Length > 0)
-				{
-					using (var stream = new MemoryStream())
-					{
-						await ImageFile.CopyToAsync(stream);
-						content.ImageUrl = stream.ToArray();
-					}
+                };
 
-					// 存 Content 進DB
-					_context.Contents.Add(content);
-					await _context.SaveChangesAsync();
+                // 存 Content 進DB
+                _context.Contents.Add(content);
+                await _context.SaveChangesAsync();
 
-					return RedirectToAction("Index");
-				}
-			}
-			ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-			//
-			if (MembersOnline())
-			{
-				ViewBag.MembersIcon = MembersIcon(member.id);
-				ViewBag.MembersOnline = MembersOnline();
-			}
-			else
-			{
-				ViewBag.MembersOnline = MembersOnline();
-			};
-			//
-			return View(content);
-		}
+                return RedirectToAction("Index");
+            }
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            //
+            if (MembersOnline())
+            {
+                //var memberJson = HttpContext.Session.GetString("key");
+                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
+            return View(content);
+        }
 
 		// 創作者貼文頁面
 		public class ContentDetailsViewModel

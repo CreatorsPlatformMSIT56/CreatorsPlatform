@@ -7,7 +7,7 @@
 <h1>發布作品</h1>
 
 <div class="quillcontainer">
-    <form asp-action="AddPost" asp-controller="Creator" method="post" enctype="multipart/form-data">
+    <form asp-action="CreatePost" asp-controller="Creator" method="post" enctype="multipart/form-data">
         <div class="form-group"> <!-- 類別與子類別選擇 -->
             <div class="row">
                 <div class="col form-group">
@@ -22,7 +22,7 @@
                     <label asp-for="SubtitleId" class="control-label font-weight-bold">
                         子類別
                     </label>
-                    <select id="subtitleSelect" @* asp-for="SubtitleId" asp-items="ViewBag.SubtitleId" *@ class="form-select">
+                    <select asp-for="SubtitleId" id="subtitleSelect" class="form-select">
                         <option selected>請選擇子類別</option>
                         @* <option value="4">插畫</option>
                         <option value="5">塗鴉</option>
@@ -33,10 +33,10 @@
         </div>
         <!-- 上傳圖像(先一張) -->
         <div class="form-group"> 
-            <label for="ImageFile" class="font-weight-bold">
+            <label asp-for="ImageFile" for="ImageFile" class="font-weight-bold">
                 上傳圖片<span class="text-danger ml-1"> *</span>
             </label>
-            <input type="file" id="ImageFile" name="ImageFile" />
+            <input asp-for="ImageFile" type="file" id="ImageFile" name="ImageFile" />
             <div class="PreviewImgWarp"><img id="preview-ImageFile" src="#"/></div>
             @* <img id="post-img" src="#" alt="" /> *@
         </div>
@@ -48,13 +48,13 @@
             <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
         </div>
         <div class="form-group">
-            <label>作品描述<span class="text-danger ml-1"> *</span></label>
+            <label asp-for="Description">作品描述<span class="text-danger ml-1"> *</span></label>
             <!-- Quill Editor Start -->
             <div id="editor"></div>
             <!-- Quill Editor End -->
         </div>
         <!-- 放置Quill內容 -->
-        <input type="hidden" id="quill-content" name="Quill-content" />
+        <input asp-for="Description" type="hidden" id="quill-content" name="Quill-content" />
         <!-- 放置Quill內容END -->
         <!-- 預計放Tags -->
         <div class="form-group">
@@ -67,11 +67,29 @@
                 data-bs-toggle="modal" data-bs-target="#submitModal">
             發送文章
         </button>
+        <!-- 確認 Modal -->
+        <div id="submitModal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">發布作品</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>確認發布作品？</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary" id="confirm-btn" @* onclick="NewPostToSQL()" *@>確認</button><!-- 還要串出去 -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <!-- 確認 Modal -->
-<div id="submitModal" class="modal" tabindex="-1">
+@* <div id="submitModal" class="modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,9 +105,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> *@
 <!-- 自訂 js -->
-<script>
+@* <script>
     $(function () {
         // 上傳圖片並且預覽功能
         // 封面圖片
@@ -112,7 +130,7 @@
 
             }
         }
-</script>
+</script> *@
 <script>
     var submitModal = document.getElementById('submitModal')
     var submitInput = document.getElementById('submitInput')
@@ -121,7 +139,8 @@
         submitInput.focus()
     })
 </script>
-// <script>
+
+<script>
 //     // 對應的大標到對應的中標
 //     $(document).ready(function () {
 //         // 獲取主分類和子分類的資料

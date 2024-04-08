@@ -148,8 +148,6 @@ function NewPostToSQL() {
     //}
     var PostToData = {
         Title: $("#postTitle").val(),
-        // ImageUrl必須處理成二進制
-        //ImageUrl: $('#ImageFile').val(),
         SubtitleId: SubNameToId,
         Description: getQuillContent()
     }
@@ -161,7 +159,7 @@ function NewPostToSQL() {
         method: "post",
         data: PostToData,
         success: function (response) {
-            sendImageDataURLToBackend();
+            //sendImageDataURLToBackend();
             alert("作品發布成功");
         },
         error: function (xhr, status, error) {
@@ -170,6 +168,7 @@ function NewPostToSQL() {
         }
     });
 }
+
 
 // 將圖片轉成 dataURL
 //$("#ImageFile").change(function () {
@@ -187,7 +186,27 @@ function NewPostToSQL() {
 //                // 将每张图片的DataURL存储在数组中
 //                imageDataURLs.push(e.target.result);
 //            }
-//            reader.readAsDataURL(input.files[i]);
+//            reader.readAsBinaryString(input.files[i]); // 讀成Binary
+//        }
+//        // 将存储多张图片的DataURL的数组传递给其他函数或发送到后端
+//        console.log(imageDataURLs);
+//    } else {
+//        var noPictures = $("<p>目前沒有圖片</p>");
+//        $("#preview-ImageFile").append(noPictures);
+//    }
+//}
+
+//function readfile(input) {
+//    if (input.files && input.files.length >= 0) {
+//        for (var i = 0; i < input.files.length; i++) {
+//            var reader = new FileReader();
+//            reader.onload = function (e) {
+//                var img = $("<img width='300' height='200'>").attr('src', e.target.result);
+//                $("#preview-ImageFile").append(img);
+//                // 将每张图片的DataURL存储在数组中
+//                imageDataURLs.push(e.target.result);
+//            }
+//            reader.readAsBinaryString(input.files[i]); // 讀成Binary
 //        }
 //        // 将存储多张图片的DataURL的数组传递给其他函数或发送到后端
 //        console.log(imageDataURLs);
