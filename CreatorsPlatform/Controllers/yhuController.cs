@@ -333,11 +333,19 @@ namespace CreatorsPlatform.Controllers
                                       planPrice = p.PlanPrice,
                                       planDes = p.Description,
                                       creatorName = i.UserName,
-                                      creatorAvatar = i.Avatar
+                                      creatorAvatar = i.Avatar,
+                                      creatorId = i.CreatorId
                                   });
 
                 ViewBag.subPay = subPayment.ToList();
                 ViewBag.Id = member.id;
+                ViewBag.PlanId = id;
+
+                var PlanIdToCreator = (from p in _context.Plans
+                                       where p.PlanId == id
+                                       select new { creatorId = p.CreatorId, }).ToList();
+                ViewBag.Cid = PlanIdToCreator.FirstOrDefault().creatorId;
+
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
                 return View();
@@ -348,11 +356,10 @@ namespace CreatorsPlatform.Controllers
 
 
         [HttpPost]
-        [Route("yhu/SubPayments")]
         public ActionResult SubPayments(Subscription subPay)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson == null)
+            if (memberJson != null)
             {
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 Console.WriteLine("我要進來囉");
@@ -366,7 +373,7 @@ namespace CreatorsPlatform.Controllers
                     StartDate = ssDate,
                     EndDate = eeDate,
                     PaymentMade = true,
-                    CreatorId = subPay.UserId,
+                    CreatorId = subPay.CreatorId,
                     PlanId = subPay.PlanId,
                     UserId = subPay.UserId
                 };
