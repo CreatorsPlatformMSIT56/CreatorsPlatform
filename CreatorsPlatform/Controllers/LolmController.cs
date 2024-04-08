@@ -110,14 +110,15 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Create(Event EventModelData)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
-            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
-            if (NowCreatorId == null)
+            if (memberJson == null)
             {
                 return BadRequest(); // 返回錯誤狀態碼 400;
-            }
+            }        
             else
             {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
+                var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+                
                 Event NewEvent = new Event
                 {
                     EventName = EventModelData.EventName,
