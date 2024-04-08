@@ -78,8 +78,8 @@ namespace CreatorsPlatform.Controllers
         }
         public IActionResult Index(int id)
         {
-            //var memberJson = HttpContext.Session.GetString("key");
-            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
             var creator = _context.Creators
                 .Include(c => c.Users)
@@ -128,8 +128,8 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                //var memberJson = HttpContext.Session.GetString("key");
+                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -163,7 +163,7 @@ namespace CreatorsPlatform.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(Content content, IFormFile ImageFile)
+        public async Task<IActionResult> CreatePost(Content content)
         {
             // 取得 member 對應之 creatorId
             var memberJson = HttpContext.Session.GetString("key");
@@ -174,41 +174,42 @@ namespace CreatorsPlatform.Controllers
             var sDate = DateTime.Now;
             DateOnly ssDate = DateOnly.FromDateTime(sDate);
 
-            var Newcontent = new Content {
-                Title = content.Title,
-                Description = content.Description,
-                UploadDate = sDate,
-                //ImageUrl = , // 要轉二進制
-                Likes = 0,
-                SubtitleId = content.SubtitleId,
-                CreatorId = NowCreatorId,
-                PlanId = content.PlanId, // AddPost沒放
-
-            };
-
             if (ModelState.IsValid)
             {
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (content.ImageFile != null && content.ImageFile.Length > 0)
                 {
                     using (var stream = new MemoryStream())
                     {
-                        await ImageFile.CopyToAsync(stream);
+                        await content.ImageFile.CopyToAsync(stream);
                         content.ImageUrl = stream.ToArray();
                     }
-
-                    // 存 Content 進DB
-                    _context.Contents.Add(content);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("Index");
                 }
+
+                var Newcontent = new Content
+                {
+                    Title = content.Title,
+                    Description = content.Description,
+                    UploadDate = sDate,
+                    Likes = 0,
+                    SubtitleId = content.SubtitleId,
+                    CreatorId = NowCreatorId,
+                    /*PlanId = content.PlanId,*/ // AddPost沒放
+                    PlanId = 3, // AddPost沒放 先隨便放
+
+                };
+
+                // 存 Content 進DB
+                _context.Contents.Add(content);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                //var memberJson = HttpContext.Session.GetString("key");
+                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
