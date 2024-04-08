@@ -39,6 +39,8 @@ public partial class User
 
     public virtual Creator? Creator { get; set; }
 
+    public virtual ICollection<Follow> Follows { get; set; } = new List<Follow>();
+
     public virtual ICollection<FriendList> FriendListAcceptorUsers { get; set; } = new List<FriendList>();
 
     public virtual ICollection<FriendList> FriendListRequesterUsers { get; set; } = new List<FriendList>();

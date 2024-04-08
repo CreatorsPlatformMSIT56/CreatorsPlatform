@@ -24,15 +24,7 @@
                     <p>頭像:</p>
                         <input id="AvatarUpData" style="display: none;" type="file" accept="image/*" onchange="readFile(event)" />
                     <label for="AvatarUpData">
-                        <img id="Avatar" @if (ViewBag.Avatar != null)
-                        {
-                            <text>src="data:image/png;base64,@ViewBag.Avatar"</text>
-                        }
-                        else
-                        {
-                            <text>src="/img/Shared/person-circle.svg"</text>
-                        }
-                       >
+                        <img id="Avatar" src="@((ViewBag.Avatar != null) ? ("data:image/png;base64," + ViewBag.Avatar) : "/img/Shared/person-circle.svg")">
                     </label>
                 </div>
                 <div class="col-md-8">    
@@ -80,10 +72,9 @@
                         </tr>
                     </thead>
                 <tbody id="ConsumptionRecord_Entrust">
-                      
-                    </tbody>
-                </table>
-        </div>
+                </tbody>
+            </table>
+        </div>@* @((ViewBag.CreatorsCheck != null) ? "tab-pane fade" : "tab-pane fade d-none") *@
         <div class="tab-pane fade" id="AuthorSettings_Project" role="tabpanel" aria-labelledby="AuthorSettings">
             <div id="PlanData">
                 <table class="table table-striped">

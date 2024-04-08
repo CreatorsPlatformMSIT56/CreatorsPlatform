@@ -3,6 +3,8 @@
 *@
 @{
     int UserId = ViewBag.Id;
+    int CreatoId = ViewBag.Cid;
+    int PlamId = ViewBag.PlanId;
 }
 <style>
     img {
@@ -119,12 +121,10 @@
             $("#subBtn").click(function () {
                 alert("Start");
                 var PlanDataToServer = {
-                    PlanID: 23,
-                    UserID: @UserId,/* 這裡寫會員會被串改 */
-                    CreatorID: 7
+                    UserId: @UserId,/* 這裡寫會員會被串改 */
+                    PlanId: @PlamId,
+                    CreatorId: @CreatoId
                 };
-                alert("AAA");
-
                 $.ajax({
                     url: "/yhu/SubPayments",
                     method: "post",

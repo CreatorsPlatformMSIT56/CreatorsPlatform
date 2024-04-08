@@ -95,15 +95,16 @@ namespace CreatorsPlatform.Controllers
 
                     var memberJson = HttpContext.Session.GetString("key");
                     MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-					var SubscriptionDataList = (from ContentsData in _context.Contents
-                                                join SubscriptionsData in _context.Subscriptions on ContentsData.CategoryId equals SubscriptionsData.CategoryId
+					var SubscriptionDataList = (from UsersData in _context.Users
+                                                join SubscriptionsData in _context.Subscriptions on UsersData.UserId equals SubscriptionsData.UserId
                                                 where SubscriptionsData.UserId == member.id
-												select SubscriptionsData.CreatorId);
+												select SubscriptionsData.PlanId);
 
                     var subscribemsgData = (from Contents in _context.Contents
-                                            join UserData in _context.Users on Contents.CategoryId equals UserData.CategoryId
-                                            where SubscriptionDataList.Contains(Contents.CreatorId)
-                                            select new { Contents.Title, Contents.Description, UserData.UserName, Contents.ImageUrl, Contents.UploadDate })
+                                            join PlansData in _context.Plans on Contents.PlanId equals PlansData.PlanId
+                                            join UsersData in _context.Users on Contents.CreatorId equals UsersData.CreatorId
+                                            where SubscriptionDataList.Contains(Contents.PlanId)
+                                            select new { Contents.ContentId, Contents.Title, Contents.Description, UsersData.UserName, Contents.ImageUrl, Contents.UploadDate })
                                        .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
                     return Json(subscribemsgData);
                 case "eventmsg":
@@ -321,7 +322,7 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Payment(int id)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson == null) {
+            if (memberJson != null) {
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 var subPayment = (from p in _context.Plans
                                   join i in _context.Users on p.CreatorId equals i.CreatorId
@@ -333,11 +334,19 @@ namespace CreatorsPlatform.Controllers
                                       planPrice = p.PlanPrice,
                                       planDes = p.Description,
                                       creatorName = i.UserName,
-                                      creatorAvatar = i.Avatar
+                                      creatorAvatar = i.Avatar,
+                                      creatorId = i.CreatorId
                                   });
 
                 ViewBag.subPay = subPayment.ToList();
                 ViewBag.Id = member.id;
+                ViewBag.PlanId = id;
+
+                var PlanIdToCreator = (from p in _context.Plans
+                                       where p.PlanId == id
+                                       select new { creatorId = p.CreatorId, }).ToList();
+                ViewBag.Cid = PlanIdToCreator.FirstOrDefault().creatorId;
+
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
                 return View();
@@ -348,13 +357,39 @@ namespace CreatorsPlatform.Controllers
 
 
         [HttpPost]
-        [Route("yhu/SubPayments")]
         public ActionResult SubPayments(Subscription subPay)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson == null)
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var SubFollow = (from f in _context.Follows
+                             join i in _context.Users on f.UserId equals i.UserId
+                             join c in _context.Creators on i.CreatorId equals c.CreatorId
+                             where f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId
+                             select f.FollowId).FirstOrDefault();
+          
+            if (memberJson != null)
             {
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                if (SubFollow == 0)
+                {
+                    Follow follow = new Follow
+                    {
+                        CreatorId = subPay.CreatorId,
+                        UserId = subPay.UserId,
+                        Unfollow = false
+                    };
+                    if (ModelState.IsValid != null)
+                    {
+                        _context.Add(follow);
+                        _context.SaveChanges();
+
+                        Console.WriteLine("杰哥不要2");
+                    }
+                }
+                else 
+                {
+                    Console.WriteLine("以追蹤");
+                }
+
                 Console.WriteLine("我要進來囉");
                 var sDate = DateTime.Now;
                 DateOnly? ssDate = DateOnly.FromDateTime(sDate);
@@ -366,7 +401,7 @@ namespace CreatorsPlatform.Controllers
                     StartDate = ssDate,
                     EndDate = eeDate,
                     PaymentMade = true,
-                    CreatorId = subPay.UserId,
+                    CreatorId = subPay.CreatorId,
                     PlanId = subPay.PlanId,
                     UserId = subPay.UserId
                 };
@@ -453,7 +488,19 @@ namespace CreatorsPlatform.Controllers
                 var Avatar = (from UserData in _context.Users
                               where UserData.Email == member.Email
                               select UserData.Avatar).FirstOrDefault();
-                ViewBag.Email = member.Email;
+                var CreatorsCheck = (from UserData in _context.Users
+                                      where UserData.UserId == member.id
+                                      select UserData.CreatorId).FirstOrDefault();
+
+                if (CreatorsCheck!=null)
+                {
+					ViewBag.CreatorsCheck = true;
+				}
+                else
+                {
+					ViewBag.CreatorsCheck = false;
+				}
+				ViewBag.Email = member.Email;
                 ViewBag.Name = member.Name;
                 ViewBag.Avatar = Convert.ToBase64String(Avatar);
                 ViewBag.MembersIcon = MembersIcon(member.id);
@@ -809,6 +856,7 @@ namespace CreatorsPlatform.Controllers
 		}
         public IActionResult Signup()
         {
+            ViewBag.MembersOnline = MembersOnline();
             return View();
         }
         [HttpPost]
