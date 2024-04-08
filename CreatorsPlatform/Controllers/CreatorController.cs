@@ -116,8 +116,29 @@ namespace CreatorsPlatform.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPost(Content content, IFormFile ImageFile)
+        public async Task<IActionResult> CreatePost(Content content, IFormFile ImageFile)
         {
+            // 取得 member 對應之 creatorId
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+
+            // 發布時間在這邊取得並轉換成資料庫要的型態
+            var sDate = DateTime.Now;
+            DateOnly ssDate = DateOnly.FromDateTime(sDate);
+
+            var Newcontent = new Content {
+                Title = content.Title,
+                Description = content.Description,
+                UploadDate = sDate,
+                //ImageUrl = , // 要轉二進制
+                Likes = 0,
+                SubtitleId = content.SubtitleId,
+                CreatorId = NowCreatorId,
+                PlanId = content.PlanId, // AddPost沒放
+
+            };
+
             if (ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
@@ -135,7 +156,7 @@ namespace CreatorsPlatform.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            
             return View(content);
         }
 

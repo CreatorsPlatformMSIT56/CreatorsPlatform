@@ -14,19 +14,19 @@
                     <label asp-for="CategoryId" class="control-label font-weight-bold">
                         類別<span class="text-danger ml-1"> *</span>
                     </label>
-                    <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
+                    <select id="categorySelect" asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
                         <option selected>請選擇類別</option>
                     </select>
                 </div>
                 <div class="col">
-                    <label class="font-weight-bold">
+                    <label asp-for="SubtitleId" class="control-label font-weight-bold">
                         子類別
                     </label>
-                    <select class="form-select" aria-label="category">
+                    <select id="subtitleSelect" @* asp-for="SubtitleId" asp-items="ViewBag.SubtitleId" *@ class="form-select">
                         <option selected>請選擇子類別</option>
-                        <option value="4">插畫</option>
+                        @* <option value="4">插畫</option>
                         <option value="5">塗鴉</option>
-                        <option value="6">背景</option>
+                        <option value="6">背景</option> *@
                     </select>
                 </div>
             </div>
@@ -59,7 +59,7 @@
         <!-- 預計放Tags -->
         <div class="form-group">
             <label @* asp-for="Tags" *@ class="form-label">
-                標籤
+                @* 標籤 *@
             </label>
             @* <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle"> *@
         </div>
@@ -83,7 +83,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">確認</button><!-- 還要串出去 -->
+                <button type="submit" class="btn btn-primary" id="confirm-btn" onclick="NewPostToSQL()">確認</button><!-- 還要串出去 -->
             </div>
         </div>
     </div>
@@ -121,6 +121,44 @@
         submitInput.focus()
     })
 </script>
+// <script>
+//     // 對應的大標到對應的中標
+//     $(document).ready(function () {
+//         // 獲取主分類和子分類的資料
+//         var categories = @Html.Raw(Json.Serialize(ViewData["CategoryId"]));
+//         var subtitles = @Html.Raw(Json.Serialize(ViewData["SubtitleId"]));
+//         console.log(categories);
+//         console.log(subtitles);
+
+
+        
+
+
+//         // 監聽主分類選擇變化
+//         $('#categorySelect').on('change', function () {
+//             var selectedCategoryId = $(this).val();
+//             console.log(this);
+//             console.log(selectedCategoryId);
+
+//             // 根據選擇的主分類 ID 更新子分類下拉式選單
+//             $('#subtitleSelect').empty();
+//             $('#subtitleSelect').append('<option value="">請選擇子類別!</option>');
+//             $.each(subtitles, function (i, subtitle) {
+//                 // console.log(i);
+//                 // console.log(subtitle);
+//                 // console.clear();
+//                 console.log(subtitle);
+//                 console.log(subtitle.value);
+//                 if (subtitle.value === selectedCategoryId) {
+                    
+//                     $('#subtitleSelect').append('<option value="' + subtitle.value + '">' + subtitle.text + '</option>');
+//                 }
+//             });
+//         });
+//     });
+// </script>
+<script src="~/js/Creator/AddPost.js"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
 <script src="/js/Creator/Quill.js"></script>
