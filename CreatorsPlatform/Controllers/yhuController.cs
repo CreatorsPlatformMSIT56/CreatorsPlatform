@@ -361,9 +361,35 @@ namespace CreatorsPlatform.Controllers
         {
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var SubFollow = (from f in _context.Follows
+                             join i in _context.Users on f.UserId equals i.UserId
+                             join c in _context.Creators on i.CreatorId equals c.CreatorId
+                             where f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId
+                             select f.FollowId).FirstOrDefault();
+          
             if (memberJson != null)
             {
-               
+                if (SubFollow == 0)
+                {
+                    Follow follow = new Follow
+                    {
+                        CreatorId = subPay.CreatorId,
+                        UserId = subPay.UserId,
+                        Unfollow = false
+                    };
+                    if (ModelState.IsValid != null)
+                    {
+                        _context.Add(follow);
+                        _context.SaveChanges();
+
+                        Console.WriteLine("杰哥不要2");
+                    }
+                }
+                else 
+                {
+                    Console.WriteLine("以追蹤");
+                }
+
                 Console.WriteLine("我要進來囉");
                 var sDate = DateTime.Now;
                 DateOnly? ssDate = DateOnly.FromDateTime(sDate);
