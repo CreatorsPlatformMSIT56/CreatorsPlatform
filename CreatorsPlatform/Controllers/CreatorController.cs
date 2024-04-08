@@ -269,7 +269,9 @@ namespace CreatorsPlatform.Controllers
                 ViewBag.MembersOnline = MembersOnline();
             };
             //
-            return View(content);
+            return RedirectToAction("Index");
+
+            //return View(content);
         }
 
 		// 創作者貼文頁面
