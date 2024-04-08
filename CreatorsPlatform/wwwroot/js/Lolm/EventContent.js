@@ -74,7 +74,7 @@ $(function () {
             method: "POST",
             data: { LikeChange: PostLike, TheCheckedPostId: CheckedPostId },
             success: function () {
-                alert('OK');
+                /*alert('OK');*/
             },
             error: function () {
                 alert('按愛心失敗');

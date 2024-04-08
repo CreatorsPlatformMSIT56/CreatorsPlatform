@@ -129,7 +129,7 @@
                             <p class="card-text plan-price">
                                 @e.PlanPrice.ToString("C0")
                             </p>
-                            <button>加入</button>
+                                <button><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
                         </div>
                     </div>
                 </div>

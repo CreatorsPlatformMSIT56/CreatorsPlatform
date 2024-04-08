@@ -120,7 +120,7 @@
                 alert("Start");
                 var PlanDataToServer = {
                     PlanID: 23,
-                    UserID: @UserId,
+                    UserID: @UserId,/* 這裡寫會員會被串改 */
                     CreatorID: 7
                 };
                 alert("AAA");
@@ -131,6 +131,7 @@
                     data: PlanDataToServer,
                     success: function (response) {
                         alert(response + "成功");
+                        window.history.back();
                     },
                     error: function () {
                         alert('新增失敗');

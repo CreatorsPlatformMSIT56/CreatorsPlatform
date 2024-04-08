@@ -126,7 +126,7 @@
             var comText = $("#userNotice").val()
             var ComDataToServer = {
                 Description: comText,
-                UserId: @UserId,
+                UserId: @UserId,/* 這裡寫會員會被串改 */
                 CommissionId: @ViewBag.ComCheck[0].commissionId,
                 PriceMin: @ViewBag.ComCheck[0].comPriceMin
             };
@@ -138,6 +138,7 @@
                 data: ComDataToServer,
                 success: function (response) {
                     alert(response + "成功");
+                    window.history.back();
                 },
                 error: function () {
                     alert('新增失敗');

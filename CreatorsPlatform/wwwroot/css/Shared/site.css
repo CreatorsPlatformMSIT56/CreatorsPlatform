@@ -80,7 +80,6 @@ html {
 
 /*會員下拉選單按鈕*/
 .MemberDropdown {
-    display: inline-block;
     color: white;
     text-decoration: none;
 }

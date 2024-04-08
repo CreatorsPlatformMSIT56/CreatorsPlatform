@@ -74,11 +74,9 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">委託名稱</th>
-                            <th scope="col">委託描述</th>
                             <th scope="col">委託訂單價格</th>
                             <th scope="col">狀態</th>
                             <th scope="col">委託訂單日期</th>
-                            <th scope="col">委託訂單截止日期</th>     
                         </tr>
                     </thead>
                 <tbody id="ConsumptionRecord_Entrust">
@@ -86,7 +84,7 @@
                     </tbody>
                 </table>
         </div>
-        <div class="tab-pane fade" id="AuthorSettings_Project" role="tabpanel" aria-labelledby="AuthorSettings">
+        <div class="tab-pane fade @ViewBag.CreatorsCheck?d-none: " id="AuthorSettings_Project" role="tabpanel" aria-labelledby="AuthorSettings">
             <div id="PlanData">
                 <table class="table table-striped">
                     <thead>

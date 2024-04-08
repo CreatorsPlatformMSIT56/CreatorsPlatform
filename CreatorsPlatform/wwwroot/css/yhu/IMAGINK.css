@@ -69,11 +69,10 @@ ul {
 }
 .image-containerEvent {
     height: 100px; /* 设置容器高度 */
-    overflow: hidden; /* 超出容器部分隐藏 */
 }
 .image-containerEventImg {
-        width: 100%; /* 图像宽度填充容器 */
-        height: 100%; /* 图像高度填充容器 */
-        object-fit: cover; /* 保持原始比例，填充容器 */
+    width: 100%; /* 图像宽度填充容器 */
+    height: 100px; /* 图像高度填充容器 */
+    object-fit: cover; /* 保持原始比例，填充容器 */
 }
 

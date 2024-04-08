@@ -19,6 +19,28 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
+        //臨時增加
+        public string MembersIcon(int x)
+        {
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select UserData.Avatar).FirstOrDefault();
+            string Avatar = Convert.ToBase64String(MembersIcon);
+            return Avatar;
+        }
+        public bool MembersOnline()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //
 
         // 創作者首頁
         public class ContentsModel
@@ -103,7 +125,19 @@ namespace CreatorsPlatform.Controllers
                 CommissionsWithWords = commissionsWithWords,
                 ContentsModel = contents.ToList()
             };
-
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View(viewModel);
         }
 
@@ -112,6 +146,19 @@ namespace CreatorsPlatform.Controllers
         public async Task<IActionResult> AddPost()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+          //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View();
         }
         [HttpPost]
@@ -156,7 +203,20 @@ namespace CreatorsPlatform.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View(content);
         }
 
@@ -261,7 +321,19 @@ namespace CreatorsPlatform.Controllers
                 ContentTagsModel = contentTags.ToList(),
                 Contents = contents.ToList()
             };
-
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View(viewModel);
         }
 
@@ -328,20 +400,45 @@ namespace CreatorsPlatform.Controllers
                                        select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
 
             var viewModel = new CommissionDetailsViewModel
-			{
-				Commission = new List<Commission> { commission! },
-				Plans = plans,
-				Comments = comments,
+            {
+                Commission = new List<Commission> { commission! },
+                Plans = plans,
+                Comments = comments,
                 CommissionsWithWords = commissionsWithWords
             };
-
-			return View(viewModel);
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
+            return View(viewModel);
 		}
 
 
 		// 創作者建立接受委託表單(修改位置待訂)
 		public IActionResult AddCommisionForm()
         {
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View();
         }
 
@@ -380,6 +477,7 @@ namespace CreatorsPlatform.Controllers
                 TempData["TheNewCommissionID"] = CreateCommission.CommissionId;
                 return Ok();
             }
+
             return BadRequest();
 
         }
@@ -406,6 +504,19 @@ namespace CreatorsPlatform.Controllers
         // 創作者編輯訂閱方案
         public IActionResult EditSubscriptionPlans()
         {
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View();
         }
     }
