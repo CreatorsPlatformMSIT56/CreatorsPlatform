@@ -1,134 +1,152 @@
 ﻿@{
-    ViewData["Title"] = "Creator Home";
+	ViewData["Title"] = "Creator Home";
 }
 @model CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel
 
 <link href="~/css/Creator/Index.css" rel="stylesheet" />
 <style>
-    .link-no-hover {
-        color: inherit !important; /* Inherit the current text color */
-        text-decoration: none !important; /* Remove underline */
-    }
+	.link-no-hover {
+		color: inherit !important; /* Inherit the current text color */
+		text-decoration: none !important; /* Remove underline */
+	}
 </style>
 <!-- Banner -->
 <div class="text-center" id="banner">
-    <img class="img-fluid" src="@(Model.Creator?.BannerUrl ?? "https://fakeimg.pl/1620x580/")" alt="" style="height: 580px; width:1620px; object-fit:cover;">
+	<img class="img-fluid" src="@(Model.Creator?.BannerUrl ?? "https://fakeimg.pl/1620x580/")" alt="" style="height: 580px; width:1620px; object-fit:cover;">
 </div>
 
 <!-- Creator介紹 -->
 <div class="container p-3">
-    <div class="row">
-        <div class="col-sm-2 col-md-2 col-lg-1">
-            @* <img class="rounded-circle img-fluid" src="https://fakeimg.pl/100/" alt=""> *@
-            <img class="rounded-circle img-fluid" src="data:image/png;base64,@(Convert.ToBase64String(Model.UserAvatar ?? Array.Empty<byte>()))"
-                 alt="" style="max-width:100px; max-height:100px;">
-            @* <img src="@if(Model.UserAvatar.GetType() == byte[]){}"/> *@
-        </div>
-        <div class="col-sm-10 col-md-10 col-lg-11">
-            <div class="row">
-                <div class="col d-flex">
-                    <h4>@Model.UserName</h4>
-                    <button class="btn ms-3">關注</button>
-                </div>
-                <!-- 強制換行 -->
-                <div class="w-100"></div>
-                <div class="col">
-                    <a href="#">
-                        <i class="fs-4 bi bi-twitter-x"></i>
-                    </a>
-                    <a href="#">
-                        <i class="fs-4 bi bi-instagram"></i>
-                    </a>
-                    <a href="#">
-                        <i class="fs-4 bi bi-facebook"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-sm-2 col-md-2 col-lg-1">
+			@* <img class="rounded-circle img-fluid" src="https://fakeimg.pl/100/" alt=""> *@
+			<img class="rounded-circle img-fluid" src="data:image/png;base64,@(Convert.ToBase64String(Model.UserAvatar ?? Array.Empty<byte>()))"
+				 alt="" style="max-width:100px; max-height:100px;">
+			@* <img src="@if(Model.UserAvatar.GetType() == byte[]){}"/> *@
+		</div>
+		<div class="col-sm-10 col-md-10 col-lg-11">
+			<div class="row">
+				<div class="col d-flex NameAndFollow">
+					<h4>@Model.UserName</h4>
+					@* 關注按鈕 *@
+					@if (ViewBag.Follow == false)
+					{
+						<button class="btn ms-3" onclick="Follow()" id="FollowBtn">關注</button>
+					}
+					else
+					{
+						<button class="btn ms-3 btn-primary" id="UnFollowBtn">關注中</button>
+					}
+				</div>
+				<!-- 強制換行 -->
+				<div class="w-100"></div>
+				<div class="col">
+					<a href="#">
+						<i class="fs-4 bi bi-twitter-x"></i>
+					</a>
+					<a href="#">
+						<i class="fs-4 bi bi-instagram"></i>
+					</a>
+					<a href="#">
+						<i class="fs-4 bi bi-facebook"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- 頁籤 0. 個人資料 1. 作品 2. 訂閱 3. 委託 -->
 <ul class="nav nav-tabs" id="creatorTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">個人資料</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="collection-tab" data-bs-toggle="tab" data-bs-target="#collection" type="button" role="tab" aria-controls="collection" aria-selected="false">作品</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="commission-tab" data-bs-toggle="tab" data-bs-target="#commission" type="button" role="tab" aria-controls="commission" aria-selected="false">委託</button>
-    </li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">個人資料</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="collection-tab" data-bs-toggle="tab" data-bs-target="#collection" type="button" role="tab" aria-controls="collection" aria-selected="false">作品</button>
+	</li>
+	<li class="nav-item" role="presentation">
+		<button class="nav-link" id="commission-tab" data-bs-toggle="tab" data-bs-target="#commission" type="button" role="tab" aria-controls="commission" aria-selected="false">委託</button>
+	</li>
 </ul>
 <!-- 頁籤 0. 個人資料 1. 作品 2. 訂閱 3. 委託 END -->
 <div class="tab-content" id="creatorTabContent">
-    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <div class="p-3">
-            <!-- 創作者描述 -->
-            <p>
-                @Model.Creator?.Description
-            </p>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="collection" role="tabpanel" aria-labelledby="collection-tab">
-        <!-- 內容Container with 3 Cards in 1 row -->
-        <div class="card-container container">
-            <div class="card-deck row p-3">
-                @foreach (var e in Model.ContentsModel)
-                {
-                <div class="col-4">
-                    <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
-                            <div class="card mb-3">
-                            <img class="card-img-top"
-                                     src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
-                                    alt="Card image cap"
-                                    style="height: 24rem; width: auto; object-fit: cover" />
-                            <div class="card-body"
-                            @* style="height: 10rem" *@>
-                                <h5 class="card-title">@e.Title</h5>
-                                <!-- 改寫LINQ讓Subtitle能放進去 OK -->
-                                    <h6 class="card-subtitle mb-2 text-muted">@e.SubtitleName</h6>
-                                <p class="card-text">
-                                    @e.Description
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="commission" role="tabpanel" aria-labelledby="commission-tab">
-        <!-- 內容Container with 3 Cards in 1 row -->
-        <div class="card-container container">
-            <div class="card-deck row p-3">
-                @foreach (var e in Model.CommissionsWithWords)
-            {
-                <div class="col-4">
-                    <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
-                        <div class="card mb-3">
-                            <img class="card-img-top"
-                                    src="@e.ImageUrl"
-                                    alt="Card image cap"
-                                    style="height: 24rem; width: auto; object-fit: cover" />
-                            <div class="card-body">
-                                <h5 class="card-title">@e.Title</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                        @e.SubtitleName
-                                    </h6>
-                                <p class="card-text commision-description">
-                                        @e.Description
-                                </p>
-                                <h5 class="card-text commisionPriceMin" style="font-weight:bolder">
-                                        @e.PriceMin.ToString("C0")
-                                        @(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")
-                                    </h5>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            }
-            </div>
-        </div>
-    </div>
+	<div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+		<div class="p-3">
+			<!-- 創作者描述 -->
+			<p>
+				@Model.Creator?.Description
+			</p>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="collection" role="tabpanel" aria-labelledby="collection-tab">
+		<!-- 內容Container with 3 Cards in 1 row -->
+		<div class="card-container container">
+			<div class="card-deck row p-3">
+				@foreach (var e in Model.ContentsModel)
+				{
+					<div class="col-4">
+						<a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
+							<div class="card mb-3">
+								<img class="card-img-top"
+									 src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
+									 alt="Card image cap"
+									 style="height: 24rem; width: auto; object-fit: cover" />
+								<div class="card-body"
+								@* style="height: 10rem" *@>
+									<h5 class="card-title">@e.Title</h5>
+									<!-- 改寫LINQ讓Subtitle能放進去 OK -->
+									<h6 class="card-subtitle mb-2 text-muted">@e.SubtitleName</h6>
+									<p class="card-text">
+										@e.Description
+									</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="commission" role="tabpanel" aria-labelledby="commission-tab">
+		<!-- 內容Container with 3 Cards in 1 row -->
+		<div class="card-container container">
+			<div class="card-deck row p-3">
+				@foreach (var e in Model.CommissionsWithWords)
+				{
+					<div class="col-4">
+						<a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
+							<div class="card mb-3">
+								<img class="card-img-top"
+									 src="@e.ImageUrl"
+									 alt="Card image cap"
+									 style="height: 24rem; width: auto; object-fit: cover" />
+								<div class="card-body">
+									<h5 class="card-title">@e.Title</h5>
+									<h6 class="card-subtitle mb-2 text-muted">
+										@e.SubtitleName
+									</h6>
+									<p class="card-text commision-description">
+										@e.Description
+									</p>
+									<h5 class="card-text commisionPriceMin" style="font-weight:bolder">
+										@e.PriceMin.ToString("C0")
+										@(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")
+									</h5>
+								</div>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </div>
+<script>
+	var MembersOnline = @Html.Raw(ViewBag.MembersOnline);
+	if (@Html.Raw(ViewBag.UserID) == true) {
+		var UserId = @Html.Raw(ViewBag.UserID);
+	}else{
+		var UserId = null
+	}
+	console.log(123);
+</script>
+<script src="~/js/Creator/Index.js"></script>
