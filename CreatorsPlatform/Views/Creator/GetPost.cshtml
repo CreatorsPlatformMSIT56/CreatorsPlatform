@@ -40,8 +40,16 @@
                         <h4>@Model.Content?.FirstOrDefault()?.Creator.Users.SingleOrDefault()?.UserName</h4>
                     </a>
                 </div>
-                <div class="col-2 d-inline-flex align-items-center justify-content-center">
-                    <button type="button" class="btn btn-primary">關注</button>
+                <div class="col-2 d-inline-flex align-items-center justify-content-center NameAndFollow">
+                    @* 關注按鈕 *@
+                    @if (ViewBag.UnFollow == true)
+                    {
+                        <button class="btn FollowBtn" onclick="Follow()">關注</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary UnFollowBtn" onclick="UnFollow()">關注中</button>
+                    }
                 </div>
             </div>
             <!-- comments -->
@@ -51,31 +59,31 @@
                 </div>
             </div>
             <!-- comment 1 -->
-        @foreach (var e in Model.Comments)
-        {
-            <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
-                <div class="row g-0">
-                    <div class="col-md-2 avatar text-center">
-                        @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
-                        @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                            <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
-                                    style="max-width:100px; max-height:100px;">
-                        @* </a> *@
-                    </div>
-                    <div class="col-md-10">
-                        <div class="card-body">
+            @foreach (var e in Model.Comments)
+            {
+                <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                    <div class="row g-0">
+                        <div class="col-md-2 avatar text-center">
+                            @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
                             @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                                <h5 class="card-title mb-1">@e.User.UserName</h5>
+                            <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                                 style="max-width:100px; max-height:100px;">
                             @* </a> *@
-                            <p class="card-text mb-2">
-                                @e.Comment1
-                            </p>
-                            <p class="card-text"><small class="text-muted">留言時間</small></p>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                <h5 class="card-title mb-1">@e.User.UserName</h5>
+                                @* </a> *@
+                                <p class="card-text mb-2">
+                                    @e.Comment1
+                                </p>
+                                <p class="card-text"><small class="text-muted">留言時間</small></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
             <div class="row">
                 <div class="col-12 px-5 py-3 other-commissions">
                     <h4>創作者其他作品</h4>
@@ -83,28 +91,28 @@
             </div>
             <!-- 創作者其他委託 -->
             <div class="row">
-            @foreach (var e in Model.Contents)
-            {
-                <div class="col-4">
-                    <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
-                        <div class="card mb-3">
-                            <img class="card-img-top"
-                                 src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
-                                 alt="Card image cap"
-                                 style="height: 12rem; width: auto; object-fit: cover" />
-                            <div class="card-body">
-                                <h5 class="card-title">@e.Title</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    @e.SubtitleName
-                                </h6>
-                                <p class="card-text commision-description">
-                                    @e.Description
-                                </p>
+                @foreach (var e in Model.Contents)
+                {
+                    <div class="col-4">
+                        <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
+                            <div class="card mb-3">
+                                <img class="card-img-top"
+                                     src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
+                                     alt="Card image cap"
+                                     style="height: 12rem; width: auto; object-fit: cover" />
+                                <div class="card-body">
+                                    <h5 class="card-title">@e.Title</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        @e.SubtitleName
+                                    </h6>
+                                    <p class="card-text commision-description">
+                                        @e.Description
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            }
+                        </a>
+                    </div>
+                }
             </div>
         </div>
         <!-- aside -->
@@ -113,28 +121,37 @@
                 <h3>訂閱方案: </h3>
                 @foreach (var e in Model.Plans)
                 {
-                <div class="col-12">
-                    <div class="card mb-3">
-                        @* <img class="card-img-top"
-                    src="https://fakeimg.pl/500/"
-                    alt="Card image cap"
-                    style="height: 24rem; width: auto; object-fit: cover" /> *@
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                @e.PlanName
-                            </h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                @e.Description
-                            </h6>
-                            <p class="card-text plan-price">
-                                @e.PlanPrice.ToString("C0")
-                            </p>
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            @* <img class="card-img-top"
+                        src="https://fakeimg.pl/500/"
+                        alt="Card image cap"
+                        style="height: 24rem; width: auto; object-fit: cover" /> *@
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    @e.PlanName
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    @e.Description
+                                </h6>
+                                <p class="card-text plan-price">
+                                    @e.PlanPrice.ToString("C0")
+                                </p>
                                 <button><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // 把當前登入的使用者跟當前創作者抓下來給JS用
+    var CreatorId = @Model.Content.FirstOrDefault().CreatorId;
+    var UserId = @ViewBag.UserId;
+    // console.log(CreatorId);
+    // console.log(UserId);
+</script>
+<script src="~/js/Creator/GetPost.js"></script>

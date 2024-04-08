@@ -31,11 +31,11 @@
                     @* 關注按鈕 *@
                     @if (ViewBag.UnFollow == true)
                     {
-                        <button class="btn ms-3" onclick="Follow()" id="FollowBtn">關注</button>
+                        <button class="btn ms-3 FollowBtn" onclick="Follow()">關注</button>
                     }
                     else
                     {
-                        <button class="btn ms-3 btn-primary" onclick="UnFollow()" id="UnFollowBtn">關注中</button>
+                        <button class="btn ms-3 btn-primary UnFollowBtn" onclick="UnFollow()">關注中</button>
                     }
                 </div>
                 <!-- 強制換行 -->

@@ -381,12 +381,27 @@ namespace CreatorsPlatform.Controllers
 				var memberJson = HttpContext.Session.GetString("key");
 				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 				ViewBag.MembersIcon = MembersIcon(member.id);
-				ViewBag.MembersOnline = MembersOnline();				
-			}
+				ViewBag.MembersOnline = MembersOnline();
+				ViewBag.UserId = member.id;
+
+                // 如果有登入，把檢查是否追蹤結果傳到前端
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                if (Follow)
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    ViewBag.UnFollow = TheFollow;
+                }
+                else
+                {
+                    ViewBag.UnFollow = true;
+                }
+            }
 			else
 			{
-				ViewBag.MembersOnline = MembersOnline();				
-			};
+				ViewBag.MembersOnline = MembersOnline();
+                ViewBag.UserId = 0;
+                ViewBag.UnFollow = true;
+            };
 			//
 			return View(viewModel);
 		}
