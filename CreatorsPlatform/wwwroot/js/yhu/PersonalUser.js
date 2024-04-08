@@ -21,7 +21,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
-                    <a class="dropdown-item" asp-route-id="${response[cont].contentId}" asp-action="GetPost" asp-controller="Creator">
+                    <a class="dropdown-item" href="/Creator/GetPost/${response[cont].contentId}">
                     <div class="mb-3">
                     <h5 class="fw-bold">${response[cont].title}</h5>
                 
@@ -48,7 +48,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
-                    <a class="dropdown-item" asp-route-id="${response[cont].contentId}" asp-action="GetPost" asp-controller="Creator">
+                    <a class="dropdown-item"  href="/Creator/GetPost/${response[cont].contentId}">
                     <div class="mb-3">
                     <h5 class="fw-bold">${response[cont].title}</h5>
                   

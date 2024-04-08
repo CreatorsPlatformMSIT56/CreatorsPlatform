@@ -95,15 +95,16 @@ namespace CreatorsPlatform.Controllers
 
                     var memberJson = HttpContext.Session.GetString("key");
                     MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-					var SubscriptionDataList = (from ContentsData in _context.Contents
-                                                join SubscriptionsData in _context.Subscriptions on ContentsData.CategoryId equals SubscriptionsData.CategoryId
+					var SubscriptionDataList = (from UsersData in _context.Users
+                                                join SubscriptionsData in _context.Subscriptions on UsersData.UserId equals SubscriptionsData.UserId
                                                 where SubscriptionsData.UserId == member.id
-												select SubscriptionsData.CreatorId);
+												select SubscriptionsData.PlanId);
 
                     var subscribemsgData = (from Contents in _context.Contents
-                                            join UserData in _context.Users on Contents.CategoryId equals UserData.CategoryId
-                                            where SubscriptionDataList.Contains(Contents.CreatorId)
-                                            select new { Contents.Title, Contents.Description, UserData.UserName, Contents.ImageUrl, Contents.UploadDate })
+                                            join PlansData in _context.Plans on Contents.PlanId equals PlansData.PlanId
+                                            join UsersData in _context.Users on Contents.CreatorId equals UsersData.CreatorId
+                                            where SubscriptionDataList.Contains(Contents.PlanId)
+                                            select new { Contents.ContentId, Contents.Title, Contents.Description, UsersData.UserName, Contents.ImageUrl, Contents.UploadDate })
                                        .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
                     return Json(subscribemsgData);
                 case "eventmsg":
@@ -359,9 +360,10 @@ namespace CreatorsPlatform.Controllers
         public ActionResult SubPayments(Subscription subPay)
         {
             var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
             if (memberJson != null)
             {
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+               
                 Console.WriteLine("我要進來囉");
                 var sDate = DateTime.Now;
                 DateOnly? ssDate = DateOnly.FromDateTime(sDate);

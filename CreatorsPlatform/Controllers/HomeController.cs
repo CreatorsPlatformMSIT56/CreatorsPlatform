@@ -16,11 +16,6 @@ namespace CreatorsPlatform.Controllers
 			_logger = logger;
 		}
 
-		public void Index()
-		{
-          
-		}
-
 		public IActionResult Privacy()
 		{
 			return View();
