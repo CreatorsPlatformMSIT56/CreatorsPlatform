@@ -17,135 +17,152 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-0">
-            <div class="container">
-                @* 網站商標 *@
-                <a class="navbar-brand" asp-area="" asp-controller="yhu" asp-action="IMAGINK">
-                    <img id="LOGO" src="~/img/Shared/LOGO.png" style="height: 80px;width: auto;" />
-                </a>
-                @* 網站名稱 *@
-                @* <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><h2 class="mb-0">Imagink</h2></a> *@
-
-                @* 響應式的菜單按鈕 *@
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                @* 響應式摺疊部分 *@
-                <div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
-                    <form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
-                        <input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/標籤" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
-                        <button class="SearchFormBtn" type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                            </svg>
-                        </button>
-                    </form>
-                    
-                    <!--方便通道開始-->
-                    <!-- <h3>以下是方便傳送道 開發完畢後請刪除</h3> -->
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-yhu" data-bs-toggle="dropdown" aria-expanded="false">
-                            繪圖
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-yhu">
-                            <li><a class="dropdown-item" asp-action="IMAGINK" asp-controller="yhu" class="link-success">原創</a></li>
-                            <li><a class="dropdown-item" asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a></li>
-                            <li><a class="dropdown-item" asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a></li>
-                            <li><a class="dropdown-item" asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a></li>
-                            <li><a class="dropdown-item" asp-action="Login" asp-controller="yhu" class="link-success">Login</a></li>
-                            <li><a class="dropdown-item" asp-action="Payment" asp-controller="yhu" class="link-success">Payment</a></li>
-                            <li><a class="dropdown-item" asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a></li>
-                        </ul>
+            <div class="container row">
+                <div class="col-md-2">
+                    @* 網站商標 *@
+                    <a class="navbar-brand" asp-area="" asp-controller="yhu" asp-action="IMAGINK">
+                        <img id="LOGO" src="~/img/Shared/LOGO.png" style="height: 80px;width: auto;" />
+                    </a>
+                    @* 網站名稱 *@
+                </div>
+                <div class="col-md-3">
+                    @* 響應式摺疊部分 *@
+                    <div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
+                        <form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
+                            <input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/標籤" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
+                            <button class="SearchFormBtn" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg>
+                            </button>
+                        </form>
                     </div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-HotGuy" data-bs-toggle="dropdown" aria-expanded="false">
-                            資料庫大師
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-HotGuy">
-                            <li><a class="dropdown-item" asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a></li>
-                        </ul>
-                    </div>
-                        
+                </div>
+                <div class="col-md-1">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-yhu" data-bs-toggle="dropdown" aria-expanded="false">
+                                繪圖
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-yhu">
+                                <li><a class="dropdown-item" asp-action="IMAGINK" asp-controller="yhu" class="link-success">首頁</a></li>
+                                <li><a class="dropdown-item" asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a></li>
+                                <li><a class="dropdown-item" asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a></li>
+                                <li><a class="dropdown-item" asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a></li>
+                                <li><a class="dropdown-item" asp-action="Login" asp-controller="yhu" class="link-success">Login</a></li>
+                                <li><a class="dropdown-item" asp-action="Payment" asp-controller="yhu" class="link-success">Payment</a></li>
+                                <li><a class="dropdown-item" asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a></li>
+                            </ul>
+                        </div>
+                </div>
+                      <div class="col-md-1">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-HotGuy" data-bs-toggle="dropdown" aria-expanded="false">
+                                影片
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-HotGuy">
+                                <li><a class="dropdown-item" asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a></li>
+                            </ul>
+                        </div>
+                </div>
+                      <div class="col-md-1">
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Lolm" data-bs-toggle="dropdown" aria-expanded="false">
-                            漫畫王
+                            聲音
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Lolm">
                             <li><a class="dropdown-item" asp-action="CreateEvent" asp-controller="Lolm" class="link-success">發起活動</a></li>
                             <li><a class="dropdown-item" asp-action="EventContent" asp-controller="Lolm" class="link-success">活動內容</a></li>
                         </ul>
                     </div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Creator" data-bs-toggle="dropdown" aria-expanded="false">
-                            波溜[創作者]
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Creator">
-                            <li><a class="dropdown-item" asp-action="Index" asp-controller="Creator" class="link-success">創作者首頁</a></li>
-                            <li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布文章</a></li>
-                            <li><a class="dropdown-item" asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">發布委託</a></li>
-                            <li><a class="dropdown-item" asp-action="GetPost" asp-controller="Creator" class="link-success">作品展示頁面</a></li>
-                            <li><a class="dropdown-item" asp-action="EditSubscriptionPlans" asp-controller="Creator" class="link-success">編輯訂閱方案頁面(似乎已放進會員介面)</a></li>
-                        </ul>
+                </div>
+                      <div class="col-md-1">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Creator" data-bs-toggle="dropdown" aria-expanded="false">
+                                教學
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Creator">
+                                <li><a class="dropdown-item" asp-action="Index" asp-controller="Creator" class="link-success">創作者首頁</a></li>
+                                <li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布文章</a></li>
+                                <li><a class="dropdown-item" asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">發布委託</a></li>
+                                <li><a class="dropdown-item" asp-action="GetPost" asp-controller="Creator" class="link-success">作品展示頁面</a></li>
+                                <li><a class="dropdown-item" asp-action="EditSubscriptionPlans" asp-controller="Creator" class="link-success">編輯訂閱方案頁面(似乎已放進會員介面)</a></li>
+                            </ul>
+                        </div>
                     </div>
+                <div class="col-md-3">
 
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Member" data-bs-toggle="dropdown" aria-expanded="false">
-                            會員
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Member">
-                            <li><a class="dropdown-item" asp-action="Login" asp-controller="Member" class="link-success">登入</a></li>
-                            <li><a class="dropdown-item" asp-action="Signup" asp-controller="Member" class="link-success">註冊</a></li>
-                            <li><a class="dropdown-item" asp-action="Individual" asp-controller="Member" class="link-success">個人設定</a></li>
-                        </ul>
                     </div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Vicky" data-bs-toggle="dropdown" aria-expanded="false">
-                            Vicky
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Vicky">
-                            <li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" class="link-success">檢索頁</a></li>
-                        </ul>
+                      
+           
+          
+                @* 響應式的菜單按鈕 *@
+    @*             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> *@               
+                    
+                </div>
+            @* @* <div id="MemberStatusUi">
+                <div class="card" >
+                    <div class="row g-0">
+                        <div id="MemberStatusUiIcon" class="col-md-4">
+                            <svg width="65" height="65" viewBox="0 0 16 16" class="bi bi-person-circle">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                            </svg>
+                        </div>
+                        <div class="col-md-8">
+                            <div>
+                                <h class="card-title">Card title</h>
+                                <p>This is a wider card with supporting text</p>
+                            </div>
+                        </div>
                     </div>
-                    <!--方便通道結束 不用洩了-->
-                    <ul class="navbar-nav NavSection">
-                        <li class="nav-item" id="MemberSection">
-                            @* 如果登入 *@
-                            @if (1 == 2)
+                </div>
+            </div> *@ 
+            <ul class="navbar-nav NavSection">
+                <li class="nav-item" id="MemberSection">
+                    @if (ViewBag.MembersOnline)
+                    {
+                        <a href="/yhu/PersonalUser" class="MemberDropdown">
+                            @if (ViewBag.MembersIcon != null)
                             {
-                                <a href="#" class="MemberDropdown">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                                    </svg>
-                                </a>
-                                <ul class="d-grid gap-1 MemberDropdownList">
-                                    <li><a class="text-start p-2" href="#">訂閱中的方案</a></li>
-                                    <li><a class="text-start p-2" href="#">會員設定</a></li>
-                                    <li><a class="text-start p-2" href="#">登出</a></li>
-                                </ul>
+                                <img style="width: 65px; height: 65px;" src="data:image/png;base64,@ViewBag.MembersIcon" class="rounded-2" alt="...">
                             }
-                            @* 如果未登入 *@
                             else
                             {
-                                <a href="#" class="MemberDropdown">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                                    </svg>
-                                </a>
-                                <ul class="MemberDropdownList">
-                                    <li><a asp-action="Login" asp-controller="Member" class="p-1">登入</a></li>
-                                    <li><a asp-action="Signup" asp-controller="Member">註冊</a></li>
-                                </ul>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                                </svg>
                             }
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                        </a>
+                        <ul class="MemberDropdownList">
+                            <li><a href="/yhu/Individual" class="p-1">設定</a></li>
+                            <li><a onclick="UserLogOut()">登出</a></li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <a asp-action="Login" asp-controller="yhu" class="MemberDropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                            </svg>
+                        </a>
+                        <ul class="MemberDropdownList">
+                            <li><a asp-action="Login" asp-controller="yhu" class="p-1">登入</a></li>
+                            <li><a asp-action="Signup" asp-controller="yhu">註冊</a></li>
+                        </ul>
+                    }
+                    
+
+
+
+
+
+                </li>
+             </ul>
         </nav>
     </header>
     <div class="container">
@@ -177,6 +194,19 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function UserLogOut() {
+            $.ajax({
+            	url: '/yhu/LogOut',
+            	method: 'POST',
+            	data: {
+            	},
+            	success: function (response) {
+            		window.location.href = '/yhu/IMAGINK';
+            	}
+            });
+        };
+        </script>
 
     @* 這是客製文字編輯器的引用，註解掉以免避免影響到其他View的客製化 *@
     @* <script src="~/js/Shared/Quill.js" asp-append-version="true"></script> *@

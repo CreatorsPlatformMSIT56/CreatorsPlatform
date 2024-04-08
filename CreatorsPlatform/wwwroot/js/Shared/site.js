@@ -16,4 +16,16 @@ window.onload = function () {
 function SaveSearchKey(event) {
     var searchKey = document.getElementById("searchInput").value;
     TempData["SearchKey"] = searchKey;
-}
+};
+//function UserLogOut() {
+//    console.log("ok");
+//	//$.ajax({
+//	//	url: '/yhu/LogOut',
+//	//	method: 'POST',
+//	//	data: {
+//	//	},
+//	//	success: function (response) {
+//	//		window.location.href = '/yhu/IMAGINK';
+//	//	}
+//	//});
+//};
