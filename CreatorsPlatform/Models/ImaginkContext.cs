@@ -41,6 +41,8 @@ public partial class ImaginkContext : DbContext
 
     public virtual DbSet<EventsAndImage> EventsAndImages { get; set; }
 
+    public virtual DbSet<Follow> Follows { get; set; }
+
     public virtual DbSet<FriendList> FriendLists { get; set; }
 
     public virtual DbSet<Plan> Plans { get; set; }
@@ -324,6 +326,25 @@ public partial class ImaginkContext : DbContext
             entity.Property(e => e.ImgCreName).HasMaxLength(40);
             entity.Property(e => e.ImgTitle).HasMaxLength(100);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Follow>(entity =>
+        {
+            entity.HasKey(e => e.FollowId).HasName("PK__Follows__2CE8108E63737688");
+
+            entity.Property(e => e.FollowId).HasColumnName("FollowID");
+            entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Creator).WithMany(p => p.Follows)
+                .HasForeignKey(d => d.CreatorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Follows__Creator__68D28DBC");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Follows)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Follows__UserID__67DE6983");
         });
 
         modelBuilder.Entity<FriendList>(entity =>

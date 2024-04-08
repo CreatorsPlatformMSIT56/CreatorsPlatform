@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections;
 using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
-using static CreatorsPlatform.Controllers.HomeController;
+
 using static CreatorsPlatform.Controllers.yhuController;
 
 namespace CreatorsPlatform.Controllers
@@ -207,8 +207,6 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
