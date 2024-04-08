@@ -1,11 +1,4 @@
-﻿#AAA,
-#BBB,
-#CCC {
-    /* max-height: inherit; */
-    height: 40vh !important;
-}
-
-.listImg {
+﻿.listImg {
     height: 80px !important;
     width: 80px !important;
 }
@@ -33,4 +26,15 @@ h3 {
 .evtStatus {
     font-size: 3.5vh;
     display: inline-block;
+}
+
+.CreateEventBtn {
+    position: fixed;
+    right: 40px;
+    bottom: 50px;
+    width: 50px;
+    height: 50px;
+    background-color: #F8CE59;
+    border-radius: 25%;
+    z-index: 20;
 }

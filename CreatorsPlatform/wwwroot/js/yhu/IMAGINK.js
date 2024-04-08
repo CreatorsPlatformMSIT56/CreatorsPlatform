@@ -67,7 +67,7 @@ function WorkChanges(e) {
 			$("#Woklist3text").empty();
 			//---------------------------
 			$("#Woklist1img").append(
-				`<a class="dropdown-item"  href="/Creator/GetPost/${response[0].contentId != undefined ? response[0].contentId : ` `}">
+				`<a class="dropdown-item"  ${response[0].contentId != undefined ? `href="/Creator/GetPost/`+response[0].contentId : ` `}>
 					<div class="ToMiddle image-container">
 							 ${response[0].imageUrl != undefined ? `<img src="data:image/png;base64,${response[0].imageUrl}" class="d-block WorkImg" alt="eoijwpeifjsj"> ` :
 							`<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-brush d-block WorkImg" viewBox="0 0 16 16">
@@ -76,14 +76,14 @@ function WorkChanges(e) {
 				   </div>
 				 </a>
 				 <div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
-							<h5>${response[0].title != undefined ? response[0].title : ` `}</h5>
-							 <p>${response[0].uploadDate != undefined ? response[0].uploadDate : ` `}</p>
+							<h3 class="text-start fw-bold">${response[0].title != undefined ? response[0].title : ` `}</h5>
+							 <h5 class="text-end">${response[0].uploadDate != undefined ? response[0].uploadDate : ` `}</p>
 				</div> 
 				 `
 			);
 			//----------------------------
 			$("#Woklist2img").append(
-				`<a class="dropdown-item"  href="/Creator/GetPost/${response[1].contentId != undefined ? response[1].contentId : ` `}">
+				`<a class="dropdown-item"   ${response[1].contentId != undefined ? `href="/Creator/GetPost/` + response[1].contentId : ` `}>
 					<div class="ToMiddle image-container">
 							${response[1].imageUrl != undefined ? `<img src="data:image/png;base64,${response[1].imageUrl}" class="d-block WorkImg" alt="eoijwpeifjsj"> ` :
 							`<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-brush d-block WorkImg" viewBox="0 0 16 16" class="d-block WorkImg">
@@ -92,13 +92,13 @@ function WorkChanges(e) {
 					</div>
 				</a>
 				<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
-					<h5>${response[1].title != undefined ? response[1].title : ` `}</h5>
-					 <p>${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
+					<h3 class="text-start fw-bold">${response[1].title != undefined ? response[1].title : ` `}</h5>
+					 <h5 class="text-end">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
 				</div>`
 			);
 			//-----------------------------
 			$("#Woklist3img").append(
-				`<a class="dropdown-item"  href="/Creator/GetPost/${response[2].contentId != undefined ? response[2].contentId : ` `}">
+				`<a class="dropdown-item" ${response[2].contentId != undefined ? `href="/Creator/GetPost/${response[2].contentId}` : ` `}>
 					<div class="ToMiddle image-container">
 						${response[2].imageUrl != undefined ? `<img src="data:image/png;base64,${response[2].imageUrl}" class="d-block WorkImg" alt="eoijwpeifjsj"> ` :
 						`<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-brush d-block WorkImg" viewBox="0 0 16 16">
@@ -107,8 +107,8 @@ function WorkChanges(e) {
 					</div>
 				</a>
 				<div id="Woklist3text" class="carousel-caption d-none d-md-block TextDiv">
-					<h5>${response[2].title != undefined ? response[2].title : ` `}</h5>
-				    <p>${response[2].uploadDate != undefined ? response[2].uploadDate : ` `}</p>
+					<h3 class="text-start fw-bold">${response[2].title != undefined ? response[2].title : ` `}</h5>
+				    <h5 class="text-end">${response[2].uploadDate != undefined ? response[2].uploadDate : ` `}</p>
 				</div>`
 			);
 			ImgCssRest();

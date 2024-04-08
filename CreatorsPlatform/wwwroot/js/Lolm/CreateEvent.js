@@ -99,8 +99,9 @@ function PostAllToSQL() {
         method: "post",
         data: EventdataFromClient,
         success: function (response) {
-            UploadEventExImg();
+            UploadEventExImg();            
             alert("活動發布成功");
+            window.location.href = '../../../HotGuy/Index';
         },
         error: function (xhr, status, error) {
             // 處理錯誤 

@@ -32,7 +32,28 @@ namespace CreatorsPlatform.Controllers
         //{
         //    return View();
         //}
-
+        //臨時增加
+        public string MembersIcon(int x)
+        {
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select UserData.Avatar).FirstOrDefault();
+            string Avatar = Convert.ToBase64String(MembersIcon);
+            return Avatar;
+        }
+        public bool MembersOnline()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //
 
         // 新增存 id 的變數，並想把他丟到 View
         public async Task<IActionResult> EventContent(int? id)
@@ -51,12 +72,37 @@ namespace CreatorsPlatform.Controllers
             var TheEventData = await (from o in TheEventContext
                                       where o.EventId == id
                                       select o).OrderByDescending(n => n.EvtImgId).ToListAsync();
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View(TheEventData);
         }
 
         public IActionResult CreateEvent()
         {
-
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             return View();
         }
 
@@ -110,14 +156,15 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Create(Event EventModelData)
         {
             var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
-            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
-            if (NowCreatorId == null)
+            if (memberJson == null)
             {
                 return BadRequest(); // 返回錯誤狀態碼 400;
-            }
+            }        
             else
             {
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
+                var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+                
                 Event NewEvent = new Event
                 {
                     EventName = EventModelData.EventName,
@@ -297,7 +344,19 @@ namespace CreatorsPlatform.Controllers
             {
                 ViewBag.SampleImg = FindEventSampleImg;
             }
-
+            //
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+            //
             //FindEventResult.FindAll(a => a.EventImages.ImageSample == true).ToList();
             return View();
         }

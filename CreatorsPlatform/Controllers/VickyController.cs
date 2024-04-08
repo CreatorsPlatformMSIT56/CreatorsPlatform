@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Drawing.Printing;
 using Microsoft.CodeAnalysis.Options;
+using Newtonsoft.Json;
+using static CreatorsPlatform.Controllers.yhuController;
 
 
 namespace CreatorsPlatform.Controllers
@@ -17,8 +19,30 @@ namespace CreatorsPlatform.Controllers
 		{
 			_context = context;
 		}
+        //臨時增加
+        public string MembersIcon(int x)
+        {
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select UserData.Avatar).FirstOrDefault();
+            string Avatar = Convert.ToBase64String(MembersIcon);
+            return Avatar;
+        }
+        public bool MembersOnline()
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //
 
-		[HttpGet]
+        [HttpGet]
 		public IActionResult Search(string searchKey, int? subtitle, int page = 1, int pageSize = 3)
 		{
 			var workList = GetWorkList(searchKey, subtitle, page, pageSize);
@@ -59,9 +83,20 @@ namespace CreatorsPlatform.Controllers
 			ViewBag.subtitle_15 = CalculateSubtitleCount(15, searchKey);
 			ViewBag.subtitle_16 = CalculateSubtitleCount(16, searchKey);
 
-
-
-			return View(viewModel);
+			//
+            if (MembersOnline())
+            {
+                var memberJson = HttpContext.Session.GetString("key");
+                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                ViewBag.MembersIcon = MembersIcon(member.id);
+                ViewBag.MembersOnline = MembersOnline();
+            }
+            else
+            {
+                ViewBag.MembersOnline = MembersOnline();
+            };
+			//
+            return View(viewModel);
 		}
 
 		//Search的方法
