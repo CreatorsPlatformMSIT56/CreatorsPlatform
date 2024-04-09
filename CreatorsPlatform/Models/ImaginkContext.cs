@@ -330,7 +330,7 @@ public partial class ImaginkContext : DbContext
 
         modelBuilder.Entity<Follow>(entity =>
         {
-            entity.HasKey(e => e.FollowId).HasName("PK__Follows__2CE8108E63737688");
+            entity.HasKey(e => e.FollowId).HasName("PK__Follows__2CE8108E9A59BE23");
 
             entity.Property(e => e.FollowId).HasColumnName("FollowID");
             entity.Property(e => e.CreatorId).HasColumnName("CreatorID");
