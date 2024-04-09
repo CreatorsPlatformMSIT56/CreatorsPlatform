@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Buffers.Text;
 using System.Collections;
 using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
 using static CreatorsPlatform.Controllers.yhuController;
@@ -214,7 +215,7 @@ namespace CreatorsPlatform.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePost(Content content, IFormFile ImageFile)
+        public async Task<IActionResult> CreatePost(string Title, int? SubtitleId, string CategoryIdstring, string Description, string Imagebase64)
         {
 			// 取得 member 對應之 creatorId
 			var memberJson = HttpContext.Session.GetString("key");
@@ -227,21 +228,17 @@ namespace CreatorsPlatform.Controllers
 
 			if (ModelState.IsValid != null)
 			{
-				//if (content.ImageFile != null && content.ImageFile.Length > 0)
-				//{
-					
-				//	content.ImageUrl = content.ImageFile.ToArray();
-					
-				//}
+                byte[] imagebinaryData = Convert.FromBase64String(Imagebase64);
 
 				var Newcontent = new Content
 				{
-					Title = content.Title,
-					Description = content.Description,
-					ImageUrl = content.ImageUrl,
+					Title = Title,
+					Description = Description,
+					ImageUrl = imagebinaryData,
 					UploadDate = sDate,
-					Likes = 0,
-					SubtitleId = content.SubtitleId,
+					CategoryId = Convert.ToInt32(CategoryIdstring),
+                    Likes = 0,
+					SubtitleId = SubtitleId,
 					CreatorId = NowCreatorId,
 					/*PlanId = content.PlanId,*/ // AddPost沒放
 					PlanId = 3, // AddPost沒放 先隨便放
@@ -249,10 +246,11 @@ namespace CreatorsPlatform.Controllers
 				};
 
 				// 存 Content 進DB
-				_context.Contents.Add(content);
+				_context.Contents.Add(Newcontent);
 				await _context.SaveChangesAsync();
 
-				return RedirectToAction("/id?/Index");
+				//return Ok();
+				return RedirectToAction("Index", "Creator");
 			}
 			//ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
 			//

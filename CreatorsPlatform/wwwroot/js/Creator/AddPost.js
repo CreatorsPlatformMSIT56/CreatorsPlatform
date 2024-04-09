@@ -1,5 +1,5 @@
 ﻿var imageFileData = [];
-var uint8ArrayData = [];
+var base64Data = [];
 // 對應的大標到對應的中標
 $(document).ready(function () {
     $('#categorySelect').change(function () {
@@ -146,18 +146,20 @@ function NewPostToSQL() {
     //        PriceMax: $("#MaxCharge").val()
     //    };
     //}
-    console.log('uint8ArrayData[0]', typeof uint8ArrayData[0]);
-    console.log('Title', typeof $("#postTitle").val());
-    console.log('ImageUrl: ', typeof $("#ImageFile")[0].files[0]);
-    console.log('SubtitleId', SubNameToId);
-    console.log('Description', getQuillContent());
+
+    //console.log('uint8ArrayData[0]', typeof uint8ArrayData[0]);
+    //console.log('Title', typeof $("#postTitle").val());
+    //console.log('ImageUrl: ', typeof $("#ImageFile")[0].files[0]);
+    //console.log('SubtitleId', SubNameToId);
+    //console.log('Description', getQuillContent());
 
     var PostToData = {
         Title: $("#postTitle").val(), // 標題
-        CategoryId: $("#categorySelect").val(), // 主分類
+        CategoryIdstring: $("#categorySelect").val(), // 主分類
         SubtitleId: SubNameToId, // 子分類
-        /*ImagUrl: uint8ArrayData[0], // 圖片 (轉成8 bit array)*/
-        ImagUrl: $("#ImageFile")[0].files[0], // 圖片Test
+        /*ImageUrl: uint8ArrayData[0], // 圖片 (轉成8 bit array)*/
+        Imagebase64: base64Data[0],
+        //ImageFile: $("#ImageFile")[0].files[0], // 圖片Test
         Description: getQuillContent() // 作品描述
     }
     /*console.clear();*/
@@ -180,38 +182,40 @@ function NewPostToSQL() {
 function previewImage() {
     const fileInput = document.getElementById('ImageFile');
     const previewImage = document.getElementById('preview-ImageFile');
-
+    
     if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
         // 預覽圖片
         reader.onload = function (e) {
             previewImage.src = e.target.result;
 
-            // 轉換為 byte[]
-            const base64 = e.target.result.split(',')[1];
-            var uint8Array = base64ToUint8Array(base64);
-            console.log('uint8Array1: ', uint8Array);
-            uint8ArrayData.push(uint8Array);
+            // 先轉 base64 進後端 再轉換為 byte[]
+            var base64 = e.target.result.split(',')[1];
+            base64Data.push(base64);
+            console.log(base64Data);
+            //var uint8Array = base64ToUint8Array(base64);
+            //console.log('uint8Array1: ', uint8Array);
+            //uint8ArrayData.push(uint8Array);
         }
         reader.readAsDataURL(fileInput.files[0]);
     }
-    console.log('imageFileData: ', imageFileData);
-    console.log('uint8ArrayData: ', uint8ArrayData);
-    console.log('uint8ArrayData[0]: ', uint8ArrayData[0]);
+    //console.log('imageFileData: ', imageFileData);
+    //console.log('uint8ArrayData: ', uint8ArrayData);
+    //console.log('uint8ArrayData[0]: ', uint8ArrayData[0]);
 
 }
-function base64ToUint8Array(base64) {
-    // 使用 atob() 將 base64 字符串解碼為二進制字符串
-    const binaryString = atob(base64);
+//function base64ToUint8Array(base64) {
+//    // 使用 atob() 將 base64 字符串解碼為二進制字符串
+//    const binaryString = atob(base64);
 
-    // 創建一個 Uint8Array 並填充二進制數據
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
+//    // 創建一個 Uint8Array 並填充二進制數據
+//    const bytes = new Uint8Array(binaryString.length);
+//    for (let i = 0; i < binaryString.length; i++) {
+//        bytes[i] = binaryString.charCodeAt(i);
+//    }
 
-    return bytes;
-}
+//    return bytes;
+//}
 function getQuillContent() {
     // 拿到編輯器內容 Delta
     const QuillContent = quill.getContents();
