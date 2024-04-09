@@ -1,5 +1,5 @@
-﻿var imageDataURLs = [];
-
+﻿var imageFileData = [];
+var uint8ArrayData = [];
 // 對應的大標到對應的中標
 $(document).ready(function () {
     $('#categorySelect').change(function () {
@@ -146,14 +146,22 @@ function NewPostToSQL() {
     //        PriceMax: $("#MaxCharge").val()
     //    };
     //}
+    console.log('uint8ArrayData[0]', typeof uint8ArrayData[0]);
+    console.log('Title', typeof $("#postTitle").val());
+    console.log('ImageUrl: ', typeof $("#ImageFile")[0].files[0]);
+    console.log('SubtitleId', SubNameToId);
+    console.log('Description', getQuillContent());
+
     var PostToData = {
-        Title: $("#postTitle").val(),
-        SubtitleId: SubNameToId,
-        Description: getQuillContent()
+        Title: $("#postTitle").val(), // 標題
+        CategoryId: $("#categorySelect").val(), // 主分類
+        SubtitleId: SubNameToId, // 子分類
+        /*ImagUrl: uint8ArrayData[0], // 圖片 (轉成8 bit array)*/
+        ImagUrl: $("#ImageFile")[0].files[0], // 圖片Test
+        Description: getQuillContent() // 作品描述
     }
-
-    console.log(PostToData);
-
+    /*console.clear();*/
+    console.log('PostToData: ', PostToData);
     $.ajax({
         url: "/Creator/CreatePost",
         method: "post",
@@ -169,73 +177,41 @@ function NewPostToSQL() {
     });
 }
 
+function previewImage() {
+    const fileInput = document.getElementById('ImageFile');
+    const previewImage = document.getElementById('preview-ImageFile');
 
-// 將圖片轉成 dataURL
-//$("#ImageFile").change(function () {
-//    $("#preview-ImageFile").html(""); // 清除預覽
-//    readURL(this);
-//});
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        // 預覽圖片
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
 
-//function readURL(input) {
-//    if (input.files && input.files.length >= 0) {
-//        for (var i = 0; i < input.files.length; i++) {
-//            var reader = new FileReader();
-//            reader.onload = function (e) {
-//                var img = $("<img width='300' height='200'>").attr('src', e.target.result);
-//                $("#preview-ImageFile").append(img);
-//                // 将每张图片的DataURL存储在数组中
-//                imageDataURLs.push(e.target.result);
-//            }
-//            reader.readAsBinaryString(input.files[i]); // 讀成Binary
-//        }
-//        // 将存储多张图片的DataURL的数组传递给其他函数或发送到后端
-//        console.log(imageDataURLs);
-//    } else {
-//        var noPictures = $("<p>目前沒有圖片</p>");
-//        $("#preview-ImageFile").append(noPictures);
-//    }
-//}
+            // 轉換為 byte[]
+            const base64 = e.target.result.split(',')[1];
+            var uint8Array = base64ToUint8Array(base64);
+            console.log('uint8Array1: ', uint8Array);
+            uint8ArrayData.push(uint8Array);
+        }
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    console.log('imageFileData: ', imageFileData);
+    console.log('uint8ArrayData: ', uint8ArrayData);
+    console.log('uint8ArrayData[0]: ', uint8ArrayData[0]);
 
-//function readfile(input) {
-//    if (input.files && input.files.length >= 0) {
-//        for (var i = 0; i < input.files.length; i++) {
-//            var reader = new FileReader();
-//            reader.onload = function (e) {
-//                var img = $("<img width='300' height='200'>").attr('src', e.target.result);
-//                $("#preview-ImageFile").append(img);
-//                // 将每张图片的DataURL存储在数组中
-//                imageDataURLs.push(e.target.result);
-//            }
-//            reader.readAsBinaryString(input.files[i]); // 讀成Binary
-//        }
-//        // 将存储多张图片的DataURL的数组传递给其他函数或发送到后端
-//        console.log(imageDataURLs);
-//    } else {
-//        var noPictures = $("<p>目前沒有圖片</p>");
-//        $("#preview-ImageFile").append(noPictures);
-//    }
-//}
+}
+function base64ToUint8Array(base64) {
+    // 使用 atob() 將 base64 字符串解碼為二進制字符串
+    const binaryString = atob(base64);
 
-// 上傳多張圖片進後端
-//function sendImageDataURLsToBackend() {
-//    console.log(imageDataURLs);
-//    for (var i = 0; i < imageDataURLs.length; i++) {
-//        $.ajax({
-//            url: "/Creator/CreateContentExImg",
-//            method: "post",
+    // 創建一個 Uint8Array 並填充二進制數據
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
 
-//            data: {
-//                ImageURL: imageDataURLs[i],
-//            },
-//            success: function (response) {
-//            },
-//            error: function () {
-//                alert("作品圖片上傳失敗");
-//            }
-//        })
-//    }
-//}
-
+    return bytes;
+}
 function getQuillContent() {
     // 拿到編輯器內容 Delta
     const QuillContent = quill.getContents();

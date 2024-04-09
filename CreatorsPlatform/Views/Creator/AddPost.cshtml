@@ -7,22 +7,23 @@
 <h1>發布作品</h1>
 
 <div class="quillcontainer">
-    <form asp-action="CreatePost" asp-controller="Creator" method="post" enctype="multipart/form-data">
+    @* <form asp-action="CreatePost" asp-controller="Creator" method="post" enctype="multipart/form-data"> *@
+    <form enctype="multipart/form-data">
         <div class="form-group"> <!-- 類別與子類別選擇 -->
             <div class="row">
                 <div class="col form-group">
-                    <label asp-for="CategoryId" class="control-label font-weight-bold">
+                    <label for="CategoryId" class="control-label font-weight-bold">
                         類別<span class="text-danger ml-1"> *</span>
                     </label>
-                    <select id="categorySelect" asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
+                    <select id="categorySelect" for="CategoryId" asp-items="ViewBag.CategoryId" class="form-select">
                         <option selected>請選擇類別</option>
                     </select>
                 </div>
                 <div class="col">
-                    <label asp-for="SubtitleId" class="control-label font-weight-bold">
+                    <label for="SubtitleId" class="control-label font-weight-bold">
                         子類別
                     </label>
-                    <select asp-for="SubtitleId" id="subtitleSelect" class="form-select">
+                    <select for="SubtitleId" id="subtitleSelect" class="form-select">
                         <option selected>請選擇子類別</option>
                         @* <option value="4">插畫</option>
                         <option value="5">塗鴉</option>
@@ -33,28 +34,28 @@
         </div>
         <!-- 上傳圖像(先一張) -->
         <div class="form-group"> 
-            <label asp-for="ImageFile" for="ImageFile" class="font-weight-bold">
+            <label class="font-weight-bold">
                 上傳圖片<span class="text-danger ml-1"> *</span>
             </label>
-            <input asp-for="ImageFile" type="file" id="ImageFile" name="ImageFile" />
-            <div class="PreviewImgWarp"><img id="preview-ImageFile" src="#"/></div>
+            <input type="file" id="ImageFile" name="ImageFile" onchange="previewImage()" />
+            <div class="PreviewImgWarp"><img id="preview-ImageFile" src="#" alt="" style="max-width: 300px"/></div>
             @* <img id="post-img" src="#" alt="" /> *@
         </div>
         <!-- 上傳圖像(先一張) END -->
         <div class="form-group">
-            <label asp-for="Title" class="form-label">
+            <label for="Title" class="form-label">
                 標題<span class="text-danger ml-1"> *</span>
             </label>
-            <input asp-for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
+            <input for="Title" type="text" class="form-control" placeholder="請輸入標題" id="postTitle">
         </div>
         <div class="form-group">
-            <label asp-for="Description">作品描述<span class="text-danger ml-1"> *</span></label>
+            <label for="Description">作品描述<span class="text-danger ml-1"> *</span></label>
             <!-- Quill Editor Start -->
             <div id="editor"></div>
             <!-- Quill Editor End -->
         </div>
         <!-- 放置Quill內容 -->
-        <input asp-for="Description" type="hidden" id="quill-content" name="Quill-content" />
+        <input for="Description" type="hidden" id="quill-content" name="Quill-content" />
         <!-- 放置Quill內容END -->
         <!-- 預計放Tags -->
         <div class="form-group">
@@ -80,7 +81,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary" id="confirm-btn" @* onclick="NewPostToSQL()" *@>確認</button><!-- 還要串出去 -->
+                        <button @* type="submit" *@ class="btn btn-primary" id="confirm-btn" onclick="NewPostToSQL()">確認</button><!-- 還要串出去 -->
                     </div>
                 </div>
             </div>
@@ -106,6 +107,7 @@
         </div>
     </div>
 </div> *@
+
 <!-- 自訂 js -->
 @* <script>
     $(function () {
@@ -131,6 +133,7 @@
             }
         }
 </script> *@
+
 <script>
     var submitModal = document.getElementById('submitModal')
     var submitInput = document.getElementById('submitInput')
@@ -140,42 +143,7 @@
     })
 </script>
 
-<script>
-//     // 對應的大標到對應的中標
-//     $(document).ready(function () {
-//         // 獲取主分類和子分類的資料
-//         var categories = @Html.Raw(Json.Serialize(ViewData["CategoryId"]));
-//         var subtitles = @Html.Raw(Json.Serialize(ViewData["SubtitleId"]));
-//         console.log(categories);
-//         console.log(subtitles);
 
-
-        
-
-
-//         // 監聽主分類選擇變化
-//         $('#categorySelect').on('change', function () {
-//             var selectedCategoryId = $(this).val();
-//             console.log(this);
-//             console.log(selectedCategoryId);
-
-//             // 根據選擇的主分類 ID 更新子分類下拉式選單
-//             $('#subtitleSelect').empty();
-//             $('#subtitleSelect').append('<option value="">請選擇子類別!</option>');
-//             $.each(subtitles, function (i, subtitle) {
-//                 // console.log(i);
-//                 // console.log(subtitle);
-//                 // console.clear();
-//                 console.log(subtitle);
-//                 console.log(subtitle.value);
-//                 if (subtitle.value === selectedCategoryId) {
-                    
-//                     $('#subtitleSelect').append('<option value="' + subtitle.value + '">' + subtitle.text + '</option>');
-//                 }
-//             });
-//         });
-//     });
-// </script>
 <script src="~/js/Creator/AddPost.js"></script>
 
 
