@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CreatorsPlatform.Models;
 
 public partial class Content
 {
+    [NotMapped]
+    public string? ImageFile { get; set; }
     public int ContentId { get; set; }
 
     public string Title { get; set; } = null!;

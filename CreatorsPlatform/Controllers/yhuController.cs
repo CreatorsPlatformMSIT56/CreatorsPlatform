@@ -396,6 +396,7 @@ namespace CreatorsPlatform.Controllers
 
             if (memberJson != null)
             {
+                // 如果用戶從沒follow作者過
                 if (SubFollow == 0)
                 {
                     Follow follow = new Follow
@@ -414,7 +415,16 @@ namespace CreatorsPlatform.Controllers
                 }
                 else
                 {
-                    Console.WriteLine("以追蹤");
+                    // 如果用戶取關作者 把關注加回去 夠貼心吧
+                    if (_context.Follows.Any(f => f. UserId == subPay.UserId && f.CreatorId == subPay.CreatorId && f.Unfollow == true))
+                    {
+                        var FollowChange = _context.Follows.SingleOrDefault(f => f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId && f.Unfollow == true);
+                        FollowChange.Unfollow = false;
+                        _context.Update(FollowChange);
+                        _context.SaveChanges();
+                    }
+
+                    Console.WriteLine("已追蹤");
                 }
 
                 Console.WriteLine("我要進來囉");
