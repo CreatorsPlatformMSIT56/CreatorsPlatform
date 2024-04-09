@@ -405,7 +405,7 @@ namespace CreatorsPlatform.Controllers
                 //var NowPostPlanLevel = _context.Plans.FirstOrDefault(e => e.PlanId == content.PlanId).PlanLevel;
                 //if (SubOrNot || NowPostPlanLevel> UserPlanLevel)
                 //{
-                //    return View("Index");
+                //    return RedirectToAction("Index");
                 //}
             }
             else
@@ -413,7 +413,7 @@ namespace CreatorsPlatform.Controllers
                 //判斷用戶是否具備足夠權限觀看
                 //if (content.PlanId != null)
                 //{
-                //    return View("Index");
+                //    return RedirectToAction("Index");
                 //}
 
                 ViewBag.MembersOnline = MembersOnline();
