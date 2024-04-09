@@ -23,7 +23,7 @@ function MessagUpdata(UserCurrentMsgtype){
                             `<li>
                     <a class="dropdown-item" href="/Creator/GetPost/${response[cont].contentId}">
                     <div class="mb-3">
-                    <h5 class="fw-bold">${response[cont].title}</h5>
+                    <h5 class="fw-bold TextWarp">${response[cont].title}</h5>
                 
                     <div class="image-container">
                             <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
@@ -48,19 +48,19 @@ function MessagUpdata(UserCurrentMsgtype){
                     response.forEach(function () {
                         $('#Messages').append(
                             `<li>
-                    <a class="dropdown-item"  href="/Creator/GetPost/${response[cont].contentId}">
+                    <a class="dropdown-item"  href="/Creator/GetPost/${response[cont].content.contentId}">
                     <div class="mb-3">
-                    <h5 class="fw-bold">${response[cont].title}</h5>
+                    <h5 class="fw-bold TextWarp">${response[cont].content.title}</h5>
                   
                     <div class ="image-container">
-                          <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                          <img class="image-containerImg" src="data:image/png;base64,${response[cont].content.imageUrl}" alt="">
                     </div>                
                             <div class="row">
                                 <div class="col-md-6">
                                     <h5 class="fw-bold">by :${response[cont].userName}</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="text-end">${response[cont].uploadDate}</p>
+                                    <p class="text-end">${response[cont].content.uploadDate}</p>
                                 </div>
                             </div>
                     </div>
@@ -85,7 +85,7 @@ function MessagUpdata(UserCurrentMsgtype){
                             `<li>
                             <a class="dropdown-item" href="/Lolm/EventContent/${response[cont].eventId}">
                               <div class="mb-3">
-                                  <h3>${response[cont].eventName}</h3>
+                                  <h3 class = "TextWarp">${response[cont].eventName}</h3>
                                    <div id="content${cont}"></div>
                                   <div class ="image-container">
                                            <img class="image-containerImg" src="${response[cont].banner}" alt="">

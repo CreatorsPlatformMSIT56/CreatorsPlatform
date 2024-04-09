@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CreatorsPlatform.Models;
 
@@ -16,8 +15,8 @@ public partial class Content
 
     public DateTime? PullOffDate { get; set; }
     // 為了拿到圖片檔案
-    //[NotMapped]
-    //public string? ImageFile { get; set; }
+    [NotMapped]
+    public IFormFile? ImageFile { get; set; }
     public byte[]? ImageUrl { get; set; }
 
     public int? Likes { get; set; }
