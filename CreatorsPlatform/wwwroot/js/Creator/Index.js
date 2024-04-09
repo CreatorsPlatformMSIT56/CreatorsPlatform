@@ -5,14 +5,14 @@ function Follow() {
         window.location.href = '../../../yhu/Login';
     } else {
         $(".FollowBtn").prop("style", "display:none;");
-        $(".NameAndFollow").append('<button class="btn ms-3 btn-primary UnFollowBtn" onclick="UnFollow()">關注中</button>');
+        $(".UnFollowBtn").prop("style", "display:block;");
         FollowAjax();
     }
 }
 
 function UnFollow() {
     $(".UnFollowBtn").prop("style", "display:none;");
-    $(".NameAndFollow").append('<button class="btn ms-3 FollowBtn" onclick="Follow()">關注</button>');
+    $(".FollowBtn").prop("style", "display:block;");
     FollowAjax();
 }
 

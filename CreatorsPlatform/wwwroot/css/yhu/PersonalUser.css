@@ -60,3 +60,7 @@ ol {
         height: 100%; /* 图像高度填充容器 */
         object-fit: cover; /* 保持原始比例，填充容器 */
     }
+
+.TextWarp {
+    white-space: normal;
+}
