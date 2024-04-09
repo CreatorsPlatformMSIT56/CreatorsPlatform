@@ -150,7 +150,8 @@ namespace CreatorsPlatform.Controllers
             else
             {
                 ViewBag.UnFollow = true;
-                ViewBag.MembersOnline = MembersOnline();                
+				ViewBag.CreatorId = id;
+				ViewBag.MembersOnline = MembersOnline();                
             };
             //
             return View(viewModel);

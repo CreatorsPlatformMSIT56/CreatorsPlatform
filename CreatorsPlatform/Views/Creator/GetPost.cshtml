@@ -45,9 +45,11 @@
                     @if (ViewBag.UnFollow == true)
                     {
                         <button class="btn FollowBtn" onclick="Follow()">關注</button>
+                        <button class="btn btn-primary UnFollowBtn" onclick="UnFollow()" style="display: none;">關注中</button>
                     }
                     else
                     {
+                        <button class="btn FollowBtn" onclick="Follow()" style="display: none;">關注</button>
                         <button class="btn btn-primary UnFollowBtn" onclick="UnFollow()">關注中</button>
                     }
                 </div>
