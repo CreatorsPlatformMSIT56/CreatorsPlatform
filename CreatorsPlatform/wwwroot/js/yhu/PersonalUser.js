@@ -23,7 +23,7 @@ function MessagUpdata(UserCurrentMsgtype){
                             `<li>
                     <a class="dropdown-item" href="/Creator/GetPost/${response[cont].contentId}">
                     <div class="mb-3">
-                    <h5 class="fw-bold">${response[cont].title}</h5>
+                    <h5 class="fw-bold TextWarp">${response[cont].title}</h5>
                 
                     <div class="image-container">
                             <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
@@ -50,7 +50,7 @@ function MessagUpdata(UserCurrentMsgtype){
                             `<li>
                     <a class="dropdown-item"  href="/Creator/GetPost/${response[cont].content.contentId}">
                     <div class="mb-3">
-                    <h5 class="fw-bold">${response[cont].content.title}</h5>
+                    <h5 class="fw-bold TextWarp">${response[cont].content.title}</h5>
                   
                     <div class ="image-container">
                           <img class="image-containerImg" src="data:image/png;base64,${response[cont].content.imageUrl}" alt="">
@@ -85,7 +85,7 @@ function MessagUpdata(UserCurrentMsgtype){
                             `<li>
                             <a class="dropdown-item" href="/Lolm/EventContent/${response[cont].eventId}">
                               <div class="mb-3">
-                                  <h3>${response[cont].eventName}</h3>
+                                  <h3 class = "TextWarp">${response[cont].eventName}</h3>
                                    <div id="content${cont}"></div>
                                   <div class ="image-container">
                                            <img class="image-containerImg" src="${response[cont].banner}" alt="">

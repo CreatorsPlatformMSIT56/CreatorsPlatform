@@ -483,10 +483,29 @@ namespace CreatorsPlatform.Controllers
 				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
+
+
+				// 如果有登入，傳登入的資料過去
+				ViewBag.CreatorId = commission.CreatorId;
+				ViewBag.UserId = member.id;
+				// 傳是否有追蹤過去
+				var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+				if (Follow)
+				{
+					var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+					ViewBag.UnFollow = TheFollow;
+				}
+				else
+				{
+					ViewBag.UnFollow = true;
+				}
 			}
 			else
 			{
 				ViewBag.MembersOnline = MembersOnline();
+				ViewBag.UserId = 0;
+				ViewBag.UnFollow = true;
+				ViewBag.CreatorId = commission.CreatorId;
 			};
 			//
 			return View(viewModel);
