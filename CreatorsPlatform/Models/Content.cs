@@ -14,9 +14,7 @@ public partial class Content
     public DateTime? UploadDate { get; set; }
 
     public DateTime? PullOffDate { get; set; }
-    // 為了拿到圖片檔案
-    //[NotMapped]
-    //public IFormFile? ImageFile { get; set; }
+
     public byte[]? ImageUrl { get; set; }
 
     public int? Likes { get; set; }
