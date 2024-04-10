@@ -99,6 +99,7 @@ html {
     margin: 0;
     padding: 0;
     display: none !important;
+    z-index: 5;
 }
 
     #MemberSection:hover > .MemberDropdownList,
