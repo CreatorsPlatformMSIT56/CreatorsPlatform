@@ -491,8 +491,9 @@ namespace CreatorsPlatform.Controllers
                 }).ToList();
 
             var commissionsWithWords = (from c in _context.CommissionWithImageAndWords
-                                        where c.CreatorId == id
+                                        where c.CreatorId == id // 目前發現此id是對應到網址輸入為cmsID
                                         group c by c.Title into g
+                                        //select g.OrderBy(x => x.CommissionId).First());
                                         select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
 
             var viewModel = new CommissionDetailsViewModel
