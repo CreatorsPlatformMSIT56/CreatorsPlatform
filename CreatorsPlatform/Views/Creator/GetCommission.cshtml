@@ -177,7 +177,7 @@
 			<div class="row">
 				<h4 class="mt-2">委託說明: </h4>
 				<p>@Model.Commission?.FirstOrDefault()?.Description</p>
-				<button class="btn bg-success" style="color:white">我要委託</button> <!-- 先寫死 -->
+				<a asp-action="EntrustPayment" asp-controller="yhu" asp-route-id="@Model.Commission?.FirstOrDefault()?.CommissionId" class="btn bg-success" style="color:white">我要委託</a> <!-- 先寫死 -->
 			</div>
 		</div>
 	</div>
