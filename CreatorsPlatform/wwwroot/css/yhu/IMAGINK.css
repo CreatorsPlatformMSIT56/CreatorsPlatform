@@ -37,6 +37,11 @@
     height: 100%; /* 图像高度填充容器 */
     object-fit: cover; /* 保持原始比例，填充容器 */
 }
+.EveImg {
+    width: 100%; /* 图像宽度填充容器 */
+    height: 100%; /* 图像高度填充容器 */
+    object-fit: cover; /* 保持原始比例，填充容器 */
+}
 
 .ToMiddle {
     display: flex;
