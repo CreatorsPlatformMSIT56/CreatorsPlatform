@@ -111,7 +111,7 @@ namespace CreatorsPlatform.Controllers
                                SubtitleId = c.SubtitleId,
                                SubtitleName = s.SubtitleName,
                                CreatorId = c.CreatorId,
-                               PlanId = c.PlanId,
+                               PlanId = (int)c.PlanId,
                            };
 
 
@@ -254,8 +254,9 @@ namespace CreatorsPlatform.Controllers
 				_context.Contents.Add(Newcontent);
 				await _context.SaveChangesAsync();
 
-				//return Ok();
-				return RedirectToAction("Index", "Creator");
+                return RedirectToAction("Index", "Creator");
+
+                //return Ok();
 			}
 			//ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
 			//
@@ -272,8 +273,9 @@ namespace CreatorsPlatform.Controllers
 			};
 			// return RedirectToAction("Index");
 			// return View(content);
-			return Ok();
-		}
+			//return Ok();
+            return RedirectToAction("Index", "Creator");
+        }
 
         // 創作者貼文頁面
         public class ContentDetailsViewModel
@@ -364,7 +366,7 @@ namespace CreatorsPlatform.Controllers
                                SubtitleId = c.SubtitleId,
                                SubtitleName = s.SubtitleName,
                                CreatorId = c.CreatorId,
-                               PlanId = c.PlanId,
+                               PlanId = (int)c.PlanId,
                            };
 
             // 整合取得的資料
@@ -625,14 +627,6 @@ namespace CreatorsPlatform.Controllers
 			//
 			return View();
 		}
-		public IActionResult Test()
-		{
-			return View();
-		}
-		[HttpPost]
-		public IActionResult TestAjax() { 
-			return Ok();
-		}
-
+		
 	}
 }
