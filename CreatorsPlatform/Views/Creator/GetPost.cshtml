@@ -80,7 +80,7 @@
                                 <p class="card-text mb-2">
                                     @e.Comment1
                                 </p>
-                                <p class="card-text"><small class="text-muted">留言時間</small></p>
+                                @* <p class="card-text"><small class="text-muted">留言時間</small></p> *@
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
-                <h3>訂閱方案: </h3>
+                <h3 class="mt-2">訂閱方案: </h3>
                 @foreach (var e in Model.Plans)
                 {
                     <div class="col-12">
