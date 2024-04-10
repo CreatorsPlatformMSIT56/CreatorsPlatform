@@ -380,8 +380,12 @@ namespace CreatorsPlatform.Controllers
                 ContentTagsModel = contentTags.ToList(),
                 Contents = contents.ToList()
             };
-            //
-            if (MembersOnline())
+
+
+			// 傳作品作者id到前端
+			ViewBag.CreatorId = content.CreatorId;
+
+			if (MembersOnline())
             {
                 var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
@@ -389,6 +393,7 @@ namespace CreatorsPlatform.Controllers
                 ViewBag.MembersOnline = MembersOnline();
 
                 ViewBag.UserId = member.id;
+                
                 // 如果有登入，把檢查是否追蹤結果傳到前端
                 var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
                 if (Follow)
