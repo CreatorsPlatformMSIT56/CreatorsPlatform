@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Buffers.Text;
 using System.Collections;
 using static CreatorsPlatform.Controllers.CreatorController.CreatorDetailsViewModel;
-using static CreatorsPlatform.Controllers.HomeController;
 using static CreatorsPlatform.Controllers.yhuController;
 
 namespace CreatorsPlatform.Controllers
@@ -61,7 +61,7 @@ namespace CreatorsPlatform.Controllers
         {
             public string? Title { get; set; }
             public string? TagName { get; set; }
-            public int TagId {  get; set; }
+            public int TagId { get; set; }
         }
         public class CreatorDetailsViewModel
         {
@@ -79,7 +79,7 @@ namespace CreatorsPlatform.Controllers
         public IActionResult Index(int id)
         {
             //var memberJson = HttpContext.Session.GetString("key");
-            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);                
 
             var creator = _context.Creators
                 .Include(c => c.Users)
@@ -99,8 +99,9 @@ namespace CreatorsPlatform.Controllers
                            join s in _context.Subtitles
                            on c.SubtitleId equals s.SubtitleId
                            where c.CreatorId == id
+                           orderby c.UploadDate descending
                            select new ContentsModel
-                           { 
+                           {
                                ContentId = c.ContentId,
                                Title = c.Title,
                                Description = c.Description,
@@ -111,10 +112,10 @@ namespace CreatorsPlatform.Controllers
                                SubtitleId = c.SubtitleId,
                                SubtitleName = s.SubtitleName,
                                CreatorId = c.CreatorId,
-                               PlanId = c.PlanId,
+                               PlanId = (int)c.PlanId,
                            };
 
-            
+
 
 
             var viewModel = new CreatorDetailsViewModel
@@ -125,28 +126,86 @@ namespace CreatorsPlatform.Controllers
                 CommissionsWithWords = commissionsWithWords,
                 ContentsModel = contents.ToList()
             };
-            //
+
+            // 傳訂閱層級(Plan)到前端
+            var CreatorPlan = _context.Plans.Where(e => e.CreatorId == id).ToList();
+            ViewBag.CreatorPlan = CreatorPlan;
+
             if (MembersOnline())
             {
                 var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
+
+                // 如果有登入，傳登入的資料過去
+                ViewBag.UserId = member.id;
+                ViewBag.CreatorId = id;
+                // 如果有登入，把檢查是否追蹤結果傳到前端
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                if (Follow)
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    ViewBag.UnFollow = TheFollow;
+                }
+                else
+                {
+                    ViewBag.UnFollow = true;
+                }
             }
             else
             {
+                ViewBag.UnFollow = true;
+                ViewBag.CreatorId = id;
                 ViewBag.MembersOnline = MembersOnline();
             };
             //
             return View(viewModel);
         }
+        // 關注功能
+        [HttpPost]
+        public string FollowCreator(int TheUserId, int TheCreatorId)
+        {
+            // 如果已經存在資料表裡
+            var result = _context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId);
+            if (result)
+            {
+                // 取關就關注，關注就取關
+                if (_context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == true))
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == true);
+                    TheFollow.Unfollow = false;
+                    _context.Follows.Update(TheFollow);
+                }
+                else
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == false);
+                    TheFollow.Unfollow = true;
+                    _context.Follows.Update(TheFollow);
+                }
+            }
+            // 沒有就new一個加關注
+            else
+            {
+                Follow NewFollow = new Follow
+                {
+                    UserId = TheUserId,
+                    CreatorId = TheCreatorId,
+                    Unfollow = false
+                };
+                _context.Follows.Add(NewFollow);
+            }
+            _context.SaveChanges();
+            return "OK";
+        }
+
 
         // 創作者建立貼文(修改位置待訂)
         [HttpGet]
         public async Task<IActionResult> AddPost()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-          //
+            //
             if (MembersOnline())
             {
                 var memberJson = HttpContext.Session.GetString("key");
@@ -162,62 +221,61 @@ namespace CreatorsPlatform.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(Content content, IFormFile ImageFile)
+        public async Task<IActionResult> CreatePost(string Title, int? SubtitleId, string CategoryIdstring, string Description, string Imagebase64)
         {
-            // 取得 member 對應之 creatorId
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-            int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+			// 取得 member 對應之 creatorId
+			var memberJson = HttpContext.Session.GetString("key");
+			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
 
             // 發布時間在這邊取得並轉換成資料庫要的型態
             var sDate = DateTime.Now;
             DateOnly ssDate = DateOnly.FromDateTime(sDate);
 
-            var Newcontent = new Content {
-                Title = content.Title,
-                Description = content.Description,
-                UploadDate = sDate,
-                //ImageUrl = , // 要轉二進制
-                Likes = 0,
-                SubtitleId = content.SubtitleId,
-                CreatorId = NowCreatorId,
-                PlanId = content.PlanId, // AddPost沒放
+			if (ModelState.IsValid != null)
+			{
+                byte[] imagebinaryData = Convert.FromBase64String(Imagebase64);
 
-            };
+				var Newcontent = new Content
+				{
+					Title = Title,
+					Description = Description,
+					ImageUrl = imagebinaryData,
+					UploadDate = sDate,
+					CategoryId = Convert.ToInt32(CategoryIdstring),
+                    Likes = 0,
+					SubtitleId = SubtitleId,
+					CreatorId = NowCreatorId,
+					/*PlanId = content.PlanId,*/ // AddPost沒放
+					PlanId = 3, // AddPost沒放 先隨便放
 
-            if (ModelState.IsValid)
-            {
-                if (ImageFile != null && ImageFile.Length > 0)
-                {
-                    using (var stream = new MemoryStream())
-                    {
-                        await ImageFile.CopyToAsync(stream);
-                        content.ImageUrl = stream.ToArray();
-                    }
+				};
 
-                    // 存 Content 進DB
-                    _context.Contents.Add(content);
-                    await _context.SaveChangesAsync();
+				// 存 Content 進DB
+				_context.Contents.Add(Newcontent);
+				await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index");
-                }
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            //
-            if (MembersOnline())
-            {
-                //var memberJson = HttpContext.Session.GetString("key");
-                //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-                ViewBag.MembersIcon = MembersIcon(member.id);
-                ViewBag.MembersOnline = MembersOnline();
-            }
-            else
-            {
-                ViewBag.MembersOnline = MembersOnline();
-            };
-            //
-            return View(content);
+                return RedirectToAction("Index", "Creator");
+
+                //return Ok();
+			}
+			//ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+			//
+			if (MembersOnline())
+			{
+				//var memberJson = HttpContext.Session.GetString("key");
+				//MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				ViewBag.MembersIcon = MembersIcon(member.id);
+				ViewBag.MembersOnline = MembersOnline();
+			}
+			else
+			{
+				ViewBag.MembersOnline = MembersOnline();
+			};
+			// return RedirectToAction("Index");
+			// return View(content);
+			//return Ok();
+            return RedirectToAction("Index", "Creator");
         }
 
         // 創作者貼文頁面
@@ -297,6 +355,7 @@ namespace CreatorsPlatform.Controllers
                            join s in _context.Subtitles
                            on c.SubtitleId equals s.SubtitleId
                            where c.CreatorId == content.CreatorId
+                           orderby c.UploadDate descending
                            select new ContentsModel
                            {
                                ContentId = c.ContentId,
@@ -309,7 +368,7 @@ namespace CreatorsPlatform.Controllers
                                SubtitleId = c.SubtitleId,
                                SubtitleName = s.SubtitleName,
                                CreatorId = c.CreatorId,
-                               PlanId = c.PlanId,
+                               PlanId = (int)c.PlanId,
                            };
 
             // 整合取得的資料
@@ -321,83 +380,120 @@ namespace CreatorsPlatform.Controllers
                 ContentTagsModel = contentTags.ToList(),
                 Contents = contents.ToList()
             };
-            //
-            if (MembersOnline())
+
+
+			// 傳作品作者id到前端
+			ViewBag.CreatorId = content.CreatorId;
+
+			if (MembersOnline())
             {
                 var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
+
+                ViewBag.UserId = member.id;
+                
+                // 如果有登入，把檢查是否追蹤結果傳到前端
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                if (Follow)
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    ViewBag.UnFollow = TheFollow;
+                }
+                else
+                {
+                    ViewBag.UnFollow = true;
+                }
+
+                //判斷用戶是否具備足夠權限觀看
+                //DateOnly currentDateOnly = DateOnly.FromDateTime(DateTime.Today);
+                //var SubOrNot = _context.Subscriptions.Any(e => e.UserId == member.id && e.CreatorId == content.CreatorId && e.EndDate > currentDateOnly);
+                //var SubLevelHigh = _context.Subscriptions.FirstOrDefault(e => e.UserId == member.id && e.CreatorId == content.CreatorId && e.EndDate > currentDateOnly).PlanId;
+                //var UserPlanLevel = _context.Plans.FirstOrDefault(e => e.PlanId == SubLevelHigh).PlanLevel;
+                //var NowPostPlanLevel = _context.Plans.FirstOrDefault(e => e.PlanId == content.PlanId).PlanLevel;
+                //if (SubOrNot || NowPostPlanLevel> UserPlanLevel)
+                //{
+                //    return RedirectToAction("Index");
+                //}
             }
             else
             {
+                //判斷用戶是否具備足夠權限觀看
+                //if (content.PlanId != null)
+                //{
+                //    return RedirectToAction("Index");
+                //}
+
                 ViewBag.MembersOnline = MembersOnline();
+                ViewBag.UserId = 0;
+                ViewBag.UnFollow = true;
             };
             //
             return View(viewModel);
         }
 
 
-		//----------------------------------------------------------------
-		//委託貼文頁面
-		public class CommissionDetailsViewModel
-		{
-			public IEnumerable<Commission>? Commission { get; set; }
-			public IEnumerable<Plan>? Plans { get; set; }
-			public IEnumerable<Comment>? Comments { get; set; }
+        //----------------------------------------------------------------
+        //委託貼文頁面
+        public class CommissionDetailsViewModel
+        {
+            public IEnumerable<Commission>? Commission { get; set; }
+            public IEnumerable<Plan>? Plans { get; set; }
+            public IEnumerable<Comment>? Comments { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
         }
 
         public IActionResult GetCommission(int id = 1)
-		{
-			var commission = _context.Commissions
-				.Include(c => c.Creator)
-				.ThenInclude(cr => cr.Users)
-				.Include(c => c.Subtitle)
-				.Include(c => c.CommissionImages)
-				.FirstOrDefault(c => c.CommissionId == id);
+        {
+            var commission = _context.Commissions
+                .Include(c => c.Creator)
+                .ThenInclude(cr => cr.Users)
+                .Include(c => c.Subtitle)
+                .Include(c => c.CommissionImages)
+                .FirstOrDefault(c => c.CommissionId == id);
 
-			var comments = _context.Comments
-				.Include(u => u.User)
-				.Where(c => c.UserId == id)
-				.Select(cm => new Comment
-				{
-					Comment1 = cm.Comment1,
-					ContentId = cm.CommentId,
-					User = new User
-					{
-						UserId = cm.UserId,
-						UserName = cm.User.UserName,
-						Avatar = cm.User.Avatar
-					}
-				}).ToList();
+            var comments = _context.Comments
+                .Include(u => u.User)
+                .Where(c => c.UserId == id)
+                .Select(cm => new Comment
+                {
+                    Comment1 = cm.Comment1,
+                    ContentId = cm.CommentId,
+                    User = new User
+                    {
+                        UserId = cm.UserId,
+                        UserName = cm.User.UserName,
+                        Avatar = cm.User.Avatar
+                    }
+                }).ToList();
 
-			var plans = _context.Plans
-				.Include(p => p.Creator)
-				.ThenInclude(c => c.Users)
-				.Select(p => new Plan
-				{
-					PlanId = p.PlanId,
-					CreatorId = p.CreatorId,
-					PlanName = p.PlanName,
-					PlanPrice = p.PlanPrice,
-					PlanLevel = p.PlanLevel,
-					Creator = new Creator
-					{
-						CreatorId = p.Creator.CreatorId,
-						Users = p.Creator.Users.Select(u => new User
-						{
-							UserId = u.UserId,
-							UserName = u.UserName,
-							Avatar = u.Avatar
-						}).ToList()
-					}
-				}).ToList();
+            var plans = _context.Plans
+                .Include(p => p.Creator)
+                .ThenInclude(c => c.Users)
+                .Select(p => new Plan
+                {
+                    PlanId = p.PlanId,
+                    CreatorId = p.CreatorId,
+                    PlanName = p.PlanName,
+                    PlanPrice = p.PlanPrice,
+                    PlanLevel = p.PlanLevel,
+                    Creator = new Creator
+                    {
+                        CreatorId = p.Creator.CreatorId,
+                        Users = p.Creator.Users.Select(u => new User
+                        {
+                            UserId = u.UserId,
+                            UserName = u.UserName,
+                            Avatar = u.Avatar
+                        }).ToList()
+                    }
+                }).ToList();
 
             var commissionsWithWords = (from c in _context.CommissionWithImageAndWords
-                                       where c.CreatorId == id
-                                       group c by c.Title into g
-                                       select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
+                                        where c.CreatorId == id
+                                        group c by c.Title into g
+                                        select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
 
             var viewModel = new CommissionDetailsViewModel
             {
@@ -413,18 +509,37 @@ namespace CreatorsPlatform.Controllers
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
+
+
+                // 如果有登入，傳登入的資料過去
+                ViewBag.CreatorId = commission.CreatorId;
+                ViewBag.UserId = member.id;
+                // 傳是否有追蹤過去
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                if (Follow)
+                {
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    ViewBag.UnFollow = TheFollow;
+                }
+                else
+                {
+                    ViewBag.UnFollow = true;
+                }
             }
             else
             {
                 ViewBag.MembersOnline = MembersOnline();
+                ViewBag.UserId = 0;
+                ViewBag.UnFollow = true;
+                ViewBag.CreatorId = commission.CreatorId;
             };
             //
             return View(viewModel);
-		}
+        }
 
 
-		// 創作者建立接受委託表單(修改位置待訂)
-		public IActionResult AddCommisionForm()
+        // 創作者建立接受委託表單(修改位置待訂)
+        public IActionResult AddCommisionForm()
         {
             //
             if (MembersOnline())
@@ -501,23 +616,24 @@ namespace CreatorsPlatform.Controllers
         }
 
 
-        // 創作者編輯訂閱方案
-        public IActionResult EditSubscriptionPlans()
-        {
-            //
-            if (MembersOnline())
-            {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-                ViewBag.MembersIcon = MembersIcon(member.id);
-                ViewBag.MembersOnline = MembersOnline();
-            }
-            else
-            {
-                ViewBag.MembersOnline = MembersOnline();
-            };
-            //
-            return View();
-        }
-    }
+		// 創作者編輯訂閱方案
+		public IActionResult EditSubscriptionPlans()
+		{
+			//
+			if (MembersOnline())
+			{
+				var memberJson = HttpContext.Session.GetString("key");
+				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				ViewBag.MembersIcon = MembersIcon(member.id);
+				ViewBag.MembersOnline = MembersOnline();
+			}
+			else
+			{
+				ViewBag.MembersOnline = MembersOnline();
+			};
+			//
+			return View();
+		}
+		
+	}
 }

@@ -24,15 +24,7 @@
                     <p>頭像:</p>
                         <input id="AvatarUpData" style="display: none;" type="file" accept="image/*" onchange="readFile(event)" />
                     <label for="AvatarUpData">
-                        <img id="Avatar" @if (ViewBag.Avatar != null)
-                        {
-                            <text>src="data:image/png;base64,@ViewBag.Avatar"</text>
-                        }
-                        else
-                        {
-                            <text>src="/img/Shared/person-circle.svg"</text>
-                        }
-                       >
+                        <img id="Avatar" src="@((ViewBag.Avatar != null) ? ("data:image/png;base64," + ViewBag.Avatar) : "/img/Shared/person-circle.svg")">
                     </label>
                 </div>
                 <div class="col-md-8">    
@@ -69,22 +61,23 @@
                 </tbody>  
             </table>
             <hr />
-            <table class="table table-striped">
+            <table id=""class="table table-striped">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">委託名稱</th>
+                            <th scope="col">作者名稱</th>
                             <th scope="col">委託訂單價格</th>
                             <th scope="col">狀態</th>
                             <th scope="col">委託訂單日期</th>
+                            <th scope="col">                        </th>
                         </tr>
                     </thead>
                 <tbody id="ConsumptionRecord_Entrust">
-                      
-                    </tbody>
-                </table>
-        </div>
-        <div class="tab-pane fade @ViewBag.CreatorsCheck?d-none: " id="AuthorSettings_Project" role="tabpanel" aria-labelledby="AuthorSettings">
+                </tbody>
+            </table>
+        </div>@* @((ViewBag.CreatorsCheck != null) ? "tab-pane fade" : "tab-pane fade d-none") *@
+        <div class="tab-pane fade" id="AuthorSettings_Project" role="tabpanel" aria-labelledby="AuthorSettings">
             <div id="PlanData">
                 <table class="table table-striped">
                     <thead>
@@ -172,11 +165,10 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">委託名稱</th>
-                            <th scope="col">委託描述</th>
-                            <th scope="col">委託價格</th>
+                            <th scope="col">委託人</th>
                             <th scope="col">委託日期</th>
                             <th scope="col">委託狀態</th>
-                            <th scope="col">                </th>
+                            <th scope="col">價格</th>
                             <th scope="col">                </th>
                         </tr>
                     </thead>
@@ -203,4 +195,22 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="OrderDescriptionAuthor" class="modal-body">
+            </div>
+            <div id="StatusReply"  class="modal-footer">
+                <button id=""onclick="" type="button" class="btn btn-secondary" data-bs-dismiss="modal">拒絕</button>
+                <button id="" onclick="" type="button" class="btn btn-primary" data-bs-dismiss="modal">接受</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/js/yhu/Individual.js"></script>
+
