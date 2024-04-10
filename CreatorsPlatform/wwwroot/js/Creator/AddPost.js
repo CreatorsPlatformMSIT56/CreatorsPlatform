@@ -1,5 +1,4 @@
-﻿var imageFileData = [];
-var base64Data = [];
+﻿var base64Data = [];
 // 對應的大標到對應的中標
 $(document).ready(function () {
     $('#categorySelect').change(function () {
@@ -157,9 +156,7 @@ function NewPostToSQL() {
         Title: $("#postTitle").val(), // 標題
         CategoryIdstring: $("#categorySelect").val(), // 主分類
         SubtitleId: SubNameToId, // 子分類
-        /*ImageUrl: uint8ArrayData[0], // 圖片 (轉成8 bit array)*/
         Imagebase64: base64Data[0],
-        //ImageFile: $("#ImageFile")[0].files[0], // 圖片Test
         Description: getQuillContent() // 作品描述
     }
     /*console.clear();*/
@@ -193,9 +190,6 @@ function previewImage() {
             var base64 = e.target.result.split(',')[1];
             base64Data.push(base64);
             console.log(base64Data);
-            //var uint8Array = base64ToUint8Array(base64);
-            //console.log('uint8Array1: ', uint8Array);
-            //uint8ArrayData.push(uint8Array);
         }
         reader.readAsDataURL(fileInput.files[0]);
     }
@@ -204,18 +198,7 @@ function previewImage() {
     //console.log('uint8ArrayData[0]: ', uint8ArrayData[0]);
 
 }
-//function base64ToUint8Array(base64) {
-//    // 使用 atob() 將 base64 字符串解碼為二進制字符串
-//    const binaryString = atob(base64);
 
-//    // 創建一個 Uint8Array 並填充二進制數據
-//    const bytes = new Uint8Array(binaryString.length);
-//    for (let i = 0; i < binaryString.length; i++) {
-//        bytes[i] = binaryString.charCodeAt(i);
-//    }
-
-//    return bytes;
-//}
 function getQuillContent() {
     // 拿到編輯器內容 Delta
     const QuillContent = quill.getContents();
