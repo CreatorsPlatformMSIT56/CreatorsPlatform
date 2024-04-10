@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CreatorsPlatform.Models;
 
 public partial class Content
 {
-    [NotMapped]
-    public string? ImageFile { get; set; }
     public int ContentId { get; set; }
 
     public string Title { get; set; } = null!;
@@ -17,9 +14,7 @@ public partial class Content
     public DateTime? UploadDate { get; set; }
 
     public DateTime? PullOffDate { get; set; }
-    // 為了拿到圖片檔案
-    //[NotMapped]
-    //public IFormFile? ImageFile { get; set; }
+
     public byte[]? ImageUrl { get; set; }
 
     public int? Likes { get; set; }
@@ -34,7 +29,7 @@ public partial class Content
 
     public int CreatorId { get; set; }
 
-    public int PlanId { get; set; }
+    public int? PlanId { get; set; }
 
     public int? EventId { get; set; }
 
@@ -60,7 +55,7 @@ public partial class Content
 
     public virtual Event? Event { get; set; }
 
-    public virtual Plan Plan { get; set; } = null!;
+    public virtual Plan? Plan { get; set; }
 
     public virtual Subtitle? Subtitle { get; set; }
 
