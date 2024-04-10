@@ -155,16 +155,12 @@ namespace CreatorsPlatform.Controllers
         [Route("Lolm/Create")]
         public IActionResult Create(Event EventModelData)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson == null)
+            if (MembersOnline())
             {
-                return BadRequest(); // 返回錯誤狀態碼 400;
-            }        
-            else
-            {
+                var memberJson = HttpContext.Session.GetString("key");
                 MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
                 var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
-                
+
                 Event NewEvent = new Event
                 {
                     EventName = EventModelData.EventName,
@@ -178,19 +174,17 @@ namespace CreatorsPlatform.Controllers
                     DescriptionString = EventModelData.DescriptionString,
                     EventCancel = false
                 };
-
-                if (ModelState.IsValid != null)
-                {
                     _context.Add(NewEvent);
                     _context.SaveChanges();
                     // 將這個新增活動的id傳出來給範例圖片的ajax使用
                     TempData["TheNewEventID"] = NewEvent.EventId;
                     Console.WriteLine(NewEvent.EventId);
-
                     return RedirectToAction("Index", "HotGuy");
-                }
-                return BadRequest();
 
+            }
+            else
+            {
+                return RedirectToAction("Login", "yhu");
             }
         }
 
@@ -394,7 +388,7 @@ namespace CreatorsPlatform.Controllers
                 {
                     item.EveImgCancel = true;
                     _context.Update(item);
-                }                
+                }
             }
             for (int i = 0; i < TheArray.Length; i++)
             {

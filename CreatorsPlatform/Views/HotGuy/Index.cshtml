@@ -1,127 +1,130 @@
 ﻿@model IEnumerable<CreatorsPlatform.Models.Event>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 
-    var newEvents = ViewData["NewEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
-    var oldEvents = ViewData["OldEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
+	var newEvents = ViewData["NewEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
+	var oldEvents = ViewData["OldEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
 }
 <link href="~/css/HotGuy/style.css" rel="stylesheet" />
-<a class="btn btn-xs p-0 CreateEventBtn" asp-action="CreateEvent" asp-controller = "Lolm">    
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
-        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-    </svg>
-</a>
+@if (ViewBag.MembersOnline)
+{
+	<a class="btn btn-xs p-0 CreateEventBtn" asp-action="CreateEvent" asp-controller="Lolm">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+			<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+			<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+		</svg>
+	</a>
+}
 <div>
-    @* 輪播圖 *@
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            @for (int i = 0; i < newEvents.Count(); i++)
-            {
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" @(i == 0 ? "class=active" : "") aria-current="true" aria-label="Slide @(i + 1)"></button>
-            }
-        </div>
-        <div class="carousel-inner">
-            @for (int i = 0; i < newEvents.Count(); i++)
-            {
-                <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <img src="@newEvents.ElementAt(i).Banner" class="d-block w-100 img-fluid ObCover" style="height: 50vh;" alt="Image @(i+1)">
-                    <div class="carousel-caption d-none d-md-block">
-                        
-                        <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@newEvents.ElementAt(i).EventId">
-                            <h5>@newEvents.ElementAt(i).EventName</h5>
-                        </a>
-                    </div>
-                </div>
-            }
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+	@* 輪播圖 *@
+	<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-indicators">
+			@for (int i = 0; i < newEvents.Count(); i++)
+			{
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" @(i == 0 ? "class=active" : "") aria-current="true" aria-label="Slide @(i + 1)"></button>
+			}
+		</div>
+		<div class="carousel-inner">
+			@for (int i = 0; i < newEvents.Count(); i++)
+			{
+				<div class="carousel-item @(i == 0 ? "active" : "")">
+					<img src="@newEvents.ElementAt(i).Banner" class="d-block w-100 img-fluid ObCover" style="height: 50vh;" alt="Image @(i+1)">
+					<div class="carousel-caption d-none d-md-block">
 
-    <br />
+						<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@newEvents.ElementAt(i).EventId">
+							<h5>@newEvents.ElementAt(i).EventName</h5>
+						</a>
+					</div>
+				</div>
+			}
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
 
-    @* 三筆最新的活動 *@
-    <div>
-        <div class="evtTitle"></div>
-        <p class="evtStatus">最新活動</p>
-        <ul class="list-group">
-            @foreach (var item in newEvents)
-            {
-                <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
-                    <h3>
-                        <span>
-                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-                                @Html.DisplayFor(newEvents => item.EventName)
-                            </a>
-                        </span>
-                    </h3>
-                    <br />
-                    <p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
-                    <p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
-                </li>
-            }
-        </ul>
-    </div>
-    <br />
+	<br />
+
+	@* 三筆最新的活動 *@
+	<div>
+		<div class="evtTitle"></div>
+		<p class="evtStatus">最新活動</p>
+		<ul class="list-group">
+			@foreach (var item in newEvents)
+			{
+				<li class="list-group-item" position-relative m-4>
+					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
+					<h3>
+						<span>
+							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+								@Html.DisplayFor(newEvents => item.EventName)
+							</a>
+						</span>
+					</h3>
+					<br />
+					<p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
+					<p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
+				</li>
+			}
+		</ul>
+	</div>
+	<br />
 
 
-    @* 把目前所有的活動都列出來 *@
-    <div>
-        <div class="evtTitle"></div>
-        <p class="evtStatus">進行中活動</p>
-        <ul class="list-group">
-            @foreach (var item in Model)
-            {
-                <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
-                    <h3>
-                        <span>
-                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-                                @Html.DisplayFor(Model => item.EventName)
-                            </a>
-                        </span>
-                    </h3><br />
-                    <p class="EventDes">@Html.DisplayFor(Model => item.DescriptionString)</p>
-                    <p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
-                </li>
-            }
+	@* 把目前所有的活動都列出來 *@
+	<div>
+		<div class="evtTitle"></div>
+		<p class="evtStatus">進行中活動</p>
+		<ul class="list-group">
+			@foreach (var item in Model)
+			{
+				<li class="list-group-item" position-relative m-4>
+					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
+					<h3>
+						<span>
+							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+								@Html.DisplayFor(Model => item.EventName)
+							</a>
+						</span>
+					</h3><br />
+					<p class="EventDes">@Html.DisplayFor(Model => item.DescriptionString)</p>
+					<p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
+				</li>
+			}
 
-        </ul>
-    </div>
-    <br />
-    
+		</ul>
+	</div>
+	<br />
 
-    @* 三筆即將結束之活動 *@
-    <div>
-        <div class="evtTitle"></div>
-        <p class="evtStatus">即將結束活動</p>
-        <ul class="list-group">
-            @foreach (var item in oldEvents)
-            {
-                <li class="list-group-item" position-relative m-4>
-                    <img class="listImg float-md-start me-md-3" src="@item.Banner" />
-                    <h3>
-                        <span>
-                            <a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+
+	@* 三筆即將結束之活動 *@
+	<div>
+		<div class="evtTitle"></div>
+		<p class="evtStatus">即將結束活動</p>
+		<ul class="list-group">
+			@foreach (var item in oldEvents)
+			{
+				<li class="list-group-item" position-relative m-4>
+					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
+					<h3>
+						<span>
+							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
 								@Html.DisplayFor(modelItem => item.EventName)
-                            </a>
-                        </span>
-                    </h3>
-                    <br />
-                    <p class="EventDes">@Html.DisplayFor(modelItem => item.DescriptionString)</p>
-                    <p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
-                </li>
-            }
-        </ul>
-    </div>
+							</a>
+						</span>
+					</h3>
+					<br />
+					<p class="EventDes">@Html.DisplayFor(modelItem => item.DescriptionString)</p>
+					<p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
+				</li>
+			}
+		</ul>
+	</div>
 
 </div>
