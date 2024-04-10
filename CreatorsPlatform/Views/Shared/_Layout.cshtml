@@ -29,7 +29,7 @@
 					@* 響應式摺疊部分 *@
 					<div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
 						<form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
-							<input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/標籤" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
+							<input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/委託" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
 							<button class="SearchFormBtn" type="submit">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
 									<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
@@ -40,52 +40,53 @@
 				</div>
 				<div class="col-md-1">
 					<div class="dropdown">
-						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-yhu" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownDraw" data-bs-toggle="dropdown" aria-expanded="false">
 							繪圖
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-yhu">
-							<li><a class="dropdown-item" asp-action="IMAGINK" asp-controller="yhu" class="link-success">首頁</a></li>
-							<li><a class="dropdown-item" asp-action="PersonalUser" asp-controller="yhu" class="link-success">Personal user</a></li>
-							<li><a class="dropdown-item" asp-action="EntrustPayment" asp-controller="yhu" class="link-success">EntrustPayment</a></li>
-							<li><a class="dropdown-item" asp-action="Individual" asp-controller="yhu" class="link-success">Individual</a></li>
-							<li><a class="dropdown-item" asp-action="Login" asp-controller="yhu" class="link-success">Login</a></li>
-							<li><a class="dropdown-item" asp-action="Payment" asp-controller="yhu" class="link-success">Payment</a></li>
-							<li><a class="dropdown-item" asp-action="Signup" asp-controller="yhu" class="link-success">Signup</a></li>
+						<ul class="dropdown-menu" aria-labelledby="dropdownDraw">
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="1" class="link-success">原創</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="2" class="link-success">同人</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="3" class="link-success">AI繪圖</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="16" class="link-success">Live2D</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-1">
 					<div class="dropdown">
-						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-HotGuy" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownVideo" data-bs-toggle="dropdown" aria-expanded="false">
 							影片
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-HotGuy">
-							<li><a class="dropdown-item" asp-action="Index" asp-controller="HotGuy" class="link-success">活動頁</a></li>
+						<ul class="dropdown-menu" aria-labelledby="dropdownVideo">
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="4" class="link-success">2D動畫</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="5" class="link-success">3D動畫</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="6" class="link-success">YT</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="7" class="link-success">VT</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-1">
 					<div class="dropdown">
-						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Lolm" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownSound" data-bs-toggle="dropdown" aria-expanded="false">
 							聲音
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Lolm">
-							<li><a class="dropdown-item" asp-action="CreateEvent" asp-controller="Lolm" class="link-success">發起活動</a></li>
-							<li><a class="dropdown-item" asp-action="EventContent" asp-controller="Lolm" class="link-success">活動內容</a></li>
+						<ul class="dropdown-menu" aria-labelledby="dropdownSound">
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="8" class="link-success">音樂</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="9" class="link-success">聲音</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="10" class="link-success">ASMR</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-md-1">
 					<div class="dropdown">
-						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuBtn-Creator" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownTeach" data-bs-toggle="dropdown" aria-expanded="false">
 							教學
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Creator">
-							<li><a class="dropdown-item" asp-action="Index" asp-controller="Creator" class="link-success">創作者首頁</a></li>
-							<li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布作品</a></li>
-							<li><a class="dropdown-item" asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">發布委託</a></li>
-							<li><a class="dropdown-item" asp-action="GetPost" asp-controller="Creator" class="link-success">作品展示頁面</a></li>
-							<li><a class="dropdown-item" asp-action="GetCommission" asp-controller="Creator" class="link-success">委託展示頁面</a></li>
+						<ul class="dropdown-menu" aria-labelledby="dropdownTeach">
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="11" class="link-success">繪圖</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="12" class="link-success">影片製作</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="13" class="link-success">聲音製作</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="14" class="link-success">音樂製作</a></li>
+							<li><a class="dropdown-item" asp-action="Search" asp-controller="Vicky" asp-route-id="15" class="link-success">手作</a></li>
 						</ul>
 					</div>
 				</div>
