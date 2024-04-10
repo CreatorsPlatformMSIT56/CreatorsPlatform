@@ -60,11 +60,9 @@
 				</div>
 				<div class="carousel-inner">
 					<div id="Woklist1img" class="carousel-item active">
-							<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[0].ContentId" asp-action="GetPost" asp-controller="Creator">
-								<div class="ToMiddle image-container">
+						<div onclick="WokLink(@ViewBag.DefaultContentsData[0].ContentId)" class="ToMiddle image-container">
 									<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg">
 								</div>
-							</a>
 							<div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
 								<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[0].Title</h3>
 								<h5 class="text-end">@ViewBag.DefaultContentsData[0].UploadDate</h5>
@@ -76,11 +74,9 @@
 							&& ViewBag.DefaultContentsData[1] != null 
 							&& ViewBag.DefaultContentsData[1].ImageUrl != null)
 							{
-								<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[1].ContentId" asp-action="GetPost" asp-controller="Creator">
-									<div class="ToMiddle image-container">
+							<div onclick="WokLink(@ViewBag.DefaultContentsData[1].ContentId)" class="ToMiddle image-container">
 										<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[1].ImageUrl)" class="d-block WorkImg" alt="eoijwpeifjsj">
 									</div>
-								</a>
 							}
 							else
 							{
@@ -115,11 +111,9 @@
 											&& ViewBag.DefaultContentsData[2].Title != null
 											&& ViewBag.DefaultContentsData[2].UploadDate != null)
 							{
-								<a class="dropdown-item" asp-route-id="@ViewBag.DefaultContentsData[2].ContentId" asp-action="GetPost" asp-controller="Creator">
-									<div class="ToMiddle image-container">
+							<div onclick="WokLink(@ViewBag.DefaultContentsData[2].ContentId)" class="ToMiddle image-container">
 										<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[2].ImageUrl)" class="d-block WorkImg" alt="eoijwpeifjsj">
 									</div>
-								</a>
 							}
 							else
 							{
@@ -187,19 +181,19 @@
 		</div>
 		<div class="row image-containerEvent">
 			<a asp-route-id="@ViewBag.EventDataList[0].EventId" asp-action="EventContent" asp-controller="Lolm">
-				<img class="image-containerEventImg d-block WorkImg" src="@ViewBag.EventDataList[0].Banner" >
+				<img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[0].Banner">
 			</a>
 		</div>
 		<hr />
 		<div class="row image-containerEvent">
 			<a asp-route-id="@ViewBag.EventDataList[1].EventId" asp-action="EventContent" asp-controller="Lolm">
-				<img class="image-containerEventImg d-block WorkImg" src="@ViewBag.EventDataList[1].Banner" >
+				<img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[1].Banner">
 			</a>			
 		</div>		
 		<hr />
 		<div class="row image-containerEvent">
 			<a asp-route-id="@ViewBag.EventDataList[2].EventId" asp-action="EventContent" asp-controller="Lolm">
-				<img class="image-containerEventImg d-block WorkImg" src="@ViewBag.EventDataList[2].Banner">
+				<img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[2].Banner">
 			</a>
 		</div>
 	
