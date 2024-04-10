@@ -20,9 +20,9 @@
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
                     <h5>
-                        @foreach (var e in Model.ContentTagsModel)
+                        @foreach (var e in Model.ContentTagsModel!)
                         {
-                            <a asp-action="Search" asp-controller="Vicky" asp-route-id="@e.TagId"><span style="color:darkorange">#@e.TagName</span></a>
+                            <a asp-action="Search" asp-controller="Vicky" asp-route-subtitle="@e.TagId"><span style="color:darkorange">#@e.TagName</span></a>
                         }
                     </h5>
                 </div>

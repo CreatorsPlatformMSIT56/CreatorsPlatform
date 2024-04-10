@@ -1,17 +1,20 @@
 ﻿
-//作品和委託分類
-
-
-
+//委託按鈕觸發判斷
+var isCommissionOnClicked = false;
+var isWorkOnClicked = false;
+//篩選按鈕判斷
+var subtitleClicked = false;
+//輸入的值
+var searchKeyValue = $("#searchKey").data("searchkey");
+var sortOrder = "ascending";
+//年月日
 function formatDate(date) {
-    //const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    //return new Date(date).toLocaleDateString('en-US', options);
-    //改成年月日
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const formattedDate = new Date(date).toLocaleDateString('en-US', options).split('/').reverse().join('-');
-    return formattedDate;
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
-
 
 function WorkOn(pageNumber = 1) {
     // 屏蔽委托排序与作品B排序按钮
@@ -19,33 +22,51 @@ function WorkOn(pageNumber = 1) {
     _button_container_TimeSortB.style.display = "block";
     _button_container_PriceSort.style.display = "none";
     _button_container_PriceSortB.style.display = "none";
-
-    var descending = "descending";
-
+    var buttonClicked = "WorkOn";
+    isWorkOnClicked = true;
+    isCommissionOnClicked = false;
+    subtitleClicked = false;
+    sortOrder = "ascending"
     $.ajax({
-        url: `/Vicky/WorkOn/${descending}?page=${pageNumber}&pageSize=3`, // 发送带有页码和页面大小的请求
+        url: `/Vicky/WorkOn/${sortOrder}?page=${pageNumber}&pageSize=9`,
         method: 'post',
+        data: { sortOrder: sortOrder },
         success: function (data) {
-
+            // 重置單選按鈕選擇狀態
+            $('input[name="input_Filter"]').prop('checked', false);
+            // 清空搜尋框內容
+            $('#searchInput').val('');
+            //創作者卡片
+            $("#_creatorCard").empty();
+            //主要內容
             $("#_worksConent").empty();
+            //搜尋筆數
             $("#_searchAmount").empty();
             let dataLength = `<i>顯示${data.workList.length}筆結果</i>`;
             $('#_searchAmount').append(dataLength);
+            //頁數
             $('#_pageNavigation').empty();
 
+            //篩選的筆數
+            if (buttonClicked != null) {
+                for (let i = 1; i <= 16; i++) {
+                    $(`#filterAmount${i}`).empty();
+                    $(`#filterAmount${i}`).html(`<i>${data.count[i].count}</i>`);
+                }
+            }
 
-            // 遍历获取到的数据，显示在页面上
+
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
                     <div class="col-4 border d-flex justify-content-center card _card_B" >
-                    <a href=""><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="" class="fs-4">${work.title}</a>
+								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4" class="fs-4">${work.title}</a>
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
 								</p>
-								<a href="" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
@@ -69,17 +90,17 @@ function WorkOn(pageNumber = 1) {
         }
     });
 }
-
 function WorkLow(pageNumber = 1) {
     // 展示作品B排序按钮，隐藏作品A排序按钮
     _button_container_TimeSort.style.display = "block";
     _button_container_TimeSortB.style.display = "none";
-
-    var ascending = "ascending";
-
+    sortOrder = "descending";
+    subtitleClicked = false;
     $.ajax({
-        url: `/Vicky/WorkOn/${ascending}?page=${pageNumber}&pageSize=3`, // 发送带有页码和页面大小的请求
+        url: `/Vicky/WorkOn/${sortOrder}?page=${pageNumber}&pageSize=9`,
+        // 发送带有页码和页面大小的请求
         method: 'post',
+        data: { sortOrder: sortOrder },
         success: function (data) {
             $("#_worksConent").empty();
             $("#_searchAmount").empty();
@@ -90,14 +111,14 @@ function WorkLow(pageNumber = 1) {
                 let workHtml =
                     `
                     <div class="col-4 border d-flex justify-content-center card _card_B" >
-                        <a href=""><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
-                        <div class="card-body text-center position-relative">
-                            <a href="" class="fs-4">${work.title}</a>
-                            <p class="position-absolute top-50 start-0">
-                                <small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
-                            </p>
-                            <a href="" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
-                        </div>
+                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+							<div class="card-body text-center position-relative">
+								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4" class="fs-4">${work.title}</a>
+								<p class="position-absolute top-50 start-0">
+									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
+								</p>
+								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+							</div>
                     </div>
                     `;
                 $('#_worksConent').append(workHtml);
@@ -120,37 +141,50 @@ function WorkLow(pageNumber = 1) {
         }
     });
 }
-
 function CommissionOn(pageNumber = 1) {
     //顯示委託排序
     _button_container_PriceSortB.style.display = "block";
     _button_container_PriceSort.style.display = "none";
     _button_container_TimeSort.style.display = "none";
     _button_container_TimeSortB.style.display = "none";
-    var descending = "descending";
-
+    var buttonClicked = "CommissionOn";
+    isCommissionOnClicked = true;
+    isWorkOnClicked = false;
+    subtitleClicked = false;
+    sortOrder = "ascending"
     $.ajax({
-        url: `/Vicky/CommissionOn/${descending}?page=${pageNumber}&pageSize=3`,
+        url: `/Vicky/CommissionOn/${sortOrder}?page=${pageNumber}&pageSize=9`,
         method: 'post',
+        data: { sortOrder: sortOrder, buttonClicked: buttonClicked },
 
         success: function (data) {
+            $('input[name="input_Filter"]').prop('checked', false);
+            $('#searchInput').val('');
+            $("#_creatorCard").empty();
             $("#_worksConent").empty();
             $("#_searchAmount").empty();
             let dataLength = `<i>顯示${data.workList.length}筆結果</i>`;
             $('#_searchAmount').append(dataLength);
             $('#_pageNavigation').empty();
+
+            if (buttonClicked != null) {
+                for (let i = 1; i <= 16; i++) {
+                    $(`#filterAmount${i}`).empty();
+                    $(`#filterAmount${i}`).html(`<i>${data.count[i].count}</i>`);
+                }
+            }
+
             data.workList.forEach(function (commission) {
-                console.log(commission.commissionImage);
                 let commissionHtml =
                     `
                     <div class="col-4 border d-flex justify-content-center card _card_B" >
-                    <a href=""><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                    <a href="/Creator/GetCommission?id=${commission.commissionID}"><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="" class="fs-4">${commission.commissionTitle}</a>
+								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
 								</p>
-								<a href="" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/Index?id=${commission.usersID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
                     </div>
                     `;
@@ -178,13 +212,13 @@ function CommissionLow(pageNumber = 1) {
     //顯示委託排序
     _button_container_PriceSortB.style.display = "none";
     _button_container_PriceSort.style.display = "block";
-    _button_container_TimeSort.style.display = "none";
-    _button_container_TimeSortB.style.display = "none";
-    var ascending = "ascending";
+    sortOrder = "descending";
+    subtitleClicked = false;
 
     $.ajax({
-        url: `/Vicky/CommissionOn/${ascending}?page=${pageNumber}&pageSize=3`,
+        url: `/Vicky/CommissionOn/${sortOrder}?page=${pageNumber}&pageSize=9`,
         method: 'post',
+        data: { sortOrder: sortOrder },
 
         success: function (data) {
             $("#_worksConent").empty();
@@ -196,13 +230,13 @@ function CommissionLow(pageNumber = 1) {
                 let commissionHtml =
                     `
                     <div class="col-4 border d-flex justify-content-center card _card_B" >
-                    <a href=""><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                    <a href="/Creator/GetCommission?id=${commission.commissionID}"><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="" class="fs-4">${commission.commissionTitle}</a>
+								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
 								</p>
-								<a href="" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/Index?id=${commission.usersID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
                     </div>
                     `;
@@ -211,15 +245,15 @@ function CommissionLow(pageNumber = 1) {
             let pageNavigation = `
 			 <ul class="pagination">
                     <li class="page-item ${pageNumber == 1 ? "disabled" : ""}">
-                        <a class="page-link" href="#" tabindex="-1" onclick="CommissionOn(${pageNumber - 1})">Previous</a>
+                        <a class="page-link" href="#" tabindex="-1" onclick="CommissionLow(${pageNumber - 1})">Previous</a>
                     </li>`;
             for (let i = 1; i <= data.totalPages; i++) {
                 pageNavigation += `
-                <li class="page-item ${pageNumber == i ? "active" : ""}"><a class="page-link" href="#" onclick="CommissionOn(${i})">${i}</a></li>`;
+                <li class="page-item ${pageNumber == i ? "active" : ""}"><a class="page-link" href="#" onclick="CommissionLow(${i})">${i}</a></li>`;
             }
             pageNavigation += `
                     <li class="page-item ${pageNumber == data.totalPages ? "disabled" : ""}">
-                        <a class="page-link" href="#" onclick="CommissionOn(${pageNumber + 1})">Next</a>
+                        <a class="page-link" href="#" onclick="CommissionLow(${pageNumber + 1})">Next</a>
                     </li>
                 </ul>`;
             $('#_pageNavigation').append(pageNavigation);
@@ -234,19 +268,57 @@ var _button_container_PriceSort = document.getElementById('_button_container_Pri
 var _button_container_PriceSortB = document.getElementById('_button_container_PriceSortB');
 
 _button_container_TimeSort.onclick = function () {
-    WorkOn();
+    console.log(1);
+    if (subtitleClicked) {
+        _button_container_TimeSort.style.display = "none";
+        _button_container_TimeSortB.style.display = "block";
+        isWorkOnClicked = true;
+        sortOrder = "ascending";
+        subtitleChange();
+        console.log(3);
+    } else {
+        WorkOn();
+        console.log(4);
+    }
 }
-
 _button_container_TimeSortB.onclick = function () {
-    WorkLow();
-}
+    console.log(2);
+    if (subtitleClicked) {
+        _button_container_TimeSort.style.display = "block";
+        _button_container_TimeSortB.style.display = "none";
+        isWorkOnClicked = true;
+        sortOrder = "descending";
+        subtitleChange();
+        console.log(5);
+    } else {
+        WorkLow();
+        console.log(6);
+    }
 
+}
 _button_container_PriceSort.onclick = function () {
-    CommissionOn();
-}
 
+    if (subtitleClicked) {
+        _button_container_PriceSortB.style.display = "block";
+        _button_container_PriceSort.style.display = "none";
+
+        isCommissionOnClicked = true;
+        sortOrder = "ascending";
+        subtitleChange();
+    } else {
+        CommissionOn();
+    }
+}
 _button_container_PriceSortB.onclick = function () {
-    CommissionLow();
+    if (subtitleClicked) {
+        _button_container_PriceSortB.style.display = "none";
+        _button_container_PriceSort.style.display = "block";
+        isCommissionOnClicked = true;
+        sortOrder = "descending";
+        subtitleChange();
+    } else {
+        CommissionLow();
+    }
 }
 
 //因為會先勾選再刷新
@@ -268,39 +340,46 @@ function subtitleChange() {
     }
     filterResults(selectedOption, searchInputValue);
 }
-function filterResults(option, searchKey, pageNumber = 1) {
-    var ascending = option;
+function filterResults(option, searchKey, pageNumber = 1, buttonClicked) {
+    subtitleClicked = true;
     if (searchKey != null) {
         searchKey = searchKey;
     }
     if (searchKey == null || searchKey == '') {
         searchKey = ' ';
     }
+    if (isCommissionOnClicked) {
+        buttonClicked = "CommissionOn";
+    }
+    if (isWorkOnClicked) {
+        buttonClicked = "WorkOn";
+    }
+
     $.ajax({
         type: "POST",
-        url: `/Vicky/GetSubtitle/${ascending}/${searchKey}?page=${pageNumber}&pageSize=3`,
-        data: { subtitleId: option, searchKey: searchKey },
+        url: `/Vicky/GetSubtitle/${option}/${searchKey}?page=${pageNumber}&pageSize=9`,
+        data: { subtitleId: option, searchKey: searchKey, sortOrder: sortOrder, buttonClicked: buttonClicked },
+
         success: function (data) {
-            // 更新页面内容
             $("#_worksConent").empty();
             $("#_searchAmount").empty();
             let dataLength = `<i>顯示${data.workList.length}筆結果</i>`;
             $('#_searchAmount').append(dataLength);
             $('#_pageNavigation').empty();
-            /*if(data.workList.subtitleId)*/
+
 
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
                     <div class="col-4 border d-flex justify-content-center card _card_B" >
-                    ${work.isCommission == true ? `<a href=""><img src="${work.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>` :
-                        `<a href=""><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>`}
+                    ${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}"><img src="${work.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>` :
+                        `<a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>`}
 							<div class="card-body text-center position-relative">
-								<a href="" class="fs-4">${work.title}</a>
+								${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}" class="fs-4">${work.title}</a>` : `<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>`}
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${work.isCommission == true ? `${work.priceMax}` : `${formatDate(work.uploadDate)}`}</small>
 								</p>
-								<a href="" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
@@ -316,7 +395,7 @@ function filterResults(option, searchKey, pageNumber = 1) {
                             <a class="page-link" href="#"onclick="filterResults(${option}, '${searchKey}', ${i})">${i}</a>
                           </li>`;
             }
-            pageNavigation += `<li class="page-item ${pageNumber == data.totalPages ? "disabled" : ""}">
+            pageNavigation += `<li class="page-item ${((pageNumber == data.totalPages) || (data.totalPages == 0)) ? "disabled" : ""}">
                         <a class="page-link" href="#" onclick="filterResults(${option}, '${searchKey}', ${pageNumber + 1})">Next</a>
                       </li>
                     </ul>`;
@@ -328,7 +407,60 @@ function filterResults(option, searchKey, pageNumber = 1) {
             console.error(error);
         }
     });
+
 }
 
+function tagResults(tagId, pageNumber = 1) {
+    $.ajax({
+        method: "get",
+        url: `/Vicky/GetTags/${tagId}?page=${pageNumber}&pageSize=9`,
+        data: { tagId: tagId },
+        success: function (data) {
+            // 更新页面内容
+            $("#_worksConent").empty();
+            $("#_searchAmount").empty();
+            let dataLength = `<i>顯示${data.workList.length}筆結果</i>`;
+            $('#_searchAmount').append(dataLength);
+            $('#_pageNavigation').empty();
 
+            data.workList.forEach(function (work) {
+                let workHtml =
+                    `
+                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                        <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+							<div class="card-body text-center position-relative">
+								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>
+								<p class="position-absolute top-50 start-0">
+									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
+								</p>
+								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+							</div>
+                    </div>
+                    `;
+                $('#_worksConent').append(workHtml);
+            })
+            $('#_pageNavigation').empty();
+            var pageNavigation = '<ul class="pagination">';
+            pageNavigation += `<li class="page-item ${pageNumber == 1 ? "disabled" : ""}">
+                        <a class="page-link" href="#" tabindex="-1" onclick="tagResults(${tagId}, ${pageNumber - 1})">Previous</a>
+                  </li>`;
+            for (let i = 1; i <= data.totalPages; i++) {
+                pageNavigation += `<li class="page-item ${pageNumber == i ? "active" : ""}">
+                            <a class="page-link" href="#"onclick="tagResults(${tagId}, ${i})">${i}</a>
+                          </li>`;
+            }
+            pageNavigation += `<li class="page-item ${((pageNumber == data.totalPages) || (data.totalPages == 0)) ? "disabled" : ""}">
+                        <a class="page-link" href="#" onclick="tagResults(${tagId}, ${pageNumber + 1})">Next</a>
+                      </li>
+                    </ul>`;
+            $('#_pageNavigation').append(pageNavigation);
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
 
+if (tagIdValue !== 0) {
+    tagResults(tagIdValue, pageNumber = 1);
+} 
