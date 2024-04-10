@@ -232,7 +232,7 @@ namespace CreatorsPlatform.Controllers
             var sDate = DateTime.Now;
             DateOnly ssDate = DateOnly.FromDateTime(sDate);
 
-			if (ModelState.IsValid != null)
+			if (ModelState.IsValid)
 			{
                 byte[] imagebinaryData = Convert.FromBase64String(Imagebase64);
 
@@ -252,10 +252,12 @@ namespace CreatorsPlatform.Controllers
 				};
 
 				// 存 Content 進DB
-				_context.Contents.Add(Newcontent);
+				var newrecord = _context.Contents.Add(Newcontent);
+
 				await _context.SaveChangesAsync();
 
-                return RedirectToAction("GetPost", "Creator");
+				return RedirectToAction("GetPost", new { id = newrecord.Entity.ContentId });
+				//return RedirectToAction("GetPost", "Creator");
 
                 //return Ok();
 			}

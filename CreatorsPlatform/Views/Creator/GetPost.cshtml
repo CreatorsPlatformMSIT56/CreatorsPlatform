@@ -15,7 +15,18 @@
                 <div class="col-12 px-5 py-3 title-container">
                     <h4>@Model.Content?.FirstOrDefault()?.Title</h4>
                 </div>
-                <div class="col-12 px-5 py-3 descr-containrer">
+                @* <div class="col-12 px-5 py-3" id="descr-container">
+                    @if (Model.Content?.FirstOrDefault()?.Description.Split('"')[0] != "{") // 判斷取得string是否有開始的"{"特徵
+                    {
+                        <p>@Model.Content?.FirstOrDefault()?.Description</p>
+                    }
+                    else
+                    {
+                        deltaToHtml()
+                            }
+
+                </div> *@
+                <div class="col-12 px-5 py-3" id="descr-container">
                     <p>@Model.Content?.FirstOrDefault()?.Description</p>
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
@@ -96,7 +107,7 @@
                 @foreach (var e in Model.Contents)
                 {
                     <div class="col-4">
-                        <a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
+                        <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
                             <div class="card mb-3">
                                 <img class="card-img-top"
                                      src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
@@ -148,6 +159,11 @@
         </div>
     </div>
 </div>
+
+@* <script>
+    var deltaDescrp = '@Model.Content?.FirstOrDefault()?.Description';
+    var htmlDescrp = quill
+</script> *@
 
 <script>
     // 把當前登入的使用者跟當前創作者抓下來給JS用
