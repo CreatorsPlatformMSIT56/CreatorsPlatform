@@ -160,3 +160,12 @@
 .disInlineBlock{
     display: inline-block;
 }
+
+.LikeBtn, .LikeModalBtn {
+    cursor: pointer;
+    color: #7a7a7a;
+}
+
+.LikeChecked {
+    color: #ff4d4d;
+}
