@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-0">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-0">
             <div class="container row">
                 <div class="col-md-2">
                     @* 網站商標 *@
@@ -82,10 +82,10 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn-Creator">
                                 <li><a class="dropdown-item" asp-action="Index" asp-controller="Creator" class="link-success">創作者首頁</a></li>
-                                <li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布文章</a></li>
+                                <li><a class="dropdown-item" asp-action="AddPost" asp-controller="Creator" class="link-success">發布作品</a></li>
                                 <li><a class="dropdown-item" asp-action="AddCommisionForm" asp-controller="Creator" class="AddCommisionForm">發布委託</a></li>
                                 <li><a class="dropdown-item" asp-action="GetPost" asp-controller="Creator" class="link-success">作品展示頁面</a></li>
-                                <li><a class="dropdown-item" asp-action="EditSubscriptionPlans" asp-controller="Creator" class="link-success">編輯訂閱方案頁面(似乎已放進會員介面)</a></li>
+                                <li><a class="dropdown-item" asp-action="GetCommission" asp-controller="Creator" class="link-success">委託展示頁面</a></li>
                             </ul>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                         <a href="/yhu/PersonalUser" class="MemberDropdown">
                             @if (ViewBag.MembersIcon != null)
                             {
-                                <img style="width: 65px; height: 65px;" src="data:image/png;base64,@ViewBag.MembersIcon" class="rounded-2" alt="...">
+                                <img style="width: 65px; height: 65px;" src="data:image/png;base64,@ViewBag.MembersIcon" class="rounded-2 rounded-circle" alt="...">
                             }
                             else
                             {
