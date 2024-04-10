@@ -230,6 +230,7 @@ public partial class ImaginkContext : DbContext
 
             entity.HasOne(d => d.Plan).WithMany(p => p.Contents)
                 .HasForeignKey(d => d.PlanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Contents__PlanID__571DF1D5");
 
             entity.HasOne(d => d.Subtitle).WithMany(p => p.Contents)

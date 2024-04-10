@@ -29,7 +29,7 @@ public partial class Content
 
     public int CreatorId { get; set; }
 
-    public int? PlanId { get; set; }
+    public int PlanId { get; set; }
 
     public int? EventId { get; set; }
 
@@ -55,7 +55,7 @@ public partial class Content
 
     public virtual Event? Event { get; set; }
 
-    public virtual Plan? Plan { get; set; }
+    public virtual Plan Plan { get; set; } = null!;
 
     public virtual Subtitle? Subtitle { get; set; }
 
