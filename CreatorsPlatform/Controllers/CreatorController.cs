@@ -255,7 +255,7 @@ namespace CreatorsPlatform.Controllers
 				_context.Contents.Add(Newcontent);
 				await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Creator");
+                return RedirectToAction("GetPost", "Creator");
 
                 //return Ok();
 			}
@@ -272,10 +272,10 @@ namespace CreatorsPlatform.Controllers
 			{
 				ViewBag.MembersOnline = MembersOnline();
 			};
-			// return RedirectToAction("Index");
-			// return View(content);
-			//return Ok();
-            return RedirectToAction("Index", "Creator");
+            // return RedirectToAction("Index");
+            // return View(content);
+            return Ok();
+            //return RedirectToAction("Index", "Creator");
         }
 
         // 創作者貼文頁面
