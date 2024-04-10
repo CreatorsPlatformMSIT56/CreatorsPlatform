@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.Options;
 using Microsoft.Data.SqlClient;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Newtonsoft.Json;
+using static CreatorsPlatform.Controllers.yhuController;
 
 
 namespace CreatorsPlatform.Controllers
@@ -20,9 +22,28 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
+		public string MembersIcon(int x)
+		{
+			var MembersIcon = (from UserData in _context.Users
+							   where UserData.UserId == x
+							   select UserData.Avatar).FirstOrDefault();
+			string Avatar = Convert.ToBase64String(MembersIcon);
+			return Avatar;
+		}
+		public bool MembersOnline()
+		{
+			var memberJson = HttpContext.Session.GetString("key");
+			if (memberJson != null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-
-        [HttpGet]
+		[HttpGet]
         public IActionResult Search(string searchKey, int? subtitle, int? id, string sortOrder, int page = 1, int pageSize = 9)
         {
             //var workList = GetWorkList(searchKey, sortOrder,subtitle, page, pageSize);
@@ -55,8 +76,20 @@ namespace CreatorsPlatform.Controllers
             }
 
             ViewBag.SubtitleCounts = subtitleCounts;
+			if (MembersOnline())
+			{
+				var memberJson = HttpContext.Session.GetString("key");
+				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				ViewBag.MembersIcon = MembersIcon(member.id);
+				ViewBag.MembersOnline = MembersOnline();
+			}
+			else
+			{
+				ViewBag.MembersOnline = MembersOnline();
+			};
 
-            return View(viewModel);
+
+			return View(viewModel);
         }
 
         //Search的方法
