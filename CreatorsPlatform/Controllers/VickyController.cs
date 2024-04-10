@@ -5,249 +5,284 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Drawing.Printing;
 using Microsoft.CodeAnalysis.Options;
+using Microsoft.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Newtonsoft.Json;
 using static CreatorsPlatform.Controllers.yhuController;
 
 
 namespace CreatorsPlatform.Controllers
 {
-	public class VickyController : Controller
-	{
-		private readonly ImaginkContext _context;
+    public class VickyController : Controller
+    {
+        private readonly ImaginkContext _context;
 
-		public VickyController(ImaginkContext context)
-		{
-			_context = context;
-		}
-        //臨時增加
-        public string MembersIcon(int x)
+        public VickyController(ImaginkContext context)
         {
-            var MembersIcon = (from UserData in _context.Users
-                               where UserData.UserId == x
-                               select UserData.Avatar).FirstOrDefault();
-            string Avatar = Convert.ToBase64String(MembersIcon);
-            return Avatar;
+            _context = context;
         }
-        public bool MembersOnline()
+		public string MembersIcon(int x)
+		{
+			var MembersIcon = (from UserData in _context.Users
+							   where UserData.UserId == x
+							   select UserData.Avatar).FirstOrDefault();
+			string Avatar = Convert.ToBase64String(MembersIcon);
+			return Avatar;
+		}
+		public bool MembersOnline()
+		{
+			var memberJson = HttpContext.Session.GetString("key");
+			if (memberJson != null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		[HttpGet]
+        public IActionResult Search(string searchKey, int? subtitle, int? id, string sortOrder, int page = 1, int pageSize = 9)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson != null)
+            //var workList = GetWorkList(searchKey, sortOrder,subtitle, page, pageSize);
+            var workList = GetWorkList(searchKey, sortOrder, subtitle, id);
+
+            var totalItems = workList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var pagedWorkList = workList.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            var viewModel = new WorkListViewModel
             {
-                return true;
+                WorkList = pagedWorkList,
+                PageNumber = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+                SearchKey = searchKey,
+            };
+
+            TempData["SearchKey"] = searchKey;
+            ViewBag.tagId = subtitle;
+            ViewBag.subtitle = id;
+            ViewBag.SortOrder = sortOrder;
+
+            Dictionary<string, SubtitleCount> subtitleCounts = [];
+
+            for (int i = 1; i <= 16; i++)
+            {
+                subtitleCounts[$"subtitle_{i}"] = new SubtitleCount { Count = CalculateSubtitleCount(i, searchKey, sortOrder) };
+            }
+
+            ViewBag.SubtitleCounts = subtitleCounts;
+			if (MembersOnline())
+			{
+				var memberJson = HttpContext.Session.GetString("key");
+				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				ViewBag.MembersIcon = MembersIcon(member.id);
+				ViewBag.MembersOnline = MembersOnline();
+			}
+			else
+			{
+				ViewBag.MembersOnline = MembersOnline();
+			};
+
+
+			return View(viewModel);
+        }
+
+        //Search的方法
+        private List<WorkViewModel> GetWorkList(string searchKey, string sortOrder, int? subtitle, int? id)
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            List<WorkViewModel> workList;
+            if (_context.Contents.Any(c => c.Title.Contains(searchKey)))
+            {
+                workList = vickyWorkContent.GetSearchContents(searchKey, sortOrder);
+            }
+            else if (_context.Users.Any(c => c.UserName.Contains(searchKey)))
+            {
+                workList = vickyWorkContent.GetCreatorContents(searchKey);
             }
             else
             {
-                return false;
+                workList = vickyWorkContent.GetSearchCommission(searchKey, sortOrder);
             }
+
+            if (string.IsNullOrEmpty(searchKey) || workList.Count == 0)
+            {
+                searchKey = "";
+                workList = vickyWorkContent.GetSearchContents("", sortOrder);
+            }
+
+            return workList;
         }
-        //
+
+        //計算中標籤總數的方法
+        private int CalculateSubtitleCount(int subtitleId, string searchKey, string sortOrder = "ascending", string buttonClicked = "")
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            List<WorkViewModel> workList = new List<WorkViewModel>();
+            var subtitleAsCommission = _context.Commissions.Any(c => c.Title!.Contains(searchKey));
+            if (searchKey != null)
+            {
+                workList = vickyWorkContent.GetSubtitleAscending(subtitleId, searchKey, sortOrder);
+                workList = workList.Where(w => w.UserName!.Contains(searchKey!) || w.Title!.Contains(searchKey!)).ToList();
+                if (subtitleAsCommission)
+                {
+                    workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey, sortOrder);
+                }
+                if (buttonClicked == "CommissionOn")
+                {
+                    workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey!, sortOrder);
+                }
+                if (buttonClicked == "WorkOn")
+                {
+                    workList = vickyWorkContent.GetSubtitleAscending(subtitleId, searchKey, sortOrder);
+                }
+            }
+            else
+            {
+                workList = vickyWorkContent.GetSubtitleAscending(subtitleId, searchKey!, sortOrder);
+            }
+            return workList.Count;
+        }
+
+        [HttpPost]
+        [Route("Vicky/GetSubtitle/{subtitleId}/{searchKey}")]
+        public IActionResult GetSubtitle(int subtitleId, string searchKey, int page = 1, int pageSize = 9, string sortOrder = "", string buttonClicked = "")
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            var workList = vickyWorkContent.GetSubtitleAscending(subtitleId, searchKey, sortOrder);
+            var subtitleAsCommission = _context.Commissions.Any(c => c.Title!.Contains(searchKey));
+            if (searchKey != null)
+            {
+                workList = workList.Where(w => w.UserName!.Contains(searchKey!) || w.Title!.Contains(searchKey!)).ToList();
+                if (subtitleAsCommission)
+                {
+                    workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey, sortOrder);
+                }
+            }
+
+            var totalItems = workList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            if (searchKey == null || workList.Count == 0)
+            {
+                searchKey = "";
+                vickyWorkContent = new VickyWorkContent(_context);
+                if (buttonClicked == "CommissionOn")
+                {
+                    workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey, sortOrder);
+
+                }
+                if (buttonClicked == "WorkOn")
+                {
+                    workList = vickyWorkContent.GetSubtitleAscending(subtitleId, searchKey, sortOrder);
+                }
+                totalItems = workList.Count;
+                totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            }
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            int skip = (page - 1) * pageSize;
+            var pagedWorkList = workList.Skip(skip).Take(pageSize).ToList();
+
+
+            var viewModel = new WorkListViewModel
+            {
+                WorkList = pagedWorkList,
+                PageNumber = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+
+            };
+            return Json(viewModel);
+        }
+
+        [HttpPost]
+        [Route("Vicky/WorkOn/{sortOrder}")]
+        public IActionResult WorkOn(string sortOrder, int page = 1, int pageSize = 9, string buttonClicked = "WorkOn")
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            List<WorkViewModel>? workList;
+            Dictionary<string, SubtitleCount> subtitleCounts = [];
+            workList = vickyWorkContent.GetSearchContents("", sortOrder);
+
+            for (int i = 1; i <= 16; i++)
+            {
+                subtitleCounts[$"{i}"] = new SubtitleCount { Count = CalculateSubtitleCount(i, "", sortOrder, buttonClicked) };
+            }
+
+            int skip = (page - 1) * pageSize;
+            var pagedWorkList = workList.Skip(skip).Take(pageSize).ToList();
+            var totalItems = workList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var viewModel = new WorkListViewModel
+            {
+                WorkList = pagedWorkList,
+                PageNumber = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+                Count = subtitleCounts,
+            };
+            return Json(viewModel);
+        }
+
+        [HttpPost]
+        [Route("Vicky/CommissionOn/{sortOrder}")]
+        public IActionResult CommissionOn(string sortOrder, int page = 1, int pageSize = 9, string buttonClicked = "CommissionOn")
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            List<WorkViewModel>? workList;
+            Dictionary<string, SubtitleCount> subtitleCounts = [];
+            workList = vickyWorkContent.GetSearchCommission("", sortOrder);
+            for (int i = 1; i <= 16; i++)
+            {
+                subtitleCounts[$"{i}"] = new SubtitleCount { Count = CalculateSubtitleCount(i, "", sortOrder, buttonClicked) };
+            }
+
+            int skip = (page - 1) * pageSize;
+            var pagedWorkList = workList.Skip(skip).Take(pageSize).ToList();
+            var totalItems = workList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            var viewModel = new WorkListViewModel
+            {
+                WorkList = pagedWorkList,
+                PageNumber = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+                Count = subtitleCounts,
+            };
+            return Json(viewModel);
+        }
+
 
         [HttpGet]
-		public IActionResult Search(string searchKey, int? subtitle, int page = 1, int pageSize = 3)
-		{
-			var workList = GetWorkList(searchKey, subtitle, page, pageSize);
-
-			var totalItems = workList.Count;
-			var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-			var pagedWorkList = workList.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-			var viewModel = new WorkListViewModel
-			{
-				WorkList = pagedWorkList,
-				PageNumber = page,
-				TotalPages = totalPages,
-				PageSize = pageSize,
-				SearchKey = searchKey,
-			};
-
-			TempData["SearchKey"] = searchKey;
-			ViewBag.subtitle = subtitle;
-
-
-
-			ViewBag.subtitle_1 = CalculateSubtitleCount(1, searchKey);
-			ViewBag.subtitle_2 = CalculateSubtitleCount(2, searchKey);
-			ViewBag.subtitle_3 = CalculateSubtitleCount(3, searchKey);
-			ViewBag.subtitle_4 = CalculateSubtitleCount(4, searchKey);
-			ViewBag.subtitle_5 = CalculateSubtitleCount(5, searchKey);
-			ViewBag.subtitle_6 = CalculateSubtitleCount(6, searchKey);
-			ViewBag.subtitle_7 = CalculateSubtitleCount(7, searchKey);
-			ViewBag.subtitle_8 = CalculateSubtitleCount(8, searchKey);
-			ViewBag.subtitle_9 = CalculateSubtitleCount(9, searchKey);
-			ViewBag.subtitle_10 = CalculateSubtitleCount(10, searchKey);
-			ViewBag.subtitle_11 = CalculateSubtitleCount(11, searchKey);
-			ViewBag.subtitle_12 = CalculateSubtitleCount(12, searchKey);
-			ViewBag.subtitle_13 = CalculateSubtitleCount(13, searchKey);
-			ViewBag.subtitle_14 = CalculateSubtitleCount(14, searchKey);
-			ViewBag.subtitle_15 = CalculateSubtitleCount(15, searchKey);
-			ViewBag.subtitle_16 = CalculateSubtitleCount(16, searchKey);
-
-			//
-            if (MembersOnline())
+        [Route("Vicky/GetTags/{tagId}")]
+        public IActionResult GetTags(int tagId, int page = 1, int pageSize = 9)
+        {
+            var vickyWorkContent = new VickyWorkContent(_context);
+            var workList = vickyWorkContent.GetTagContents(tagId);
+            var totalItems = workList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            int skip = (page - 1) * pageSize;
+            var pagedWorkList = workList.Skip(skip).Take(pageSize).ToList();
+            var viewModel = new WorkListViewModel
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-                ViewBag.MembersIcon = MembersIcon(member.id);
-                ViewBag.MembersOnline = MembersOnline();
-            }
-            else
-            {
-                ViewBag.MembersOnline = MembersOnline();
+                WorkList = pagedWorkList,
+                PageNumber = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+
             };
-			//
-            return View(viewModel);
-		}
 
-		//Search的方法
-		private List<WorkViewModel> GetWorkList(string searchKey, int? subtitle, int page, int pageSize)
-		{
-			var vickyWorkContent = new VickyWorkContent(_context);
-			List<WorkViewModel> workList;
-
-			if (_context.Contents.Any(c => c.Title.Contains(searchKey)))
-			{
-				workList = vickyWorkContent.GetSearchContents(searchKey, page, pageSize);
-			}
-			else if (_context.Users.Any(c => c.UserName.Contains(searchKey)))
-			{
-				workList = vickyWorkContent.GetCreatorContents(searchKey);
-			}
-			else
-			{
-				workList = vickyWorkContent.GetSearchCommission(searchKey);
-			}
-
-			if (string.IsNullOrEmpty(searchKey) || workList.Count == 0)
-			{
-				searchKey = string.Empty;
-				workList = vickyWorkContent.GetSearchContents("", page, pageSize);
-			}
-
-			return workList;
-		}
-
-		//計算中標籤總數的方法
-		private int CalculateSubtitleCount(int subtitleId, string searchKey)
-		{
-			var vickyWorkContent = new VickyWorkContent(_context);
-			var workList = vickyWorkContent.GetSubtitleAscending(subtitleId);
-			var subtitleAsCommission = _context.Commissions.Any(c => c.Title!.Contains(searchKey));
-
-			if (!string.IsNullOrEmpty(searchKey))
-			{
-				workList = workList.Where(w => w.UserName!.Contains(searchKey!) || w.Title!.Contains(searchKey!)).ToList();
-				if (subtitleAsCommission)
-				{
-					workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey);
-				}
-			}
-
-			return workList.Count;
-		}
-
-		[HttpPost]
-		[Route("Vicky/GetSubtitle/{subtitleId}/{searchKey}")]
-		public IActionResult GetSubtitle(int subtitleId, string searchKey, int page = 1, int pageSize = 3)
-		{
-			var vickyWorkContent = new VickyWorkContent(_context);
-			var workList = vickyWorkContent.GetSubtitleAscending(subtitleId);
-			var subtitleAsCommission = _context.Commissions.Any(c => c.Title!.Contains(searchKey));
-
-
-			if (searchKey != null)
-			{
-				workList = workList.Where(w => w.UserName!.Contains(searchKey!) || w.Title!.Contains(searchKey!)).ToList();
-				if (subtitleAsCommission)
-				{
-					workList = vickyWorkContent.GetSubtitleAsCommission(subtitleId, searchKey);
-				}
-			}
-
-			var totalItems = workList.Count;
-			var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-			if (searchKey == null || workList.Count == 0)
-			{
-				searchKey = " ";
-				vickyWorkContent = new VickyWorkContent(_context);
-				workList = vickyWorkContent.GetSubtitleAscending(subtitleId);
-				totalItems = workList.Count();
-				totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-			}
-			if (totalPages == 0)
-			{
-				totalPages = 1;
-			}
-
-			int skip = (page - 1) * pageSize;
-			var pagedWorkList = workList.Skip(skip).Take(pageSize).ToList();
-
-			var viewModel = new WorkListViewModel
-			{
-				WorkList = pagedWorkList,
-				PageNumber = page,
-				TotalPages = totalPages,
-				PageSize = pageSize,
-
-			};
-
-			return Json(viewModel);
-		}
-
-		[HttpPost]
-		[Route("Vicky/WorkOn/{Option}")]
-		public IActionResult WorkOn(string Option, int page = 1, int pageSize = 3)
-		{
-			var vickyWorkContent = new VickyWorkContent(_context);
-			List<WorkViewModel>? workList;
-			if (Option == "descending")
-			{
-				workList = vickyWorkContent.GetContentsDescending(page, pageSize);
-			}
-			else
-			{
-				workList = vickyWorkContent.GetContentsAscending(page, pageSize);
-			}
-			var totalItems = _context.Contents.Count();
-			var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-			var viewModelB = new WorkListViewModel
-			{
-				WorkList = workList,
-				PageNumber = page,
-				TotalPages = totalPages,
-				PageSize = pageSize
-			};
-			return Json(viewModelB);
-		}
-		[HttpPost]
-		[Route("Vicky/CommissionOn/{Option}")]
-		public IActionResult CommissionOn(string Option, int page = 1, int pageSize = 3)
-		{
-			var vickyWorkContent = new VickyWorkContent(_context);
-			List<WorkViewModel>? workList;
-			if (Option == "descending")
-			{
-				workList = vickyWorkContent.GetCommissionDescending(page, pageSize);
-			}
-			else
-			{
-				workList = vickyWorkContent.GetCommissionAscending(page, pageSize);
-			}
-			var totalItems = _context.Contents.Count();
-			var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-			var viewModel = new WorkListViewModel
-			{
-				WorkList = workList,
-				PageNumber = page,
-				TotalPages = totalPages,
-				PageSize = pageSize
-			};
-			return Json(viewModel);
-		}
-
-
-	}
+            return Json(viewModel);
+        }
+    }
 }

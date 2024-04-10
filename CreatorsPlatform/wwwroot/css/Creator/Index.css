@@ -5,6 +5,6 @@
     text-overflow: ellipsis; /* 添加省略號 */
 }
 .SubClass > *{
-    width: 10rem;
+    width: 9rem;
 }
 

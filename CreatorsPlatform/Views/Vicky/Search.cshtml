@@ -1,8 +1,9 @@
 ﻿@model CreatorsPlatform.CsMod.Vicky.WorkListViewModel
 
 @{
-	int subtitle = ViewBag.subtitle == null ? 0 : ViewBag.subtitle;
 	var firstCreator = Model.WorkList!.FirstOrDefault(w => w.IsCreator);
+	int tagIdValue = ViewBag.tagId == null ? 0 : ViewBag.tagId;
+	int subtitleValue = ViewBag.subtitle == null ? 0 : ViewBag.subtitle;
 
 
 }
@@ -120,28 +121,28 @@
 								<input class="form-check-input" type="radio" name="input_Filter" value="1" id="flexCheckDefault_Original">
 								<label class="form-check-label" for="flexCheckDefault_Original">原創</label>
 							</li>
-							<li id="filterAmount"><i>@ViewBag.subtitle_1 </i></li>
+							<li id="filterAmount1"><i>@ViewBag.SubtitleCounts["subtitle_1"].Count </i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="2" id="flexCheckDefault_doujin">
 								<label class="form-check-label" for="flexCheckDefault_doujin">同人</label>
 							</li>
-							<li><i>@ViewBag.subtitle_2</i></li>
+							<li id="filterAmount2"><i>@ViewBag.SubtitleCounts["subtitle_2"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="3" id="flexCheckDefault_AI">
 								<label class="form-check-label" for="flexCheckDefault_AI">AI繪圖</label>
 							</li>
-							<li><i>@ViewBag.subtitle_3</i></li>
+							<li id="filterAmount3"><i>@ViewBag.SubtitleCounts["subtitle_3"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="16" id="flexCheckDefault_Live2D">
 								<label class="form-check-label" for="flexCheckDefault_Live2D">Live2D</label>
 							</li>
-							<li><i>@ViewBag.subtitle_16</i></li>
+							<li id="filterAmount16"><i>@ViewBag.SubtitleCounts["subtitle_16"].Count</i></li>
 						</div>
 					</div>
 
@@ -159,28 +160,28 @@
 								<input class="form-check-input" type="radio" name="input_Filter" value="4" id="flexCheckDefault_2D">
 								<label class="form-check-label" for="flexCheckDefault_2D">2D動畫</label>
 							</li>
-							<li><i>@ViewBag.subtitle_4</i></li>
+							<li id="filterAmount4"><i>@ViewBag.SubtitleCounts["subtitle_4"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="5" id="flexCheckDefault_3D">
 								<label class="form-check-label" for="flexCheckDefault_3D">3D動畫</label>
 							</li>
-							<li><i>@ViewBag.subtitle_5</i></li>
+							<li id="filterAmount5"><i>@ViewBag.SubtitleCounts["subtitle_5"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="6" id="flexCheckDefault_YT">
 								<label class="form-check-label" for="flexCheckDefault_YT">YT</label>
 							</li>
-							<li><i>@ViewBag.subtitle_6</i></li>
+							<li id="filterAmount6"><i>@ViewBag.SubtitleCounts["subtitle_6"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="7" id="flexCheckDefault_VT">
 								<label class="form-check-label" for="flexCheckDefault_VT">VT</label>
 							</li>
-							<li><i>@ViewBag.subtitle_7</i></li>
+							<li id="filterAmount7"><i>@ViewBag.SubtitleCounts["subtitle_7"].Count</i></li>
 						</div>
 					</div>
 
@@ -198,21 +199,21 @@
 								<input class="form-check-input" type="radio" name="input_Filter" value="8" id="flexCheckDefault_Music">
 								<label class="form-check-label" for="flexCheckDefault_Music">音樂</label>
 							</li>
-							<li><i>@ViewBag.subtitle_8</i></li>
+							<li id="filterAmount8"><i>@ViewBag.SubtitleCounts["subtitle_8"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="9" id="flexCheckDefault_Sound">
 								<label class="form-check-label" for="flexCheckDefault_Sound">聲音</label>
 							</li>
-							<li><i>@ViewBag.subtitle_9</i></li>
+							<li id="filterAmount9"><i>@ViewBag.SubtitleCounts["subtitle_9"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="10" id="flexCheckDefault_ASMR">
 								<label class="form-check-label" for="flexCheckDefault_Music">ASMR</label>
 							</li>
-							<li><i>@ViewBag.subtitle_10</i></li>
+							<li id="filterAmount10"><i>@ViewBag.SubtitleCounts["subtitle_10"].Count</i></li>
 						</div>
 					</div>
 
@@ -230,66 +231,55 @@
 								<input class="form-check-input" type="radio" name="input_Filter" value="11" id="flexCheckDefault_Draw">
 								<label class="form-check-label" for="flexCheckDefault_Draw">繪圖</label>
 							</li>
-							<li><i>@ViewBag.subtitle_11</i></li>
+							<li id="filterAmount11"><i>@ViewBag.SubtitleCounts["subtitle_11"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="12" id="flexCheckDefault_Video">
 								<label class="form-check-label" for="flexCheckDefault_Video">影片製作</label>
 							</li>
-							<li><i>@ViewBag.subtitle_12</i></li>
+							<li id="filterAmount12"><i>@ViewBag.SubtitleCounts["subtitle_12"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="13" id="flexCheckDefault_Soundmade">
 								<label class="form-check-label" for="flexCheckDefault_Soundmade">聲音製作</label>
 							</li>
-							<li><i>@ViewBag.subtitle_13</i></li>
+							<li id="filterAmount13"><i>@ViewBag.SubtitleCounts["subtitle_13"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="14" id="flexCheckDefault_Musicmade">
 								<label class="form-check-label" for="flexCheckDefault_Musicmade">音樂製作</label>
 							</li>
-							<li><i>@ViewBag.subtitle_14</i></li>
+							<li id="filterAmount14"><i>@ViewBag.SubtitleCounts["subtitle_14"].Count</i></li>
 						</div>
 						<div class="form-check d-flex justify-content-between">
 							<li>
 								<input class="form-check-input" type="radio" name="input_Filter" value="15" id="flexCheckDefault_Handmade">
 								<label class="form-check-label" for="flexCheckDefault_Handmade">手作</label>
 							</li>
-							<li><i>@ViewBag.subtitle_15</i></li>
+							<li id="filterAmount15"><i>@ViewBag.SubtitleCounts["subtitle_15"].Count</i></li>
 						</div>
 					</div>
 					<ul class="d-flex">
 						<label for="" class="fs-4 fw-bold  mt-3">標籤</label>
 						<button class="btn border-0 mt-3" data-bs-toggle="collapse"
-								data-bs-target="#collapseExample_Label" aria-expanded="false"
-								aria-controls="collapseExample_Label">
+								data-bs-target="#collapseTag_Label" aria-expanded="false"
+								aria-controls="collapseTag_Label">
 							<i class="ri-arrow-down-s-fill"></i>
 						</button>
 					</ul>
-					<div class="collapse" id="collapseExample_Label">
-						<li class="input-group fs-5 mx-4">
-							<a href="">
-								AAAA
-							</a>
-							<a href="">
-								BBBB
-							</a>
-							<a href="">
-								CCCC
-							</a>
-							<a href="">
-								DDDD
-							</a>
-							<a href="">
-								EEEE
-							</a>
-							<a href="">
-								FFFF
-							</a>
-						</li>
+					<div class="collapse" id="collapseTag_Label">
+						<div class="input-group fs-5 mx-3">
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(1)">少女</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(2)">原神</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(3)">女孩</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(4)">狐狸耳朵</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(5)">壁紙</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(6)">旗袍</a>
+							<a href="javascript:void(0)" class="badge badge-white m-1" onclick="tagResults(7)">長裙</a>
+						</div>
 					</div>
 				</div>
 
@@ -298,14 +288,14 @@
 					<div class="row d-flex justify-content-center">
 						@if (firstCreator != null)
 						{
-							<div class="d-flex">
+							<div class="d-flex" id="_creatorCard">
 								<div class="col-4 border card _card_A">
-									<a href="">
+									<a href="@Url.Action("index", "Creator", new { id = firstCreator.UsersID})">
 										<img src="data:image/*;base64,@(Convert.ToBase64String(firstCreator.UsersAvatar !))" class="img_Card ard-img-top img-fluid" alt="...">
 									</a>
-									<a href="" class="fs-5">@firstCreator.UserName</a>
 								</div>
 								<div class="col-8 card-body text-center position-relative">
+									<a href="@Url.Action("index", "Creator", new { id = firstCreator.UsersID})" class="fs-5">@firstCreator.UserName</a><br /><br />
 									<p>@firstCreator.Description</p>
 									<p>@firstCreator.Notice</p>
 								</div>
@@ -322,15 +312,20 @@
 								@foreach (var i in Model.WorkList!)
 								{
 									<div class="col-4 border d-flex justify-content-center card _card_B">
-										<a href="">
+										<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})">
 											<img src="data:image/*;base64,@(Convert.ToBase64String(i.ImageUrl!))" class="img_Card ard-img-top img-fluid" alt="...">
 										</a>
 										<div class="card-body text-center position-relative">
-											<a href="" class="fs-4">@i.Title</a>
+											<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})" class="fs-4">@i.Title</a>
 											<p class="position-absolute top-50 start-0">
-												<small class="text-muted fs-5">@i.UploadDate</small>
+												<span class="text-muted fs-5">
+													@if (i.UploadDate != null)
+													{
+														<span class="text-muted fs-5">@i.UploadDate.Value.ToString("yyyy-MM-dd")</span>
+													}
+												</span>
 											</p>
-											<a href="" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
@@ -341,15 +336,15 @@
 								@foreach (var i in Model.WorkList!)
 								{
 									<div class="col-4 border d-flex justify-content-center card _card_B">
-										<a href="">
+										<a href="@Url.Action("GetCommission", "Creator", new { id = i.CommissionID})">
 											<img src="../@i.CommissionImage" class="img_Card ard-img-top img-fluid" alt="...">
 										</a>
 										<div class="card-body text-center position-relative">
-											<a href="" class="fs-4">@i.Title</a>
+											<a href="@Url.Action("GetCommission", "Creator", new { id = i.CommissionID})" class="fs-4">@i.Title</a>
 											<p class="position-absolute top-50 start-0">
 												<small class="text-muted fs-5">@i.PriceMax</small>
 											</p>
-											<a href="" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
@@ -359,15 +354,20 @@
 								@foreach (var i in Model.WorkList!)
 								{
 									<div class="col-4 border d-flex justify-content-center card _card_B">
-										<a href="">
+										<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})">
 											<img src="data:image/*;base64,@(Convert.ToBase64String(i.ImageUrl!))" class="img_Card ard-img-top img-fluid" alt="...">
 										</a>
 										<div class="card-body text-center position-relative">
-											<a href="" class="fs-4">@i.Title</a>
+											<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})" class="fs-4">@i.Title</a>
 											<p class="position-absolute top-50 start-0">
-												<small class="text-muted fs-5">@i.UploadDate</small>
+												<small class="text-muted fs-5">
+													@if (i.UploadDate != null)
+													{
+														<span class="text-muted fs-5">@i.UploadDate.Value.ToString("yyyy-MM-dd")</span>
+													}
+												</small>
 											</p>
-											<a href="" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
@@ -381,7 +381,7 @@
 						<nav aria-label="Page navigation" id="_pageNavigation">
 							<ul class="pagination">
 								<li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
-									<a class="page-link" href="@Url.Action("Search", new { searchKey = Model.SearchKey, page = Model.PageNumber - 1, pageSize = 3 })" tabindex="-1">Previous</a>
+									<a class="page-link" href="@Url.Action("Search", new { searchKey = Model.SearchKey, page = Model.PageNumber - 1, pageSize = 9 })" tabindex="-1">Previous</a>
 								</li>
 								@for (int i = 1; i <= Model.TotalPages; i++)
 								{
@@ -390,7 +390,7 @@
 									</li>
 								}
 								<li class="page-item @(((Model.PageNumber == Model.TotalPages)||(Model.TotalPages==0))? "disabled" : "")">
-									<a class="page-link" href="@Url.Action("Search", new { searchKey = Model.SearchKey, page = Model.PageNumber + 1, pageSize = 3 })">Next</a>
+									<a class="page-link" href="@Url.Action("Search", new { searchKey = Model.SearchKey, page = Model.PageNumber + 1, pageSize = 9 })">Next</a>
 								</li>
 							</ul>
 						</nav>
@@ -399,17 +399,46 @@
 				</div>
 	</main>
 	<footer id="footerr">
-
-		<div id="contentList">
-			<!-- 显示内容列表的部分 -->
-		</div>
+		<div id="searchKey" data-searchkey="@TempData["SearchKey"]"></div>
 	</footer>
 	<script>
-		let subtitle = @subtitle;
-
+		let tagIdValue = @tagIdValue;
+		let subtitle = @subtitleValue;
 		$(document).ready(function () {
-			$('input[name="input_Filter"][value="' + subtitle + '"]').attr('checked', true); //如果subtitle值相同則打勾
+			$('input[name="input_Filter"][value="' + subtitle + '"]').attr('checked', true);
 		});
+		// function SortByDate(sortOrder,pageNumber = 1) {
+		// 	var searchKey = "@ViewBag.SearchKey";
+		// 	var subtitle = "@ViewBag.SubtitleId";
+		// 	var url = `/Vicky/GetSearch/${sortOrder}?page=${pageNumber}&pageSize=9`; // 修正为正确的控制器方法名
+		// 	$.ajax({
+		// 		url: url,
+		// 		type: "GET",
+		// 		data: { sortOrder: sortOrder },
+		// 		success: function (result) {
+		// 			$(".body_background").html(result);
+		// 			// result.workList.forEach(function (work) {
+		// 			// 	let workHtml =
+		// 			// 		`
+		// 			// 		<div class="col-4 border d-flex justify-content-center card _card_B" >
+		// 			// 		<a href=""><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+		// 			// 				<div class="card-body text-center position-relative">
+		// 			// 					<a href="" class="fs-4">${work.title}</a>
+		// 			// 					<p class="position-absolute top-50 start-0">
+		// 			// 						<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
+		// 			// 					</p>
+		// 			// 					<a href="" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+		// 			// 				</div>
+		// 			// 		</div>
+		// 			// 		`;
+		// 			// 	$('#_worksConent').append(workHtml);
+		// 			// });
+		// 		},
+		// 		error: function (xhr, status, error) {
+		// 			console.error(error);
+		// 		}
+		// 	});
+		// }
 	</script>
 	<script src="~/js/Vicky/VickySearch.js">
 	</script>

@@ -38,3 +38,7 @@ h3 {
     border-radius: 25%;
     z-index: 20;
 }
+
+.ObCover{
+    object-fit: cover;
+}
