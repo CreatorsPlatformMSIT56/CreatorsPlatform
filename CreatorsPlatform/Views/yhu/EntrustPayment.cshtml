@@ -69,7 +69,6 @@
 <script>
     $(document).ready(function () {
         $("#comBtn").click(function () {
-            alert("Start");
             var comText = $("#userNotice").val()
             var ComDataToServer = {
                 Description: comText,
@@ -77,14 +76,13 @@
                 CommissionId: @ViewBag.ComCheck[0].commissionId,
                 PriceMin: @ViewBag.ComCheck[0].comPriceMin
             };
-            alert(comText);
 
             $.ajax({
                 url: "/yhu/ComOrders",
                 method: "post",
                 data: ComDataToServer,
                 success: function (response) {
-                    alert(response + "成功");
+                    alert("新增成功");
                     window.history.back();
                 },
                 error: function () {
