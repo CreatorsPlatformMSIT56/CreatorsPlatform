@@ -1,4 +1,5 @@
-﻿var base64Data = [];
+﻿// 定義空陣列放資料
+var base64Data = [];
 // 對應的大標到對應的中標
 $(document).ready(function () {
     $('#categorySelect').change(function () {
@@ -156,7 +157,7 @@ function NewPostToSQL() {
         Title: $("#postTitle").val(), // 標題
         CategoryIdstring: $("#categorySelect").val(), // 主分類
         SubtitleId: SubNameToId, // 子分類
-        Imagebase64: base64Data[0],
+        Imagebase64: base64Data[0], // 取用base64 string
         Description: getQuillContent() // 作品描述
     }
     /*console.clear();*/
