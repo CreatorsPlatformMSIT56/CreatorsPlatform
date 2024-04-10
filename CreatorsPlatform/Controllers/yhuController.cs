@@ -84,7 +84,12 @@ namespace CreatorsPlatform.Controllers
             var MembersIcon = (from UserData in _context.Users
                                where UserData.UserId == x
                                select UserData.Avatar).FirstOrDefault();
-            string Avatar = Convert.ToBase64String(MembersIcon);
+            string Avatar = null;
+            if (MembersIcon != null)
+            {
+                 Avatar = Convert.ToBase64String(MembersIcon);
+            }
+            
             return Avatar;
         }
         public bool MembersOnline()
@@ -267,17 +272,6 @@ namespace CreatorsPlatform.Controllers
 
             return View();
         }
-        //[HttpPost]
-        //public ActionResult CreatorsChange(int data)
-        //{
-        //    var CreatorsData = (from UserData in _context.Users
-        //                        join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-        //                        where UserData.CategoryId == data
-        //                        select new { UserData.UserId, UserData.Avatar, UserData.UserName, 
-        //                            Description = Creators.Description.Length > 10 ? Creators.Description.Substring(0, 10) : Creators.Description 
-        //                        });
-        //    return Json(CreatorsData.ToList());
-        //}
         [HttpPost]
         public ActionResult CreatorsChange(int data)
         {
@@ -582,6 +576,7 @@ namespace CreatorsPlatform.Controllers
                 var CreatorsCheck = (from UserData in _context.Users
                                      where UserData.UserId == member.id
                                      select UserData.CreatorId).FirstOrDefault();
+               
 
                 if (CreatorsCheck != null)
                 {
@@ -593,7 +588,10 @@ namespace CreatorsPlatform.Controllers
                 }
                 ViewBag.Email = member.Email;
                 ViewBag.Name = member.Name;
-                ViewBag.Avatar = Convert.ToBase64String(Avatar);
+                if (Avatar != null)
+                {
+                    ViewBag.Avatar = Convert.ToBase64String(Avatar);
+                }
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
                 return View();
@@ -621,8 +619,13 @@ namespace CreatorsPlatform.Controllers
                     var Avatar = (from UserData in _context.Users
                                   where UserData.Email == member.Email
                                   select UserData.Avatar).FirstOrDefault();
+                    string AvatarIcon=null;
+                    if (Avatar!=null)
+                    {
+                        AvatarIcon = Convert.ToBase64String(Avatar);
+                    }
 
-                    return Json(new { Email = member.Email, Name = member.Name, Avatar = Convert.ToBase64String(Avatar) });
+                    return Json(new { Email = member.Email, Name = member.Name, Avatar = AvatarIcon });
                 case "ConsumptionRecord":
                     switch (step)
                     {
@@ -900,11 +903,6 @@ namespace CreatorsPlatform.Controllers
             }
 
         }
-        //[HttpPost]
-        //public ActionResult OrderDescription(string type, int step)
-        //{
-
-        //}
         [HttpPost]
         public ActionResult IndividualDataUP([FromBody] List<Dictionary<string, string>> data)
         {
@@ -1205,8 +1203,12 @@ namespace CreatorsPlatform.Controllers
                 HttpContext.Session.SetString("key", Member);
                 var MemberUi = (from UserData in _context.Users
                                 where UserData.UserId == ID
-                                select new { Avatar = Convert.ToBase64String(UserData.Avatar) }).FirstOrDefault();
-
+                                select  UserData.Avatar).FirstOrDefault();
+                if (MemberUi !=null)
+                {
+                    Convert.ToBase64String(MemberUi);
+                }
+            
                 return Json(MemberUi);
             }
             else if (!EmailCheck)

@@ -64,7 +64,12 @@ function GeneralSettingsReadData() {
             type: "GeneralSettings"
         },
         success: function (response) {
-            $("#Avatar").attr("src", "data:image/png;base64," + response.avatar);
+            if (response.avatar != undefined) {
+                $("#Avatar").attr("src", "data:image/png;base64," + response.avatar);
+            } else {
+                $("#Avatar").attr("src", "/img/Shared/person-circle.svg");
+            }
+           
             $("#UserEMail").val(response.email);
             $("#UserName").val(response.name);  
         }
