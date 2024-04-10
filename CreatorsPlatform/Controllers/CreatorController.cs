@@ -99,6 +99,7 @@ namespace CreatorsPlatform.Controllers
                            join s in _context.Subtitles
                            on c.SubtitleId equals s.SubtitleId
                            where c.CreatorId == id
+                           orderby c.UploadDate descending
                            select new ContentsModel
                            {
                                ContentId = c.ContentId,
