@@ -47,7 +47,11 @@ $("#UserData").on("submit", function (e) {
         contentType: 'application/json',
         success: function (response) {
             $("#UserEMail").val(response.email);
-            $("#UserName").val(response.name);  
+            $("#UserName").val(response.name);
+            $("#UserEMailText").text(response.email);
+            $("#UserNameText").text(response.name);
+            $(".ReviseShow").css("display", "none");
+            $(".DataShow").css("display", "block");
         }
     })
 });
@@ -125,6 +129,7 @@ function Order1() {
                         <td>待確認</td>
                         <td>${response[cont].workStatus}</td>
                         <td>${response[cont].orderDate}</td>        
+                        <td> </td>
              </tr>
             `)
                 cont++;
@@ -189,6 +194,7 @@ function Order3() {
                         <td>${response[cont].price}</td>
                         <td>${response[cont].workStatus}</td>
                         <td>${response[cont].orderDate}</td>
+                        <td> </td>
              </tr>
             `)
                 cont++;
@@ -216,6 +222,7 @@ function Order4() {
                         <td>${response[cont].price}</td>
                         <td>${response[cont].workStatus}</td>
                         <td>${response[cont].orderDate}</td>
+                        <td> </td>
              </tr>
             `)
                 cont++;
@@ -243,6 +250,7 @@ function Order5() {
                         <td>${response[cont].price}</td>
                         <td>${response[cont].workStatus}</td>
                         <td>${response[cont].orderDate}</td>
+                        <td> </td>
              </tr>
             `)
                 cont++;
@@ -270,6 +278,7 @@ function Order6() {
                         <td>${response[cont].price}</td>
                         <td>${response[cont].workStatus}</td>
                         <td>${response[cont].orderDate}</td>
+                        <td> </td>
              </tr>
             `)
                 cont++;
@@ -339,6 +348,10 @@ function AuthorSettingsReadData() {
             type: "AuthorSettings"
         },
         success: function (response) {
+            $("#WorkData").addClass("d-none");
+            $("#OrderData").addClass("d-none");
+            $("#EventData").addClass("d-none");
+            $("#PlanData").removeClass("d-none");
             let cont = 0;
             $("#AuthorSettings_List").empty();
             response.forEach(function () {
@@ -591,6 +604,10 @@ function WorkRead() {
         success: function (response) {
             console.log(response);
             let cont = 0;
+            $("#PlanData").addClass("d-none");
+            $("#OrderData").addClass("d-none");
+            $("#EventData").addClass("d-none");
+            $("#WorkData").removeClass("d-none"); 
             $("#Works_List").empty();
             response.forEach(function () {
                 $("#Works_List").append(`
@@ -621,6 +638,10 @@ function WorkRead() {
     });
 };
 function OrderRead() {
+    $("#PlanData").addClass("d-none");
+    $("#EventData").addClass("d-none");
+    $("#WorkData").addClass("d-none"); 
+    $("#OrderData").removeClass("d-none"); 
     Order1Read();
     $("#EntrustOrders_List").empty();
     Order2Read1();
@@ -979,7 +1000,7 @@ function CreatorStatusReply2(x, y) {
         }
     });
 };
-function CreatorStatusReply2(x, y) {
+function CreatorStatusReply3(x, y) {
     let match = x.match(/\d+$/);
     if (match !== null) {
         // 提取到的数字字符串
@@ -1049,7 +1070,6 @@ function CreatorStatusReply(x,y) {
         }
     });
 };
-
 function EventRead() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -1059,6 +1079,10 @@ function EventRead() {
         },
         success: function (response) {
             console.log(response[0]);
+            $("#PlanData").addClass("d-none");
+            $("#OrderData").addClass("d-none");
+            $("#WorkData").addClass("d-none");
+            $("#EventData").removeClass("d-none"); 
             let cont = 0;
             $("#Event_List").empty();
             response.forEach(function () {
