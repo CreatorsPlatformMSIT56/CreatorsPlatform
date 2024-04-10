@@ -489,10 +489,11 @@ namespace CreatorsPlatform.Controllers
                         }).ToList()
                     }
                 }).ToList();
-
+            //ViewBag.CreatorId = 6;
             var commissionsWithWords = (from c in _context.CommissionWithImageAndWords
                                         where c.CreatorId == id // 目前發現此id是對應到網址輸入為cmsID
-                                        group c by c.Title into g
+                                        //where c.CreatorId == ViewBag.CreatorId // 不吃動態
+										group c by c.Title into g
                                         //select g.OrderBy(x => x.CommissionId).First());
                                         select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
 
