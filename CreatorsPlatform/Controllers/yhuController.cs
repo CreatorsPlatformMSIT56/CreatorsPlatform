@@ -592,11 +592,14 @@ namespace CreatorsPlatform.Controllers
                         case 2:
                             var Order1 = (from OrderData in _context.CommissionOrders
                                          join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
-                                         where OrderData.UserId == member.id && OrderData.WorkStatus== "待確認中"
+                                         join UserData in _context.Users on OrderProjectCons.CreatorId equals UserData.CreatorId
+                                          where OrderData.UserId == member.id && OrderData.WorkStatus== "待確認中"
                                           select new
                                          {
                                              OrderData.CommissionId,
-                                             OrderProjectCons.Title,
+                                              OrderData.CommissionOrderId,
+                                              UserData.UserName,
+                                              OrderProjectCons.Title,
                                              OrderData.Price,
                                              OrderData.OrderDate,
                                              OrderData.WorkStatus
@@ -605,11 +608,15 @@ namespace CreatorsPlatform.Controllers
                         case 3:
                             var Order2 = (from OrderData in _context.CommissionOrders
                                          join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
-                                         where OrderData.UserId == member.id && OrderData.WorkStatus == "價格確認"
+                                         join UserData in _context.Users on OrderProjectCons.CreatorId equals UserData.CreatorId
+                                         where OrderData.UserId == member.id && OrderData.WorkStatus == "價格回覆"
                                           select new
                                          {
                                              OrderData.CommissionId,
+                                              OrderData.CommissionOrderId,
+                                              UserData.UserName,
                                              OrderProjectCons.Title,
+                                              OrderData.Description,
                                              OrderData.Price,
                                              OrderData.OrderDate,
                                              OrderData.WorkStatus
@@ -618,10 +625,13 @@ namespace CreatorsPlatform.Controllers
                         case 4:
                             var Order3 = (from OrderData in _context.CommissionOrders
                                          join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
-                                         where OrderData.UserId == member.id && OrderData.WorkStatus == "製作中"
+                                          join UserData in _context.Users on OrderProjectCons.CreatorId equals UserData.CreatorId
+                                          where OrderData.UserId == member.id && OrderData.WorkStatus == "價格確認"
                                          select new
                                          {
                                              OrderData.CommissionId,
+                                             OrderData.CommissionOrderId,
+                                             UserData.UserName,
                                              OrderProjectCons.Title,
                                              OrderData.Price,
                                              OrderData.OrderDate,
@@ -631,7 +641,39 @@ namespace CreatorsPlatform.Controllers
                         case 5:
                             var Order4 = (from OrderData in _context.CommissionOrders
                                           join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
+                                          join UserData in _context.Users on OrderProjectCons.CreatorId equals UserData.CreatorId
+                                          where OrderData.UserId == member.id && OrderData.WorkStatus == "製作中"
+                                          select new
+                                          {
+                                              OrderData.CommissionId,
+                                              OrderData.CommissionOrderId,
+                                              UserData.UserName,
+                                              OrderProjectCons.Title,
+                                              OrderData.Price,
+                                              OrderData.OrderDate,
+                                              OrderData.WorkStatus
+                                          });
+                            return Json(Order4.ToList());
+                        case 6:
+                            var Order5 = (from OrderData in _context.CommissionOrders
+                                          join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
+                                          join UserData in _context.Users on OrderProjectCons.CreatorId equals UserData.CreatorId
                                           where OrderData.UserId == member.id && OrderData.WorkStatus == "完成"
+                                          select new
+                                          {
+                                              OrderData.CommissionId,
+                                              OrderData.CommissionOrderId,
+                                              UserData.UserName,
+                                              OrderProjectCons.Title,
+                                              OrderData.Price,
+                                              OrderData.OrderDate,
+                                              OrderData.WorkStatus
+                                          });
+                            return Json(Order5.ToList());
+                        case 7:
+                            var Order6 = (from OrderData in _context.CommissionOrders
+                                          join OrderProjectCons in _context.Commissions on OrderData.CommissionId equals OrderProjectCons.CommissionId
+                                          where OrderData.UserId == member.id && OrderData.WorkStatus == "拒絕"
                                           select new
                                           {
                                               OrderData.CommissionId,
@@ -640,7 +682,7 @@ namespace CreatorsPlatform.Controllers
                                               OrderData.OrderDate,
                                               OrderData.WorkStatus,
                                           });
-                            return Json(Order4.ToList());
+                            return Json(Order6.ToList());
                         default:
                             break;
                     }
@@ -687,55 +729,108 @@ namespace CreatorsPlatform.Controllers
                         case 1:
                             var OrderAsk1= (from OrderData in _context.CommissionOrders
                                             join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
-                                            where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "待確認"
+                                            join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
+                                            where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "待確認中"
                                             select new
                                             {
+                                                OrderData.CommissionOrderId,
                                                 OrderData.Title,
+                                                UsrtData.UserName,
                                                 OrderData.OrderDate,
                                                 OrderData.WorkStatus,
+                                                OrderData.Description,
+                                                OrderData.Price
                                             });
                             return Json(OrderAsk1.ToList());
                         case 2:
                             var OrderAsk2 = (from OrderData in _context.CommissionOrders
                                             join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
-                                            where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "價格確認"
-                                            select new
+                                             join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
+                                             where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "價格回覆"
+                                             select new
                                             {
+                                                 OrderData.CommissionOrderId,
                                                 OrderData.Title,
-                                                OrderData.OrderDate,
+                                                 UsrtData.UserName,
+                                                 OrderData.OrderDate,
                                                 OrderData.WorkStatus,
-                                            });
+                                                 OrderData.Description,
+                                                 OrderData.Price,
+                                             });
                                 return Json(OrderAsk2.ToList());
                         case 3:
                             var OrderAsk3 = (from OrderData in _context.CommissionOrders
                                              join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
-                                             where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "製作中"
+                                             join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
+                                             where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "價格確認"
                                              select new
                                              {
+                                                 OrderData.CommissionOrderId,
                                                  OrderData.Title,
+                                                 UsrtData.UserName,
                                                  OrderData.OrderDate,
                                                  OrderData.WorkStatus,
+                                                 OrderData.Description,
+                                                 OrderData.Price
                                              });
                             return Json(OrderAsk3.ToList());
                         case 4:
                             var OrderAsk4 = (from OrderData in _context.CommissionOrders
                                              join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
+                                             join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
+                                             where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "製作中"
+                                             select new
+                                             {
+                                                 OrderData.CommissionOrderId,
+                                                 OrderData.Title,
+                                                 UsrtData.UserName,
+                                                 OrderData.OrderDate,
+                                                 OrderData.WorkStatus,
+                                                 OrderData.Description,
+                                                 OrderData.Price
+                                             });
+                            return Json(OrderAsk4.ToList());
+                        case 5:
+                            var OrderAsk5 = (from OrderData in _context.CommissionOrders
+                                             join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
+                                             join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
                                              where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "完成"
                                              select new
                                              {
+                                                 OrderData.CommissionOrderId,
                                                  OrderData.Title,
+                                                 UsrtData.UserName,
                                                  OrderData.OrderDate,
                                                  OrderData.WorkStatus,
+                                                 OrderData.Description,
+                                                 OrderData.Price
                                              });
-                            return Json(OrderAsk4.ToList());
+                            return Json(OrderAsk5.ToList());
+                        case 6:
+                            var OrderAsk6 = (from OrderData in _context.CommissionOrders
+                                             join OrderData2 in _context.Commissions on OrderData.CommissionId equals OrderData2.CommissionId
+                                             join UsrtData in _context.Users on OrderData.UserId equals UsrtData.UserId
+                                             where OrderData2.CreatorId == CreatorId && OrderData.WorkStatus == "拒絕"
+                                             select new
+                                             {
+                                                 OrderData.CommissionOrderId,
+                                                 OrderData.Title,
+                                                 UsrtData.UserName,
+                                                 OrderData.OrderDate,
+                                                 OrderData.WorkStatus,
+                                                 OrderData.Description,
+                                                 OrderData.Price
+                                             });
+                            return Json(OrderAsk6.ToList());
                         default:
                             break;
                     }
                     return Json("Eeeor");
 
                 case "EventData":
-                    var EventRead = (from EventData in _context.Events
-                                     where EventData.EventCancel == false
+                    var EventRead = (from EventData in _context.Events 
+                                     join UserData in _context.Users on EventData.CreatorId equals UserData.CreatorId
+                                     where EventData.EventCancel == false&& UserData.UserId==member.id
                                      select new
                                      {
                                          EventData.EventId,
@@ -936,7 +1031,89 @@ namespace CreatorsPlatform.Controllers
 
             return Json("OK");
         }
+        [HttpPost]
+        public ActionResult FanStatusReply(int id, string Reply)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var Order = (from OrderData in _context.CommissionOrders
+                         where OrderData.CommissionOrderId == id && OrderData.UserId == member.id
+                         select OrderData).FirstOrDefault();
+            string WorkStatus = Order.WorkStatus.ToString();
+            switch (Reply)
+            {
+                
+                case "true":
+                    switch (WorkStatus)
+                    {
+                        case "價格回覆":
+                            Order.WorkStatus = "價格確認";
+                            _context.SaveChanges();
+                            break;
+                    }
+                    break;
+                case "false":
+                    switch (WorkStatus)
+                    {
+                        case "價格回覆":
+                            Order.WorkStatus = "拒絕";
+                            _context.SaveChanges();
+                            break;
+                    }
+                    break;
+            }
+            return Json("ok");
+        }
 
+        public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var Order = (from OrderData in _context.CommissionOrders
+                         where OrderData.CommissionOrderId == id
+                         select OrderData).FirstOrDefault();
+            string WorkStatus = Order.WorkStatus.ToString();
+            switch (Reply)
+            {
+
+                case "true":
+                    switch (WorkStatus)
+                    {
+                        case "待確認中":
+                            Order.WorkStatus = "價格回覆";
+                            Order.Price = Price;
+                            _context.SaveChanges();
+                            break; 
+                        case "價格確認":
+                            Order.WorkStatus = "製作中";
+                            _context.SaveChanges();
+                            break;
+                        case "製作中":
+                            Order.WorkStatus = "完成";
+                            _context.SaveChanges();
+                            break;
+                    }
+                    break;
+                case "false":
+                    switch (WorkStatus)
+                    {
+                        case "待確認中":
+                            Order.WorkStatus = "拒絕";
+                            _context.SaveChanges();
+                            break;
+                        case "價格確認":
+                            Order.WorkStatus = "拒絕";
+                            _context.SaveChanges();
+                            break;
+                        case "製作中":
+                            Order.WorkStatus = "拒絕";
+                            _context.SaveChanges();
+                            break;
+                    }
+                    break;
+            }
+            return Json("ok");
+        }
         public IActionResult Login()
         {
             ViewBag.MembersOnline = MembersOnline();
