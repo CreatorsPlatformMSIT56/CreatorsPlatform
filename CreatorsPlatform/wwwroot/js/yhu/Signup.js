@@ -38,3 +38,24 @@
     };
    
 });
+
+$(function () {
+    $("#showPasswordBtn").on("click", function () {
+        var passwordField = $("#UserPasswd");
+        var passwordFieldCheck = $("#UserPasswdCheck");
+        var passwordError = $("#PasswdError");
+
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            passwordError.hide();
+        } else {
+            passwordField.attr("type", "password");
+        }
+        if (passwordFieldCheck.attr("type") === "password") {
+            passwordFieldCheck.attr("type", "text");
+            passwordError.hide();
+        } else {
+            passwordFieldCheck.attr("type", "password");
+        }
+    });
+});

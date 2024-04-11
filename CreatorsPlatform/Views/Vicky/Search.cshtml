@@ -290,12 +290,12 @@
 						{
 							<div class="d-flex" id="_creatorCard">
 								<div class="col-4 border card _card_A">
-									<a href="@Url.Action("index", "Creator", new { id = firstCreator.UsersID})">
+									<a href="@Url.Action("index", "Creator", new { id = firstCreator.CreatorID})">
 										<img src="data:image/*;base64,@(Convert.ToBase64String(firstCreator.UsersAvatar !))" class="img_Card ard-img-top img-fluid" alt="...">
 									</a>
 								</div>
 								<div class="col-8 card-body text-center position-relative">
-									<a href="@Url.Action("index", "Creator", new { id = firstCreator.UsersID})" class="fs-5">@firstCreator.UserName</a><br /><br />
+									<a href="@Url.Action("index", "Creator", new { id = firstCreator.CreatorID})" class="fs-5">@firstCreator.UserName</a><br /><br />
 									<p>@firstCreator.Description</p>
 									<p>@firstCreator.Notice</p>
 								</div>
@@ -325,7 +325,7 @@
 													}
 												</span>
 											</p>
-											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.CreatorID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
@@ -344,7 +344,7 @@
 											<p class="position-absolute top-50 start-0">
 												<small class="text-muted fs-5">@i.PriceMax</small>
 											</p>
-											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.CreatorID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
@@ -367,7 +367,7 @@
 													}
 												</small>
 											</p>
-											<a href="@Url.Action("index", "Creator", new { id = i.UsersID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
+											<a href="@Url.Action("index", "Creator", new { id = i.CreatorID})" class="fs-5 position-absolute top-50 end-0">@i.UserName</a>
 										</div>
 									</div>
 								}
