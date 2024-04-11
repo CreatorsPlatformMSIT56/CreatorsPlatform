@@ -39,7 +39,7 @@
                             <div class="row">
                                 <p><label for="UserName">Name</label></p>
                                 <p><input id="UserName" type="text" name="UserName" required></p>
-                                <p style="display: none; " id="UserNameError">使用者暱稱重複</pstyle>
+                                <p style="display: none; " id="UserNameError">使用者暱稱重複</p>
                             </div>
                             <div class="row">
                                 <p><label for="UserPasswd">Passwd</label></p>
@@ -49,6 +49,7 @@
                                 <p><label for="UserPasswdCheck">Passwd Check</label></p>
                                 <p><input id="UserPasswdCheck" type="password" name="UserPasswdCheck" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
                                 <p style="display: none;" id="PasswdError">兩次密碼不符合</p>
+                                <button id="showPasswordBtn" type="button">顯示密碼</button>
                             </div>
                         </div>
                         <hr />
@@ -66,3 +67,4 @@
     </div>
 </div>
 <script src="/js/yhu/Signup.js"></script>
+

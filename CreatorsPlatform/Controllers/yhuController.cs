@@ -32,8 +32,18 @@ namespace CreatorsPlatform.Controllers
 		public void sendGmail(string MEmail, string verifyCode)
 		{
 			var member = _context.Users.FirstOrDefault(x => x.Email == MEmail);
-			var result = member!.Email;
-			System.Diagnostics.Debug.WriteLine("顯示的" + result);
+            var result = "";
+            if (member != null)
+            {
+                result = member.Email;
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "發送郵件失敗";
+            }
+            System.Diagnostics.Debug.WriteLine("顯示的" + result);
+            //var result = member.Email;
+			//System.Diagnostics.Debug.WriteLine("顯示的" + result);
 
 			if (member != null)
 			{
@@ -72,11 +82,13 @@ namespace CreatorsPlatform.Controllers
 			else
 			{
 				System.Diagnostics.Debug.WriteLine("顯示" + "郵件未寄送");
-			}
+                ViewBag.ErrorMessage = "發送郵件失敗";
+            }
 		}
 		public IActionResult FTP()
 		{
-			return View();
+            ViewBag.MembersOnline = MembersOnline();
+            return View();
 		}
 
 		public string MembersIcon(int x)
