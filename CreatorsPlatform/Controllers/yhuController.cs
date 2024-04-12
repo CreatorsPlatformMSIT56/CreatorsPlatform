@@ -2,6 +2,7 @@
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
 using System.Composition;
 using System.Diagnostics.Tracing;
@@ -28,10 +29,10 @@ namespace CreatorsPlatform.Controllers
         };
 
 		[HttpGet]
-		//系統自動發驗證碼信件
-		public void sendGmail(string MEmail, string verifyCode)
-		{
-			var member = _context.Users.FirstOrDefault(x => x.Email == MEmail);
+        //系統自動發驗證碼信件
+        public void sendGmail(string MEmail, string verifyCode)
+        {
+            var member = _context.Users.FirstOrDefault(x => x.Email == MEmail);
             var result = "";
             if (member != null)
             {
@@ -39,57 +40,81 @@ namespace CreatorsPlatform.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "發送郵件失敗";
+                result = "發送郵件失敗";
             }
             System.Diagnostics.Debug.WriteLine("顯示的" + result);
             //var result = member.Email;
-			//System.Diagnostics.Debug.WriteLine("顯示的" + result);
+            //System.Diagnostics.Debug.WriteLine("顯示的" + result);
 
-			if (member != null)
-			{
-				MailMessage mail = new MailMessage();
-				//                          前面是發信的email  後面是顯示的名稱   
-				mail.From = new MailAddress("Aa0977706956@gmail.com", "系統驗證碼發送");
-				//收件者email
-				mail.To.Add(MEmail);//result
-									//mail.To.Add("wryi636@gmail.com");//result\
-				mail.To.Add("Aa0977706956@gmail.com");//result 收到信箱
-													  //設定優先權
-				mail.Priority = MailPriority.Normal;
-				//標題
-				mail.Subject = "IMAGINK_身分驗證，此為系統自動發信，請勿回信";
-				//內容
-				mail.Body = "<h1>IMAGINK系統 驗證碼</h1>\r\n" +
-							"<p>以下是您本次修改密碼的驗證碼</p>\r\n" +
-							"<h3>驗證碼:</h3>\r\n" +
-							"<h3>" + verifyCode + "</h3>\r\n";
-				//內容使用html
-				mail.IsBodyHtml = true;
-				//設定gmail的smtp(這是google的)
-				SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
-				//在gmail的帳號密碼
-				MySmtp.Credentials = new System.Net.NetworkCredential("Aa0977706956@gmail.com", "kpegknehzepacohd");
-				//開啟ssl
-				MySmtp.EnableSsl = true;
-				//發送郵件
-				MySmtp.Send(mail);
-				//放掉宣告出來的MySetp
-				MySmtp = null;
-				//放掉宣告出來的mail
-				mail.Dispose();
-				System.Diagnostics.Debug.WriteLine("顯示" + "郵件發送成功");
-			}
-			else
-			{
-				System.Diagnostics.Debug.WriteLine("顯示" + "郵件未寄送");
+            if (member != null)
+            {
+                MailMessage mail = new MailMessage();
+                //                          前面是發信的email  後面是顯示的名稱   
+                mail.From = new MailAddress("Aa0977706956@gmail.com", "系統驗證碼發送");
+                //收件者email
+                mail.To.Add(MEmail);//result
+                                    //mail.To.Add("wryi636@gmail.com");//result\
+                mail.To.Add("Aa0977706956@gmail.com");//result 收到信箱
+                                                      //設定優先權
+                mail.Priority = MailPriority.Normal;
+                //標題
+                mail.Subject = "IMAGINK_身分驗證，此為系統自動發信，請勿回信";
+                //內容
+                mail.Body = "<h1>IMAGINK系統 驗證碼</h1>\r\n" +
+                            "<p>以下是您本次修改密碼的驗證碼</p>\r\n" +
+                            "<h3>驗證碼:</h3>\r\n" +
+                            "<h3>" + verifyCode + "</h3>\r\n";
+                //內容使用html
+                mail.IsBodyHtml = true;
+                //設定gmail的smtp(這是google的)
+                SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
+                //在gmail的帳號密碼
+                MySmtp.Credentials = new System.Net.NetworkCredential("Aa0977706956@gmail.com", "kpegknehzepacohd");
+                //開啟ssl
+                MySmtp.EnableSsl = true;
+                //發送郵件
+                MySmtp.Send(mail);
+                //放掉宣告出來的MySetp
+                MySmtp = null;
+                //放掉宣告出來的mail
+                mail.Dispose();
+                System.Diagnostics.Debug.WriteLine("顯示" + "郵件發送成功");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("顯示" + "郵件未寄送");
                 ViewBag.ErrorMessage = "發送郵件失敗";
             }
-		}
+        }
+
+		[HttpGet]
 		public IActionResult FTP()
 		{
-            ViewBag.MembersOnline = MembersOnline();
-            return View();
+			ViewBag.MembersOnline = MembersOnline();
+
+			return View();
 		}
+
+		[HttpPost]
+		public IActionResult FTPGet(string userEmail, string userPassword)
+		{
+            ViewBag.MembersOnline = MembersOnline();
+
+			var user = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+
+			if (user != null)
+			{
+				// 更新密碼
+				user.Password = userPassword;
+				_context.SaveChanges(); 
+			}
+
+            return Json(user);
+		}
+
+
+
+
 
 		public string MembersIcon(int x)
         {
@@ -1288,7 +1313,26 @@ namespace CreatorsPlatform.Controllers
 
             return Json("CheckOk");
         }
+
+        [HttpPost]
+        public ActionResult ChangePwd(User user)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+
+            var  userPwdUpdate = _context.Users.FirstOrDefault(u => u.UserId == member.id);
+
+            if (userPwdUpdate != null)
+            {
+                userPwdUpdate.Password = user.Password;
+                _context.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest();
+
+        }
     }
 
-
+    
 }
