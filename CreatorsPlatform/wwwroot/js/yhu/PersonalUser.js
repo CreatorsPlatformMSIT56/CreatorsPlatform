@@ -115,7 +115,8 @@ function ImgCssRest() {
     $(".image-containerImg").css({
         "height": "100%",
         "width": "100%",
-        "object-fit": "cover"
+        "object-fit": "cover",
+        "object-position": "50% 20%"
     });
 }
 function Messagloading(UserCurrentMsgtype, CurrentMsg) {
