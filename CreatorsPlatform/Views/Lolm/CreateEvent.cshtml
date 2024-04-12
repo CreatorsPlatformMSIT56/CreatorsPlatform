@@ -38,9 +38,7 @@
             </div>
             <div>
                 <b>範例圖片</b><br />
-                <div class="d-flex ExampleImgSection">
-                    @*<div><img src="~/img/Lolm/EventContent/InaImg.jpg" alt="" /></div>
-                    <div><img src="~/img/Lolm/EventContent/ShikaImg.jpg" alt="" /></div> *@
+                <div class="d-flex ExampleImgSection">                    
                     <form action="/somewhere/to/upload" enctype="multipart/form-data">
                         <input type="file" accept="image/gif, image/jpeg, image/png" />
                         <div><img src="#" /></div>
@@ -50,17 +48,6 @@
                         <div><img src="#" /></div>
                     </form>
                 </div>
-
-                @* test *@
-                @*                 <div class="upload-container">
-                <div class="upload-box">
-                <input type="file" id="upload" accept="image/*">
-                <label for="upload"></label>
-                </div>
-                <div class="upload-preview" id="preview"></div>
-                </div> *@
-
-
             </div>
             <div class="mt-1 CreateEventBtnSection">
                 <a class="btn" id="cancelButton" type="button" asp-controller="HotGuy" asp-action="Index">取消</a>

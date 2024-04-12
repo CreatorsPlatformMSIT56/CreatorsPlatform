@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Newtonsoft.Json;
 using System.Composition;
 using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -364,14 +365,15 @@ namespace CreatorsPlatform.Controllers
                             group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                             select new
                             {
-                                UserID = PopularityRranking.Key,
+								CreatorId = PopularityRranking.Key,
                                 UserLikes = PopularityRranking.Sum(r => r.Likes)
                             }).OrderByDescending(item => item.UserLikes).Take(6);
 
-                var userIDsArray = CATCreatorsData.Select(data => data.UserID).ToArray();
+                var userIDsArray = (from Data in CATCreatorsData
+                                    select Data.CreatorId).ToList();
                 var CreatorsData = (from UserData in _context.Users
                                     join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-                                    where (userIDsArray).Contains(UserData.UserId)
+                                    where userIDsArray.Contains((int)UserData.CreatorId)
                                     select new
                                     {
                                         UserData.UserId,
@@ -381,7 +383,7 @@ namespace CreatorsPlatform.Controllers
                                         Description = Creators.Description.Length > 10 ?
                                         Creators.Description.Substring(0, 10) : Creators.Description
                                     });
-                if (CreatorsData == null)
+                if (userIDsArray.Count == 0)
                 {
                     var DefaultCreatorsData =
                             (from DefaultContents in _context.Contents
