@@ -1288,7 +1288,26 @@ namespace CreatorsPlatform.Controllers
 
             return Json("CheckOk");
         }
+
+        [HttpPost]
+        public ActionResult ChangePwd(User user)
+        {
+            var memberJson = HttpContext.Session.GetString("key");
+            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+
+            var  userPwdUpdate = _context.Users.FirstOrDefault(u => u.UserId == member.id);
+
+            if (userPwdUpdate != null)
+            {
+                userPwdUpdate.Password = user.Password;
+                _context.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest();
+
+        }
     }
 
-
+    
 }

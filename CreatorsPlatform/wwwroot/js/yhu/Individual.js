@@ -1,4 +1,4 @@
-﻿
+
 function ReviseON() {
     $(".ReviseShow").css("display", "block");
     $(".DataShow").css("display", "none");
@@ -1119,3 +1119,26 @@ function EventRead() {
         }
     });
 };
+
+
+function ChangePwd() {
+    var NewPwd = $("#NewPasswd").val();
+    var CheckNewPwd = $("#CheckNewPasswd").val();
+
+    if (NewPwd == CheckNewPwd) {
+        $.ajax({
+            url: '/yhu/ChangePwd',
+            method: 'POST',
+            data: {
+                Password: NewPwd
+            },
+            success: function (response) {
+                alert("密碼變更成功")
+                $('#exampleModal').modal('hide');
+            }
+        });
+    } else {
+        alert("重新輸入密碼錯誤，請重新確認")
+    }
+    
+}
