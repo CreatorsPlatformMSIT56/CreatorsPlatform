@@ -33,7 +33,8 @@ namespace CreatorsPlatform.CsMod.Vicky
                         where content.Title.Contains(searchKey)
                         select new WorkViewModel
                         {
-                            ContentsID = content.ContentId, //作品ID
+							CreatorID = content.CreatorId,
+							ContentsID = content.ContentId, //作品ID
                             UsersID = user.UserId, //使用者ID
                             Title = content.Title, //標籤
                             UploadDate = content.UploadDate, //作品更新時間
@@ -74,7 +75,8 @@ namespace CreatorsPlatform.CsMod.Vicky
                         where commission.Title!.Contains(searchKey)
                         select new WorkViewModel
                         {
-                            CommissionID = commission.CommissionId, //作品ID
+							CreatorID = commission.CreatorId,
+							CommissionID = commission.CommissionId, //作品ID
                             UsersID = user.UserId, //使用者ID
                             CommissionTitle = commission.Title, //標籤
                             CommissionImage = image.ImageUrl, //作品圖
@@ -100,15 +102,14 @@ namespace CreatorsPlatform.CsMod.Vicky
 
             var query = from content in _context.Contents
                         join user in _context.Users
-                        on content.CreatorId equals user.CreatorId//以下新增勾選
-                                                                  //join category in _context.Categories
-                                                                  //on content.CategoryId equals category.CategoryId
+                        on content.CreatorId equals user.CreatorId
                         join creator in _context.Creators
                         on content.CreatorId equals creator.CreatorId
                         where user.UserName.Contains(searchKey)
                         orderby content.UploadDate ascending
                         select new WorkViewModel
                         {
+                            CreatorID = creator.CreatorId,
                             ContentsID = content.ContentId,
                             UsersID = user.UserId,
                             Title = content.Title,
@@ -140,7 +141,8 @@ namespace CreatorsPlatform.CsMod.Vicky
                         //orderby content.UploadDate ascending
                         select new WorkViewModel
                         {
-                            ContentsID = content.ContentId,
+							CreatorID = content.CreatorId,
+							ContentsID = content.ContentId,
                             UsersID = user.UserId,
                             Title = content.Title,
                             UploadDate = content.UploadDate,
@@ -175,7 +177,8 @@ namespace CreatorsPlatform.CsMod.Vicky
                         where commission.SubtitleId == subtitleId && commission.Title!.Contains(searchKey)
                         select new WorkViewModel
                         {
-                            CommissionID = commission.CommissionId,
+							CreatorID = commission.CreatorId,
+							CommissionID = commission.CommissionId,
                             UsersID = user.UserId,
                             Title = commission.Title,
                             CommissionImage = image.ImageUrl,
@@ -211,7 +214,8 @@ namespace CreatorsPlatform.CsMod.Vicky
                         orderby content.UploadDate ascending
                         select new WorkViewModel
                         {
-                            ContentsID = content.ContentId,
+							CreatorID = content.CreatorId,
+							ContentsID = content.ContentId,
                             UsersID = user.UserId,
                             Title = content.Title,
                             UploadDate = content.UploadDate,

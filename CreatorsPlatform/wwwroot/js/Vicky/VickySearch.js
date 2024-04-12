@@ -66,7 +66,7 @@ function WorkOn(pageNumber = 1) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
 								</p>
-								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
@@ -117,7 +117,7 @@ function WorkLow(pageNumber = 1) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
 								</p>
-								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
@@ -184,7 +184,7 @@ function CommissionOn(pageNumber = 1) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
 								</p>
-								<a href="/Creator/Index?id=${commission.usersID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
                     </div>
                     `;
@@ -236,7 +236,7 @@ function CommissionLow(pageNumber = 1) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
 								</p>
-								<a href="/Creator/Index?id=${commission.usersID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
                     </div>
                     `;
@@ -268,21 +268,17 @@ var _button_container_PriceSort = document.getElementById('_button_container_Pri
 var _button_container_PriceSortB = document.getElementById('_button_container_PriceSortB');
 
 _button_container_TimeSort.onclick = function () {
-    console.log(1);
     if (subtitleClicked) {
         _button_container_TimeSort.style.display = "none";
         _button_container_TimeSortB.style.display = "block";
         isWorkOnClicked = true;
         sortOrder = "ascending";
         subtitleChange();
-        console.log(3);
     } else {
         WorkOn();
-        console.log(4);
     }
 }
 _button_container_TimeSortB.onclick = function () {
-    console.log(2);
     if (subtitleClicked) {
         _button_container_TimeSort.style.display = "block";
         _button_container_TimeSortB.style.display = "none";
@@ -379,7 +375,7 @@ function filterResults(option, searchKey, pageNumber = 1, buttonClicked) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${work.isCommission == true ? `${work.priceMax}` : `${formatDate(work.uploadDate)}`}</small>
 								</p>
-								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
@@ -433,7 +429,7 @@ function tagResults(tagId, pageNumber = 1) {
 								<p class="position-absolute top-50 start-0">
 									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
 								</p>
-								<a href="/Creator/Index?id=${work.usersID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
                     </div>
                     `;
