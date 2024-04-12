@@ -97,6 +97,34 @@
                     </div>
                 </div>
             }
+            <!-- 發送留言 -->
+            <div class="row">
+                <div class="new-comment">
+                    <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                        <div class="row g-0">
+                            <div class="col-md-2 avatar text-center">
+                                @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+                                @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                <img src="data:image/png;base64,@(ViewBag.MembersIcon ?? Array.Empty<byte>())" alt="" class="align-items-center img-fluid rounded-circle"
+                                     style="max-width:100px; max-height:100px;">
+                                @* </a> *@
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                    <h5 class="card-title mb-1">@ViewBag.UserName</h5>
+                                    @* </a> *@
+                                    <div class="input-group">
+                                        <textarea class="form-control" placeholder="留言..." id="comment-text"></textarea>
+                                    </div>
+                                    <button class="mt-2 btn bg-primary" onclick="PostCommentToSQL()">發送</button>
+                                    @* <p class="card-text"><small class="text-muted">留言時間</small></p> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12 px-5 py-3 other-commissions">
                     <h4>創作者其他作品</h4>
@@ -169,6 +197,7 @@
     // 把當前登入的使用者跟當前創作者抓下來給JS用
     var CreatorId = @ViewBag.CreatorId;
     var UserId = @ViewBag.UserId;
+    var ContentId = @ViewBag.ContentId;
     // console.log(CreatorId);
     // console.log(UserId);
 </script>

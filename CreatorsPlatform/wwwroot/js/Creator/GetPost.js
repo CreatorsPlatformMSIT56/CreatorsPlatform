@@ -30,3 +30,26 @@ function FollowAjax() {
         }
     });
 }
+
+// 發送留言AJAX
+function PostCommentToSQL() {
+    var commentData = {
+        //Comment1: "HUH",
+        Comment1: $("#comment-text").val(),
+        UserId: UserId,
+        ContentId: ContentId
+    }
+    console.log(commentData);
+    $.ajax({
+        url: "/Creator/PostComment",
+        method: "post",
+        data: commentData,
+        success: function () {
+            alert('ok');
+            commentGet(); // 實時顯示留言還沒寫
+        },
+        error: function () {
+            alert('fail');
+        }
+    });
+}
