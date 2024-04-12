@@ -1,4 +1,7 @@
 
+CreatorIDCheck(false);
+const { ajax } = require("jquery");
+
 function ReviseON() {
     $(".ReviseShow").css("display", "block");
     $(".DataShow").css("display", "none");
@@ -34,7 +37,7 @@ function readFile(event) {
     });
 
     FR.readAsDataURL(file);
-}
+};
 
 $("#UserData").on("submit", function (e) {
     e.preventDefault();
@@ -730,7 +733,7 @@ function Order2Read1() {
             });
         }
     });
-}
+};
 function Order2Read2() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -758,7 +761,7 @@ function Order2Read2() {
             });
         }
     });
-}
+};
 function Order2Read3() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -796,7 +799,7 @@ function Order2Read3() {
             });
         }
     });
-}
+};
 function Order2Read4() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -834,7 +837,7 @@ function Order2Read4() {
             });
         }
     });
-}
+};
 function Order2Read5() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -862,7 +865,7 @@ function Order2Read5() {
             });
         }
     });
-}
+};
 function Order2Read6() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -890,7 +893,7 @@ function Order2Read6() {
             });
         }
     });
-}
+};
 
 function StatusReplyOptionsCreator1(e) {
     $("#OrderDescriptionAuthor").empty();
@@ -1119,8 +1122,6 @@ function EventRead() {
         }
     });
 };
-
-
 function ChangePwd() {
     var NewPwd = $("#NewPasswd").val();
     var CheckNewPwd = $("#CheckNewPasswd").val();
@@ -1141,4 +1142,24 @@ function ChangePwd() {
         alert("重新輸入密碼錯誤，請重新確認")
     }
     
-}
+};
+
+function CreatorIDCheck(x) {
+    let y = x;
+    $.ajax({
+        url: '/yhu/CreatorIDCheck',
+        method: 'POST',
+        data: {
+            Check: y
+        },
+        success: function (response) {
+            $("#AuthorSettings").removeClass("d-none");
+            $("#AuthorSettings_Project").removeClass("d-none");
+            $("#CreatorIDCheck").addClass("d-none");
+        }, error: function () {
+            $("#AuthorSettings").addClass("d-none");
+            $("#AuthorSettings_Project").addClass("d-none");
+            $("#CreatorIDCheck").removeClass("d-none");
+        }
+    });
+};

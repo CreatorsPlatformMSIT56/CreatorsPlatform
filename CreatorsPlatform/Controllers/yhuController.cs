@@ -1334,7 +1334,53 @@ namespace CreatorsPlatform.Controllers
             return BadRequest();
 
         }
-    }
+		[HttpPost]
+		public ActionResult CreatorIDCheck(bool Check)
+		{
+			var memberJson = HttpContext.Session.GetString("key");
+			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			if (Check)
+			{
+			
+				var CreatorID = (from UserData in _context.Users
+								 where UserData.UserId == member.id
+								 select UserData).FirstOrDefault();
+                if (CreatorID != null)
+                {
+                    Creator CreatorNew = new Creator
+                    {
+                        Description = "",
+                        Notice="",
+                    };
+                  
+                    _context.Add(CreatorNew);
+                    _context.SaveChanges();
 
-    
+                    var CreatorIDMax = (from UserData in _context.Creators
+                                        select UserData.CreatorId).Max();
+                    CreatorID.CreatorId = CreatorIDMax ;
+                    _context.SaveChanges();
+				}
+                return Ok();
+			}
+			else
+			{
+                var CreatorID = (from UserData in _context.Users
+                                 where UserData.UserId == member.id
+                                 select UserData.CreatorId).FirstOrDefault();
+                if (CreatorID != null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+	
+		}
+		}
+	}
+
+	
 }
