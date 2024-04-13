@@ -254,7 +254,7 @@ namespace CreatorsPlatform.Controllers
 				// 存 Content 進DB
 				var newrecord = _context.Contents.Add(Newcontent);
 
-				await _context.SaveChangesAsync();
+				await _context.SaveChangesAsync(); // 目前發現這條結束後 就會自行跳轉
 
 				return RedirectToAction("GetPost", new { id = newrecord.Entity.ContentId });
 				//return RedirectToAction("GetPost", "Creator");
