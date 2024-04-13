@@ -1,3 +1,9 @@
+var userName = UserName;
+var membersIcon = MembersIcon;
+console.log(userName);
+console.log(membersIcon);
+
+
 function Follow() {
     //console.log(123);
     if (UserId == 0) {
@@ -46,7 +52,25 @@ function PostCommentToSQL() {
         data: commentData,
         success: function () {
             alert('ok');
-            commentGet(); // 實時顯示留言還沒寫
+            var newPostHtml = `
+                    <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                    <div class="row g-0">
+                        <div class="col-md-2 avatar text-center">
+                            <img src="data:image/png;base64,${MembersIcon}" alt="" class="img-fluid rounded-circle"
+                                 style="max-width:100px; max-height:100px;">
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                <h5 class="card-title mb-1">${UserName}</h5>
+                                <p class="card-text mb-2">
+                                    ${commentData.Comment1}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $(".new-comment-pop").append(newPostHtml);
         },
         error: function () {
             alert('fail');

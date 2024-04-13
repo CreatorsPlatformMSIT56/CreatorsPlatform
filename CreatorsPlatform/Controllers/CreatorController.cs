@@ -398,6 +398,8 @@ namespace CreatorsPlatform.Controllers
                 ViewBag.MembersOnline = MembersOnline();
 
                 ViewBag.UserId = member.id;
+                // 拿名字去前端
+                ViewBag.UserName = member.Name;
                 
                 // 如果有登入，把檢查是否追蹤結果傳到前端
                 var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
@@ -445,8 +447,8 @@ namespace CreatorsPlatform.Controllers
             {
                 // 存 Comment 進DB
                 _context.Comments.Add(commentData);
-
                 await _context.SaveChangesAsync();
+
             }
             return Ok();
         }
