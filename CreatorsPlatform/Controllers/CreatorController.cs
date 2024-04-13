@@ -387,6 +387,9 @@ namespace CreatorsPlatform.Controllers
 			// 傳作品作者id到前端
 			ViewBag.CreatorId = content.CreatorId;
 
+            // 傳作品id回js
+            ViewBag.ContentId = content.ContentId;
+
 			if (MembersOnline())
             {
                 var memberJson = HttpContext.Session.GetString("key");
@@ -434,7 +437,19 @@ namespace CreatorsPlatform.Controllers
             //
             return View(viewModel);
         }
+        // 發送留言
+        [HttpPost]
+        public async Task<IActionResult> PostComment(Comment commentData)
+        {
+            if (ModelState.IsValid != null)
+            {
+                // 存 Comment 進DB
+                _context.Comments.Add(commentData);
 
+                await _context.SaveChangesAsync();
+            }
+            return Ok();
+        }
 
         //----------------------------------------------------------------
         //委託貼文頁面

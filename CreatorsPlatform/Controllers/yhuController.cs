@@ -677,8 +677,7 @@ namespace CreatorsPlatform.Controllers
                                                 {
                                                     PlansData.PlanName,
                                                     UserData.UserName,
-                                                    PlansData.Description
-                                                ,
+                                                    PlansData.Description,
                                                     PlansData.PlanLevel,
                                                     PlansData.PlanPrice,
                                                     SubscriptionData.EndDate

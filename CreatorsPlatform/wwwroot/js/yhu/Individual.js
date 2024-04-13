@@ -104,8 +104,9 @@ function PlanCons() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Plan").append(`
               <tr>
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${(cont + 1)}</th>
                         <td>${response[cont].planName}</td>
+                        <td>${response[cont].userName}</td>
                         <td>${response[cont].description}</td>
                         <td>${response[cont].planLevel}</td>
                         <td>${response[cont].planPrice}</td>
@@ -131,7 +132,7 @@ function Order1() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${(cont + 1)}</th>
                         <td>${response[cont].title}</td>
                         <td>${response[cont].userName}</td>
                         <td>待確認</td>
