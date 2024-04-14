@@ -64,8 +64,8 @@
 									<img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg">
 								</div>
 							<div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
-								<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[0].Title</h3>
-								<h5 class="text-end">@ViewBag.DefaultContentsData[0].UploadDate</h5>
+							<h3 class="text-start fw-bold GrayText">@ViewBag.DefaultContentsData[0].Title</h3>
+							<h5 class="text-end GrayText">@ViewBag.DefaultContentsData[0].UploadDate</h5>
 							</div>
 						</div>
 					<div id="Woklist2img" class="carousel-item">
@@ -96,8 +96,8 @@
 								&& ViewBag.DefaultContentsData[1].Title != null 
 								&& ViewBag.DefaultContentsData[1].UploadDate != null)
 								{
-								<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[1].Title</h3>
-								<h5 class="text-end">@ViewBag.DefaultContentsData[1].UploadDate</h5>
+								<h3 class="text-start fw-bold GrayText">@ViewBag.DefaultContentsData[1].Title</h3>
+								<h5 class="text-end GrayText">@ViewBag.DefaultContentsData[1].UploadDate</h5>
 								}
 								else
 								{
@@ -134,8 +134,8 @@
 												&& ViewBag.DefaultContentsData[2].UploadDate != null
 								)
 							{
-								<h3 class="text-start fw-bold">@ViewBag.DefaultContentsData[2].Title</h3>
-								<h5 class="text-end">@ViewBag.DefaultContentsData[2].UploadDate</h5>
+								<h3 class="text-start fw-bold GrayText">@ViewBag.DefaultContentsData[2].Title</h3>
+								<h5 class="text-end GrayText">@ViewBag.DefaultContentsData[2].UploadDate</h5>
 							}
 							else
 							{
@@ -161,7 +161,14 @@
 				{
 					<div id="@item.UserId" class="row" onclick="WorkChanges(this)">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
-							<img src="data:image/png;base64,@Convert.ToBase64String(@item.Avatar)" class="UserIcon rounded-2" alt="...">
+							@if (item.Avatar != null)
+							{
+								<img src="data:image/png;base64,@item.Avatar" class="UserIcon rounded-2" alt="...">
+							}
+							else
+							{
+								<img src="/img/Shared/person-circle.svg" class="UserIcon rounded-2" alt="...">
+							}
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">

@@ -80,4 +80,6 @@ ul {
     height: 100px; /* 图像高度填充容器 */
     object-fit: cover; /* 保持原始比例，填充容器 */
 }
-
+.GrayText {
+    text-shadow: -1px -1px 0 #b7b7b7, 1px -1px 0 #b7b7b7, -1px 1px 0 #b7b7b7, 1px 1px 0 #b7b7b7;
+}
