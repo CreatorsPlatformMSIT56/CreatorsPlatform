@@ -71,6 +71,8 @@ ul {
 .TextDiv {
     display: block;
     backdrop-filter: blur(8px);
+    background-color: #0000006b;
+    color: #ffffff;
 }
 .image-containerEvent {
     height: 100px; /* 设置容器高度 */

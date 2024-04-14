@@ -131,13 +131,13 @@
     bottom: 50px;
     width: 50px;
     height: 50px;
-    background-color: #f9a21a;
-    border-radius: 25%
+    border-radius: 50%;
+    color: #ffcc2e;
 }
 
     .QuickPostBtn:hover {
-        filter: brightness(1.05);
-        background-color: #f9a21a;
+        filter: brightness(1.1);
+        color: #ffcc2e;
     }
 
     .QuickPostBtn:focus {
