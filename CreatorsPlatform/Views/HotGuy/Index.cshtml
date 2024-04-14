@@ -33,7 +33,7 @@
 					<div class="carousel-caption d-none d-md-block">
 
 						<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@newEvents.ElementAt(i).EventId">
-							<h5>@newEvents.ElementAt(i).EventName</h5>
+							<h5 class="d-inline-block bg-dark bg-opacity-75 fs-4">@newEvents.ElementAt(i).EventName</h5>
 						</a>
 					</div>
 				</div>
@@ -56,21 +56,44 @@
 		<div class="evtTitle"></div>
 		<p class="evtStatus">最新活動</p>
 		<ul class="list-group">
+			@{
+				int NewEventCount = 1;
+			}
 			@foreach (var item in newEvents)
 			{
-				<li class="list-group-item" position-relative m-4>
-					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
-					<h3>
-						<span>
-							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-								@Html.DisplayFor(newEvents => item.EventName)
-							</a>
-						</span>
-					</h3>
-					<br />
-					<p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
-					<p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
-				</li>
+				if (NewEventCount % 2 == 0)
+				{
+					<li class="list-group-item bg-success bg-opacity-10" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@item.Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+									@Html.DisplayFor(newEvents => item.EventName)
+								</a>
+							</span>
+						</h3>
+						<br />
+						<p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
+					</li>
+				}
+				else
+				{
+					<li class="list-group-item" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@item.Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
+									@Html.DisplayFor(newEvents => item.EventName)
+								</a>
+							</span>
+						</h3>
+						<br />
+						<p class="EventDes">@Html.DisplayFor(newEvents => item.DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(newEvents => item.StartDate)</p>
+					</li>
+				}
+				NewEventCount++;
 			}
 		</ul>
 	</div>
@@ -82,20 +105,39 @@
 		<div class="evtTitle"></div>
 		<p class="evtStatus">進行中活動</p>
 		<ul class="list-group">
-			@foreach (var item in Model)
+			@for (int i = 0; i < Model.ToList().Count; i++)
 			{
-				<li class="list-group-item" position-relative m-4>
-					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
-					<h3>
-						<span>
-							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-								@Html.DisplayFor(Model => item.EventName)
-							</a>
-						</span>
-					</h3><br />
-					<p class="EventDes">@Html.DisplayFor(Model => item.DescriptionString)</p>
-					<p class="EventEndDate">@Html.DisplayFor(Model => item.EndDate)</p>
-				</li>
+				@* if是為了設置偶數底色 *@
+				if (i % 2 == 0)
+				{
+					<li class="list-group-item bg-success bg-opacity-10" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@Model.ToList()[i].Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@Model.ToList()[i].EventId">
+									@Html.DisplayFor(Model => Model.ToList()[i].EventName)
+								</a>
+							</span>
+						</h3><br />
+						<p class="EventDes">@Html.DisplayFor(Model => Model.ToList()[i].DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(Model => Model.ToList()[i].EndDate)</p>
+					</li>
+				}
+				else
+				{
+					<li class="list-group-item" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@Model.ToList()[i].Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@Model.ToList()[i].EventId">
+									@Html.DisplayFor(Model => Model.ToList()[i].EventName)
+								</a>
+							</span>
+						</h3><br />
+						<p class="EventDes">@Html.DisplayFor(Model => Model.ToList()[i].DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(Model => Model.ToList()[i].EndDate)</p>
+					</li>
+				}
 			}
 
 		</ul>
@@ -108,21 +150,41 @@
 		<div class="evtTitle"></div>
 		<p class="evtStatus">即將結束活動</p>
 		<ul class="list-group">
-			@foreach (var item in oldEvents)
+			@for (int i = 0; i < oldEvents.ToList().Count; i++)
 			{
-				<li class="list-group-item" position-relative m-4>
-					<img class="listImg float-md-start me-md-3" src="@item.Banner" />
-					<h3>
-						<span>
-							<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@item.EventId">
-								@Html.DisplayFor(modelItem => item.EventName)
-							</a>
-						</span>
-					</h3>
-					<br />
-					<p class="EventDes">@Html.DisplayFor(modelItem => item.DescriptionString)</p>
-					<p class="EventEndDate">@Html.DisplayFor(modelItem => item.EndDate)</p>
-				</li>
+				@* for 偶數行的背景色 *@
+				if (i % 2 == 0)
+				{
+					<li class="list-group-item bg-success bg-opacity-10" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@oldEvents.ToList()[i].Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@oldEvents.ToList()[i].EventId">
+									@Html.DisplayFor(modelItem => oldEvents.ToList()[i].EventName)
+								</a>
+							</span>
+						</h3>
+						<br />
+						<p class="EventDes">@Html.DisplayFor(modelItem => oldEvents.ToList()[i].DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(modelItem => oldEvents.ToList()[i].EndDate)</p>
+					</li>
+				}
+				else
+				{
+					<li class="list-group-item" position-relative m-4>
+						<img class="listImg float-md-start me-md-3" src="@oldEvents.ToList()[i].Banner" />
+						<h3>
+							<span>
+								<a asp-controller="Lolm" asp-action="EventContent" asp-route-id="@oldEvents.ToList()[i].EventId">
+									@Html.DisplayFor(modelItem => oldEvents.ToList()[i].EventName)
+								</a>
+							</span>
+						</h3>
+						<br />
+						<p class="EventDes">@Html.DisplayFor(modelItem => oldEvents.ToList()[i].DescriptionString)</p>
+						<p class="EventEndDate">@Html.DisplayFor(modelItem => oldEvents.ToList()[i].EndDate)</p>
+					</li>
+				}
 			}
 		</ul>
 	</div>
