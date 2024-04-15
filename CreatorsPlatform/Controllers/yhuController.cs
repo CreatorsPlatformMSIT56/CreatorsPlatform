@@ -118,17 +118,21 @@ namespace CreatorsPlatform.Controllers
 
 
 
-		public string MembersIcon(int x)
+        public string MembersIcon(int x)
         {
+            string Avatar;
             var MembersIcon = (from UserData in _context.Users
                                where UserData.UserId == x
                                select UserData.Avatar).FirstOrDefault();
-            string Avatar = null;
             if (MembersIcon != null)
             {
-                 Avatar = Convert.ToBase64String(MembersIcon);
+                Avatar = Convert.ToBase64String(MembersIcon);
             }
-            
+            else
+            {
+                Avatar = null;
+            }
+
             return Avatar;
         }
         public bool MembersOnline()

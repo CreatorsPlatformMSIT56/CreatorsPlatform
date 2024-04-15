@@ -107,22 +107,22 @@ html {
         display: block !important;
     }
 
-/*會員下拉選單裡面的按鈕(a)*/
-.MemberDropdownList a {
-    text-decoration: none;
-    background: white;
-    color: black;
-    display: block;
-    text-align: center;
-}
-
-    .MemberDropdownList a:hover {
+    /*會員下拉選單裡面的按鈕(a)*/
+    .MemberDropdownList a {
+        text-decoration: none;
+        background: white;
+        color: black;
         display: block;
-        background: #d6edff;
+        text-align: center;
     }
 
-    /*Footer*/
-.FooterContainer{
+        .MemberDropdownList a:hover {
+            display: block;
+            background: #d6edff;
+        }
+
+/*Footer*/
+.FooterContainer {
     line-height: 30px;
 }
 /*社群媒體圖片*/

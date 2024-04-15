@@ -22,15 +22,24 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
-		public string MembersIcon(int x)
-		{
-			var MembersIcon = (from UserData in _context.Users
-							   where UserData.UserId == x
-							   select UserData.Avatar).FirstOrDefault();
-			string Avatar = Convert.ToBase64String(MembersIcon);
-			return Avatar;
-		}
-		public bool MembersOnline()
+        public string MembersIcon(int x)
+        {
+            string Avatar;
+            var MembersIcon = (from UserData in _context.Users
+                               where UserData.UserId == x
+                               select UserData.Avatar).FirstOrDefault();
+            if (MembersIcon != null)
+            {
+                Avatar = Convert.ToBase64String(MembersIcon);
+            }
+            else
+            {
+                Avatar = null;
+            }
+
+            return Avatar;
+        }
+        public bool MembersOnline()
 		{
 			var memberJson = HttpContext.Session.GetString("key");
 			if (memberJson != null)
