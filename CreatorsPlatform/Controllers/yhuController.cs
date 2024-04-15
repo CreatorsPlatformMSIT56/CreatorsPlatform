@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Newtonsoft.Json;
 using System.Composition;
 using System.Diagnostics.Tracing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
@@ -326,13 +327,15 @@ namespace CreatorsPlatform.Controllers
                            group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                            select new
                            {
-                               UserID = PopularityRranking.Key,
+                               CreatorId = PopularityRranking.Key,
                                UserLikes = PopularityRranking.Sum(r => r.Likes)
-                           }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
-                        var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                           }).OrderByDescending(item => item.UserLikes).Take(6);
+                        var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
                         var AuthorProfile = (from UsersData in _context.Users
                                              join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                             join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
                                              where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                             orderby Default.UserLikes descending
                                              select new
                                              {
                                                  UsersData.UserId,
@@ -340,7 +343,7 @@ namespace CreatorsPlatform.Controllers
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
                                                  Description = Introduction.Description.Length > 10 ?
-                                                 Introduction.Description.Substring(0, 10) : Introduction.Description
+                                                 Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
                                              }
                                    );
                         return Json(AuthorProfile.ToList());
@@ -353,7 +356,7 @@ namespace CreatorsPlatform.Controllers
                                                  Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
                                                  NewReport.UserName,
                                                  NewReport.CategoryId,
-                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
+                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) + "..." : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
                         return Json(NewReportData.ToList());
                     default:
@@ -362,6 +365,8 @@ namespace CreatorsPlatform.Controllers
             }
             else
             {
+
+
                 var CATCreatorsData =
                            (from DefaultContents in _context.Contents
                             where DefaultContents.CategoryId == data
@@ -374,9 +379,11 @@ namespace CreatorsPlatform.Controllers
 
                 var userIDsArray = (from Data in CATCreatorsData
                                     select Data.CreatorId).ToList();
-                var CreatorsData = (from UserData in _context.Users
+                var CreatorsData = (from UserData in _context.Users            
                                     join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-                                    where userIDsArray.Contains((int)UserData.CreatorId)
+                                    join CATCData in CATCreatorsData on UserData.CreatorId equals CATCData.CreatorId
+                                    where userIDsArray.Contains(Creators.CreatorId)
+                                    orderby CATCData.UserLikes descending
                                     select new
                                     {
                                         UserData.UserId,
@@ -384,7 +391,7 @@ namespace CreatorsPlatform.Controllers
                                         UserData.UserName,
                                         UserData.CategoryId,
                                         Description = Creators.Description.Length > 10 ?
-                                        Creators.Description.Substring(0, 10) : Creators.Description
+                                        Creators.Description.Substring(0, 10)+ "..." : Creators.Description
                                     });
                 if (userIDsArray.Count == 0)
                 {
@@ -393,13 +400,15 @@ namespace CreatorsPlatform.Controllers
                              group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                              select new
                              {
-                                 UserID = PopularityRranking.Key,
+                                 CreatorId = PopularityRranking.Key,
                                  UserLikes = PopularityRranking.Sum(r => r.Likes)
-                             }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
-                    var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                             }).OrderByDescending(item => item.UserLikes).Take(6);
+                    var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
                     var AuthorProfile = (from UsersData in _context.Users
                                          join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                         join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
                                          where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                         orderby Default.UserLikes descending
                                          select new
                                          {
                                              UsersData.UserId,
@@ -407,7 +416,7 @@ namespace CreatorsPlatform.Controllers
                                              UsersData.UserName,
                                              UsersData.CategoryId,
                                              Description = Introduction.Description.Length > 10 ?
-                                             Introduction.Description.Substring(0, 10) : Introduction.Description
+                                             Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
                                          }
                                );
                     return Json(AuthorProfile.ToList());

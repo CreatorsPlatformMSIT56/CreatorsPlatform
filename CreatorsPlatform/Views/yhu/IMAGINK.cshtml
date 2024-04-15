@@ -63,8 +63,8 @@
                             <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg">
                         </div>
                         <div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
-                            <h3 class="text-center fw-bold">@ViewBag.DefaultContentsData[0].Title</h3>
-                            <h5 class="text-end pe-3">@ViewBag.DefaultContentsData[0].UploadDate</h5>
+                            <h3 class="text-center fw-bold GrayText">@ViewBag.DefaultContentsData[0].Title</h3>
+                            <h5 class="text-end pe-3 GrayText">@ViewBag.DefaultContentsData[0].UploadDate</h5>
                         </div>
                     </div>
                     <div id="Woklist2img" class="carousel-item">
@@ -95,8 +95,8 @@
                             && ViewBag.DefaultContentsData[1].Title != null
                             && ViewBag.DefaultContentsData[1].UploadDate != null)
                             {
-                                <h3 class="text-center fw-bold">@ViewBag.DefaultContentsData[1].Title</h3>
-                                <h5 class="text-end pe-3">@ViewBag.DefaultContentsData[1].UploadDate</h5>
+                                <h3 class="text-center fw-bold GrayText">@ViewBag.DefaultContentsData[1].Title</h3>
+                                <h5 class="text-end pe-3 GrayText">@ViewBag.DefaultContentsData[1].UploadDate</h5>
                             }
                             else
                             {
@@ -133,8 +133,8 @@
                             && ViewBag.DefaultContentsData[2].UploadDate != null
                             )
                             {
-                                <h3 class="text-center fw-bold">@ViewBag.DefaultContentsData[2].Title</h3>
-                                <h5 class="text-end pe-3">@ViewBag.DefaultContentsData[2].UploadDate</h5>
+                                <h3 class="text-center fw-bold GrayText">@ViewBag.DefaultContentsData[2].Title</h3>
+                                <h5 class="text-end pe-3 GrayText">@ViewBag.DefaultContentsData[2].UploadDate</h5>
                             }
                             else
                             {
