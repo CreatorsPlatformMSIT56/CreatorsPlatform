@@ -1,4 +1,7 @@
-﻿
+﻿.CurSorPointer{
+    cursor:pointer;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -10,7 +13,18 @@
 #Main {
     flex: 0 0 auto;
     width: 56%;
+    /*設定輪播部份的動畫*/
+    position: relative;
+    animation-name: bottomToTop;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
 }
+
+@keyframes bottomToTop{
+    from {top: 10vh; opacity: 0;}
+    to {top: 0px; opacity: 1;}
+}
+
 #StallMain {
     flex: 0 0 auto;
     width: 56%;
@@ -23,6 +37,16 @@
 
 #Sidebar {
 }
+
+/*點擊頭像會轉換輪播的部份*/
+.CreaterChangePart{
+    cursor:pointer;
+    transition: all 0.2s ease;
+}
+
+    .CreaterChangePart:hover {
+        box-shadow: 5px 5px 8px #888888;
+    }
 
 .UserIcon {
     height: 12vh;
@@ -60,7 +84,16 @@
     align-items: center;
     background-color: aliceblue;
     height: 5vh;
+    position: relative;
+    animation-name: TopToBottom;
+    animation-duration: 0.5s;
 }
+
+@keyframes TopToBottom{
+    from{ opacity:0;}
+    to{ opacity:1;}
+}
+
 ul {
     margin: 0;
 }
@@ -76,7 +109,12 @@ ul {
 }
 .image-containerEvent {
     height: 100px; /* 设置容器高度 */
+    transition: all 0.2s ease;
 }
+    .image-containerEvent:hover {
+        box-shadow: 5px 5px 8px #888888;
+    }
+
 .image-containerEventImg {
     width: 100%; /* 图像宽度填充容器 */
     height: 100px; /* 图像高度填充容器 */

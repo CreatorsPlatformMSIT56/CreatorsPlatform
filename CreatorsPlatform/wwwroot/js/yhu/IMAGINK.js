@@ -20,12 +20,18 @@ function CreatorsChange(Category) {
 		success: function (response) {
 			console.log(response);
 			let cont = 0;
+			let UserBg;
 			$("#UserlistDetail").empty();
-			response.forEach(function () {		
+			response.forEach(function () {
+				if (cont % 2 == 0) {
+					UserBg = "bg-info bg-opacity-10";
+				} else {
+					UserBg = "";
+				}
 				$("#UserlistDetail").append(`
-				  <div id="uid${response[cont].userId}" class="row" onclick="WorkChanges(this)">
+				  <div id="uid${response[cont].userId}" class="row border border-2 ${UserBg}" onclick="WorkChanges(this)">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
-							<img src="data:image/png;base64,${response[cont].avatar}" class="UserIcon rounded-2" alt="...">
+							<img src="data:image/png;base64,${response[cont].avatar}" class="UserIcon rounded-2 CreaterChangePart" alt="...">
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
@@ -35,8 +41,7 @@ function CreatorsChange(Category) {
 								<p class="card-text">${response[cont].description}</p>
 							</div>
 						</div>
-				  </div>
-				  <hr />
+				  </div>				  
             `);
 				cont++;
 			});
