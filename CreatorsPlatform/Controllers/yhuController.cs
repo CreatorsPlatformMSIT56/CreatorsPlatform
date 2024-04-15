@@ -1315,8 +1315,8 @@ namespace CreatorsPlatform.Controllers
                 return Json("EmailCheck");
             };
             //目前使用者
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+           
+            MemberData member = new MemberData();
             member.Name = UserName;
             member.Email = Email;
             member.Password = UserPasswd;
