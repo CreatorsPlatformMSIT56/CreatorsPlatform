@@ -37,7 +37,7 @@ function WorkOn(pageNumber = 1) {
             // 清空搜尋框內容
             $('#searchInput').val('');
             //創作者卡片
-            $("#_creatorCard").empty();
+            $("#_creatorCard").remove();
             //主要內容
             $("#_worksConent").empty();
             //搜尋筆數
@@ -59,14 +59,14 @@ function WorkOn(pageNumber = 1) {
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                    <div class="col-4  border _card_B">
                     <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4" class="fs-4">${work.title}</a>
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
-								</p>
-								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								    <a href="/Creator/GetPost?id=${work.contentsID}" class="fs-5">${work.title}</a>
+                                <div class=" d-flex justify-content-between">
+                                	<h4 class="text-muted">${formatDate(work.uploadDate)}</h4>
+                                    <a href="/Creator/Index?id=${work.creatorID}" class="fs-5">${work.userName}</a>
+                                </div>				
 							</div>
                     </div>
                     `;
@@ -110,14 +110,14 @@ function WorkLow(pageNumber = 1) {
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                        <div class="col-4  border _card_B">
                     <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4" class="fs-4">${work.title}</a>
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
-								</p>
-								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								    <a href="/Creator/GetPost?id=${work.contentsID}" class="fs-5">${work.title}</a>
+                                <div class=" d-flex justify-content-between">
+                                	<h4 class="text-muted">${formatDate(work.uploadDate)}</h4>
+                                    <a href="/Creator/Index?id=${work.creatorID}" class="fs-5">${work.userName}</a>
+                                </div>				
 							</div>
                     </div>
                     `;
@@ -160,7 +160,7 @@ function CommissionOn(pageNumber = 1) {
         success: function (data) {
             $('input[name="input_Filter"]').prop('checked', false);
             $('#searchInput').val('');
-            $("#_creatorCard").empty();
+            $("#_creatorCard").remove();
             $("#_worksConent").empty();
             $("#_searchAmount").empty();
             let dataLength = `<i>顯示${data.workList.length}筆結果</i>`;
@@ -177,14 +177,14 @@ function CommissionOn(pageNumber = 1) {
             data.workList.forEach(function (commission) {
                 let commissionHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                    <div class="col-4  border _card_B">
                     <a href="/Creator/GetCommission?id=${commission.commissionID}"><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${commission.priceMin} ~ ${commission.priceMax}</small>
-								</p>
-								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-5">${commission.commissionTitle}</a>
+                                <div class=" d-flex justify-content-between">
+                                     <h4 class="text-muted ">${commission.priceMin} ~ ${commission.priceMax}</h4>
+                                     <a href="/Creator/Index?id=${commission.creatorID}" class="fs-5">${commission.userName}</a>
+                                </div>				
 							</div>
                     </div>
                     `;
@@ -229,14 +229,14 @@ function CommissionLow(pageNumber = 1) {
             data.workList.forEach(function (commission) {
                 let commissionHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                    <div class="col-4  border _card_B">
                     <a href="/Creator/GetCommission?id=${commission.commissionID}"><img src="${commission.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
-								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${commission.priceMin} ~ ${commission.priceMax}</small>
-								</p>
-								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
+								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-5">${commission.commissionTitle}</a>
+                                <div class=" d-flex justify-content-between">
+                                     <h4 class="text-muted ">${commission.priceMin} ~ ${commission.priceMax}</h4>
+                                     <a href="/Creator/Index?id=${commission.creatorID}" class="fs-5">${commission.userName}</a>
+                                </div>				
 							</div>
                     </div>
                     `;
@@ -365,15 +365,15 @@ function filterResults(option, searchKey, pageNumber = 1, buttonClicked) {
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                   <div class="col-4  border _card_B">
                     ${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}"><img src="${work.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>` :
                         `<a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>`}
 							<div class="card-body text-center position-relative">
 								${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}" class="fs-4">${work.title}</a>` : `<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>`}
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${work.isCommission == true ? `${work.priceMin}~${work.priceMax}` : `${formatDate(work.uploadDate)}`}</small>
-								</p>
-								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+								<div class=" d-flex justify-content-between">
+                                    <h4 class="text-muted">${work.isCommission == true ? `${work.priceMin}~${work.priceMax}` : `${formatDate(work.uploadDate)}`}</h4>
+                                    <a href="/Creator/Index?id=${work.creatorID}" class="fs-5">${work.userName}</a>
+                                </div>
 							</div>
                     </div>
                     `;
@@ -420,14 +420,14 @@ function tagResults(tagId, pageNumber = 1) {
             data.workList.forEach(function (work) {
                 let workHtml =
                     `
-                    <div class="col-4 border d-flex justify-content-center card _card_B" >
+                    <div class="col-4  border _card_B">
                         <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
 								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>
-								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${formatDate(work.uploadDate)}</small>
-								</p>
-								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
+                                <div class=" d-flex justify-content-between">
+									<h4 class="text-muted">${formatDate(work.uploadDate)}</h4>
+									<a href="/Creator/Index?id=${work.creatorID}" class="fs-5">${work.userName}</a>
+								</div>
 							</div>
                     </div>
                     `;

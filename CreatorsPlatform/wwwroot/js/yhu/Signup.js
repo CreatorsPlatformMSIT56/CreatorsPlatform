@@ -39,10 +39,10 @@
    
 });
 
+//顯示密碼
 $(function () {
     $("#showPasswordBtn").on("click", function () {
         var passwordField = $("#UserPasswd");
-        var passwordFieldCheck = $("#UserPasswdCheck");
         var passwordError = $("#PasswdError");
 
         if (passwordField.attr("type") === "password") {
@@ -51,6 +51,13 @@ $(function () {
         } else {
             passwordField.attr("type", "password");
         }
+    });
+});
+
+$(function () {
+    $("#showPasswordCheckBtn").on("click", function () {
+        var passwordFieldCheck = $("#UserPasswdCheck");
+        var passwordError = $("#PasswdError");
         if (passwordFieldCheck.attr("type") === "password") {
             passwordFieldCheck.attr("type", "text");
             passwordError.hide();
@@ -58,4 +65,48 @@ $(function () {
             passwordFieldCheck.attr("type", "password");
         }
     });
+});
+
+//沒點擊時看見是密碼 點擊後會變成黑點點
+
+function showPlainText(input) {
+    if (input.value === '密碼' || input.value === '確認密碼') {
+        input.value = '';
+        input.type = 'password';
+        
+    }
+}
+
+//沒點擊時看見是密碼 點擊後會變成黑點點
+function hidePlainText(input) {
+    if (input.value === '') {
+        input.type = 'text';
+        input.value = '密碼';
+    }
+}
+
+function hidePlainCheckText(input) {
+    if (input.value === '') {
+        input.type = 'text';
+        input.value = '確認密碼';
+    }
+}
+
+//點擊切換圖片
+document.getElementById('showPasswordBtn').addEventListener('click', function () {
+    var passwordIcon = document.getElementById('passwordIcon');
+    if (passwordIcon.src.includes('lockFill')) {
+        passwordIcon.src = "/img/VickyImg/lockUnlock.png";
+    } else {
+        passwordIcon.src = "/img/VickyImg/lockFill.png";
+    }
+});
+
+document.getElementById('showPasswordCheckBtn').addEventListener('click', function () {
+    var passwordIcon = document.getElementById('passWordCheckIcon');
+    if (passwordIcon.src.includes('lockFill')) {
+        passwordIcon.src = "/img/VickyImg/lockUnlock.png";
+    } else {
+        passwordIcon.src = "/img/VickyImg/lockFill.png";
+    }
 });

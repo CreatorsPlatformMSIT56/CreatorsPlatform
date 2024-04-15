@@ -1,10 +1,81 @@
-﻿#Login{
-    height:60vh;
-    min-height:60vh;
+﻿
+
+body {
+    animation: scrollBackground 10s linear infinite;
 }
-.VhHeight{
-    height:15% !important;
+
+@keyframes scrollBackground {
+    0% {
+        background-color: red;
+    }
+
+    25% {
+        background-color: blue;
+    }
+
+    50% {
+        background-color: green;
+    }
+
+    75% {
+        background-color: yellow;
+    }
+
+    100% {
+        background-color: red;
+    }
 }
+
+.container {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.LoginCard {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-weight: bold;
+    border: 10px solid #f1f1f1;
+    font-size: 1.5rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 25vw;
+    height:45vh;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(4px); /* 添加模糊效果 */
+}
+
+    .LoginCard input {
+        background-color: rgba(0, 0, 0, 0); /* 使用 rgba() 函數設置完全透明的背景色 */
+        color: white;
+        border: 2px solid #ccc;
+        border-radius: 20px;
+        padding: 5px;
+        margin-bottom: 10px;
+        width: 15vw;
+        font-size: 1rem;
+        font-weight: bold;
+        outline: none; /* 移除聚焦時的輪廓 */
+    }
+
+#loginInputOk {
+    width: 10vw;
+}
+
+.showPasswordBtnLogin {
+    background-color: transparent; /* 去掉背景色 */
+    border-color: transparent; /* 去掉邊框色 */
+}
+
+
 .ToMiddle {
     display: flex;
     justify-content: center;
