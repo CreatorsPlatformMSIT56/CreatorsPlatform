@@ -160,7 +160,14 @@
                 {
                     <div id="@item.UserId" class="row" onclick="WorkChanges(this)">
                         <div class="col-md-4 d-flex align-items-center justify-content-center">
-                            <img src="data:image/png;base64,@Convert.ToBase64String(@item.Avatar)" class="UserIcon rounded-2" alt="...">
+                            @if (item.Avatar != null)
+                            {
+                                <img src="data:image/png;base64,@item.Avatar" class="UserIcon rounded-2" alt="...">
+                            }
+                            else
+                            {
+                                <img src="/img/Shared/person-circle.svg" class="UserIcon rounded-2" alt="...">
+                            }
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
