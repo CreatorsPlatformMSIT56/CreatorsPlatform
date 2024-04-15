@@ -3,9 +3,9 @@
 *@
 @{
     int UserId = ViewBag.Id;
-    string maxPrice = "0";
+    int? maxPrice = 0;
     if (ViewBag.ComCheck[0].comPriceMax == null) 
-    { maxPrice = ""; }else { maxPrice = ViewBag.ComCheck[0].comPriceMax; }
+    { maxPrice = null; }else { maxPrice = ViewBag.ComCheck[0].comPriceMax; }
 }
 
 <style>
