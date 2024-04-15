@@ -29,7 +29,7 @@ function CreatorsChange(Category) {
 					UserBg = "";
 				}
 				$("#UserlistDetail").append(`
-				  <div id="uid${response[cont].userId}" class="row border border-2 ${UserBg}" onclick="WorkChanges(this)">
+				  <div id="uid${response[cont].userId}" class="h-100 row border border-2 ${UserBg}" onclick="WorkChanges(this)">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
 							<img src="data:image/png;base64,${response[cont].avatar}" class="UserIcon rounded-2 CreaterChangePart" alt="...">
 						</div>
