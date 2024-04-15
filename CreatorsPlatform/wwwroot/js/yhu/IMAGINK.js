@@ -55,6 +55,54 @@ function WorkChanges(e) {
 		method: 'POST',
 		data: { data: intValue }, //UserlistDetail
 		success: function (response) {
+
+			var formattedDates = []; // 创建一个空数组来存储格式化后的日期字符串
+
+			for (var i = 0; i < response.length; i++) {
+				// 调用 formatDateString 函数来格式化日期
+				var FormatUploadDate = formatDateString(new Date(response[i].uploadDate));
+				console.log(FormatUploadDate);
+
+				// 将格式化后的日期字符串添加到数组中
+				formattedDates.push(FormatUploadDate);
+			};
+
+			function formatDateString(date) {
+				// 获取年、月、日
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1; // 月份从 0 开始，所以要加1
+				var day = date.getDate();
+
+				// 获取小时、分钟、秒
+				var hours = date.getHours();
+				var minutes = date.getMinutes();
+				var seconds = date.getSeconds();
+
+				// 格式化月份和日期，确保是单个数字时前面加零
+				month = month < 10 ? '0' + month : month;
+				day = day < 10 ? '0' + day : day;
+
+				// 格式化小时、分钟、秒，确保是单个数字时前面加零
+				hours = hours < 10 ? '0' + hours : hours;
+				minutes = minutes < 10 ? '0' + minutes : minutes;
+				seconds = seconds < 10 ? '0' + seconds : seconds;
+
+				// 判断上午或下午
+				var period = hours >= 12 ? '下午' : '上午';
+
+				// 将小时转换为12小时制
+				hours = hours % 12;
+				hours = hours ? hours : 12; // 如果小时数为0，则转换为12
+
+				// 拼接格式化后的日期和时间字符串
+				var formattedDate = year + '/' + month + '/' + day + ' ' + period + ' ' + hours + ':' + minutes + ':' + seconds;
+
+				return formattedDate;
+			}
+
+
+			console.log(typeof response[0].uploadDate + ' ' + response[0].uploadDate);
+
 			console.log(response);
 			//---------------------------
 			$("#Woklist1img").empty();
@@ -73,7 +121,7 @@ function WorkChanges(e) {
 				   </div>
 				 <div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
 							<h3 class="text-center fw-bold GrayText">${response[0].title != undefined ? response[0].title : ` `}</h5>
-							 <h5 class="text-end pe-3 GrayText">${response[0].uploadDate != undefined ? response[0].uploadDate : ` `}</p>
+							 <h5 class="text-end pe-3 GrayText">${formattedDates[0] != undefined ? formattedDates[0] : ` `}</p>
 				</div> 
 				 `	);
 			//----------------------------
@@ -86,7 +134,7 @@ function WorkChanges(e) {
 					</div>
 				<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
 					<h3 class="text-center fw-bold GrayText">${response[1].title != undefined ? response[1].title : ` `}</h5>
-					 <h5 class="text-end pe-3 GrayText">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
+					 <h5 class="text-end pe-3 GrayText">${formattedDates[1] != undefined ? formattedDates[1] : ` `}</p>
 				</div>`
 			);
 			//-----------------------------
@@ -99,13 +147,15 @@ function WorkChanges(e) {
 					</div>
 				<div id="Woklist3text" class="carousel-caption d-none d-md-block TextDiv">
 					<h3 class="text-center fw-bold GrayText">${response[2].title != undefined ? response[2].title : ` `}</h5>
-				    <h5 class="text-end pe-3 GrayText">${response[2].uploadDate != undefined ? response[2].uploadDate : ` `}</p>
+				    <h5 class="text-end pe-3 GrayText">${formattedDates[2] != undefined ? formattedDates[2] : ` `}</p>
 				</div>`
 			);
 			ImgCssRest();
 		}
 	});
 };
+
+
 function IconCssRest() {
 	$(".UserIcon").css({
 		"height": "12vh",
