@@ -8,7 +8,12 @@
 			<div class="pictures-container text-center border-bottom border-2 rounded">
 				@if (Model.Commission!.FirstOrDefault()!.CommissionImages.Any())
 				{
-					<img src="@Model.Commission!.FirstOrDefault()!.CommissionImages.First().ImageUrl" alt="" class="img-fluid">
+					@* <img src="@Model.Commission!.FirstOrDefault()!.CommissionImages.First().ImageUrl" alt="" class="img-fluid"> *@
+					@foreach (var e in Model.CommissionImages){
+					<div>
+						<img src="@e.ImageUrl" class="d-block w-100" alt="...">
+					</div>
+					}
 				}
 				else
 				{
@@ -153,9 +158,10 @@
 											<h6 class="card-subtitle mb-2 text-muted">
 												@e.SubtitleName
 											</h6>
-											<p class="card-text commision-description">
+											<!-- 暫且不用 -->
+											@* <p class="card-text commision-description">
 												@e.Description
-											</p>
+											</p> *@
 											<h5 class="card-text commisionPriceMin" style="font-weight:bolder">
 												@e.PriceMin.ToString("C0")
 												@(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")
