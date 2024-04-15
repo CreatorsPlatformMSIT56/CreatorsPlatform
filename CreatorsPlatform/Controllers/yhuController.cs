@@ -264,15 +264,17 @@ namespace CreatorsPlatform.Controllers
                                  select new
                                  {
                                      UsersData.UserId,
-                                     UsersData.Avatar,
+									 Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
                                      Description = Introduction.Description.Length > 10 ?
-                                    Introduction.Description.Substring(0, 10) : Introduction.Description
+                                    Introduction.Description.Substring(0, 10)+"..." : Introduction.Description
                                  });
             Console.WriteLine(AuthorProfile.ToList().Count);
-            //依作者照第一個作者群找作品
-            var DefaultContentsData = ((from DefaultContents in _context.Contents
+            var x = AuthorProfile.ToList();
+            Console.WriteLine(x[0].Avatar);
+			//依作者照第一個作者群找作品
+			var DefaultContentsData = ((from DefaultContents in _context.Contents
                                         where DefaultContents.CreatorId == DefaultCreatorsData[0].UserID
                                         select new
                                         {
@@ -333,7 +335,7 @@ namespace CreatorsPlatform.Controllers
                                              select new
                                              {
                                                  UsersData.UserId,
-                                                 Avatar = Convert.ToBase64String(UsersData.Avatar),
+                                                 Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
                                                  Description = Introduction.Description.Length > 10 ?
@@ -377,7 +379,7 @@ namespace CreatorsPlatform.Controllers
                                     select new
                                     {
                                         UserData.UserId,
-                                        Avatar = Convert.ToBase64String(UserData.Avatar),
+                                        Avatar = UserData.Avatar!=null?Convert.ToBase64String(UserData.Avatar): null,
                                         UserData.UserName,
                                         UserData.CategoryId,
                                         Description = Creators.Description.Length > 10 ?
@@ -400,7 +402,7 @@ namespace CreatorsPlatform.Controllers
                                          select new
                                          {
                                              UsersData.UserId,
-                                             Avatar = Convert.ToBase64String(UsersData.Avatar),
+                                             Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                              UsersData.UserName,
                                              UsersData.CategoryId,
                                              Description = Introduction.Description.Length > 10 ?
@@ -646,6 +648,10 @@ namespace CreatorsPlatform.Controllers
         public ActionResult IndividualData(string type, int step)
         {
             var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson == null)
+            {
+                View("Login");
+            };
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
             var CreatorId = (from UserData in _context.Users
                              where UserData.UserId == member.id
