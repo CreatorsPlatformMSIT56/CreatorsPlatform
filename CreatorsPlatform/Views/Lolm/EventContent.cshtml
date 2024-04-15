@@ -57,7 +57,7 @@
 				<div class="row">
 					@foreach (var item in Model.FindAll(model => model.ImageSample == true && model.EveImgCancel != true))
 					{
-						<div class="col-6 EventExampleImg"><img src="@item.ImageUrl" alt="Alternate Text" /></div>
+						<div class="col-6 EventExampleImg align-self-start"><img class="img-fluid " src="@item.ImageUrl" alt="Alternate Text" /></div>
 					}
 				</div>
 			</div>
