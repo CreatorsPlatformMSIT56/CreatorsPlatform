@@ -251,31 +251,32 @@ namespace CreatorsPlatform.Controllers
             var DefaultCreatorsData =
                              ((from DefaultContents in _context.Contents
                                group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+                               orderby PopularityRranking.Sum(r => r.Likes) descending
                                select new
                                {
-                                   UserID = PopularityRranking.Key,
+                                   CreatorId = PopularityRranking.Key,
                                    UserLikes = PopularityRranking.Sum(r => r.Likes)
-                               }).OrderByDescending(item => item.UserLikes).Take(6).ToList());
-            var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                               }).OrderByDescending(item => item.UserLikes).Take(6));
+            var xxx = DefaultCreatorsData.ToList();
+            var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
             //作者依喜歡數排序並取則頭像等
             var AuthorProfile = (from UsersData in _context.Users
                                  join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                 join topCreator in DefaultCreatorsData on UsersData.CreatorId equals topCreator.CreatorId
                                  where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                 orderby topCreator.UserLikes descending
                                  select new
                                  {
                                      UsersData.UserId,
-									 Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
+                                     Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
                                      Description = Introduction.Description.Length > 10 ?
-                                    Introduction.Description.Substring(0, 10)+"..." : Introduction.Description
+                                    Introduction.Description.Substring(0, 10) + "..." : Introduction.Description,
                                  });
-            Console.WriteLine(AuthorProfile.ToList().Count);
-            var x = AuthorProfile.ToList();
-            Console.WriteLine(x[0].Avatar);
 			//依作者照第一個作者群找作品
 			var DefaultContentsData = ((from DefaultContents in _context.Contents
-                                        where DefaultContents.CreatorId == DefaultCreatorsData[0].UserID
+                                        where DefaultContents.CreatorId == xxx[0].CreatorId
                                         select new
                                         {
                                             DefaultContents.ContentId,
