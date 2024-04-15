@@ -10,19 +10,19 @@
 	<div class="row LoginCard  border ToMiddle" id="UserU">
 		<form id="LoginList">
 			<h2 class="my-4">登入</h2>
-			<div class="position-relative">
+			<div class="position-relative my-2">
 				<input id="E_Mail" name="E_Mail" type="email" value="Email" onfocus="if(this.value=='Email') this.value='';" onblur="if(this.value=='') this.value='Email';" required>
 				<h3 class="ri-mail-add-fill position-absolute top-0 end-0  my-1 w-50"></h3>
 				<p style="display: none;" id="EmailError">使用者信箱無效</p>
 			</div>
-				<div class="position-relative">
+			<div class="position-relative my-2">
 					<input id="Passwd" name="Passwd" type="password" value="密碼" onfocus="if(this.value=='密碼') this.value='';" onblur="if(this.value=='') this.value='密碼';" required>
 				<button class="showPasswordBtnLogin position-absolute top-0 end-0 my-1 w-50" id="showPasswordBtnLogin" type="button">
 						<img id="passwordIconLogin" src="~/img/VickyImg/lockFill.png" alt="">
 					</button>
 					<p style="display: none;" id="PasswdError">密碼錯誤</p>
 				</div>
-				<div class="d-flex">
+			<div class="d-flex my-2">
 					<a href="/yhu/FTP" class="mx-5">忘記密碼</a>
 					<h5><input type="submit" value="Login" id="loginInputOk"></h5>
 				</div>
