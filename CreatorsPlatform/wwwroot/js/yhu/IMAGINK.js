@@ -1,12 +1,10 @@
-﻿//const { compile } = require("sizzle");
+﻿window.addEventListener('load', function () {
+	var myCarousel = document.querySelector('#SmallTourCarousel');
+	var carousel = new bootstrap.Carousel(myCarousel, {
+		interval: false,
+	});
 
-//window.addEventListener('load', function () {
-//    var myCarousel = document.querySelector('#SmallTourCarousel');
-//    var carousel = new bootstrap.Carousel(myCarousel, {
-//        interval: false,
-//	});
-
-//});
+});
 
 
 
@@ -74,8 +72,8 @@ function WorkChanges(e) {
 						     </svg>` }
 				   </div>
 				 <div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
-							<h3 class="text-start fw-bold">${response[0].title != undefined ? response[0].title : ` `}</h5>
-							 <h5 class="text-end">${response[0].uploadDate != undefined ? response[0].uploadDate : ` `}</p>
+							<h3 class="text-center fw-bold GrayText">${response[0].title != undefined ? response[0].title : ` `}</h5>
+							 <h5 class="text-end pe-3 GrayText">${response[0].uploadDate != undefined ? response[0].uploadDate : ` `}</p>
 				</div> 
 				 `	);
 			//----------------------------
@@ -87,8 +85,8 @@ function WorkChanges(e) {
 							</svg>` }
 					</div>
 				<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
-					<h3 class="text-start fw-bold">${response[1].title != undefined ? response[1].title : ` `}</h5>
-					 <h5 class="text-end">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
+					<h3 class="text-center fw-bold GrayText">${response[1].title != undefined ? response[1].title : ` `}</h5>
+					 <h5 class="ttext-end pe-3 GrayText">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
 				</div>`
 			);
 			//-----------------------------
@@ -100,8 +98,8 @@ function WorkChanges(e) {
 						</svg>` }
 					</div>
 				<div id="Woklist3text" class="carousel-caption d-none d-md-block TextDiv">
-					<h3 class="text-start fw-bold">${response[2].title != undefined ? response[2].title : ` `}</h5>
-				    <h5 class="text-end">${response[2].uploadDate != undefined ? response[2].uploadDate : ` `}</p>
+					<h3 class="text-center fw-bold GrayText">${response[2].title != undefined ? response[2].title : ` `}</h5>
+				    <h5 class="text-end pe-3 GrayText">${response[2].uploadDate != undefined ? response[2].uploadDate : ` `}</p>
 				</div>`
 			);
 			ImgCssRest();

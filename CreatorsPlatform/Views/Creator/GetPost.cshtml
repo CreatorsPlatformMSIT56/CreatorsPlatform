@@ -55,12 +55,12 @@
                     @* 關注按鈕 *@
                     @if (ViewBag.UnFollow == true)
                     {
-                        <button class="btn FollowBtn" onclick="Follow()">關注</button>
+                        <button class="btn FollowBtn  border border-3 border-secondary" onclick="Follow()">關注</button>
                         <button class="btn btn-primary UnFollowBtn" onclick="UnFollow()" style="display: none;">關注中</button>
                     }
                     else
                     {
-                        <button class="btn FollowBtn" onclick="Follow()" style="display: none;">關注</button>
+                        <button class="btn FollowBtn  border border-3 border-secondary" onclick="Follow()" style="display: none;">關注</button>
                         <button class="btn btn-primary UnFollowBtn" onclick="UnFollow()">關注中</button>
                     }
                 </div>
@@ -97,6 +97,38 @@
                     </div>
                 </div>
             }
+            <!-- 新留言張貼處 -->
+            <div class="row new-comment-pop">
+
+            </div>
+            <!-- 發送留言 -->
+            <div class="row">
+                <div class="new-comment">
+                    <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
+                        <div class="row g-0">
+                            <div class="col-md-2 avatar text-center">
+                                @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
+                                @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                <img src="data:image/png;base64,@(ViewBag.MembersIcon ?? Array.Empty<byte>())" alt="" class="align-items-center img-fluid rounded-circle"
+                                     style="max-width:100px; max-height:100px;">
+                                @* </a> *@
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
+                                    <h5 class="card-title mb-1">@ViewBag.UserName</h5>
+                                    @* </a> *@
+                                    <div class="input-group">
+                                        <textarea class="form-control" placeholder="留言..." id="comment-text"></textarea>
+                                    </div>
+                                    <button class="mt-2 btn bg-primary" onclick="PostCommentToSQL()">發送</button>
+                                    @* <p class="card-text"><small class="text-muted">留言時間</small></p> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12 px-5 py-3 other-commissions">
                     <h4>創作者其他作品</h4>
@@ -131,11 +163,11 @@
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
-                <h3 class="mt-2">訂閱方案: </h3>
+                <h3 class="mt-2 text-center bg-warning bg-opacity-25">訂閱方案 </h3>
                 @foreach (var e in Model.Plans)
                 {
-                    <div class="col-12">
-                        <div class="card mb-3">
+                    <div class="col-12 text-center">
+                        <div class="card mb-3 border border-4 border-start-0 border-end-0">
                             @* <img class="card-img-top"
                         src="https://fakeimg.pl/500/"
                         alt="Card image cap"
@@ -150,7 +182,7 @@
                                 <p class="card-text plan-price">
                                     @e.PlanPrice.ToString("C0")
                                 </p>
-                                <button><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
+                                <button class="btn bg-warning bg-opacity-75"><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
                             </div>
                         </div>
                     </div>
@@ -169,7 +201,10 @@
     // 把當前登入的使用者跟當前創作者抓下來給JS用
     var CreatorId = @ViewBag.CreatorId;
     var UserId = @ViewBag.UserId;
-    // console.log(CreatorId);
+    var ContentId = @ViewBag.ContentId;
+    var MembersIcon = '@ViewBag.MembersIcon';
+    var UserName = '@ViewBag.UserName';
+
     // console.log(UserId);
 </script>
 <script src="~/js/Creator/GetPost.js"></script>

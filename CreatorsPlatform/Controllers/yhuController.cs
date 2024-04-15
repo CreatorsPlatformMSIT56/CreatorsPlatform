@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Newtonsoft.Json;
 using System.Composition;
 using System.Diagnostics.Tracing;
+using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -250,29 +252,32 @@ namespace CreatorsPlatform.Controllers
             var DefaultCreatorsData =
                              ((from DefaultContents in _context.Contents
                                group DefaultContents by DefaultContents.CreatorId into PopularityRranking
+                               orderby PopularityRranking.Sum(r => r.Likes) descending
                                select new
                                {
-                                   UserID = PopularityRranking.Key,
+                                   CreatorId = PopularityRranking.Key,
                                    UserLikes = PopularityRranking.Sum(r => r.Likes)
-                               }).OrderByDescending(item => item.UserLikes).Take(6).ToList());
-            var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                               }).OrderByDescending(item => item.UserLikes).Take(6));
+            var xxx = DefaultCreatorsData.ToList();
+            var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
             //作者依喜歡數排序並取則頭像等
             var AuthorProfile = (from UsersData in _context.Users
                                  join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                 join topCreator in DefaultCreatorsData on UsersData.CreatorId equals topCreator.CreatorId
                                  where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                 orderby topCreator.UserLikes descending
                                  select new
                                  {
                                      UsersData.UserId,
-                                     UsersData.Avatar,
+                                     Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
                                      Description = Introduction.Description.Length > 10 ?
-                                    Introduction.Description.Substring(0, 10) : Introduction.Description
+                                    Introduction.Description.Substring(0, 10) + "..." : Introduction.Description,
                                  });
-            Console.WriteLine(AuthorProfile.ToList().Count);
-            //依作者照第一個作者群找作品
-            var DefaultContentsData = ((from DefaultContents in _context.Contents
-                                        where DefaultContents.CreatorId == DefaultCreatorsData[0].UserID
+			//依作者照第一個作者群找作品
+			var DefaultContentsData = ((from DefaultContents in _context.Contents
+                                        where DefaultContents.CreatorId == xxx[0].CreatorId
                                         select new
                                         {
                                             DefaultContents.ContentId,
@@ -322,21 +327,23 @@ namespace CreatorsPlatform.Controllers
                            group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                            select new
                            {
-                               UserID = PopularityRranking.Key,
+                               CreatorId = PopularityRranking.Key,
                                UserLikes = PopularityRranking.Sum(r => r.Likes)
-                           }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
-                        var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                           }).OrderByDescending(item => item.UserLikes).Take(6);
+                        var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
                         var AuthorProfile = (from UsersData in _context.Users
                                              join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                             join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
                                              where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                             orderby Default.UserLikes descending
                                              select new
                                              {
                                                  UsersData.UserId,
-                                                 Avatar = Convert.ToBase64String(UsersData.Avatar),
+                                                 Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
                                                  Description = Introduction.Description.Length > 10 ?
-                                                 Introduction.Description.Substring(0, 10) : Introduction.Description
+                                                 Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
                                              }
                                    );
                         return Json(AuthorProfile.ToList());
@@ -349,7 +356,7 @@ namespace CreatorsPlatform.Controllers
                                                  Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
                                                  NewReport.UserName,
                                                  NewReport.CategoryId,
-                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) : UserDescription.Description
+                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) + "..." : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
                         return Json(NewReportData.ToList());
                     default:
@@ -358,51 +365,58 @@ namespace CreatorsPlatform.Controllers
             }
             else
             {
+
+
                 var CATCreatorsData =
                            (from DefaultContents in _context.Contents
                             where DefaultContents.CategoryId == data
                             group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                             select new
                             {
-                                UserID = PopularityRranking.Key,
+								CreatorId = PopularityRranking.Key,
                                 UserLikes = PopularityRranking.Sum(r => r.Likes)
                             }).OrderByDescending(item => item.UserLikes).Take(6);
 
-                var userIDsArray = CATCreatorsData.Select(data => data.UserID).ToArray();
-                var CreatorsData = (from UserData in _context.Users
+                var userIDsArray = (from Data in CATCreatorsData
+                                    select Data.CreatorId).ToList();
+                var CreatorsData = (from UserData in _context.Users            
                                     join Creators in _context.Creators on UserData.CreatorId equals Creators.CreatorId
-                                    where (userIDsArray).Contains(UserData.UserId)
+                                    join CATCData in CATCreatorsData on UserData.CreatorId equals CATCData.CreatorId
+                                    where userIDsArray.Contains(Creators.CreatorId)
+                                    orderby CATCData.UserLikes descending
                                     select new
                                     {
                                         UserData.UserId,
-                                        Avatar = Convert.ToBase64String(UserData.Avatar),
+                                        Avatar = UserData.Avatar!=null?Convert.ToBase64String(UserData.Avatar): null,
                                         UserData.UserName,
                                         UserData.CategoryId,
                                         Description = Creators.Description.Length > 10 ?
-                                        Creators.Description.Substring(0, 10) : Creators.Description
+                                        Creators.Description.Substring(0, 10)+ "..." : Creators.Description
                                     });
-                if (CreatorsData == null)
+                if (userIDsArray.Count == 0)
                 {
                     var DefaultCreatorsData =
                             (from DefaultContents in _context.Contents
                              group DefaultContents by DefaultContents.CreatorId into PopularityRranking
                              select new
                              {
-                                 UserID = PopularityRranking.Key,
+                                 CreatorId = PopularityRranking.Key,
                                  UserLikes = PopularityRranking.Sum(r => r.Likes)
-                             }).OrderByDescending(item => item.UserLikes).Take(6).ToList();
-                    var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.UserID).ToList();
+                             }).OrderByDescending(item => item.UserLikes).Take(6);
+                    var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
                     var AuthorProfile = (from UsersData in _context.Users
                                          join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
+                                         join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
                                          where (topCreatorUserIds).Contains(Introduction.CreatorId)
+                                         orderby Default.UserLikes descending
                                          select new
                                          {
                                              UsersData.UserId,
-                                             Avatar = Convert.ToBase64String(UsersData.Avatar),
+                                             Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                              UsersData.UserName,
                                              UsersData.CategoryId,
                                              Description = Introduction.Description.Length > 10 ?
-                                             Introduction.Description.Substring(0, 10) : Introduction.Description
+                                             Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
                                          }
                                );
                     return Json(AuthorProfile.ToList());
@@ -644,6 +658,10 @@ namespace CreatorsPlatform.Controllers
         public ActionResult IndividualData(string type, int step)
         {
             var memberJson = HttpContext.Session.GetString("key");
+            if (memberJson == null)
+            {
+                View("Login");
+            };
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
             var CreatorId = (from UserData in _context.Users
                              where UserData.UserId == member.id
@@ -675,8 +693,7 @@ namespace CreatorsPlatform.Controllers
                                                 {
                                                     PlansData.PlanName,
                                                     UserData.UserName,
-                                                    PlansData.Description
-                                                ,
+                                                    PlansData.Description,
                                                     PlansData.PlanLevel,
                                                     PlansData.PlanPrice,
                                                     SubscriptionData.EndDate
@@ -1332,7 +1349,53 @@ namespace CreatorsPlatform.Controllers
             return BadRequest();
 
         }
-    }
+		[HttpPost]
+		public ActionResult CreatorIDCheck(bool Check)
+		{
+			var memberJson = HttpContext.Session.GetString("key");
+			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			if (Check)
+			{
+			
+				var CreatorID = (from UserData in _context.Users
+								 where UserData.UserId == member.id
+								 select UserData).FirstOrDefault();
+                if (CreatorID != null)
+                {
+                    Creator CreatorNew = new Creator
+                    {
+                        Description = "",
+                        Notice="",
+                    };
+                  
+                    _context.Add(CreatorNew);
+                    _context.SaveChanges();
 
-    
+                    var CreatorIDMax = (from UserData in _context.Creators
+                                        select UserData.CreatorId).Max();
+                    CreatorID.CreatorId = CreatorIDMax ;
+                    _context.SaveChanges();
+				}
+                return Ok();
+			}
+			else
+			{
+                var CreatorID = (from UserData in _context.Users
+                                 where UserData.UserId == member.id
+                                 select UserData.CreatorId).FirstOrDefault();
+                if (CreatorID != null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+	
+		}
+		}
+	}
+
+	
 }

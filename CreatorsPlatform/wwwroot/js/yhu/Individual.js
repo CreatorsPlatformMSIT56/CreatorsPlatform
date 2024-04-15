@@ -1,3 +1,7 @@
+var Order2 = 1;
+var Order = 1;
+CreatorIDCheck(false);
+
 
 function ReviseON() {
     $(".ReviseShow").css("display", "block");
@@ -34,7 +38,7 @@ function readFile(event) {
     });
 
     FR.readAsDataURL(file);
-}
+};
 
 $("#UserData").on("submit", function (e) {
     e.preventDefault();
@@ -80,11 +84,6 @@ function ConsumptionRecordReadData() {
     PlanCons();
     $("#ConsumptionRecord_Entrust").empty();
     Order1();
-    Order2();
-    Order3();
-    Order4();
-    Order5();
-    Order6();
 };
 function PlanCons() {
     $.ajax({
@@ -101,8 +100,9 @@ function PlanCons() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Plan").append(`
               <tr>
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${(cont + 1)}</th>
                         <td>${response[cont].planName}</td>
+                        <td>${response[cont].userName}</td>
                         <td>${response[cont].description}</td>
                         <td>${response[cont].planLevel}</td>
                         <td>${response[cont].planPrice}</td>
@@ -128,7 +128,7 @@ function Order1() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                         <td>${response[cont].userName}</td>
                         <td>待確認</td>
@@ -138,7 +138,9 @@ function Order1() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
+            Order2();
         }
     });
 };
@@ -155,7 +157,7 @@ function Order2() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr>
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                         <td>${response[cont].userName}</td>
                         <td>${response[cont].price}</td>
@@ -175,8 +177,9 @@ function Order2() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
-
+            Order3();
         }
     });
 };
@@ -193,7 +196,7 @@ function Order3() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                          <td>${response[cont].userName}</td>
                         <td>${response[cont].price}</td>
@@ -203,8 +206,9 @@ function Order3() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
-
+            Order4();
         }
     });
 };
@@ -221,7 +225,7 @@ function Order4() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                          <td>${response[cont].userName}</td>
                         <td>${response[cont].price}</td>
@@ -231,8 +235,9 @@ function Order4() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
-
+            Order5();
         }
     });
 };
@@ -249,7 +254,7 @@ function Order5() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                          <td>${response[cont].userName}</td>
                         <td>${response[cont].price}</td>
@@ -259,8 +264,9 @@ function Order5() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
-
+            Order6();
         }
     });
 };
@@ -277,7 +283,7 @@ function Order6() {
             response.forEach(function () {
                 $("#ConsumptionRecord_Entrust").append(`
               <tr class="${response[cont].commissionId}">
-                        <th scope="row">${cont}</th>
+                        <th scope="row">${Order}</th>
                         <td>${response[cont].title}</td>
                          <td>${response[cont].userName}</td>
                         <td>${response[cont].price}</td>
@@ -287,6 +293,7 @@ function Order6() {
              </tr>
             `)
                 cont++;
+                Order++;
             });
 
         }
@@ -334,11 +341,6 @@ function FanStatusReply(x, y) {
         success: function (response) {
             $("#ConsumptionRecord_Entrust").empty();
             Order1();
-            Order2();
-            Order3();
-            Order4();
-            Order5();
-            Order6();
         }
     });
 };
@@ -648,13 +650,9 @@ function OrderRead() {
     $("#WorkData").addClass("d-none"); 
     $("#OrderData").removeClass("d-none"); 
     Order1Read();
+    $("#Entrust_List").empty();
     $("#EntrustOrders_List").empty();
     Order2Read1();
-    Order2Read2();
-    Order2Read3();
-    Order2Read4();
-    Order2Read5();
-    Order2Read6();
 };
 function Order1Read() {
     $.ajax({
@@ -710,7 +708,7 @@ function Order2Read1() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -727,10 +725,12 @@ function Order2Read1() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
+            Order2Read2();
         }
     });
-}
+};
 function Order2Read2() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -745,7 +745,7 @@ function Order2Read2() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -755,10 +755,12 @@ function Order2Read2() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
+            Order2Read3();
         }
     });
-}
+};
 function Order2Read3() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -773,7 +775,7 @@ function Order2Read3() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -793,10 +795,12 @@ function Order2Read3() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
+            Order2Read4();
         }
     });
-}
+};
 function Order2Read4() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -811,7 +815,7 @@ function Order2Read4() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -831,10 +835,12 @@ function Order2Read4() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
+            Order2Read5();
         }
     });
-}
+};
 function Order2Read5() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -849,7 +855,7 @@ function Order2Read5() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -859,10 +865,12 @@ function Order2Read5() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
+            Order2Read6();
         }
     });
-}
+};
 function Order2Read6() {
     $.ajax({
         url: '/yhu/IndividualData',
@@ -877,7 +885,7 @@ function Order2Read6() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${cont + 1}</th>
+                                <th scope="col">${Order2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -887,10 +895,11 @@ function Order2Read6() {
                         </tr>
                     `);
                 cont++;
+                Order2++;
             });
         }
     });
-}
+};
 
 function StatusReplyOptionsCreator1(e) {
     $("#OrderDescriptionAuthor").empty();
@@ -966,11 +975,6 @@ function CreatorStatusReply1(x,y) {
         success: function (response) {
             $("#EntrustOrders_List").empty();
             Order2Read1();
-            Order2Read2();
-            Order2Read3();
-            Order2Read4();
-            Order2Read5();
-            Order2Read6();
         }
     });
 };
@@ -997,11 +1001,6 @@ function CreatorStatusReply2(x, y) {
         success: function (response) {
             $("#EntrustOrders_List").empty();
             Order2Read1();
-            Order2Read2();
-            Order2Read3();
-            Order2Read4();
-            Order2Read5();
-            Order2Read6();
         }
     });
 };
@@ -1028,11 +1027,6 @@ function CreatorStatusReply3(x, y) {
         success: function (response) {
             $("#EntrustOrders_List").empty();
             Order2Read1();
-            Order2Read2();
-            Order2Read3();
-            Order2Read4();
-            Order2Read5();
-            Order2Read6();
         }
     });
 };
@@ -1067,11 +1061,6 @@ function CreatorStatusReply(x,y) {
         success: function (response) {
             $("#EntrustOrders_List").empty();
             Order2Read1();
-            Order2Read2();
-            Order2Read3();
-            Order2Read4();
-            Order2Read5();
-            Order2Read6();
         }
     });
 };
@@ -1119,8 +1108,6 @@ function EventRead() {
         }
     });
 };
-
-
 function ChangePwd() {
     var NewPwd = $("#NewPasswd").val();
     var CheckNewPwd = $("#CheckNewPasswd").val();
@@ -1141,4 +1128,24 @@ function ChangePwd() {
         alert("重新輸入密碼錯誤，請重新確認")
     }
     
-}
+};
+
+function CreatorIDCheck(x) {
+    let y = x;
+    $.ajax({
+        url: '/yhu/CreatorIDCheck',
+        method: 'POST',
+        data: {
+            Check: y
+        },
+        success: function (response) {
+            $("#AuthorSettings").removeClass("d-none");
+            $("#AuthorSettings_Project").removeClass("d-none");
+            $("#CreatorIDCheck").addClass("d-none");
+        }, error: function () {
+            $("#AuthorSettings").addClass("d-none");
+            $("#AuthorSettings_Project").addClass("d-none");
+            $("#CreatorIDCheck").removeClass("d-none");
+        }
+    });
+};
