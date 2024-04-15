@@ -1,4 +1,4 @@
-var Order2 = 1;
+var OrderR2 = 1;
 var Order = 1;
 CreatorIDCheck(false);
 
@@ -708,7 +708,7 @@ function Order2Read1() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -725,7 +725,7 @@ function Order2Read1() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read2();
         }
@@ -745,7 +745,7 @@ function Order2Read2() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -755,7 +755,7 @@ function Order2Read2() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read3();
         }
@@ -775,7 +775,7 @@ function Order2Read3() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -795,7 +795,7 @@ function Order2Read3() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read4();
         }
@@ -815,7 +815,7 @@ function Order2Read4() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -835,7 +835,7 @@ function Order2Read4() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read5();
         }
@@ -855,7 +855,7 @@ function Order2Read5() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -865,7 +865,7 @@ function Order2Read5() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read6();
         }
@@ -885,7 +885,7 @@ function Order2Read6() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -895,7 +895,7 @@ function Order2Read6() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
         }
     });
