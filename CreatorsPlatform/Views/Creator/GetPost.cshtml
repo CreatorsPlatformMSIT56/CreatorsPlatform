@@ -163,11 +163,11 @@
         <!-- aside -->
         <div class="col-3" style="border:solid">
             <div class="row">
-                <h3 class="mt-2">訂閱方案: </h3>
+                <h3 class="mt-2 text-center bg-warning bg-opacity-25">訂閱方案 </h3>
                 @foreach (var e in Model.Plans)
                 {
-                    <div class="col-12">
-                        <div class="card mb-3">
+                    <div class="col-12 text-center">
+                        <div class="card mb-3 border border-4 border-start-0 border-end-0">
                             @* <img class="card-img-top"
                         src="https://fakeimg.pl/500/"
                         alt="Card image cap"
@@ -182,7 +182,7 @@
                                 <p class="card-text plan-price">
                                     @e.PlanPrice.ToString("C0")
                                 </p>
-                                <button><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
+                                <button class="btn bg-warning bg-opacity-75"><a asp-action="Payment" asp-controller="yhu" asp-route-id="@e.PlanId">加入</a></button>
                             </div>
                         </div>
                     </div>

@@ -86,7 +86,7 @@ function WorkChanges(e) {
 					</div>
 				<div id="Woklist2text" class="carousel-caption d-none d-md-block TextDiv">
 					<h3 class="text-center fw-bold GrayText">${response[1].title != undefined ? response[1].title : ` `}</h5>
-					 <h5 class="ttext-end pe-3 GrayText">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
+					 <h5 class="text-end pe-3 GrayText">${response[1].uploadDate != undefined ? response[1].uploadDate : ` `}</p>
 				</div>`
 			);
 			//-----------------------------
