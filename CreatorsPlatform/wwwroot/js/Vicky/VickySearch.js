@@ -182,7 +182,7 @@ function CommissionOn(pageNumber = 1) {
 							<div class="card-body text-center position-relative">
 								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
 								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
+									<small class="text-muted fs-5">${commission.priceMin} ~ ${commission.priceMax}</small>
 								</p>
 								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
@@ -234,7 +234,7 @@ function CommissionLow(pageNumber = 1) {
 							<div class="card-body text-center position-relative">
 								<a href="/Creator/GetCommission?id=${commission.commissionID}" class="fs-4">${commission.commissionTitle}</a>
 								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${commission.priceMax} ~ ${commission.priceMin}</small>
+									<small class="text-muted fs-5">${commission.priceMin} ~ ${commission.priceMax}</small>
 								</p>
 								<a href="/Creator/Index?id=${commission.creatorID}" class="fs-5 position-absolute top-50 end-0">${commission.userName}</a>
 							</div>
@@ -285,10 +285,8 @@ _button_container_TimeSortB.onclick = function () {
         isWorkOnClicked = true;
         sortOrder = "descending";
         subtitleChange();
-        console.log(5);
     } else {
         WorkLow();
-        console.log(6);
     }
 
 }
@@ -373,7 +371,7 @@ function filterResults(option, searchKey, pageNumber = 1, buttonClicked) {
 							<div class="card-body text-center position-relative">
 								${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}" class="fs-4">${work.title}</a>` : `<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>`}
 								<p class="position-absolute top-50 start-0">
-									<small class="text-muted fs-5">${work.isCommission == true ? `${work.priceMax}` : `${formatDate(work.uploadDate)}`}</small>
+									<small class="text-muted fs-5">${work.isCommission == true ? `${work.priceMin}~${work.priceMax}` : `${formatDate(work.uploadDate)}`}</small>
 								</p>
 								<a href="/Creator/Index?id=${work.creatorID}" class="fs-5 position-absolute top-50 end-0">${work.userName}</a>
 							</div>
