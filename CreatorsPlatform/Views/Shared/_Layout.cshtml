@@ -30,7 +30,7 @@
 				<div class="col-md-3">
 					@* 響應式摺疊部分 *@
 					<div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
-						<form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
+						<form class="d-flex mb-0" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
 							<input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/委託" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
 							<button class="SearchFormBtn" type="submit">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">

@@ -276,8 +276,8 @@ namespace CreatorsPlatform.Controllers
                                      Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
-                                     Description = Introduction.Description.Length > 10 ?
-                                    Introduction.Description.Substring(0, 10) + "..." : Introduction.Description,
+                                     Description = Introduction.Description.Length > 26 ?
+                                    Introduction.Description.Substring(0, 26) + "..." : Introduction.Description,
                                  });
 			//依作者照第一個作者群找作品
 			var DefaultContentsData = ((from DefaultContents in _context.Contents
