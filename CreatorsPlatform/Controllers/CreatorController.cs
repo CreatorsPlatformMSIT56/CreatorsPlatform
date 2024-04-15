@@ -323,6 +323,7 @@ namespace CreatorsPlatform.Controllers
                     }
                 }).ToList();
 
+            
             // 取得訂閱方案資料
             var plans = _context.Plans
                 .Include(p => p.Creator)
@@ -462,9 +463,20 @@ namespace CreatorsPlatform.Controllers
             return Ok();
         }
 
-        //----------------------------------------------------------------
-        //委託貼文頁面
-        public class CommissionDetailsViewModel
+		// 愛心
+		[HttpPost]
+		public IActionResult PostLikeChange(int LikeChange, int TheCheckedPostId)
+		{
+			var ThePostModel = _context.Contents.FirstOrDefault(m => m.ContentId == TheCheckedPostId);
+			ThePostModel!.Likes = LikeChange;
+			_context.Update(ThePostModel);
+			_context.SaveChanges();
+			return Ok();
+		}
+
+		//----------------------------------------------------------------
+		//委託貼文頁面
+		public class CommissionDetailsViewModel
         {
             public IEnumerable<Commission>? Commission { get; set; }
             public IEnumerable<Plan>? Plans { get; set; }
