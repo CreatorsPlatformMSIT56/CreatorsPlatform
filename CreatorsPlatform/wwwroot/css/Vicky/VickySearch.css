@@ -13,20 +13,23 @@
 ._card_A {
     border-radius: 20px;
     margin: 1%;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-    height: 16rem;
+    height: 20rem;
+
 }
 
 ._card_B {
-    width: 18rem;
+    width: 21rem;
     border-radius: 20px;
     margin: 1%;
     padding-top: 1vh;
     padding-bottom: 1vh;
-    height: 22rem;
+    height: 30rem;
+    transition: box-shadow 0.3s ease;
 }
 
+    ._card_B:hover {
+        box-shadow: 3px 10px 10px 0 hsl(333, 57%, 77%);
+    }
 
 ._card_A a {
     text-decoration: none;
@@ -37,9 +40,17 @@
 }
 
 .img_Card {
-    width: 15vw;
-    height: 25vh;
+    width: 21rem;
+    height: 80%;
     border-radius: 20px;
+    object-fit: cover;
+}
+
+.img_CardCreator {
+    width: 100%;
+    height: 20rem;
+    border-radius: 20px;
+    object-fit: cover;
 }
 
 .input-group a {
@@ -63,11 +74,11 @@
 
 .button__content {
     position: relative;
-    background-color: aliceblue;
+    background-color: rgb(255, 255, 255);
     padding: 0.5rem 1rem;
-    border-radius: 4rem;
-    border: 1px solid var(--black-color);
-    color: var(--black-color);
+   /* border-radius: 2rem;*/
+    /*border: 1px solid var(--black-color);
+    color: var(--black-color);*/
     column-gap: .5rem;
     overflow: hidden;
 }
@@ -154,16 +165,18 @@
     position: absolute;
     left: 0px;
     top: 0;
-    background: var(--gradient-color);
+    /*background: var(--gradient-color);
     border-radius: 4rem;
-    border: 3px solid var(--black-color);
+    border: 3px solid var(--black-color);*/
     z-index: -1;
     transition: transform .3s;
 }
 
 .button__content:hover {
     background: var(--gradient-color);
-    border: 3px solid var(--black-color);
+    border: 1px solid var(--black-color);
+    border-radius: 4rem;
+    color:black;
 }
 
 .button_a:hover .button__shadow {
