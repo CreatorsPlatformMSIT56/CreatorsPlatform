@@ -305,6 +305,7 @@ namespace CreatorsPlatform.Controllers
             var content = _context.Contents
                 .Include(c => c.Creator)
                 .ThenInclude(cr => cr.Users)
+                .Include(c => c.Subtitle)
                 .FirstOrDefault(c => c.ContentId == id);
 
             // 取得留言資料
