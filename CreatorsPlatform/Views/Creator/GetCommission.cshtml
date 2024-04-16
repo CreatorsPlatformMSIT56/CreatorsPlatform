@@ -182,7 +182,18 @@
 		<div class="col-3 border border-2 rounded">
 			<div class="row">
 				<h4 class="mt-2">委託說明: </h4>
-				<p class="m-1">@Model.Commission?.FirstOrDefault()?.Description</p>
+				<!-- 以下為Quill應急手段 -->
+				<p class="m-1">@if (Model.Commission?.FirstOrDefault()?.Description.Substring(0, 1) == "{")
+					{
+						<div class="mb-3" id="editor">
+						</div>
+					}
+					else
+					{
+						@Model.Commission?.FirstOrDefault()?.Description
+					}
+				</p>
+				<!-- 以上為Quill應急手段 -->
 				<a asp-action="EntrustPayment" asp-controller="yhu"
 				asp-route-id="@Model.Commission?.FirstOrDefault()?.CommissionId"
 				class="btn bg-success px-2" style="color:white">我要委託</a>
@@ -199,3 +210,10 @@
 	console.log(CreatorId);
 </script>
 <script src="~/js/Creator/GetCommission.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script defer>
+	const quill = new Quill("#editor", {
+		readOnly: true
+	});
+	quill.setContents(@Html.Raw(Model.Commission?.FirstOrDefault()?.Description));
+</script>
