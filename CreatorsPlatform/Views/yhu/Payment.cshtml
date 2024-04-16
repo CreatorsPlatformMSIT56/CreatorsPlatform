@@ -78,7 +78,7 @@
     $(document).ready(function () {
         $("#subBtn").click(function (event) {
             // 阻止表单默认提交行为
-            // event.preventDefault();
+            event.preventDefault();
 
             // 获取信用卡号码
             let cardNumber = $("#cardNumber").val();

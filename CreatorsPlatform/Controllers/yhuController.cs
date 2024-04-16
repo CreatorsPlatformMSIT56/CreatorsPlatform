@@ -518,8 +518,6 @@ namespace CreatorsPlatform.Controllers
 					{
 						_context.Add(follow);
 						_context.SaveChanges();
-
-						Console.WriteLine("杰哥不要2");
 					}
 				}
 				else
@@ -536,7 +534,6 @@ namespace CreatorsPlatform.Controllers
 					Console.WriteLine("已追蹤");
 				}
 
-				Console.WriteLine("我要進來囉");
 				var sDate = DateTime.Now;
 				DateOnly? ssDate = DateOnly.FromDateTime(sDate);
 				var eDate = sDate.AddMonths(1);
@@ -556,14 +553,12 @@ namespace CreatorsPlatform.Controllers
 				{
 					_context.Add(NewSub);
 					_context.SaveChanges();
-
-					Console.WriteLine("杰哥不要");
 					return Ok();
-				}
+                }
 				return BadRequest();
 
-			}
-			return BadRequest();
+            }
+            return BadRequest();
 		}
 		public IActionResult EntrustPayment(int id)
 		{
