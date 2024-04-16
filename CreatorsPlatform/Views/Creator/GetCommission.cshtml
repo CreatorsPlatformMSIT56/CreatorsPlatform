@@ -23,8 +23,8 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="d-flex flex-row-reverse bd-highlight">
-						<div class="p-2 bd-highlight uploadDate text-muted">@Model.Commission?.FirstOrDefault()?.PutUpDate</div>
-						<div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
+						<div class="p-2 bd-highlight uploadDate text-muted">委託期限: @Model.Commission?.FirstOrDefault()?.PutUpDate.ToString("yyyy/MM/dd") - @((Model.Commission?.FirstOrDefault()?.OverDate != null) ? (Model.Commission?.FirstOrDefault()?.OverDate!.Value.ToString("yyyy/MM/dd")) : ("不限期"))</div>
+						<!-- <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div> -->
 					</div>
 				</div>
 				<div class="col-12 px-5 py-3 title-container">
