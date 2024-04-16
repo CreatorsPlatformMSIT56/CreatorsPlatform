@@ -30,7 +30,20 @@
 
                 </div> *@
                 <div class="col-12 px-5 py-3" id="descr-container">
-                    <p>@Model.Content?.FirstOrDefault()?.Description</p>
+                    @* <p>@Model.Content?.FirstOrDefault()?.Description</p> *@
+                    <!-- 以下為Quill應急手段 -->
+                    <p class="m-1">
+                        @if (Model.Content?.FirstOrDefault()?.Description.Substring(0, 1) == "{")
+                        {
+                            <div class="mb-3" id="editor">
+                            </div>
+                        }
+                        else
+                        {
+                            @Model.Content?.FirstOrDefault()?.Description
+                        }
+                    </p>
+                    <!-- 以上為Quill應急手段 -->
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
                     <a asp-action="Search" asp-controller="Vicky" asp-route-id="@Model.Content?.FirstOrDefault()?.SubtitleId">
@@ -217,3 +230,10 @@
     // console.log(UserId);
 </script>
 <script src="~/js/Creator/GetPost.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script defer>
+    const quill = new Quill("#editor", {
+        readOnly: true
+    });
+    quill.setContents(@Html.Raw(Model.Content?.FirstOrDefault()?.Description));
+</script>
