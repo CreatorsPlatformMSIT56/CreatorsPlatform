@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Composition;
 using System.Diagnostics.Tracing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CreatorsPlatform.Controllers
@@ -1173,8 +1175,8 @@ namespace CreatorsPlatform.Controllers
             }
             return Json("ok");
         }
-
-        public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
+		[HttpPost]
+		public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
         {
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
@@ -1354,36 +1356,60 @@ namespace CreatorsPlatform.Controllers
 
         }
 		[HttpPost]
-		public ActionResult CreatorIDCheck(bool Check)
+		public ActionResult CreatorIDCheck([FromBody] JsonObject CreatorJson)
 		{
 			var memberJson = HttpContext.Session.GetString("key");
 			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-			if (Check)
-			{
-			
-				var CreatorID = (from UserData in _context.Users
-								 where UserData.UserId == member.id
-								 select UserData).FirstOrDefault();
-                if (CreatorID != null)
-                {
-                    Creator CreatorNew = new Creator
-                    {
-                        Description = "",
-                        Notice="",
-                    };
-                  
-                    _context.Add(CreatorNew);
-                    _context.SaveChanges();
 
-                    var CreatorIDMax = (from UserData in _context.Creators
-                                        select UserData.CreatorId).Max();
-                    CreatorID.CreatorId = CreatorIDMax ;
-                    _context.SaveChanges();
-				}
-                return Ok();
-			}
-			else
-			{
+            var checkFromNewData = CreatorJson["Check"];
+            var NewCreatorData = CreatorJson["NewCreator"];
+            
+
+            if (NewCreatorData != null)
+            {
+                var NewCreatorDescription = NewCreatorData["description"].ToString();
+                var NewCreatornotice = NewCreatorData["notice"].ToString();
+                if (checkFromNewData != null)
+                {
+
+                    var CreatorID = (from UserData in _context.Users
+                                     where UserData.UserId == member.id
+                                     select UserData).FirstOrDefault();
+                    if (CreatorID != null)
+                    {
+                        Creator CreatorNew = new Creator
+                        {
+                            Description = NewCreatorDescription,
+                            Notice = NewCreatornotice,
+                        };
+
+                        _context.Add(CreatorNew);
+                        _context.SaveChanges();
+
+                        var CreatorIDMax = (from UserData in _context.Creators
+                                            select UserData.CreatorId).Max();
+                        CreatorID.CreatorId = CreatorIDMax;
+                        _context.SaveChanges();
+                    }
+                    return Ok();
+                }
+                else
+                {
+                    var CreatorID = (from UserData in _context.Users
+                                     where UserData.UserId == member.id
+                                     select UserData.CreatorId).FirstOrDefault();
+                    if (CreatorID != null)
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+            }
+            else if (NewCreatorData == null)
+            {
                 var CreatorID = (from UserData in _context.Users
                                  where UserData.UserId == member.id
                                  select UserData.CreatorId).FirstOrDefault();
@@ -1395,10 +1421,9 @@ namespace CreatorsPlatform.Controllers
                 {
                     return BadRequest();
                 }
-
-	
-		}
-		}
+            }
+            return Ok();
+        }
 	}
 
 	
