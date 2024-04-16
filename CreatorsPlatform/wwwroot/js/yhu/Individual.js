@@ -1132,20 +1132,50 @@ function ChangePwd() {
 
 function CreatorIDCheck(x) {
     let y = x;
-    $.ajax({
-        url: '/yhu/CreatorIDCheck',
-        method: 'POST',
-        data: {
-            Check: y
-        },
-        success: function (response) {
-            $("#AuthorSettings").removeClass("d-none");
-            $("#AuthorSettings_Project").removeClass("d-none");
-            $("#CreatorIDCheck").addClass("d-none");
-        }, error: function () {
-            $("#AuthorSettings").addClass("d-none");
-            $("#AuthorSettings_Project").addClass("d-none");
-            $("#CreatorIDCheck").removeClass("d-none");
+    if (y == true) {
+        y = true;
+        let Creatordata = {
+            description: $("#CreatorDes").val(),
+            notice: $("#CreatorNot").val()
         }
-    });
+        let NewCreatorDataToDb = {
+            NewCreator: Creatordata,
+            Check: y
+        }
+
+        $.ajax({
+            url: '/yhu/CreatorIDCheck',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(NewCreatorDataToDb),
+            success: function (response) {
+                $('#UserToCreatorModal').modal('hide');
+                $("#AuthorSettings").removeClass("d-none");
+                $("#AuthorSettings_Project").removeClass("d-none");
+                $("#NotACreator").addClass("d-none");
+            }
+        });
+    };
+    if (y == false) {
+        y = false;
+        let NewCreatorDataToDb = {
+            Check: y
+        };
+        $.ajax({
+            url: '/yhu/CreatorIDCheck',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(NewCreatorDataToDb),
+            success: function (response) {
+                $("#AuthorSettings").removeClass("d-none");
+                $("#AuthorSettings_Project").removeClass("d-none");
+                $("#NotACreator").addClass("d-none");
+            },
+            error: function () {
+                $("#AuthorSettings").addClass("d-none");
+                $("#AuthorSettings_Project").addClass("d-none");
+                $("#NotACreator").removeClass("d-none");
+            }
+        });
+    }
 };
