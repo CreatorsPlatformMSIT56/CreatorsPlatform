@@ -156,6 +156,7 @@ function NewComToSQL() {
         success: function (response) {
             sendImageDataURLsToBackend();
             alert("委託發布成功");
+            window.location.href = `/Creator/GetCommission/${response.commissionId}`;
         },
         error: function (xhr, status, error) {
             // 處理錯誤 

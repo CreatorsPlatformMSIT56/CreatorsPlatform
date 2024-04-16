@@ -638,7 +638,12 @@ namespace CreatorsPlatform.Controllers
 
                 // 拿到對應新委託Id 新增範例圖片要用
                 TempData["TheNewCommissionID"] = CreateCommission.CommissionId;
-                return Ok();
+                //return Ok();
+                var commissionId = (from commissionData in _context.Commissions
+                                  join UserData in _context.Users on commissionData.CreatorId equals UserData.CreatorId
+                                  where UserData.UserId == member.id
+                                  select new { commissionData.CommissionId }).ToList().Last();
+                return Json(commissionId);
             }
 
             return BadRequest();
