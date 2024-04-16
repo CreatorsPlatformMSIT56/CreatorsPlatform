@@ -13,9 +13,9 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public DateTime RegisterDate { get; set; }
+    public DateTime? RegisterDate { get; set; }
 
-    public DateTime LastLoginDate { get; set; }
+    public DateTime? LastLoginDate { get; set; }
 
     public byte[]? Avatar { get; set; }
 

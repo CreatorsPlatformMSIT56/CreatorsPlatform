@@ -3,28 +3,31 @@
 *@
 @{
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 <link href="/css/yhu/Login.css" rel="stylesheet" />
-<div id="Login">
-    <div class="row VhHeight">
-    </div>
-    <div class="row">
-        <div id="UserUI" class="ToMiddle VhHeight">
-            <form id="LoginList">
-                <p><label for="E_Mail">E-Mail:</label></p>
-                <p><input id="E_Mail" name="E_Mail" type="email"></p>
-                <p style="display: none;" id="EmailError">使用者信箱無效</p>
-                <p><label for="Passwd">Password:</label></p>
-                <p><input id="Passwd" name="Passwd" type="password"></p>
-                <p style="display: none;" id="PasswdError">密碼錯誤</p>
-                <div class="d-flex">
-                    <h5><input type="submit" value="Login"></h5>
-                    <a href="/yhu/FTP" class="mx-5">忘記密碼</a>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="row VhHeight">
-    </div>
+<div id="Login" class="container">
+	<div class="row LoginCard  border ToMiddle" id="UserU">
+		<form id="LoginList">
+			<h2 class="my-4">登入</h2>
+			<div class="position-relative my-2">
+				<input id="E_Mail" name="E_Mail" type="email" value="Email" onfocus="if(this.value=='Email') this.value='';" onblur="if(this.value=='') this.value='Email';" required>
+				<h3 class="ri-mail-add-fill position-absolute top-0 end-0  my-1 w-50"></h3>
+				<p style="display: none;" id="EmailError">使用者信箱無效</p>
+			</div>
+			<div class="position-relative my-2">
+					<input id="Passwd" name="Passwd" type="password" value="密碼" onfocus="if(this.value=='密碼') this.value='';" onblur="if(this.value=='') this.value='密碼';" required>
+				<button class="showPasswordBtnLogin position-absolute top-0 end-0 my-1 w-50" id="showPasswordBtnLogin" type="button">
+						<img id="passwordIconLogin" src="~/img/VickyImg/lockFill.png" alt="">
+					</button>
+					<p style="display: none;" id="PasswdError">密碼錯誤</p>
+				</div>
+			<div class="d-flex my-2">
+					<a href="/yhu/FTP" class="mx-5">忘記密碼</a>
+					<h5><input type="submit" value="Login" id="loginInputOk"></h5>
+				</div>
+		</form>
+	</div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/js/yhu/Login.js"></script>

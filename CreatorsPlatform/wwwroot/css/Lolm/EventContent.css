@@ -16,15 +16,13 @@
 }
 /*範例圖片*/
 .EventExampleImg {
-    max-height: 20rem;
+    /*max-height: 20rem;*/
     text-align: center;
 }
 
     .EventExampleImg img {
-        height: 100%;
+        width: 100%;
         object-fit: contain;
-        /*    padding-left: 3rem;
-    padding-right: 3rem;*/
     }
 /*中型參加者頭像*/
 .MidSizeHeadShot {

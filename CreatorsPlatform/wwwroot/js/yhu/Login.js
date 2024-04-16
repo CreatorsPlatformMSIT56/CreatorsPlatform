@@ -35,3 +35,29 @@
         }
     });
 });
+
+
+//切換密碼圖片
+document.getElementById('showPasswordBtnLogin').addEventListener('click', function () {
+    var passwordIcon = document.getElementById('passwordIconLogin');
+    if (passwordIcon.src.includes('lockFill')) {
+        passwordIcon.src = "/img/VickyImg/lockUnlock.png";
+    } else {
+        passwordIcon.src = "/img/VickyImg/lockFill.png";
+    }
+});
+
+//顯示密碼
+$(function () {
+    $("#showPasswordBtnLogin").on("click", function () {
+        var passwordField = $("#Passwd");
+        var passwordError = $("#PasswdError");
+
+        if (passwordField.attr("type") === "password") {
+            passwordField.attr("type", "text");
+            passwordError.hide();
+        } else {
+            passwordField.attr("type", "password");
+        }
+    });
+});

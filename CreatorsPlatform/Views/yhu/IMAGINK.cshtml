@@ -16,18 +16,18 @@
                         <div class="carousel-item active">
                             <div class="row">
                                 <div class="col-md-3"></div>
-                                <div class="col-md-2 " onclick="CreatorsChange(7)"><a>熱門</a></div>
-                                <div class="col-md-2 " onclick="CreatorsChange(1)"><a>繪圖</a></div>
-                                <div class="col-md-2 " onclick="CreatorsChange(2)"><a>影片</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(7)"><a>熱門</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(1)"><a>繪圖</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(2)"><a>影片</a></div>
                                 <div class="col-md-3 "></div>
                             </div>
                         </div>
                         <div class="carousel-item">
                             <div class="row d-flex  justify-content-center">
                                 <div class="col-md-3 "></div>
-                                <div class="col-md-2" onclick="CreatorsChange(8)"><a>新人</a></div>
-                                <div class="col-md-2" onclick="CreatorsChange(3)"><a>聲音</a></div>
-                                <div class="col-md-2" onclick="CreatorsChange(6)"><a>教學</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(8)"><a>新人</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(3)"><a>聲音</a></div>
+                                <div class="col-md-2 CurSorPointer" onclick="CreatorsChange(6)"><a>教學</a></div>
                                 <div class="col-md-3"></div>
                             </div>
                         </div>
@@ -156,17 +156,26 @@
     <div id="Sidebar" class="col-md-4 me-2 ms-2">
         <div id="Userlist" class="border row">
             <div id="UserlistDetail" class="card mb-3 border-0 shadow p-2">
+                @{int UserCount = 1;string BgClass;}
                 @foreach (var item in ViewBag.AuthorProfile)
                 {
-                    <div id="@item.UserId" class="row" onclick="WorkChanges(this)">
+                    if (UserCount % 2 == 1)
+                    {
+                        BgClass = "bg-info bg-opacity-10";
+                    }
+                    else
+                    {
+                        BgClass = "";
+                    }
+                    <div id="@item.UserId" class="h-100 row border border-2 @BgClass" onclick="WorkChanges(this)">
                         <div class="col-md-4 d-flex align-items-center justify-content-center">
                             @if (item.Avatar != null)
                             {
-                                <img src="data:image/png;base64,@item.Avatar" class="UserIcon rounded-2" alt="...">
+                                <img src="data:image/png;base64,@item.Avatar" class="UserIcon rounded-2 CreaterChangePart" alt="...">
                             }
                             else
                             {
-                                <img src="/img/Shared/person-circle.svg" class="UserIcon rounded-2" alt="...">
+                                <img src="/img/Shared/person-circle.svg" class="UserIcon rounded-2 CreaterChangePart" alt="...">
                             }
                         </div>
                         <div class="col-md-8">
@@ -177,8 +186,8 @@
                                 <p class="card-text">@item.Description</p>
                             </div>
                         </div>
-                    </div>
-                    <hr />
+                    </div>                    
+                    UserCount++;
                 }
             </div>
         </div>

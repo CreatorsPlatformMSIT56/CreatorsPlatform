@@ -1,4 +1,7 @@
-﻿
+﻿.CurSorPointer {
+    cursor: pointer;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -10,7 +13,25 @@
 #Main {
     flex: 0 0 auto;
     width: 56%;
+    /*設定輪播部份的動畫*/
+    position: relative;
+    animation-name: bottomToTop;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
 }
+
+@keyframes bottomToTop {
+    from {
+        top: 10vh;
+        opacity: 0;
+    }
+
+    to {
+        top: 0px;
+        opacity: 1;
+    }
+}
+
 #StallMain {
     flex: 0 0 auto;
     width: 56%;
@@ -23,6 +44,16 @@
 
 #Sidebar {
 }
+
+/*點擊頭像會轉換輪播的部份*/
+.CreaterChangePart {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .CreaterChangePart:hover {
+        box-shadow: 5px 5px 8px #888888;
+    }
 
 .UserIcon {
     height: 12vh;
@@ -37,6 +68,19 @@
     height: 100%; /* 图像高度填充容器 */
     object-fit: cover; /* 保持原始比例，填充容器 */
 }
+
+#Woklist1img > *, #Woklist2img > *, #Woklist3img > * {
+    transition: all 0.6s ease;
+    animation-name: SlowShow;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes SlowShow{
+    from{opacity:0}
+    to{opacity:1}
+}
+
 .EveImg {
     width: 100%; /* 图像宽度填充容器 */
     height: 100%; /* 图像高度填充容器 */
@@ -60,28 +104,72 @@
     align-items: center;
     background-color: aliceblue;
     height: 5vh;
+    position: relative;
+    animation-name: TopToBottom;
+    animation-duration: 0.5s;
 }
+
+@keyframes TopToBottom {
+    from {
+        opacity: 0;
+        bottom: 10vh;
+    }
+
+    to {
+        opacity: 1;
+        bottom:0vh;
+    }
+}
+
+#UserlistDetail, .image-containerEvent {
+    position: relative;
+    animation-name: LeftToRight;
+    animation-duration: 0.5s;
+}
+
+@keyframes LeftToRight {
+    from {
+        opacity: 0;
+        left: 5vw;
+    }
+
+    to {
+        opacity: 1;
+        left: 0vw;
+    }
+}
+
 ul {
     margin: 0;
 }
+
 .image-container {
     height: 100vh !important; /* 设置容器高度 */
     overflow: hidden; /* 超出容器部分隐藏 */
 }
+
 .TextDiv {
     display: block;
     backdrop-filter: blur(8px);
     background-color: #0000006b;
     color: #ffffff;
 }
+
 .image-containerEvent {
     height: 100px; /* 设置容器高度 */
+    transition: all 0.2s ease;
 }
+
+    .image-containerEvent:hover {
+        box-shadow: 5px 5px 8px #888888;
+    }
+
 .image-containerEventImg {
     width: 100%; /* 图像宽度填充容器 */
     height: 100px; /* 图像高度填充容器 */
     object-fit: cover; /* 保持原始比例，填充容器 */
 }
+
 .GrayText {
     text-shadow: -1px -1px 0 #b7b7b7, 1px -1px 0 #b7b7b7, -1px 1px 0 #b7b7b7, 1px 1px 0 #b7b7b7;
 }

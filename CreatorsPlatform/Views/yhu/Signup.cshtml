@@ -4,67 +4,51 @@
 @{
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 <link href="/css/yhu/Signup.css" rel="stylesheet" />
-<div id="Signup" class="row">
-    <div class="col-md-4 row ToMiddle" style="height:60vh">
-        <div class="row ToMiddle">
-            <h5 class="ToMiddle m-0" ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" fill="currentColor" class="bi bi-1-circle" viewBox="0 0 16 16">
-                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383z" />
-                </svg>&nbsp;&nbsp;填寫基本資料
-            </h5>
-        </div>
-        <div class="d-flex ToMiddle" style="height:30%">
-            <div class="vr"></div>
-        </div>
-        <div class="row ToMiddle">
-            <h5 class="ToMiddle m-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="10%" height="10%" fill="currentColor" class="bi bi-2-circle" viewBox="0 0 16 16">
-                    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306" />
-                </svg>&nbsp;&nbsp;完成
-            </h5>
-        </div>
-    </div>
-    <div class="col-md-8 ToMiddle">
-        <div id="Userlist">
-            <form id="Register">
-                <div class="row ToMiddle">
-                    <div class="col-md-4">
-                        <div class="row border">
-                            <div class="row">
-                                <p> <label for="Email">Email</label></p>
-                                <p><input id="Email" type="email" name="Email" required></p>
-                                <p style="display: none;" id="EmailError">使用者信箱重複</p>
-                            </div>
-                            <div class="row">
-                                <p><label for="UserName">Name</label></p>
-                                <p><input id="UserName" type="text" name="UserName" required></p>
-                                <p style="display: none; " id="UserNameError">使用者暱稱重複</p>
-                            </div>
-                            <div class="row">
-                                <p><label for="UserPasswd">Passwd</label></p>
-                                <p><input id="UserPasswd" type="password" name="UserPasswd" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
-                            </div>
-                            <div class="row">
-                                <p><label for="UserPasswdCheck">Passwd Check</label></p>
-                                <p><input id="UserPasswdCheck" type="password" name="UserPasswdCheck" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
-                                <p style="display: none;" id="PasswdError">兩次密碼不符合</p>
-                                <button id="showPasswordBtn" type="button">顯示密碼</button>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>     
-        <div id="UserAdd" class="ToMiddle" style="display: none;">
-            <h5 id="NewUser"></h5>
-            <button class="btn btn-primary btn-lg btn-block">返回首頁</button>
-        </div>
-    </div>
+
+<div class="container-fluid">
+	<img src="~/img/VickyImg/SignBackGround.png" alt="" class="SignBackGround">
+	<div class="row SignupCard  border" id="Signup">
+		<div id="Userlist">
+			<form id="Register">
+				<h2 class="my-4">註冊</h2>
+				<div class="position-relative">
+					<input id="Email" type="email" name="Email" value="Email" onfocus="if(this.value=='Email') this.value='';" onblur="if(this.value=='') this.value='Email';" required>
+					<h3 class="ri-mail-add-fill position-absolute top-0 end-0 my-1 w-25"></h3>
+					<p style="display: none;" id="EmailError">使用者信箱重複</p>
+				</div>
+				<div>
+					<div class="position-relative">
+						<input id="UserName" type="text" name="UserName" value="暱稱" onfocus="if(this.value=='暱稱') this.value='';" onblur="if(this.value=='') this.value='暱稱';" required>
+						<h3 class="ri-account-circle-fill position-absolute top-0 end-0 my-1 w-25"></h3>
+					</div>
+					<p style="display: none; " id="UserNameError">使用者暱稱重複</p>
+				</div>
+				<div class="position-relative">
+					<input id="UserPasswd" type="text" name="UserPasswd" value="密碼" onfocus="showPlainText(this)" onblur="hidePlainText(this)" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required>
+					<button class="showPasswordBtn position-absolute top-0 end-0 my-1 w-25" id="showPasswordBtn" type="button">
+						<img id="passwordIcon" src="~/img/VickyImg/lockFill.png" alt="">
+					</button>
+				</div>
+				<div>
+					<div class="position-relative">
+						<p><input id="UserPasswdCheck" type="text" name="UserPasswdCheck" value="確認密碼" onfocus="showPlainText(this)" onblur="hidePlainCheckText(this)" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
+						<button class="showPasswordCheckBtn  position-absolute top-0 end-0 my-1 w-25" id="showPasswordCheckBtn" type="button">
+							<img id="passWordCheckIcon" src="~/img/VickyImg/lockFill.png" alt="">
+						</button>
+					</div>
+					<p style="display: none;" id="PasswdError">兩次密碼不符合</p>
+					<input type="submit" value="OK" class="btn btn-lg btn-block" id="signupEnter">
+				</div>
+			</form>
+		</div>
+		<div id="UserAdd" class="ToMiddle" style="display: none;">
+			<h5 id="NewUser"></h5>
+			<button class="btn btn-primary btn-lg btn-block">返回首頁</button>
+		</div>
+	</div>
 </div>
+
 <script src="/js/yhu/Signup.js"></script>
 

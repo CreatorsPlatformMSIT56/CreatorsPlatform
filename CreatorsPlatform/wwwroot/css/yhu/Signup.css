@@ -1,13 +1,79 @@
-﻿#Signup {
-    height: 60vh;
-    min-height: 60vh;
+﻿.SignupCard {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-weight: bold;
+    border: 10px solid #f1f1f1;
+    font-size: 1.5rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 25vw;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(4px); /* 添加模糊效果 */
 }
+
+    .SignupCard input {
+        background-color: rgba(0, 0, 0, 0); /* 使用 rgba() 函數設置完全透明的背景色 */
+        color: white; 
+        border: 2px solid #ccc;
+        border-radius:20px;
+        padding: 5px; 
+        margin-bottom: 10px; 
+        width: 19vw; 
+        font-size: 1rem;
+        font-weight:bold;
+        outline: none; /* 移除聚焦時的輪廓 */
+    }
+
+#signupEnter {
+    background-color: rgb(255, 255, 255);
+    color: black;
+}
+
+    #signupEnter:hover {
+        background-color: rgba(100, 100, 100, 0.5);
+        color: white;
+        border-color: black;
+    }
+
 .ToMiddle {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.vr {
-   width:10px;
-   height:100%;
+
+.showPasswordBtn, .showPasswordCheckBtn{
+    background-color: transparent; /* 去掉背景色 */
+    border-color: transparent; /* 去掉邊框色 */
+}
+
+.SignBackGround {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.container-fluid {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/*.showPasswordBtn,*/ /* 顯示密碼按鈕 */
+/*input[type="submit"] {*/ /* 確認按鈕 */
+    /*color: white;*/ /* 設置文字顏色為白色 */
+    /*font-weight: bold;
+}*/
+
+.SignupCard input[type="text"],
+.SignupCard input[type="password"],
+.SignupCard input[type="email"] {
+    position: relative; /* 设定相对定位 */
+    padding-left: 1vw; /* 调整右边内边距 */
 }
