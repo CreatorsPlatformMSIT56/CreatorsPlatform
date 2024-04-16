@@ -15,14 +15,14 @@
 <body>
 	<header>
 		<nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white border-bottom mb-3 py-0">
-			<div class="container row">
-				<div class="col-md-1">
+			<div class="container row justify-content-center">
+				<div class="col-4 col-md-1">
 					@* 網站商標 *@
 					<a class="navbar-brand" asp-area="" asp-controller="yhu" asp-action="IMAGINK">
 						<img id="LOGO" src="~/img/Shared/LOGO.png" style="height: 80px;width: auto;" />
 					</a>
 				</div>
-				<div class="col-md-2">
+				<div class="col-7 col-md-2">
 					<a class="navbar-brand" asp-area="" asp-controller="yhu" asp-action="IMAGINK">
 						<img id="LOGOText" src="~/img/Shared/NAME_ONLY.png" style="width: 100%;" />
 					</a>					
@@ -30,7 +30,7 @@
 				<div class="col-md-3">
 					@* 響應式摺疊部分 *@
 					<div class="navbar-collapse navbar-right collapse d-flex justify-content-between ms-4">
-						<form class="d-flex" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
+						<form class="d-flex mb-0" style="position: relative;" method="get" action="@Url.Action("Search", "Vicky")" onsubmit="SaveSearchKey(event)">
 							<input id="searchInput" class="form-control SearchFormInput" type="text" placeholder="搜尋作品/創作者/委託" aria-label="Search" name="searchKey" value="@TempData["SearchKey"]">
 							<button class="SearchFormBtn" type="submit">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -93,7 +93,7 @@
 					</div>
 				</div>
 				<div class="col-md-1">
-					<a class="btn btn-light" type="button" asp-action="Index" asp-controller="HotGuy">
+					<a class="EventBtn btn btn-light" type="button" asp-action="Index" asp-controller="HotGuy">
 						活動
 					</a>
 				</div>
@@ -171,7 +171,7 @@
 		<div class="container py-2 FooterContainer">
 			<div class="d-flex">
 				<div class="me-3">
-					&copy; 2024 - CreatorsPlatform - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+					&copy; 2024 - IMAGINK - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 				</div>
 				<div class="me-3"><a href="#">聯絡我們</a></div>
 				<div class="me-3"><a href="#">隱私政策</a></div>

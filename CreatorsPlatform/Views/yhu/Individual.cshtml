@@ -9,7 +9,7 @@
     <div class="nav flex-column nav-pills me-3 col-md-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <button class="nav-link active" id="GeneralSettings" onclick="GeneralSettingsReadData()" data-bs-toggle="pill" data-bs-target="#GeneralSettings_Project" type="button" role="tab" aria-controls="GeneralSettings_Project" aria-selected="true">一般設定</button>
         <button class="nav-link" id="ConsumptionRecord" onclick=" ConsumptionRecordReadData()" data-bs-toggle="pill" data-bs-target="#ConsumptionRecord_Project" type="button" role="tab" aria-controls="ConsumptionRecord_Project" aria-selected="false">消費紀錄</button>
-        <button class="nav-link" id="CreatorIDCheck" onclick=" CreatorIDCheck(true)" data-bs-toggle="pill" data-bs-target="#ConsumptionRecord_Project" type="button" role="tab" aria-controls="ConsumptionRecord_Project" aria-selected="false">作者功能啟用</button>
+        <button id="NotACreator" class="nav-link" data-bs-toggle="modal" data-bs-target="#UserToCreatorModal">作者功能啟用</button>
         <button class="nav-link" id="AuthorSettings" onclick="AuthorSettingsReadData()" data-bs-toggle="pill" data-bs-target="#AuthorSettings_Project" type="button" role="tab" aria-controls="AuthorSettings_Project" aria-selected="false">作者設定</button>
         <div id="AuthorSettingsDetailed"class="mt-3" style="display: none;">
             <div class="ToMiddle" onclick="AuthorSettingsReadData()"><p>方案設定</p></div>
@@ -235,5 +235,30 @@
         </div>
     </div>
 </div>
+
+<!-- 成為創作者Modal -->
+<div class="modal fade" id="UserToCreatorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UserToCreatorModalLabel">是否成為使用者</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><label for="CreatorDes">創作者描述: </label></p>
+                <p><input id="CreatorDes" name="CreatorDes" type="text"></p>
+                <p><label for="CreatorNot">創作者須知: </label></p>
+                <p><input id="CreatorNot" name="CreatorNot" type="text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">還在考慮</button>
+                <button class="btn btn-primary" id="CreatorIDCheck" onclick=" CreatorIDCheck(true)" data-bs-toggle="pill" data-bs-target="#ConsumptionRecord_Project" type="button" role="tab" aria-controls="ConsumptionRecord_Project" aria-selected="false">確認成為創作者</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script src="/js/yhu/Individual.js"></script>
 

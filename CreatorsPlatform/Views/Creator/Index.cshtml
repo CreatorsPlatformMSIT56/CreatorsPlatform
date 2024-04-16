@@ -107,12 +107,12 @@
                                      style="height: 24rem; width: auto; object-fit: cover" />
                                 <div class="card-body"
                                 @* style="height: 10rem" *@>
-                                    <h5 class="card-title">@e.Title</h5>
-                                    <!-- 改寫LINQ讓Subtitle能放進去 OK -->
                                     <h6 class="card-subtitle mb-2 text-muted">@e.SubtitleName</h6>
-                                    <p class="card-text">
+                                    <h5 class="card-title">@e.Title</h5>
+                                    <!-- 不放Description -->
+                                    @* <p class="card-text">
                                         @e.Description
-                                    </p>
+                                    </p> *@
                                 </div>
                             </div>
                         </a>
@@ -135,13 +135,14 @@
                                      alt="Card image cap"
                                      style="height: 24rem; width: auto; object-fit: cover" />
                                 <div class="card-body">
-                                    <h5 class="card-title">@e.Title</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">
                                         @e.SubtitleName
                                     </h6>
-                                    <p class="card-text commision-description">
+                                    <h5 class="card-title">@e.Title</h5>
+                                    <!-- 不放Description -->
+                                    @* <p class="card-text commision-description">
                                         @e.Description
-                                    </p>
+                                    </p> *@
                                     <h5 class="card-text commisionPriceMin" style="font-weight:bolder">
                                         @e.PriceMin.ToString("C0")
                                         @(e.PriceMax.HasValue ? "~ " + e.PriceMax?.ToString("N0") : "")

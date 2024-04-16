@@ -230,7 +230,7 @@ namespace CreatorsPlatform.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePost(string Title, int? SubtitleId, string CategoryIdstring, string Description, string Imagebase64)
+        public ActionResult CreatePost(string Title, int? SubtitleId, string CategoryIdstring, string Description, string Imagebase64)
         {
 			// 取得 member 對應之 creatorId
 			var memberJson = HttpContext.Session.GetString("key");
@@ -259,13 +259,9 @@ namespace CreatorsPlatform.Controllers
 					PlanId = 3, // AddPost沒放 先隨便放
 
 				};
-
 				// 存 Content 進DB
 				var newrecord = _context.Contents.Add(Newcontent);
-
-				await _context.SaveChangesAsync(); // 目前發現這條結束後 就會自行跳轉
-
-				return RedirectToAction("GetPost", new { id = newrecord.Entity.ContentId });
+				 _context.SaveChanges(); // 目前發現這條結束後 就會自行跳轉
 				//return RedirectToAction("GetPost", "Creator");
 
                 //return Ok();
@@ -285,7 +281,11 @@ namespace CreatorsPlatform.Controllers
 			};
             // return RedirectToAction("Index");
             // return View(content);
-            return Ok();
+            var ContentsID = (from ContentsData in _context.Contents
+                              join UserData in _context.Users on ContentsData.CreatorId equals UserData.CreatorId
+                              where UserData.UserId == member.id
+                              select new { ContentsData.ContentId }).ToList().Last() ;
+            return Json(ContentsID);
             //return RedirectToAction("Index", "Creator");
         }
 
@@ -305,6 +305,7 @@ namespace CreatorsPlatform.Controllers
             var content = _context.Contents
                 .Include(c => c.Creator)
                 .ThenInclude(cr => cr.Users)
+                .Include(c => c.Subtitle)
                 .FirstOrDefault(c => c.ContentId == id);
 
             // 取得留言資料

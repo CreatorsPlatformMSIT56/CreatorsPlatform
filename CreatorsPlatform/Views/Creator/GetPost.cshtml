@@ -10,7 +10,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
+                        <div class="p-2 bd-highlight uploadDate text-muted">@Model.Content?.FirstOrDefault()?.UploadDate.Value.ToString("yyyy/MM/dd tt h:mm")</div>
+                        <!-- <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div> -->
                         <div class="p-2 bd-highlight LikeBtn"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.FirstOrDefault()?.Likes</span></div>
                     </div>
                 </div>
@@ -29,7 +30,25 @@
 
                 </div> *@
                 <div class="col-12 px-5 py-3" id="descr-container">
-                    <p>@Model.Content?.FirstOrDefault()?.Description</p>
+                    @* <p>@Model.Content?.FirstOrDefault()?.Description</p> *@
+                    <!-- 以下為Quill應急手段 -->
+                    <p class="m-1">
+                        @if (Model.Content?.FirstOrDefault()?.Description.Substring(0, 1) == "{")
+                        {
+                            <div class="mb-3" id="editor">
+                            </div>
+                        }
+                        else
+                        {
+                            @Model.Content?.FirstOrDefault()?.Description
+                        }
+                    </p>
+                    <!-- 以上為Quill應急手段 -->
+                </div>
+                <div class="col-12 px-5 mb-3 tags-container">
+                    <a asp-action="Search" asp-controller="Vicky" asp-route-id="@Model.Content?.FirstOrDefault()?.SubtitleId">
+                        <h5 style="color:steelblue">@Model.Content?.FirstOrDefault()?.Subtitle.SubtitleName</h5>
+                    </a>
                 </div>
                 <div class="col-12 px-5 mb-3 tags-container">
                     <h5>
@@ -149,7 +168,7 @@
                                      style="height: 12rem; width: auto; object-fit: cover" />
                                 <div class="card-body">
                                     <h5 class="card-title">@e.Title</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">
+                                    <h6 class="card-subtitle mb-2 text-muted text-end">
                                         @e.SubtitleName
                                     </h6>
                                     <!-- 暫且不用 -->
@@ -211,3 +230,10 @@
     // console.log(UserId);
 </script>
 <script src="~/js/Creator/GetPost.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script defer>
+    const quill = new Quill("#editor", {
+        readOnly: true
+    });
+    quill.setContents(@Html.Raw(Model.Content?.FirstOrDefault()?.Description));
+</script>
