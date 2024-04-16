@@ -31,7 +31,8 @@ function CreatorsChange(Category) {
 				$("#UserlistDetail").append(`
 				  <div id="uid${response[cont].userId}" class="h-100 row border border-2 ${UserBg}" onclick="WorkChanges(this)">
 						<div class="col-md-4 d-flex align-items-center justify-content-center">
-							<img src="data:image/png;base64,${response[cont].avatar}" class="UserIcon rounded-2 CreaterChangePart" alt="...">
+						${response[cont].avatar != undefined ? `<img src="data:image/png;base64,${response[cont].avatar}" class="UserIcon rounded-2 CreaterChangePart" alt="...">` :
+						`<img src="/img/Shared/person-circle.svg" class="UserIcon rounded-2" alt="...">`}
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
