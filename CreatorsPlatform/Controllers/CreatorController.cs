@@ -321,6 +321,7 @@ namespace CreatorsPlatform.Controllers
                     }
                 }).ToList();
 
+            
             // 取得訂閱方案資料
             var plans = _context.Plans
                 .Include(p => p.Creator)
@@ -460,15 +461,27 @@ namespace CreatorsPlatform.Controllers
             return Ok();
         }
 
-        //----------------------------------------------------------------
-        //委託貼文頁面
-        public class CommissionDetailsViewModel
+		// 愛心
+		[HttpPost]
+		public IActionResult PostLikeChange(int LikeChange, int TheCheckedPostId)
+		{
+			var ThePostModel = _context.Contents.FirstOrDefault(m => m.ContentId == TheCheckedPostId);
+			ThePostModel!.Likes = LikeChange;
+			_context.Update(ThePostModel);
+			_context.SaveChanges();
+			return Ok();
+		}
+
+		//----------------------------------------------------------------
+		//委託貼文頁面
+		public class CommissionDetailsViewModel
         {
             public IEnumerable<Commission>? Commission { get; set; }
             public IEnumerable<Plan>? Plans { get; set; }
             public IEnumerable<Comment>? Comments { get; set; }
             public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
-        }
+            public IEnumerable<CommissionImage>? CommissionImages { get; set; }
+		}
 
         public IActionResult GetCommission(int id = 1)
         {
@@ -478,6 +491,9 @@ namespace CreatorsPlatform.Controllers
                 .Include(c => c.Subtitle)
                 .Include(c => c.CommissionImages)
                 .FirstOrDefault(c => c.CommissionId == id);
+
+            var commissionImages = _context.CommissionImages
+                .Where(c => c.CommissionId == id);
 
             var comments = _context.Comments
                 .Include(u => u.User)
@@ -528,8 +544,9 @@ namespace CreatorsPlatform.Controllers
                 Commission = new List<Commission> { commission! },
                 Plans = plans,
                 Comments = comments,
-                CommissionsWithWords = commissionsWithWords
-            };
+                CommissionsWithWords = commissionsWithWords,
+				CommissionImages = commissionImages
+			};
             //
             if (MembersOnline())
             {

@@ -1,15 +1,17 @@
 ﻿@model CreatorsPlatform.Controllers.CreatorController.ContentDetailsViewModel
+<link href="~/css/Creator/GetPost.css" rel="stylesheet" />
+
 <div class="container main-page">
     <div class="row">
-        <div class="col-9" style="border:solid">
-            <div class="pictures-container text-center" style="border:solid">
+        <div class="col-9 border border-2 rounded">
+            <div class="pictures-container text-center border-bottom border-2 rounded" style="">
                 <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.ImageUrl ?? Array.Empty<byte>()))" alt="" class="img-fluid">
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-row-reverse bd-highlight">
                         <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
-                        <div class="p-2 bd-highlight"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.FirstOrDefault()?.Likes</span></div>
+                        <div class="p-2 bd-highlight LikeBtn"><i class="fs-4 bi bi-heart"></i><span>@Model.Content?.FirstOrDefault()?.Likes</span></div>
                     </div>
                 </div>
                 <div class="col-12 px-5 py-3 title-container">
@@ -150,9 +152,10 @@
                                     <h6 class="card-subtitle mb-2 text-muted">
                                         @e.SubtitleName
                                     </h6>
-                                    <p class="card-text commision-description">
+                                    <!-- 暫且不用 -->
+                                    @* <p class="card-text commision-description">
                                         @e.Description
-                                    </p>
+                                    </p> *@
                                 </div>
                             </div>
                         </a>
@@ -161,7 +164,7 @@
             </div>
         </div>
         <!-- aside -->
-        <div class="col-3" style="border:solid">
+        <div class="col-3 border border-2 rounded">
             <div class="row">
                 <h3 class="mt-2 text-center bg-warning bg-opacity-25">訂閱方案 </h3>
                 @foreach (var e in Model.Plans)

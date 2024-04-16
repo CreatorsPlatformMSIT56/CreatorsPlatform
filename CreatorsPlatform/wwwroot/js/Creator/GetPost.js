@@ -3,6 +3,30 @@ var membersIcon = MembersIcon;
 console.log(userName);
 console.log(membersIcon);
 
+$(".LikeBtn").on("click", function () {
+    
+    //console.log("ContentId: ",ContentId);
+    $(this).toggleClass("LikeChecked");
+    if ($(this).hasClass("LikeChecked")) {
+        $(this).children('span').text(parseInt($(this).children('span').text()) + 1);
+    } else {
+        $(this).children('span').text(parseInt($(this).children('span').text()) - 1);
+    }
+    var PostLike = parseInt($(this).children('span').text());
+    console.log(PostLike);
+    $.ajax({
+        url: "/Creator/PostLikeChange",
+        method: "POST",
+        data: { LikeChange: PostLike, TheCheckedPostId: ContentId },
+        success: function () {
+            //alert('OK');
+        },
+        error: function () {
+            alert('按愛心失敗');
+        }
+    });
+});
+
 
 function Follow() {
     //console.log(123);

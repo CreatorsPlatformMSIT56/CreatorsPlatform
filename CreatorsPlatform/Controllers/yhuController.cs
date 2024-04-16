@@ -276,8 +276,8 @@ namespace CreatorsPlatform.Controllers
                                      Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
-                                     Description = Introduction.Description.Length > 10 ?
-                                    Introduction.Description.Substring(0, 10) + "..." : Introduction.Description,
+                                     Description = Introduction.Description.Length > 26 ?
+                                    Introduction.Description.Substring(0, 26) + "..." : Introduction.Description,
                                  });
 			//依作者照第一個作者群找作品
 			var DefaultContentsData = ((from DefaultContents in _context.Contents
@@ -346,8 +346,8 @@ namespace CreatorsPlatform.Controllers
                                                  Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
-                                                 Description = Introduction.Description.Length > 10 ?
-                                                 Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
+                                                 Description = Introduction.Description.Length > 26 ?
+                                                 Introduction.Description.Substring(0, 26) + "..." : Introduction.Description
                                              }
                                    );
                         return Json(AuthorProfile.ToList());
@@ -360,7 +360,7 @@ namespace CreatorsPlatform.Controllers
                                                  Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
                                                  NewReport.UserName,
                                                  NewReport.CategoryId,
-                                                 Description = UserDescription.Description.Length > 10 ? UserDescription.Description.Substring(0, 10) + "..." : UserDescription.Description
+                                                 Description = UserDescription.Description.Length > 26 ? UserDescription.Description.Substring(0, 26) + "..." : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
                         return Json(NewReportData.ToList());
                     default:
@@ -394,8 +394,8 @@ namespace CreatorsPlatform.Controllers
                                         Avatar = UserData.Avatar!=null?Convert.ToBase64String(UserData.Avatar): null,
                                         UserData.UserName,
                                         UserData.CategoryId,
-                                        Description = Creators.Description.Length > 10 ?
-                                        Creators.Description.Substring(0, 10)+ "..." : Creators.Description
+                                        Description = Creators.Description.Length > 26 ?
+                                        Creators.Description.Substring(0, 26) + "..." : Creators.Description
                                     });
                 if (userIDsArray.Count == 0)
                 {
@@ -419,8 +419,8 @@ namespace CreatorsPlatform.Controllers
                                              Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
                                              UsersData.UserName,
                                              UsersData.CategoryId,
-                                             Description = Introduction.Description.Length > 10 ?
-                                             Introduction.Description.Substring(0, 10) + "..." : Introduction.Description
+                                             Description = Introduction.Description.Length > 26 ?
+                                             Introduction.Description.Substring(0, 26) + "..." : Introduction.Description
                                          }
                                );
                     return Json(AuthorProfile.ToList());
@@ -1315,8 +1315,8 @@ namespace CreatorsPlatform.Controllers
                 return Json("EmailCheck");
             };
             //目前使用者
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+           
+            MemberData member = new MemberData();
             member.Name = UserName;
             member.Email = Email;
             member.Password = UserPasswd;
