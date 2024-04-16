@@ -1173,8 +1173,8 @@ namespace CreatorsPlatform.Controllers
             }
             return Json("ok");
         }
-
-        public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
+		[HttpPost]
+		public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
         {
             var memberJson = HttpContext.Session.GetString("key");
             MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);

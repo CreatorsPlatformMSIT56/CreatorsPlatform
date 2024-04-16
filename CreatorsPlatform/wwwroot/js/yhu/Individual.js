@@ -652,6 +652,7 @@ function OrderRead() {
     Order1Read();
     $("#Entrust_List").empty();
     $("#EntrustOrders_List").empty();
+    OrderR2 = 1;
     Order2Read1();
 };
 function Order1Read() {
