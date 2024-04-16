@@ -168,11 +168,9 @@ function NewPostToSQL() {
         data: PostToData,
         success: function (response) {
             //sendImageDataURLToBackend();
+            console.log(response);
             alert("作品發布成功");
-        },
-        error: function (xhr, status, error) {
-            // 處理錯誤 
-            alert("作品發布失敗");
+            window.location.href = `/Creator/GetPost/${response.contentId}`;
         }
     });
 }

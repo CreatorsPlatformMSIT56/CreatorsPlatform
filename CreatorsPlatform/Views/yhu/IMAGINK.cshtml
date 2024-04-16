@@ -167,7 +167,7 @@
                     {
                         BgClass = "";
                     }
-                    <div id="@item.UserId" class="row border border-2 @BgClass" onclick="WorkChanges(this)">
+                    <div id="@item.UserId" class="h-100 row border border-2 @BgClass" onclick="WorkChanges(this)">
                         <div class="col-md-4 d-flex align-items-center justify-content-center">
                             @if (item.Avatar != null)
                             {
@@ -186,8 +186,7 @@
                                 <p class="card-text">@item.Description</p>
                             </div>
                         </div>
-                    </div>
-                    
+                    </div>                    
                     UserCount++;
                 }
             </div>

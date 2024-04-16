@@ -23,8 +23,8 @@
 			<div class="row">
 				<div class="col-12">
 					<div class="d-flex flex-row-reverse bd-highlight">
-						<div class="p-2 bd-highlight uploadDate text-muted">@Model.Commission?.FirstOrDefault()?.PutUpDate</div>
-						<div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div>
+						<div class="p-2 bd-highlight uploadDate text-muted">委託期限: @Model.Commission?.FirstOrDefault()?.PutUpDate.ToString("yyyy/MM/dd") - @((Model.Commission?.FirstOrDefault()?.OverDate != null) ? (Model.Commission?.FirstOrDefault()?.OverDate!.Value.ToString("yyyy/MM/dd")) : ("不限期"))</div>
+						<!-- <div class="p-2 bd-highlight"><i class="fs-4 bi bi-share"></i></div> -->
 					</div>
 				</div>
 				<div class="col-12 px-5 py-3 title-container">
@@ -155,7 +155,7 @@
 											 style="height: 12rem; width: auto; object-fit: cover" />
 										<div class="card-body">
 											<h5 class="card-title">@e.Title</h5>
-											<h6 class="card-subtitle mb-2 text-muted">
+											<h6 class="card-subtitle mb-2 text-muted text-end">
 												@e.SubtitleName
 											</h6>
 											<!-- 暫且不用 -->
@@ -182,7 +182,18 @@
 		<div class="col-3 border border-2 rounded">
 			<div class="row">
 				<h4 class="mt-2">委託說明: </h4>
-				<p class="m-1">@Model.Commission?.FirstOrDefault()?.Description</p>
+				<!-- 以下為Quill應急手段 -->
+				<p class="m-1">@if (Model.Commission?.FirstOrDefault()?.Description.Substring(0, 1) == "{")
+					{
+						<div class="mb-3" id="editor">
+						</div>
+					}
+					else
+					{
+						@Model.Commission?.FirstOrDefault()?.Description
+					}
+				</p>
+				<!-- 以上為Quill應急手段 -->
 				<a asp-action="EntrustPayment" asp-controller="yhu"
 				asp-route-id="@Model.Commission?.FirstOrDefault()?.CommissionId"
 				class="btn bg-success px-2" style="color:white">我要委託</a>
@@ -199,3 +210,10 @@
 	console.log(CreatorId);
 </script>
 <script src="~/js/Creator/GetCommission.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+<script defer>
+	const quill = new Quill("#editor", {
+		readOnly: true
+	});
+	quill.setContents(@Html.Raw(Model.Commission?.FirstOrDefault()?.Description));
+</script>

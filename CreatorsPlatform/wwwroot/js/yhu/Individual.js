@@ -1,4 +1,4 @@
-var Order2 = 1;
+var OrderR2 = 1;
 var Order = 1;
 CreatorIDCheck(false);
 
@@ -652,6 +652,7 @@ function OrderRead() {
     Order1Read();
     $("#Entrust_List").empty();
     $("#EntrustOrders_List").empty();
+    OrderR2 = 1;
     Order2Read1();
 };
 function Order1Read() {
@@ -708,7 +709,7 @@ function Order2Read1() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -725,7 +726,7 @@ function Order2Read1() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read2();
         }
@@ -745,7 +746,7 @@ function Order2Read2() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -755,7 +756,7 @@ function Order2Read2() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read3();
         }
@@ -775,7 +776,7 @@ function Order2Read3() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -795,7 +796,7 @@ function Order2Read3() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read4();
         }
@@ -815,7 +816,7 @@ function Order2Read4() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -835,7 +836,7 @@ function Order2Read4() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read5();
         }
@@ -855,7 +856,7 @@ function Order2Read5() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -865,7 +866,7 @@ function Order2Read5() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
             Order2Read6();
         }
@@ -885,7 +886,7 @@ function Order2Read6() {
             response.forEach(function () {
                 $("#EntrustOrders_List").append(`
                          <tr>
-                                <th scope="col">${Order2}</th>
+                                <th scope="col">${OrderR2}</th>
                                 <td scope="col">${response[cont].title}</td>
                                 <td scope="col">${response[cont].userName}</td>
                                 <td scope="col">${response[cont].orderDate}</td>
@@ -895,7 +896,7 @@ function Order2Read6() {
                         </tr>
                     `);
                 cont++;
-                Order2++;
+                OrderR2++;
             });
         }
     });
@@ -1132,20 +1133,50 @@ function ChangePwd() {
 
 function CreatorIDCheck(x) {
     let y = x;
-    $.ajax({
-        url: '/yhu/CreatorIDCheck',
-        method: 'POST',
-        data: {
-            Check: y
-        },
-        success: function (response) {
-            $("#AuthorSettings").removeClass("d-none");
-            $("#AuthorSettings_Project").removeClass("d-none");
-            $("#CreatorIDCheck").addClass("d-none");
-        }, error: function () {
-            $("#AuthorSettings").addClass("d-none");
-            $("#AuthorSettings_Project").addClass("d-none");
-            $("#CreatorIDCheck").removeClass("d-none");
+    if (y == true) {
+        y = true;
+        let Creatordata = {
+            description: $("#CreatorDes").val(),
+            notice: $("#CreatorNot").val()
         }
-    });
+        let NewCreatorDataToDb = {
+            NewCreator: Creatordata,
+            Check: y
+        }
+
+        $.ajax({
+            url: '/yhu/CreatorIDCheck',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(NewCreatorDataToDb),
+            success: function (response) {
+                $('#UserToCreatorModal').modal('hide');
+                $("#AuthorSettings").removeClass("d-none");
+                $("#AuthorSettings_Project").removeClass("d-none");
+                $("#NotACreator").addClass("d-none");
+            }
+        });
+    };
+    if (y == false) {
+        y = false;
+        let NewCreatorDataToDb = {
+            Check: y
+        };
+        $.ajax({
+            url: '/yhu/CreatorIDCheck',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(NewCreatorDataToDb),
+            success: function (response) {
+                $("#AuthorSettings").removeClass("d-none");
+                $("#AuthorSettings_Project").removeClass("d-none");
+                $("#NotACreator").addClass("d-none");
+            },
+            error: function () {
+                $("#AuthorSettings").addClass("d-none");
+                $("#AuthorSettings_Project").addClass("d-none");
+                $("#NotACreator").removeClass("d-none");
+            }
+        });
+    }
 };
