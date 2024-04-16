@@ -413,10 +413,10 @@ namespace CreatorsPlatform.Controllers
                 ViewBag.UserName = member.Name;
                 
                 // 如果有登入，把檢查是否追蹤結果傳到前端
-                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == content.CreatorId);
                 if (Follow)
                 {
-                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == content.CreatorId).Unfollow;
                     ViewBag.UnFollow = TheFollow;
                 }
                 else
@@ -563,10 +563,10 @@ namespace CreatorsPlatform.Controllers
                 ViewBag.CreatorId = commission.CreatorId;
                 ViewBag.UserId = member.id;
                 // 傳是否有追蹤過去
-                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
+                var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == commission.CreatorId);
                 if (Follow)
                 {
-                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == commission.CreatorId).Unfollow;
                     ViewBag.UnFollow = TheFollow;
                 }
                 else
