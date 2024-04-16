@@ -315,7 +315,7 @@
 											<div class=" d-flex justify-content-between">
 												@if (i.UploadDate != null)
 												{
-													<h4 class="text-muted">@i.UploadDate.Value.ToString("yyyy-MM-dd")</h4>
+													<h4 class="text-muted">@i.UploadDate.Value.ToString("yyyy/MM/dd")</h4>
 													<a href="@Url.Action("index", "Creator", new { id = i.CreatorID})" class="fs-5">@i.UserName</a>
 												}
 											</div>
@@ -356,7 +356,7 @@
 												<h4 class="text-muted">
 													@if (i.UploadDate != null)
 													{
-														@i.UploadDate.Value.ToString("yyyy-MM-dd")
+														@i.UploadDate.Value.ToString("yyyy/MM/dd")
 													}
 												</h4>
 												<a href="@Url.Action("index", "Creator", new { id = i.CreatorID})" class="fs-5">@i.UserName</a>

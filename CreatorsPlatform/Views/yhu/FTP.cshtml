@@ -1,15 +1,40 @@
-﻿@{
+﻿@model List<Content>
+@{
+	var FirstImage = Model.ElementAtOrDefault(0);
+	var SecondImage = Model.ElementAtOrDefault(1);
+	var ThreeImage = Model.ElementAtOrDefault(2);
+	var FourImage = Model.ElementAtOrDefault(3);
+	var FiveImage = Model.ElementAtOrDefault(4);
+	var SixImage = Model.ElementAtOrDefault(5);
+	var SevenImage = Model.ElementAtOrDefault(6);
+	var EightImage = Model.ElementAtOrDefault(7);
+	var NineImage = Model.ElementAtOrDefault(8);
 }
-<div class="container  d-flex justify-content-center align-items-center p-4 my-5">
-	<div class="row">
-		<h1 class="text-center">忘記密碼頁面</h1>
-		<div class="text-center my-5">
+<link rel="stylesheet" href="~/css/yhu/FTP.css">
+
+ <div class="container d-flex">
+	<div class="row columnFirst">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FirstImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(SecondImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(ThreeImage!.ImageUrl!))" alt="...">
+	</div>
+	<div class="row columnSecond">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FourImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FiveImage!.ImageUrl!))" alt="...">
+	</div>
+	<div class="row columnThree">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(SevenImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(EightImage!.ImageUrl!))" alt="...">
+	</div>
+
+	<div class="row LoginCard">
+		<h1 class="text-center my-5">忘記密碼頁面</h1>
+		<div class="text-center">
 			<form action="/" method="post">
 				<p><label>Email : </label></p>
 				<input id="Email" type="email" />
 				<button id="Verification" type="submit">取得驗證碼</button>
 			</form>
-			<br /><br />
 			<div id="extraFields" style="display: none;">
 				<input id="VerificationCode" type="text" value="請輸入驗證碼">
 				<input type="submit" value="OK" id="verificationOk">
@@ -26,6 +51,11 @@
 		</div>
 	</div>
 </div>
+
+
+
+
+
 
 <script>
 	var verifyCode = 0;
@@ -127,6 +157,7 @@
 			// 比较输入的验证码与之前获取的验证码
 			if (inputCode === verifyCode) {
 				// 显示更改密码的相关字段和按钮
+				$(".LoginCard").css("height", "80vh");
 				$("#userPasswd").show();
 			} else {
 				// 验证码不匹配，显示错误提示信息

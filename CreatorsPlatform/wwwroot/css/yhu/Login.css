@@ -1,5 +1,5 @@
 ﻿
-
+/*
 body {
     animation: scrollBackground 10s linear infinite;
 }
@@ -24,15 +24,20 @@ body {
     100% {
         background-color: red;
     }
-}
+}*/
 
 .container {
-    height: 85%;
-    width: 100%;
     display: flex;
+    /*height: 85%;
+    width: 100%;*/
     align-items: center;
     justify-content: center;
-    position: relative;
+    /*position: relative;*/
+
+}
+
+#showPasswordBtnLogin{
+    width:10px;
 }
 
 .LoginCard {
@@ -47,7 +52,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 2;
     width: 25vw;
-    height:45vh;
+    height: 45vh;
     padding: 20px;
     text-align: center;
     backdrop-filter: blur(4px); /* 添加模糊效果 */
@@ -80,4 +85,33 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+/* 背景圖 */
+
+
+.columnFirst > div {
+    width: 33vw;
+    height: 35vh;
+}
+
+.columnFirst > img {
+    width: 100%;
+    height: 35vh;
+    object-fit: cover;
+}
+
+.columnSecond > div,
+.columnThree > div {
+    width: 33vw; /* 設定寬度 */
+    height: 55vh; /* 設定高度 */
+    overflow: hidden; /* 如果圖片尺寸超過容器尺寸，則隱藏溢出部分 */
+}
+
+.columnSecond > img,
+.columnThree > img {
+    width: 100%;
+    height: 53vh; /* 使圖片高度填滿容器 */
+    object-fit: cover; /* 使圖片保持比例並裁剪多餘部分 */
 }
