@@ -850,7 +850,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
@@ -866,7 +866,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
@@ -882,7 +882,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
@@ -898,7 +898,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
@@ -914,7 +914,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
@@ -930,7 +930,7 @@ namespace CreatorsPlatform.Controllers
 											 select new
 											 {
 												 OrderData.CommissionOrderId,
-												 OrderData.Title,
+												 OrderData2.Title,
 												 UsrtData.UserName,
 												 OrderData.OrderDate,
 												 OrderData.WorkStatus,
