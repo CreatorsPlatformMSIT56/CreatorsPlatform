@@ -70,6 +70,9 @@ html {
     margin-right: 10rem;
 }
 
+.EventBtn {
+    background-color: #F8CE59;
+}
 /*導覽列會員登入*/
 #MemberSection {
     display: flex;

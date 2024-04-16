@@ -1,12 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Content>
 @{
+	var FirstImage = Model.ElementAtOrDefault(0);
+	var SecondImage = Model.ElementAtOrDefault(1);
+	var ThreeImage = Model.ElementAtOrDefault(2);
+	var FourImage = Model.ElementAtOrDefault(3);
+	var FiveImage = Model.ElementAtOrDefault(4);
+	var SixImage = Model.ElementAtOrDefault(5);
+	var SevenImage = Model.ElementAtOrDefault(6);
+	var EightImage = Model.ElementAtOrDefault(7);
+	var NineImage = Model.ElementAtOrDefault(8);
 }
 
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 <link href="/css/yhu/Login.css" rel="stylesheet" />
 <div id="Login" class="container">
+	<div class="row columnFirst">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FirstImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(SecondImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(ThreeImage!.ImageUrl!))" alt="...">
+	</div>
+	<div class="row columnSecond">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FourImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(FiveImage!.ImageUrl!))" alt="...">
+	</div>
+	<div class="row columnThree">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(SevenImage!.ImageUrl!))" alt="...">
+		<img src="data:image/*;base64,@(Convert.ToBase64String(EightImage!.ImageUrl!))" alt="...">
+	</div>
 	<div class="row LoginCard  border ToMiddle" id="UserU">
 		<form id="LoginList">
 			<h2 class="my-4">登入</h2>
@@ -17,7 +37,8 @@
 			</div>
 			<div class="position-relative my-2">
 					<input id="Passwd" name="Passwd" type="password" value="密碼" onfocus="if(this.value=='密碼') this.value='';" onblur="if(this.value=='') this.value='密碼';" required>
-				<button class="showPasswordBtnLogin position-absolute top-0 end-0 my-1 w-50" id="showPasswordBtnLogin" type="button">
+
+				<button class="showPasswordBtnLogin position-absolute top-0 end-0 my-1 w-50 " id="showPasswordBtnLogin" type="button">
 						<img id="passwordIconLogin" src="~/img/VickyImg/lockFill.png" alt="">
 					</button>
 					<p style="display: none;" id="PasswdError">密碼錯誤</p>
