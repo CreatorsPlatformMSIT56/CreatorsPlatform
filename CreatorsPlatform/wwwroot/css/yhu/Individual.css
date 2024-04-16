@@ -14,3 +14,7 @@
 #Event_List div :hover {
     cursor: pointer;
 }
+
+#AuthorSettingsDetailed .ToMiddle{
+    cursor: pointer;
+}
