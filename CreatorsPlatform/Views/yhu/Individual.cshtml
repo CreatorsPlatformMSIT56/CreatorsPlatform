@@ -29,24 +29,45 @@
         <div class="tab-pane fade show active" id="GeneralSettings_Project" role="tabpanel" aria-labelledby="GeneralSettings">
             <div class="row">
                 <div class="col-md-4">
-                    <p>頭像:</p>
+                    <h5 class="fw-bold">頭像</h5>
+                    <div class="ToMiddle row">
                         <input id="AvatarUpData" style="display: none;" type="file" accept="image/*" onchange="readFile(event)" />
-                    <label for="AvatarUpData">
-                        <img id="Avatar" src="@((ViewBag.Avatar != null) ? ("data:image/png;base64," + ViewBag.Avatar) : "/img/Shared/person-circle.svg")">
-                    </label>
+                        <label for="AvatarUpData">
+                            <img id="Avatar" src="@((ViewBag.Avatar != null) ? ("data:image/png;base64," + ViewBag.Avatar) : "/img/Shared/person-circle.svg")">
+                        </label>
+                    </div>
+                    <div class="ToMiddle row">
+                        <button type="button" class="btn btn-primary btn-lg btn-block mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">密碼變更</button>
+                    </div>                   
                 </div>
                 <div class="col-md-8">    
                     <form id="UserData">
-                            <p><label for="UserName">使用者名稱</label></p>
-                        <p id="UserNameText" class="DataShow">@ViewBag.Name</p>
-                        <p><input id="UserName" name="UserName" type="text" style="display: none;" class="ReviseShow" value="@ViewBag.Name"></p>
-                            <p><label for="UserEMail">E-Mail</label></p>
-                        <p id="UserEMailText" class="DataShow">@ViewBag.Email</p>
-                        <p><input id="UserEMail" name="UserEMails" type="text" style="display: none;" class="ReviseShow" value="@ViewBag.Email"></p>
-                        <p><button type="button" class="btn btn-primary btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal">密碼變更</button></p>
-                            <p><button id="Revise" type="button" onclick="ReviseON()" class="DataShow">修改</button></p>
-                            <p> <input type="submit" id="Confirm" style="display: none;" class="ReviseShow" value="確認"></p>
-                            <p><button id="Cancel" type="button" style="display: none;" class="ReviseShow" onclick="ReviseOFF()">取消</button></p>
+                        <table class="table table-striped mt-3">
+                            <tr>
+                                <td> <h5><label for="UserName">使用者名稱</label></h5></td>
+                                <td>
+                                    <h5 id="UserNameText" class="DataShow">@ViewBag.Name</h5>
+                                    <h5><input id="UserName" name="UserName" type="text" style="display: none;" class="ReviseShow" value="@ViewBag.Name"></h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h5><label for="UserEMail">E-Mail</label></h5></td>
+                                <td>
+                                    <h5 id="UserEMailText" class="DataShow">@ViewBag.Email</h5>
+                                    <h5><input id="UserEMail" name="UserEMails" type="text" style="display: none;" class="ReviseShow" value="@ViewBag.Email"></h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5><button id="Revise" type="button" onclick="ReviseON()" class="DataShow btn btn-primary">修改</button></h5>
+                                    <h5> <input type="submit" id="Confirm" style="display: none;" class="ReviseShow btn btn-primary" value="確認"></h5>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                    <h5><button id="Cancel" type="button" style="display: none;" class="ReviseShow btn btn-primary" onclick="ReviseOFF()">取消</button></h5>
+                                </td>
+                            </tr>
+                        </table>
                     </form>
                 </div>
             </div>
