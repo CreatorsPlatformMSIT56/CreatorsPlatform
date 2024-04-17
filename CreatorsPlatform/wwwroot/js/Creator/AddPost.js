@@ -169,7 +169,7 @@ function NewPostToSQL() {
         success: function (response) {
             //sendImageDataURLToBackend();
             console.log(response);
-            alert("作品發布成功");
+            //alert("作品發布成功");
             window.location.href = `/Creator/GetPost/${response.contentId}`;
         }
     });
