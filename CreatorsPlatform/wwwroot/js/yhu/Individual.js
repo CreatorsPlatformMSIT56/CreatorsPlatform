@@ -341,6 +341,7 @@ function FanStatusReply(x, y) {
         },
         success: function (response) {
             $("#ConsumptionRecord_Entrust").empty();
+            Order = 1;
             Order1();
         }
     });

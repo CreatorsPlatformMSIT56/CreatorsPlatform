@@ -4,6 +4,13 @@
 @{
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+    #CreatorDes, #CreatorNot {
+        display: inline-block;
+        width: 100% !important;
+        height: 10vh;
+    }
+</style>
 <link href="/css/yhu/Individual.css" rel="stylesheet" />
 <div class="d-flex align-items-start row">
     <div class="nav flex-column nav-pills me-3 col-md-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -188,7 +195,7 @@
                     </tbody>
                 </table>
                 <table id="OrderAsk" class="table table-striped">
-                    <h5 class="fw-bold">已接受委託:</h5>
+                    <h5 class="fw-bold">已接收委託:</h5>
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -269,14 +276,14 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="UserToCreatorModalLabel">是否成為使用者</h5>
+                <h5 class="modal-title" id="UserToCreatorModalLabel">是否成為創作者</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p><label for="CreatorDes">創作者描述: </label></p>
-                <p><input id="CreatorDes" name="CreatorDes" type="text"></p>
+                <p><textarea id="CreatorDes" name="CreatorNot" type="text" rows="5" class="d-block"></textarea></p>
                 <p><label for="CreatorNot">創作者須知: </label></p>
-                <p><input id="CreatorNot" name="CreatorNot" type="text"></p>
+                <p><textarea id="CreatorNot" name="CreatorNot" type="text" rows="5" class="d-block"></textarea></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">還在考慮</button>
