@@ -75,7 +75,7 @@ function PostCommentToSQL() {
         method: "post",
         data: commentData,
         success: function () {
-            alert('ok');
+            //alert('ok');
             var newPostHtml = `
                     <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                     <div class="row g-0">
@@ -95,6 +95,7 @@ function PostCommentToSQL() {
                 </div>
             `;
             $(".new-comment-pop").append(newPostHtml);
+            $("#comment-text").val('');
         },
         error: function () {
             alert('fail');

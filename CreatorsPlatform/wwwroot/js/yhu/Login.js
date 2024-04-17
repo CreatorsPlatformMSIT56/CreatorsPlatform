@@ -61,3 +61,22 @@ $(function () {
         }
     });
 });
+
+
+//沒點擊時看見是密碼 點擊後會變成黑點點
+
+function showPlainText(input) {
+    if (input.value === '密碼') {
+        input.value = '';
+        input.type = 'password';
+
+    }
+}
+
+//沒點擊時看見是密碼 點擊後會變成黑點點
+function hidePlainText(input) {
+    if (input.value === '') {
+        input.type = 'text';
+        input.value = '密碼';
+    }
+}

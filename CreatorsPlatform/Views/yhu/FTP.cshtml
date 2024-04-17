@@ -11,8 +11,9 @@
 	var NineImage = Model.ElementAtOrDefault(8);
 }
 <link rel="stylesheet" href="~/css/yhu/FTP.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 
- <div class="container d-flex">
+<div class="container d-flex">
 	<div class="row columnFirst">
 		<img src="data:image/*;base64,@(Convert.ToBase64String(FirstImage!.ImageUrl!))" alt="...">
 		<img src="data:image/*;base64,@(Convert.ToBase64String(SecondImage!.ImageUrl!))" alt="...">
@@ -27,26 +28,33 @@
 		<img src="data:image/*;base64,@(Convert.ToBase64String(EightImage!.ImageUrl!))" alt="...">
 	</div>
 
-	<div class="row LoginCard">
-		<h1 class="text-center my-5">忘記密碼頁面</h1>
-		<div class="text-center">
+	<div class="row passwordCard">
+		<h1 class="text-center my-5">忘記密碼</h1>
+		<div class="text-center" id="VerificationCodeCard">
 			<form action="/" method="post">
-				<p><label>Email : </label></p>
-				<input id="Email" type="email" />
-				<button id="Verification" type="submit">取得驗證碼</button>
+				<input id="Email" type="email" value="Email" onfocus="if(this.value=='Email') this.value='';" onblur="if(this.value=='') this.value='Email';" pattern="[a-z0-9._%+-]+&#64;[a-z0-9.-]+\.[a-z]{2,}$" required />
+				<input id="Verification" type="submit" value="取得驗證碼" class="fs-5">
+				<p style="display: none;" id="PasswordError">請輸入有效信箱</p>
 			</form>
 			<div id="extraFields" style="display: none;">
 				<input id="VerificationCode" type="text" value="請輸入驗證碼">
 				<input type="submit" value="OK" id="verificationOk">
 			</div>
 		</div>
-		<div class="text-center" id="userPasswd" style=" display: none;">
-			<p><label for="UserPasswd">Passwd</label></p>
-			<p><input id="UserPasswd" type="password" name="UserPasswd" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
-			<p><label for="UserPasswdCheck">Passwd Check</label></p>
-			<p><input id="UserPasswdCheck" type="password" name="UserPasswdCheck" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" required></p>
-			<button id="showPasswordBtn" type="button">顯示密碼</button>
-			<a href="/yhu/Login"><input type="submit" value="passwdOk" id="passwdOk"></a>
+		<div class="text-center position-relative" id="userPasswd" style=" display: none;">
+			<div class="position-relative">
+				<input id="UserPasswd" type="text" value="密碼" name="UserPasswd" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" onfocus="showPlainText(this)" onblur="hidePlainText(this)" required>
+				<button class="showPasswordBtn position-absolute top-0 end-0 my-1 w-50" id="showPasswordBtn" type="button">
+					<img id="passwordIcon" src="~/img/VickyImg/lockFill.png" alt="">
+				</button>
+			</div>
+			<div class="position-relative">
+				<input id="UserPasswdCheck" type="text" value="確認密碼" name="UserPasswdCheck" pattern="^[a-zA-Z0-9]{8,100}$" title="請輸入英文和數字，至少為 8字符" onfocus="showPlainText(this)" onblur="hidePlainCheckText(this)" required>
+				<button class="showPasswordCheckBtn  position-absolute top-0 end-0 my-1 w-50" id="showPasswordCheckBtn" type="button">
+					<img id="passWordCheckIcon" src="~/img/VickyImg/lockFill.png" alt="">
+				</button>
+			</div>
+			<a href="/yhu/Login"><input type="submit" value="Ok" id="passwdOk"></a>
 			<p style="display: none;" id="PasswdError">兩次密碼不符合</p>
 		</div>
 	</div>
@@ -64,7 +72,6 @@
 		var EmailFromClient = $('#Email').val()
 		//驗證碼亂數產生一組6個數字
 		verifyCode = Math.random().toFixed(6).slice(-6);
-
 		$.ajax({
 			url: "/yhu/sendGmail",
 			method: "get",
@@ -73,31 +80,41 @@
 				verifyCode: verifyCode
 			},
 			success: function (e) {
-				console.log("verifyCode = " + verifyCode);
+				$("#PasswordError").css("display", "block");
 			}
 		})
 	})
 
-
 	//顯示輸入驗證碼和確認按鈕
 	$(document).ready(function () {
-		// 当点击取得验证码按钮时
 		$("#Verification").click(function (event) {
-			event.preventDefault(); // 阻止默认的表单提交行为
-			// 显示额外的输入字段和提交按钮
+			event.preventDefault();
 			$("#extraFields").show();
 		});
 		$("#VerificationCode").focus(function () {
-			// 如果值等于默认文本，则清空值
 			if ($(this).val() === "請輸入驗證碼") {
 				$(this).val("");
 			}
 		});
-		// 当文本框失去焦点时
 		$("#VerificationCode").blur(function () {
-			// 如果值为空，则恢复默认文本
 			if ($(this).val().trim() === "") {
 				$(this).val("請輸入驗證碼");
+			}
+		});
+	});
+
+	$(document).ready(function () {
+		$("#verificationOk").on("click", function () {
+			event.preventDefault();
+			var inputCode = $("#VerificationCode").val().trim();
+			if (inputCode === verifyCode) {
+				$("#VerificationCodeCard").remove();
+				$(".LoginCard").css("height", "80vh");
+
+				$("#userPasswd").show();
+			} else {
+				alert("驗證碼不正確");
+				$("#VerificationCode").val("");
 			}
 		});
 	});
@@ -126,19 +143,25 @@
 		});
 	});
 
-
+	//密碼隱藏按鈕
 	$(function () {
 		$("#showPasswordBtn").on("click", function () {
 			var passwordField = $("#UserPasswd");
-			var passwordFieldCheck = $("#UserPasswdCheck");
 			var passwordError = $("#PasswdError");
-
 			if (passwordField.attr("type") === "password") {
 				passwordField.attr("type", "text");
 				passwordError.hide();
 			} else {
 				passwordField.attr("type", "password");
 			}
+		});
+	});
+
+	//確認密碼隱藏按鈕
+	$(function () {
+		$("#showPasswordCheckBtn").on("click", function () {
+			var passwordFieldCheck = $("#UserPasswdCheck");
+			var passwordError = $("#PasswdError");
 			if (passwordFieldCheck.attr("type") === "password") {
 				passwordFieldCheck.attr("type", "text");
 				passwordError.hide();
@@ -148,25 +171,6 @@
 		});
 	});
 
-	$(document).ready(function () {
-		// 当点击确认验证码按钮时
-		$("#verificationOk").on("click", function () {
-			event.preventDefault(); // 阻止默认的表单提交行为
-			// 获取输入的验证码
-			var inputCode = $("#VerificationCode").val().trim();
-			// 比较输入的验证码与之前获取的验证码
-			if (inputCode === verifyCode) {
-				// 显示更改密码的相关字段和按钮
-				$(".LoginCard").css("height", "80vh");
-				$("#userPasswd").show();
-			} else {
-				// 验证码不匹配，显示错误提示信息
-				alert("验证码不正确，请重新输入。");
-				// 清空验证码输入框
-				$("#VerificationCode").val("");
-			}
-		});
-	});
 
 
 	$("#passwdOk").on("click", function (event) {
@@ -180,21 +184,64 @@
 				method: "post",
 				data: {
 					userEmail: emailFromClient,
-					userPassword: newPassword // 新密碼
+					userPassword: newPassword
 				},
 				success: function (response) {
-					// 如果成功更新密碼，你可以根據需要進行一些處理
 					console.log("密碼已成功更新");
-					// 例如，你可以在頁面上顯示一個成功更新密碼的提示
 				},
 				error: function (xhr, status, error) {
-					// 如果發生錯誤，你可以根據需要進行一些處理
 					console.error("更新密碼時發生錯誤：" + error);
-					// 例如，你可以在頁面上顯示一個錯誤訊息
 				}
 			});
 		} else {
-			console.log("密碼輸入不一致");
+			$("#PasswdError").css("display", "block");
+		}
+	});
+
+
+	//沒點擊時看見是密碼 點擊後會變成黑點點
+
+	function showPlainText(input) {
+		if (input.value === '密碼' || input.value === '確認密碼') {
+			input.value = '';
+			input.type = 'password';
+
+		}
+	}
+
+	//沒點擊時看見是密碼 點擊後會變成黑點點
+	function hidePlainText(input) {
+		if (input.value === '') {
+			input.type = 'text';
+			input.value = '密碼';
+		}
+	}
+
+
+	function hidePlainCheckText(input) {
+		if (input.value === '') {
+			input.type = 'text';
+			input.value = '確認密碼';
+		}
+	}
+
+	//切換圖片
+
+	document.getElementById('showPasswordBtn').addEventListener('click', function () {
+		var passwordIcon = document.getElementById('passwordIcon');
+		if (passwordIcon.src.includes('lockFill')) {
+			passwordIcon.src = "/img/VickyImg/lockUnlock.png";
+		} else {
+			passwordIcon.src = "/img/VickyImg/lockFill.png";
+		}
+	});
+
+	document.getElementById('showPasswordCheckBtn').addEventListener('click', function () {
+		var passwordIcon = document.getElementById('passWordCheckIcon');
+		if (passwordIcon.src.includes('lockFill')) {
+			passwordIcon.src = "/img/VickyImg/lockUnlock.png";
+		} else {
+			passwordIcon.src = "/img/VickyImg/lockFill.png";
 		}
 	});
 

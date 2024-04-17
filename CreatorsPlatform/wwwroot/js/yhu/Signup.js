@@ -93,6 +93,8 @@ function hidePlainCheckText(input) {
 }
 
 //點擊切換圖片
+
+
 document.getElementById('showPasswordBtn').addEventListener('click', function () {
     var passwordIcon = document.getElementById('passwordIcon');
     if (passwordIcon.src.includes('lockFill')) {

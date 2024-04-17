@@ -41,7 +41,7 @@ body {
 }
 
 .LoginCard {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
     color: white;
     font-weight: bold;
     border: 10px solid #f1f1f1;
@@ -104,8 +104,8 @@ body {
 
 .columnSecond > div,
 .columnThree > div {
-    width: 33vw; /* 設定寬度 */
-    height: 55vh; /* 設定高度 */
+    width: 33vw; 
+    height: 55vh; 
     overflow: hidden; /* 如果圖片尺寸超過容器尺寸，則隱藏溢出部分 */
 }
 
@@ -114,4 +114,14 @@ body {
     width: 100%;
     height: 53vh; /* 使圖片高度填滿容器 */
     object-fit: cover; /* 使圖片保持比例並裁剪多餘部分 */
+}
+
+#loginInputOk:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+}
+
+input[type="email"],
+input[type="text"] {
+    text-indent: 10px; /* 將提示文字向右移動5px */
 }
