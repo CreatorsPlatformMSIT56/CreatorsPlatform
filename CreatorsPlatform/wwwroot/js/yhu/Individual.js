@@ -83,6 +83,7 @@ function ConsumptionRecordReadData() {
     $("#AuthorSettingsDetailed").css("display", "none");
     PlanCons();
     $("#ConsumptionRecord_Entrust").empty();
+    Order = 1;
     Order1();
 };
 function PlanCons() {
