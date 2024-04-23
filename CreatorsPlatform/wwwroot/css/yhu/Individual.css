@@ -18,3 +18,7 @@
 #AuthorSettingsDetailed .ToMiddle{
     cursor: pointer;
 }
+
+.CursorPointer {
+    cursor: pointer;
+}
