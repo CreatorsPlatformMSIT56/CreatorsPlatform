@@ -224,7 +224,7 @@ namespace CreatorsPlatform.Controllers
 					// 關注功能
 					// 找出他關注的所有作者
 					var result = (from f in _context.Follows
-								  where f.UserId == member.id
+								  where f.UserId == member.id && f.Unfollow == false
 								  select f.CreatorId).ToList();
 					// 找他關注的作者的所有投稿依時間排序
 					var AllFollowCreatorPost = (from content in _context.Contents
