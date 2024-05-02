@@ -103,6 +103,7 @@ function PostAllToSQL() {
         success: function (response) {
             UpdateEventExImg();
             alert("活動修改成功");
+            history.back();
         },
         error: function (xhr, status, error) {
             // 處理錯誤 
