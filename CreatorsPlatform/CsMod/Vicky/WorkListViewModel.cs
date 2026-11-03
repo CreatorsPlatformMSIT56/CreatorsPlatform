@@ -1,4 +1,4 @@
-﻿namespace CreatorsPlatform.CsMod.Vicky
+namespace CreatorsPlatform.CsMod.Vicky
 {
     public class WorkListViewModel : WorkViewModel
     {

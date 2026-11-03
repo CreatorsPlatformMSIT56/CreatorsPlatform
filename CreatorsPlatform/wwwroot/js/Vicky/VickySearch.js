@@ -1,4 +1,4 @@
-﻿
+
 //委託按鈕觸發判斷
 var isCommissionOnClicked = false;
 var isWorkOnClicked = false;

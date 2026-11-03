@@ -1,4 +1,4 @@
-﻿using CreatorsPlatform.Models;
+using CreatorsPlatform.Models;
 
 namespace CreatorsPlatform.CsMod.Vicky
 {

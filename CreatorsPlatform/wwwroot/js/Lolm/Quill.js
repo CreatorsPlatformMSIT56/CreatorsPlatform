@@ -1,4 +1,4 @@
-﻿// 僅用於Quill的設定
+// 僅用於Quill的設定
 
 const initialData = {
     // `content` is a Delta object

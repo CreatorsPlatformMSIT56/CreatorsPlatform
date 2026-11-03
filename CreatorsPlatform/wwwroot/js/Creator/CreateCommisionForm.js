@@ -1,4 +1,4 @@
-﻿var imageDataURLs = [];
+var imageDataURLs = [];
 
 // 對應的大標到對應的中標
 $(document).ready(function () {

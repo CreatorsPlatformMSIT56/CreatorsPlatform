@@ -1,4 +1,4 @@
-﻿using CreatorsPlatform.Models;
+using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

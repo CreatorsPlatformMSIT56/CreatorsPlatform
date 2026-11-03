@@ -1,4 +1,4 @@
-﻿using CreatorsPlatform.Models;
+using CreatorsPlatform.Models;
 using CreatorsPlatform.CsMod.Vicky;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Printing;

@@ -1,4 +1,4 @@
-﻿
+
 // 檢查 sessionstorage 是否包含搜索關鍵字並填充輸入框
 window.onload = function () {
     var searchkey = sessionstorage.getitem('searchkey');

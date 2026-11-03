@@ -1,4 +1,4 @@
-﻿namespace CreatorsPlatform.Controllers
+namespace CreatorsPlatform.Controllers
 {
     public class List
     {

@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using CreatorsPlatform.Controllers;
 using CreatorsPlatform.Models;
 
-//¨Ï¥ÎSession¸ê®Æ¤èªk:
-//³]¸mSession:HttpContext.Session.SetInt32/SetString/......(¦WºÙ, ¤º®e);
-//¨ú±oSession:HttpContext.Session.GetInt32/GetString/......(¦WºÙ, ¤º®e);
+//ä½¿ç”¨Sessionè³‡æ–™æ–¹æ³•:
+//è¨­ç½®Session:HttpContext.Session.SetInt32/SetString/......(åç¨±, å…§å®¹);
+//å–å¾—Session:HttpContext.Session.GetInt32/GetString/......(åç¨±, å…§å®¹);
 
 var builder = WebApplication.CreateBuilder(args);
 #region

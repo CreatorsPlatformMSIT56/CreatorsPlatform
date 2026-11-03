@@ -1,4 +1,4 @@
-﻿$("#LoginList").on("submit", function (e) {
+$("#LoginList").on("submit", function (e) {
     e.preventDefault();
     var UserData = $('#LoginList').serializeArray();
     $.ajax({

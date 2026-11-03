@@ -1,4 +1,4 @@
-﻿$("#Register").on("submit", function (e) {
+$("#Register").on("submit", function (e) {
     e.preventDefault();
     var UserData = $('#Register').serializeArray();
     let Passwd = UserData[2].value;

@@ -1,4 +1,4 @@
-﻿var ImgDataURL;
+var ImgDataURL;
 var EventIdSaver = EventIdStocker;
 // 當前點擊的post的id
 var NowCheckedPost;

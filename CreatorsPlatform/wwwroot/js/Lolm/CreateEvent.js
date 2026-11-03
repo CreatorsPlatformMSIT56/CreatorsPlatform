@@ -1,4 +1,4 @@
-﻿var BannerDataURL;
+var BannerDataURL;
 var ExImgDataURLs = [];
 var ExImgDataURL;
 $(function () {

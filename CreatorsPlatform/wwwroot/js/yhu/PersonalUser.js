@@ -1,4 +1,4 @@
-﻿
+
 var CurrentMsg = 0;
 var UserCurrentMsgtype = "newmsg";
 var _UserCurrentMsgtype = "newmsg";

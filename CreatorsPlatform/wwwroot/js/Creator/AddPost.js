@@ -1,4 +1,4 @@
-﻿// 定義空陣列放資料
+// 定義空陣列放資料
 var base64Data = [];
 // 對應的大標到對應的中標
 $(document).ready(function () {
