@@ -32,7 +32,7 @@ function readFile(event) {
                 base64: base64format
             },
             success: function (response) {
-                $("#Avatar").attr("src", "data:image/png;base64," + response);
+                $("#Avatar").attr("src", response + "?v=" + Date.now());
             }
         });
     });
@@ -69,7 +69,7 @@ function GeneralSettingsReadData() {
         },
         success: function (response) {
             if (response.avatar != undefined) {
-                $("#Avatar").attr("src", "data:image/png;base64," + response.avatar);
+                $("#Avatar").attr("src", response.avatar + "?v=" + Date.now());
             } else {
                 $("#Avatar").attr("src", "/img/Shared/person-circle.svg");
             }

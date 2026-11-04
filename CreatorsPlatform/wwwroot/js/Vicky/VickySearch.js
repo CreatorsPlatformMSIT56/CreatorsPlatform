@@ -60,7 +60,7 @@ function WorkOn(pageNumber = 1) {
                 let workHtml =
                     `
                     <div class="col-4  border _card_B">
-                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="/images/content/${work.contentsID}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
 								    <a href="/Creator/GetPost?id=${work.contentsID}" class="fs-5">${work.title}</a>
                                 <div class=" d-flex justify-content-between">
@@ -111,7 +111,7 @@ function WorkLow(pageNumber = 1) {
                 let workHtml =
                     `
                         <div class="col-4  border _card_B">
-                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                    <a href="/Creator/GetPost?id=${work.contentsID}"><img src="/images/content/${work.contentsID}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
 								    <a href="/Creator/GetPost?id=${work.contentsID}" class="fs-5">${work.title}</a>
                                 <div class=" d-flex justify-content-between">
@@ -367,7 +367,7 @@ function filterResults(option, searchKey, pageNumber = 1, buttonClicked) {
                     `
                    <div class="col-4  border _card_B">
                     ${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}"><img src="${work.commissionImage}" class="img_Card ard-img-top img-fluid" alt="..."></a>` :
-                        `<a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>`}
+                        `<a href="/Creator/GetPost?id=${work.contentsID}"><img src="/images/content/${work.contentsID}" class="img_Card ard-img-top img-fluid" alt="..."></a>`}
 							<div class="card-body text-center position-relative">
 								${work.isCommission == true ? `<a href="/Creator/GetCommission?id=${work.commissionID}" class="fs-4">${work.title}</a>` : `<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>`}
 								<div class=" d-flex justify-content-between">
@@ -421,7 +421,7 @@ function tagResults(tagId, pageNumber = 1) {
                 let workHtml =
                     `
                     <div class="col-4  border _card_B">
-                        <a href="/Creator/GetPost?id=${work.contentsID}"><img src="data:image/*;base64,${work.imageUrl}" class="img_Card ard-img-top img-fluid" alt="..."></a>
+                        <a href="/Creator/GetPost?id=${work.contentsID}"><img src="/images/content/${work.contentsID}" class="img_Card ard-img-top img-fluid" alt="..."></a>
 							<div class="card-body text-center position-relative">
 								<a href="/Creator/GetPost?id=${work.contentsID}" class="fs-4">${work.title}</a>
                                 <div class=" d-flex justify-content-between">

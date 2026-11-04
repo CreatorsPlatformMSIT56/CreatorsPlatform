@@ -286,7 +286,7 @@
 							<div class="d-flex _card_A" id="_creatorCard">
 								<div class="col-4 ">
 									<a href="@Url.Action("index", "Creator", new { id = firstCreator.CreatorID})">
-										<img src="data:image/*;base64,@(Convert.ToBase64String(firstCreator.UsersAvatar !))" class="img_CardCreator ard-img-top img-fluid" alt="...">
+										<img src="/images/avatar/@firstCreator.UsersID" class="img_CardCreator ard-img-top img-fluid" alt="...">
 									</a>
 								</div>
 								<div class="col-8 card-body text-center position-relative">
@@ -308,7 +308,7 @@
 								{
 									<div class="col-4  border _card_B">
 										<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})">
-											<img src="data:image/*;base64,@(Convert.ToBase64String(i.ImageUrl!))" class="img_Card ard-img-top img-fluid" alt="...">
+											<img src="/images/content/@i.ContentsID" class="img_Card ard-img-top img-fluid" alt="...">
 										</a>
 										<div class="card-body text-center position-relative">
 											<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})" class="fs-5">@i.Title</a>
@@ -348,7 +348,7 @@
 								{
 									<div class="col-4  border _card_B">
 										<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})">
-											<img src="data:image/*;base64,@(Convert.ToBase64String(i.ImageUrl!))" class="img_Card ard-img-top img-fluid" alt="...">
+											<img src="/images/content/@i.ContentsID" class="img_Card ard-img-top img-fluid" alt="...">
 										</a>
 										<div class="card-body text-center position-relative">
 											<a href="@Url.Action("GetPost", "Creator", new { id = i.ContentsID})" class="fs-5">@i.Title</a>
@@ -437,6 +437,6 @@
 		// 	});
 		// }
 	</script>
-	<script src="~/js/Vicky/VickySearch.js">
+	<script src="~/js/Vicky/VickySearch.js" asp-append-version="true">
 	</script>
 </body>

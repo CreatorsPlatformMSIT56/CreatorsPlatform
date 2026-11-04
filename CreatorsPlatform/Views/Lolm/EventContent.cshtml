@@ -19,8 +19,7 @@
 @if (Model[0].Banner != null)
 {
 	<div class="container-fluid px-0 EventHeaderImg">
-		<img class="img-fluid" src="@Model[0].Banner
-											" alt="Alternate Text" />
+		<img class="img-fluid" src="/images/event/@Model[0].EventId" alt="Alternate Text" />
 	</div>
 }
 @* 說明欄 *@
@@ -31,7 +30,7 @@
 			<a class="d-flex align-items-center" href="#">
 				@if (Model[0].EveCreAvatar != null)
 				{
-					<img class="MidSizeHeadShot" src="data:image/*;base64,@(Convert.ToBase64String(Model[0].EveCreAvatar))" alt="沒有頭像" />
+					<img class="MidSizeHeadShot" src="/images/creator-avatar/@Model[0].EveCreator" alt="沒有頭像" />
 				}<b>@Model[0].EveCreName</b>
 			</a>
 			<p class="mb-0">主辦</p>
@@ -57,7 +56,7 @@
                 <div class="row justify-content-center">
 					@foreach (var item in Model.FindAll(model => model.ImageSample == true && model.EveImgCancel != true))
 					{
-						<div class="col-6 EventExampleImg align-self-start"><img class="img-fluid " src="@item.ImageUrl" alt="Alternate Text" /></div>
+						<div class="col-6 EventExampleImg align-self-start"><img class="img-fluid " src="/images/event-image/@item.EventImageId" alt="Alternate Text" /></div>
 					}
 				</div>
 			</div>
@@ -88,7 +87,7 @@
 				<div class="col EventPost" id="@("Post" + item.EventImageId)">
 					@* 投稿圖片*@
 					<div class="EventPostImgPart">
-						<div><img class="img-fluid p-1" src="@item.ImageUrl" /></div>
+						<div><img class="img-fluid p-1" src="/images/event-image/@item.EventImageId" /></div>
 					</div>
 					@* 標題 *@
 					<div class="d-flex justify-content-between align-items-start px-1">
@@ -106,7 +105,7 @@
 						</div>
 						@* 作者 *@
 						<div class="d-flex align-items-center px-1 EventParticipant">
-							<a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="data:image/*;base64,@(Convert.ToBase64String(item.ImgCreAvatar))" alt="Alternate Text" />@item.ImgCreName</a>
+							<a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="/images/creator-avatar/@item.ImgCreator" alt="Alternate Text" />@item.ImgCreName</a>
 						</div>
 					</div>
 				</div>

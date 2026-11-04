@@ -60,7 +60,7 @@
                 <div class="carousel-inner">
                     <div id="Woklist1img" class="carousel-item active">
                         <div onclick="WokLink(@ViewBag.DefaultContentsData[0].ContentId)" class="ToMiddle image-container">
-                            <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[0].ImageUrl)" class="d-block WorkImg">
+                            <img src="/images/home/@ViewBag.DefaultContentsData[0].ContentId" class="d-block WorkImg">
                         </div>
                         <div id="Woklist1text" class="carousel-caption d-none d-md-block TextDiv">
                             <h3 class="text-center fw-bold GrayText">@ViewBag.DefaultContentsData[0].Title</h3>
@@ -69,12 +69,12 @@
                     </div>
                     <div id="Woklist2img" class="carousel-item">
                         @if (ViewBag.DefaultContentsData != null
-                        && ViewBag.DefaultContentsData.Count > 0
+                        && ViewBag.DefaultContentsData.Count > 1
                         && ViewBag.DefaultContentsData[1] != null
-                        && ViewBag.DefaultContentsData[1].ImageUrl != null)
+                        && ViewBag.DefaultContentsData[1].HasImage)
                         {
                             <div onclick="WokLink(@ViewBag.DefaultContentsData[1].ContentId)" class="ToMiddle image-container">
-                                <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[1].ImageUrl)" class="d-block WorkImg" alt="eoijwpeifjsj">
+                                <img src="/images/home/@ViewBag.DefaultContentsData[1].ContentId" class="d-block WorkImg" alt="eoijwpeifjsj">
                             </div>
                         }
                         else
@@ -111,7 +111,7 @@
                         && ViewBag.DefaultContentsData[2].UploadDate != null)
                         {
                             <div onclick="WokLink(@ViewBag.DefaultContentsData[2].ContentId)" class="ToMiddle image-container">
-                                <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.DefaultContentsData[2].ImageUrl)" class="d-block WorkImg" alt="eoijwpeifjsj">
+                                <img src="/images/home/@ViewBag.DefaultContentsData[2].ContentId" class="d-block WorkImg" alt="eoijwpeifjsj">
                             </div>
                         }
                         else
@@ -169,9 +169,9 @@
                     }
                     <div id="@item.UserId" class="h-100 row border border-2 @BgClass" onclick="WorkChanges(this)">
                         <div class="col-md-4 d-flex align-items-center justify-content-center">
-                            @if (item.Avatar != null)
+                            @if (item.HasAvatar)
                             {
-                                <img src="data:image/png;base64,@item.Avatar" class="UserIcon rounded-2 CreaterChangePart" alt="...">
+                                <img src="/images/avatar/@item.UserId" class="UserIcon rounded-2 CreaterChangePart" alt="...">
                             }
                             else
                             {
@@ -196,19 +196,19 @@
         </div>
         <div class="row image-containerEvent">
             <a asp-route-id="@ViewBag.EventDataList[0].EventId" asp-action="EventContent" asp-controller="Lolm">
-                <img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[0].Banner">
+                <img class="image-containerEventImg d-block EveImg" src="/images/event/@ViewBag.EventDataList[0].EventId">
             </a>
         </div>
         <hr />
         <div class="row image-containerEvent">
             <a asp-route-id="@ViewBag.EventDataList[1].EventId" asp-action="EventContent" asp-controller="Lolm">
-                <img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[1].Banner">
+                <img class="image-containerEventImg d-block EveImg" src="/images/event/@ViewBag.EventDataList[1].EventId">
             </a>
         </div>
         <hr />
         <div class="row image-containerEvent">
             <a asp-route-id="@ViewBag.EventDataList[2].EventId" asp-action="EventContent" asp-controller="Lolm">
-                <img class="image-containerEventImg d-block EveImg" src="@ViewBag.EventDataList[2].Banner">
+                <img class="image-containerEventImg d-block EveImg" src="/images/event/@ViewBag.EventDataList[2].EventId">
             </a>
         </div>
 

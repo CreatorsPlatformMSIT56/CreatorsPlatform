@@ -26,7 +26,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     <h5 class="fw-bold TextWarp">${response[cont].title}</h5>
                 
                     <div class="image-container">
-                            <img class="image-containerImg" src="data:image/png;base64,${response[cont].imageUrl}" alt="">
+                            <img class="image-containerImg" src="/images/content/${response[cont].contentId}" alt="">
                     </div>
                         <div class="row">
                              <div class="col-md-6">
@@ -53,7 +53,7 @@ function MessagUpdata(UserCurrentMsgtype){
                     <h5 class="fw-bold TextWarp">${response[cont].content.title}</h5>
                   
                     <div class ="image-container">
-                          <img class="image-containerImg" src="data:image/png;base64,${response[cont].content.imageUrl}" alt="">
+                          <img class="image-containerImg" src="/images/content/${response[cont].content.contentId}" alt="">
                     </div>                
                             <div class="row">
                                 <div class="col-md-6">
@@ -88,7 +88,7 @@ function MessagUpdata(UserCurrentMsgtype){
                                   <h3 class = "TextWarp">${response[cont].eventName}</h3>
                                    <div id="content${cont}"></div>
                                   <div class ="image-container">
-                                           <img class="image-containerImg" src="${response[cont].banner}" alt="">
+                                           <img class="image-containerImg" src="/images/event/${response[cont].eventId}" alt="">
                                   </div>
                                     <p class="text-end">${response[cont].startDate.match(/^\d{4}-\d{2}-\d{2}/)[0]}~${response[cont].endDate.match(/^\d{4}-\d{2}-\d{2}/)[0]}</p>
                                 </div>

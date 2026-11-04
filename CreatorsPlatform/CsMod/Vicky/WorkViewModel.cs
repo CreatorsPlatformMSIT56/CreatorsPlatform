@@ -14,8 +14,6 @@ namespace CreatorsPlatform.CsMod.Vicky
         public string? CategoryName { get; set; } //大分類名稱
         public string? SubtitleName { get; set; } //中分類名稱
         public string? Description { get; set; } //創作者描述
-        public byte[]? ImageUrl { get; set; } //作品圖
-        public byte[]? UsersAvatar { get; set; } //頭像
         public DateTime? UploadDate { get; set; } //作品更新時間
         public bool IsContent { get; set; } = false;
         public bool IsCreator { get; set; } = false;

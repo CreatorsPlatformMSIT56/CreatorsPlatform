@@ -30,7 +30,7 @@ namespace CreatorsPlatform.Controllers
                                select UserData.Avatar).FirstOrDefault();
             if (MembersIcon != null)
             {
-                Avatar = Convert.ToBase64String(MembersIcon);
+                Avatar = $"/images/avatar/{x}";
             }
             else
             {

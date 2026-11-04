@@ -38,7 +38,6 @@ namespace CreatorsPlatform.CsMod.Vicky
                             UsersID = user.UserId, //使用者ID
                             Title = content.Title, //標籤
                             UploadDate = content.UploadDate, //作品更新時間
-                            ImageUrl = content.ImageUrl, //作品圖
                             UserName = user.UserName, //使用者名稱
                                                       //新增部分
                                                       //CreatorID = content.CreatorId, //創作者ID
@@ -114,8 +113,6 @@ namespace CreatorsPlatform.CsMod.Vicky
                             UsersID = user.UserId,
                             Title = content.Title,
                             UploadDate = content.UploadDate,
-                            UsersAvatar = user.Avatar,
-                            ImageUrl = content.ImageUrl,
                             UserName = user.UserName,
                             SubtitleID = content.SubtitleId,
                             Description = creator.Description,
@@ -146,7 +143,6 @@ namespace CreatorsPlatform.CsMod.Vicky
                             UsersID = user.UserId,
                             Title = content.Title,
                             UploadDate = content.UploadDate,
-                            ImageUrl = content.ImageUrl,
                             UserName = user.UserName,
                             SubtitleID = content.SubtitleId,
                             SubtitleName = subtitle.SubtitleName,
@@ -219,7 +215,6 @@ namespace CreatorsPlatform.CsMod.Vicky
                             UsersID = user.UserId,
                             Title = content.Title,
                             UploadDate = content.UploadDate,
-                            ImageUrl = content.ImageUrl,
                             UserName = user.UserName,
                             TagID = content.TagId,
                         };

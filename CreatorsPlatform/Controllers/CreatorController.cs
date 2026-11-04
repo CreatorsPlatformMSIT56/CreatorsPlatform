@@ -28,7 +28,7 @@ namespace CreatorsPlatform.Controllers
                                select UserData.Avatar).FirstOrDefault();
             if (MembersIcon != null )
             {
-                Avatar = Convert.ToBase64String(MembersIcon);
+                Avatar = $"/images/avatar/{x}";
             }
             else
             {
@@ -58,7 +58,6 @@ namespace CreatorsPlatform.Controllers
             public string? Title { get; set; }
             public string? Description { get; set; }
             public DateTime? UploadDate { get; set; }
-            public byte[]? ImageUrl { get; set; }
             public int? Likes { get; set; }
             public int CategoryId { get; set; }
             public int? SubtitleId { get; set; }
@@ -115,7 +114,6 @@ namespace CreatorsPlatform.Controllers
                                Title = c.Title,
                                Description = c.Description,
                                UploadDate = c.UploadDate,
-                               ImageUrl = c.ImageUrl,
                                Likes = c.Likes,
                                CategoryId = c.CategoryId,
                                SubtitleId = c.SubtitleId,
@@ -375,7 +373,6 @@ namespace CreatorsPlatform.Controllers
                                Title = c.Title,
                                Description = c.Description,
                                UploadDate = c.UploadDate,
-                               ImageUrl = c.ImageUrl,
                                Likes = c.Likes,
                                CategoryId = c.CategoryId,
                                SubtitleId = c.SubtitleId,

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-9 border border-2 rounded">
             <div class="pictures-container text-center border-bottom border-2 rounded" style="">
-                <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.ImageUrl ?? Array.Empty<byte>()))" alt="" class="img-fluid">
+                <img src="/images/content/@(Model.Content?.FirstOrDefault()?.ContentId)" alt="" class="img-fluid">
             </div>
             <div class="row">
                 <div class="col-12">
@@ -63,7 +63,7 @@
             <div class="row p-3">
                 <div class="col-2 avatar text-center">
                     <a asp-action="Index" asp-controller="Creator" asp-route-id="@Model.Content?.FirstOrDefault()?.Creator.CreatorId">
-                        <img src="data:image/png;base64,@(Convert.ToBase64String(Model.Content?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                        <img src="/images/avatar/@(Model.Content?.FirstOrDefault()?.Creator.Users.FirstOrDefault()?.UserId)" alt="" class="img-fluid rounded-circle"
                              style="max-width:100px; max-height:100px;">
                     </a>
                 </div>
@@ -100,7 +100,7 @@
                         <div class="col-md-2 avatar text-center">
                             @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
                             @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                            <img src="data:image/png;base64,@(Convert.ToBase64String(e.User.Avatar ?? Array.Empty<byte>()))" alt="" class="img-fluid rounded-circle"
+                            <img src="/images/avatar/@e.User.UserId" alt="" class="img-fluid rounded-circle"
                                  style="max-width:100px; max-height:100px;">
                             @* </a> *@
                         </div>
@@ -130,7 +130,7 @@
                             <div class="col-md-2 avatar text-center">
                                 @* <img src="https://fakeimg.pl/100/" alt="" class="img-fluid rounded-circle"> *@
                                 @* <a asp-action="" asp-controller="" asp-route-id="@e.User.UserId"> *@
-                                <img src="data:image/png;base64,@(ViewBag.MembersIcon ?? Array.Empty<byte>())" alt="" class="align-items-center img-fluid rounded-circle"
+                                <img src="@ViewBag.MembersIcon" alt="" class="align-items-center img-fluid rounded-circle"
                                      style="max-width:100px; max-height:100px;">
                                 @* </a> *@
                             </div>
@@ -163,7 +163,7 @@
                         <a style="display:block" asp-action="GetPost" asp-controller="Creator" asp-route-id="@e.ContentId" class="link-no-hover">
                             <div class="card mb-3">
                                 <img class="card-img-top"
-                                     src="data:image/png;base64,@(Convert.ToBase64String(e.ImageUrl ?? Array.Empty<byte>()))"
+                                     src="/images/content/@e.ContentId"
                                      alt="Card image cap"
                                      style="height: 12rem; width: auto; object-fit: cover" />
                                 <div class="card-body">

@@ -33,7 +33,7 @@
                     <div class="ToMiddle row">
                         <input id="AvatarUpData" style="display: none;" type="file" accept="image/*" onchange="readFile(event)" />
                         <label for="AvatarUpData">
-                            <img id="Avatar" src="@((ViewBag.Avatar != null) ? ("data:image/png;base64," + ViewBag.Avatar) : "/img/Shared/person-circle.svg")">
+                            <img id="Avatar" src="@(ViewBag.Avatar ?? "/img/Shared/person-circle.svg")">
                         </label>
                     </div>
                     <div class="ToMiddle row">

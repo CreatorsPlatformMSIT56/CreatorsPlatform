@@ -133,7 +133,7 @@ namespace CreatorsPlatform.Controllers
 							   select UserData.Avatar).FirstOrDefault();
 			if (MembersIcon != null)
 			{
-				Avatar = Convert.ToBase64String(MembersIcon);
+				Avatar = $"/images/avatar/{x}";
 			}
 			else
 			{
@@ -176,7 +176,6 @@ namespace CreatorsPlatform.Controllers
 									   Newmesg.Title,
 									   Newmesg.Description,
 									   UserData.UserName,
-									   Newmesg.ImageUrl,
 									   Newmesg.UploadDate,
 									   Newmesg.ContentId
 								   })
@@ -201,7 +200,7 @@ namespace CreatorsPlatform.Controllers
 				case "newmsg":
 					var NewmesgData = (from Newmesg in _context.Contents
 									   join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-									   select new { Newmesg.ContentId, Newmesg.Title, Newmesg.Description, UserData.UserName, Newmesg.ImageUrl, Newmesg.UploadDate })
+									   select new { Newmesg.ContentId, Newmesg.Title, Newmesg.Description, UserData.UserName, Newmesg.UploadDate })
 									   .OrderByDescending(item => item.UploadDate).Skip(_CurrentMsg).Take(5).ToList();
 					return Json(NewmesgData.ToList());
 				case "subscribemsg":
@@ -231,7 +230,7 @@ namespace CreatorsPlatform.Controllers
 												join user in _context.Users on content.CreatorId equals user.CreatorId
 												where result.Contains(content.CreatorId)
 												orderby content.ContentId descending
-												select new { Content = content, UserName = user.UserName }).ToList().Take(5);
+														select new { Content = new { content.ContentId, content.Title, content.UploadDate }, UserName = user.UserName }).Take(5).ToList();
 
 					return Json(AllFollowCreatorPost);
 
@@ -242,7 +241,6 @@ namespace CreatorsPlatform.Controllers
 											eventmsg.EventId,
 											eventmsg.EventName,
 											eventmsg.Description,
-											eventmsg.Banner,
 											eventmsg.StartDate,
 											eventmsg.EndDate
 										}).ToList();
@@ -280,7 +278,7 @@ namespace CreatorsPlatform.Controllers
                                  select new
                                  {
                                      UsersData.UserId,
-                                     Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
+                                     HasAvatar = UsersData.Avatar != null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
                                      Description = Introduction.Description.Length > 26 ?
@@ -292,15 +290,14 @@ namespace CreatorsPlatform.Controllers
 										select new
 										{
 											DefaultContents.ContentId,
-											DefaultContents.ImageUrl,
+											HasImage = DefaultContents.ImageUrl != null,
 											DefaultContents.Title,
 											DefaultContents.UploadDate
 										}).OrderByDescending(item => item.UploadDate).Take(3));
 			var EventDataList = (from EventData in _context.Events
 								 select new
 								 {
-									 EventData.EventId,
-									 EventData.Banner
+									 EventData.EventId
 								 }).OrderByDescending(x => x.EventId).Take(3);
 
 
@@ -309,7 +306,7 @@ namespace CreatorsPlatform.Controllers
 			Console.WriteLine(DefaultContentsDatalist[1].Title);
 
 			ViewBag.EventDataList = EventDataList.ToList();
-			ViewBag.DefaultContentsData = DefaultContentsData.ToList();
+			ViewBag.DefaultContentsData = DefaultContentsDatalist;
 			ViewBag.AuthorProfile = AuthorProfile.ToList();
 			if (MembersOnline())
 			{
@@ -350,7 +347,7 @@ namespace CreatorsPlatform.Controllers
                                              select new
                                              {
                                                  UsersData.UserId,
-                                                 Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
+                                                 HasAvatar = UsersData.Avatar != null,
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
                                                  Description = Introduction.Description.Length > 26 ?
@@ -364,7 +361,7 @@ namespace CreatorsPlatform.Controllers
                                              select new
                                              {
                                                  NewReport.UserId,
-                                                 Avatar = NewReport.Avatar != null ? Convert.ToBase64String(NewReport.Avatar) : null,
+                                                 HasAvatar = NewReport.Avatar != null,
                                                  NewReport.UserName,
                                                  NewReport.CategoryId,
                                                  Description = UserDescription.Description.Length > 26 ? UserDescription.Description.Substring(0, 26) + "..." : UserDescription.Description
@@ -398,7 +395,7 @@ namespace CreatorsPlatform.Controllers
                                     select new
                                     {
                                         UserData.UserId,
-                                        Avatar = UserData.Avatar!=null?Convert.ToBase64String(UserData.Avatar): null,
+                                        HasAvatar = UserData.Avatar != null,
                                         UserData.UserName,
                                         UserData.CategoryId,
                                         Description = Creators.Description.Length > 26 ?
@@ -423,7 +420,7 @@ namespace CreatorsPlatform.Controllers
                                          select new
                                          {
                                              UsersData.UserId,
-                                             Avatar = UsersData.Avatar != null ? Convert.ToBase64String(UsersData.Avatar) : null,
+                                             HasAvatar = UsersData.Avatar != null,
                                              UsersData.UserName,
                                              UsersData.CategoryId,
                                              Description = Introduction.Description.Length > 26 ?
@@ -448,7 +445,7 @@ namespace CreatorsPlatform.Controllers
 									   select new
 									   {
 										   DefaultContents.ContentId,
-										   ImageUrl = Convert.ToBase64String(DefaultContents.ImageUrl),
+										   HasImage = DefaultContents.ImageUrl != null,
 										   DefaultContents.Title,
 										   DefaultContents.UploadDate
 									   }).OrderByDescending(item => item.UploadDate).Take(3);
@@ -470,7 +467,7 @@ namespace CreatorsPlatform.Controllers
 									  planPrice = p.PlanPrice,
 									  planDes = p.Description,
 									  creatorName = i.UserName,
-									  creatorAvatar = i.Avatar,
+									  creatorUserId = i.UserId,
 									  creatorId = i.CreatorId
 								  });
 
@@ -574,7 +571,7 @@ namespace CreatorsPlatform.Controllers
 								{
 									commissionId = c.CommissionId,
 									creatorName = i.UserName,
-									creatorAvatar = i.Avatar,
+									creatorUserId = i.UserId,
 									comPriceMin = c.PriceMin,
 									comPriceMax = c.PriceMax,
 									commissionTitle = c.Title,
@@ -647,7 +644,7 @@ namespace CreatorsPlatform.Controllers
 				ViewBag.Name = member.Name;
 				if (Avatar != null)
 				{
-					ViewBag.Avatar = Convert.ToBase64String(Avatar);
+					ViewBag.Avatar = $"/images/avatar/{member.id}";
 				}
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
@@ -683,7 +680,7 @@ namespace CreatorsPlatform.Controllers
 					string AvatarIcon = null;
 					if (Avatar != null)
 					{
-						AvatarIcon = Convert.ToBase64String(Avatar);
+						AvatarIcon = $"/images/avatar/{member.id}";
 					}
 
 					return Json(new { Email = member.Email, Name = member.Name, Avatar = AvatarIcon });
@@ -999,7 +996,7 @@ namespace CreatorsPlatform.Controllers
 				AvatarChange.Avatar = binaryData;
 				_context.SaveChanges();
 			}
-			return Json(base64);
+			return Json($"/images/avatar/{member.id}");
 
 		}
 		[HttpPost]

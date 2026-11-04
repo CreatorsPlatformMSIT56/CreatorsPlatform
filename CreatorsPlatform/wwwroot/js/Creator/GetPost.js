@@ -80,7 +80,7 @@ function PostCommentToSQL() {
                     <div class="card mb-3" style="border-color: rgba(0, 0, 0, 0);">
                     <div class="row g-0">
                         <div class="col-md-2 avatar text-center">
-                            <img src="data:image/png;base64,${MembersIcon}" alt="" class="img-fluid rounded-circle"
+                            <img src="${MembersIcon}" alt="" class="img-fluid rounded-circle"
                                  style="max-width:100px; max-height:100px;">
                         </div>
                         <div class="col-md-10">

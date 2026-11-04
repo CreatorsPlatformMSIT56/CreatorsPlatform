@@ -97,10 +97,10 @@ function PostOrderBy() {
 
             // 遍历响应数据并生成 HTML 内容
             Response.forEach(function (item) {
-                if (item.imageUrl != null && item.imageSample == false) {
+                if (item.eventImageId != null && item.imageSample == false) {
                     htmlContent += '<div class="col EventPost" id="Post' + item.eventImageId + '">' +
                         '<div class="EventPostImgPart">' +
-                        '<div><img class="img-fluid p-1" src="' + item.imageUrl + '" /></div>' +
+                        '<div><img class="img-fluid p-1" src="/images/event-image/' + item.eventImageId + '" /></div>' +
                         '</div>' +
                         '<div class="d-flex justify-content-between align-items-start px-1">' +
                         '<div><span class="EventPostTitle"><b>' + item.imgTitle + '</b></span></div>' +
@@ -114,7 +114,7 @@ function PostOrderBy() {
                         '</div>' +
                         '</div>' +
                         '<div class="d-flex align-items-center px-1 EventParticipant">' +
-                        '<a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="data:image/*;base64,' + item.imgCreAvatar + '" alt="Alternate Text" />' + item.imgCreName + '</a>' +
+                        '<a class="d-flex align-items-center text-secondary" href="#"><img class="SmallSizeHeadShot" src="/images/creator-avatar/' + item.imgCreator + '" alt="Alternate Text" />' + item.imgCreName + '</a>' +
                         '</div>' +
                         '</div>';
                 }
@@ -154,9 +154,9 @@ function PostSet() {
             success: function (ThePostModel) {
                 $("#exampleModalLabel").text(ThePostModel.imgTitle);
                 $("#PostDescription").text(ThePostModel.imgDes);
-                $(".EventPostModalImg").prop("src", e => (e = ThePostModel.imageUrl));
+                $(".EventPostModalImg").prop("src", "/images/event-image/" + ThePostModel.eventImageId);
                 //var PostCreatorAvatar64 = hexToDataURL(ThePostModel.imgCreAvatar);
-                $("#PostCreatorAvatar").prop("src", e => (e = "data: image / jpg; base64," + ThePostModel.imgCreAvatar));
+                $("#PostCreatorAvatar").prop("src", "/images/creator-avatar/" + ThePostModel.imgCreator);
                 $("#PostCreatorName").text(ThePostModel.imgCreName);
                 $("#PostLikeInt").text(ThePostModel.evePostLike);
             },

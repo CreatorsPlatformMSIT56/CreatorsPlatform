@@ -41,7 +41,7 @@ namespace CreatorsPlatform.Controllers
                                select UserData.Avatar).FirstOrDefault();
             if (MembersIcon != null)
             {
-                Avatar = Convert.ToBase64String(MembersIcon);
+                Avatar = $"/images/avatar/{x}";
             }
             else
             {
@@ -247,12 +247,13 @@ namespace CreatorsPlatform.Controllers
 
         // 獲得投稿內容
         [HttpGet]
-        public EventsAndImage? EventPostContent(string EventPostId)
+        public IActionResult EventPostContent(string EventPostId)
         {
             int EventPostIntId = Convert.ToInt32(EventPostId);
             var TheEventPostSQL = _context.EventsAndImages;
-            var TheEventPost = TheEventPostSQL.FirstOrDefault(model => model.EventImageId == EventPostIntId);
-            return TheEventPost;
+            var TheEventPost = TheEventPostSQL.Where(model => model.EventImageId == EventPostIntId)
+                .Select(model => new { model.EventImageId, model.ImgTitle, model.ImgDes, model.ImgCreator, model.ImgCreName, model.EvePostLike }).FirstOrDefault();
+            return Json(TheEventPost);
         }
 
         // 刷新Like數
@@ -285,11 +286,19 @@ namespace CreatorsPlatform.Controllers
 
         // 更新活動中的投稿排序
         [HttpGet]
-        public List<EventsAndImage> PostOrderBy(string OrderByWhat, int id)
+        public IActionResult PostOrderBy(string OrderByWhat, int id)
         {
             var PostResult = (from o in _context.EventsAndImages
                               where o.EventId == id
-                              select o);
+                              select new EventsAndImage
+                              {
+                                  EventImageId = o.EventImageId,
+                                  ImageSample = o.ImageSample,
+                                  ImgTitle = o.ImgTitle,
+                                  EvePostLike = o.EvePostLike,
+                                  ImgCreator = o.ImgCreator,
+                                  ImgCreName = o.ImgCreName
+                              });
             List<EventsAndImage> AfterOrderBy = new List<EventsAndImage>();
             switch (OrderByWhat)
             {
@@ -309,7 +318,7 @@ namespace CreatorsPlatform.Controllers
                     // 处理未知情况
                     break;
             }
-            return AfterOrderBy;
+            return Json(AfterOrderBy.Select(item => new { item.EventImageId, item.ImageSample, item.ImgTitle, item.EvePostLike, item.ImgCreator, item.ImgCreName }));
         }
 
         // 編輯活動內容頁面

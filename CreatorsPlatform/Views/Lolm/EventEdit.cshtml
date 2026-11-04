@@ -51,7 +51,7 @@
                     <div class="PreviewImgWarp">
                         @if (ViewBag.Event[0].Banner != null)
                         {
-                            <img id="preview_progressbarTW_img" src="@ViewBag.Event[0].Banner" />
+                            <img id="preview_progressbarTW_img" src="/images/event/@ViewBag.Event[0].TheEventId" />
                         }
                         else
                         {
@@ -69,7 +69,7 @@
                             <form action="/somewhere/to/upload" enctype="multipart/form-data">
                                 <input type="file" accept="image/gif, image/jpeg, image/png" />
                                 <div>
-                                    <img src="@ViewBag.SampleImg[0].ImageUrl" />
+                                    <img src="/images/event-image/@ViewBag.SampleImg[0].EventImageId" />
                                 </div>
                             </form>
                             <form action="/somewhere/to/upload" enctype="multipart/form-data">
@@ -83,13 +83,13 @@
                             <form action="/somewhere/to/upload" enctype="multipart/form-data">
                                 <input type="file" accept="image/gif, image/jpeg, image/png" />
                                 <div>
-                                    <img src="@ViewBag.SampleImg[0].ImageUrl" />
+                                    <img src="/images/event-image/@ViewBag.SampleImg[0].EventImageId" />
                                 </div>
                             </form>
                             <form action="/somewhere/to/upload" enctype="multipart/form-data">
                                 <input type="file" accept="image/gif, image/jpeg, image/png" />
                                 <div>
-                                    <img src="@ViewBag.SampleImg[1].ImageUrl" />
+                                    <img src="/images/event-image/@ViewBag.SampleImg[1].EventImageId" />
                                 </div>
                             </form>
                             break;
