@@ -532,12 +532,21 @@ namespace CreatorsPlatform.Controllers
                     }
                 }).ToList();
             int creatorId = commission.CreatorId;
-			var commissionsWithWords = (from c in _context.CommissionWithImageAndWords
-                                        //where c.CreatorId == id // 目前發現此id是對應到網址輸入為cmsID
-                                        where c.CreatorId == creatorId
-										group c by c.Title into g
-                                        select g.OrderBy(x => x.CommissionId).First());
-                                        //select g.OrderBy(x => x.CommissionId).First()).Take(3); // 只取三個
+            var commissions = _context.CommissionWithImageAndWords
+                .Where(c => c.CreatorId == creatorId);
+            var commissionsWithWords = commissions
+                .Where(c => c.Title != null)
+                .GroupBy(c => c.Title)
+                .Select(g => g.OrderBy(c => c.CommissionId).First())
+                .ToList();
+            var nullTitleCommission = commissions
+                .Where(c => c.Title == null)
+                .OrderBy(c => c.CommissionId)
+                .FirstOrDefault();
+            if (nullTitleCommission != null)
+            {
+                commissionsWithWords.Add(nullTitleCommission);
+            }
 
             var viewModel = new CommissionDetailsViewModel
             {
