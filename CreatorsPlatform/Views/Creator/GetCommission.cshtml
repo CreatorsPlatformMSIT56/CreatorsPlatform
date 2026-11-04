@@ -149,10 +149,15 @@
 							<div class="col-4">
 								<a style="display:block" asp-action="GetCommission" asp-controller="Creator" asp-route-id="@e.CommissionId" class="link-no-hover">
 									<div class="card mb-3">
-										<img class="card-img-top"
-											 src="@e.ImageUrl"
-											 alt="Card image cap"
+										@if (!string.IsNullOrWhiteSpace(e.ImageUrl))
+										{
+											<img class="card-img-top" src="@e.ImageUrl" alt="委託圖片"
 											 style="height: 12rem; width: auto; object-fit: cover" />
+										}
+										else
+										{
+											<div class="d-flex align-items-center justify-content-center bg-light text-muted" style="height: 12rem;">暫無圖片</div>
+										}
 										<div class="card-body">
 											<h5 class="card-title">@e.Title</h5>
 											<h6 class="card-subtitle mb-2 text-muted text-end">
