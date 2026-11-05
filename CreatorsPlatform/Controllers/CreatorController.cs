@@ -20,9 +20,9 @@ namespace CreatorsPlatform.Controllers
             _context = context;
         }
         //臨時增加
-        public string MembersIcon(int x)
+        public string? MembersIcon(int x)
         {
-            string Avatar;
+            string? Avatar;
             var MembersIcon = (from UserData in _context.Users
                                where UserData.UserId == x
                                select UserData.Avatar).FirstOrDefault();
@@ -37,18 +37,7 @@ namespace CreatorsPlatform.Controllers
              
             return Avatar;
         }
-        public bool MembersOnline()
-        {
-            var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public bool MembersOnline() => SessionMember.Get(HttpContext, _context) != null;
         //
 
         // 創作者首頁
@@ -80,18 +69,20 @@ namespace CreatorsPlatform.Controllers
             public Creator? Creator { get; set; }
             public string? UserName { get; set; }
             public byte[]? UserAvatar { get; set; }
-            public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
-            public IEnumerable<ContentsModel>? ContentsModel { get; set; }
+            public IEnumerable<CommissionWithImageAndWord> CommissionsWithWords { get; set; } = Enumerable.Empty<CommissionWithImageAndWord>();
+            public IEnumerable<ContentsModel> ContentsModel { get; set; } = Enumerable.Empty<ContentsModel>();
 
         }
         public IActionResult Index(int id)
         {
-            //var memberJson = HttpContext.Session.GetString("key");
-            //MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);                
-
             var creator = _context.Creators
                 .Include(c => c.Users)
                 .FirstOrDefault(c => c.CreatorId == id);
+
+            if (creator == null)
+            {
+                return NotFound();
+            }
 
             var userName = creator?.Users.FirstOrDefault()?.UserName;
 
@@ -140,8 +131,8 @@ namespace CreatorsPlatform.Controllers
 
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
 
@@ -152,7 +143,7 @@ namespace CreatorsPlatform.Controllers
                 var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == id);
                 if (Follow)
                 {
-                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id).Unfollow;
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == id)?.Unfollow ?? true;
                     ViewBag.UnFollow = TheFollow;
                 }
                 else
@@ -171,8 +162,11 @@ namespace CreatorsPlatform.Controllers
         }
         // 關注功能
         [HttpPost]
-        public string FollowCreator(int TheUserId, int TheCreatorId)
+        public IActionResult FollowCreator(int TheUserId, int TheCreatorId)
         {
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return Unauthorized();
+            TheUserId = member.id;
             // 如果已經存在資料表裡
             var result = _context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId);
             if (result)
@@ -181,12 +175,14 @@ namespace CreatorsPlatform.Controllers
                 if (_context.Follows.Any(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == true))
                 {
                     var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == true);
+                    if (TheFollow == null) return NotFound();
                     TheFollow.Unfollow = false;
                     _context.Follows.Update(TheFollow);
                 }
                 else
                 {
                     var TheFollow = _context.Follows.FirstOrDefault(e => e.UserId == TheUserId && e.CreatorId == TheCreatorId && e.Unfollow == false);
+                    if (TheFollow == null) return NotFound();
                     TheFollow.Unfollow = true;
                     _context.Follows.Update(TheFollow);
                 }
@@ -203,7 +199,7 @@ namespace CreatorsPlatform.Controllers
                 _context.Follows.Add(NewFollow);
             }
             _context.SaveChanges();
-            return "OK";
+            return Content("OK");
         }
 
 
@@ -211,12 +207,13 @@ namespace CreatorsPlatform.Controllers
         [HttpGet]
         public async Task<IActionResult> AddPost()
         {
+            if (!MembersOnline()) return RedirectToAction("Login", "yhu");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -230,10 +227,12 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public ActionResult CreatePost(string Title, int? SubtitleId, string CategoryIdstring, string Description, string Imagebase64)
         {
+			if (!ModelState.IsValid) return BadRequest(ModelState);
 			// 取得 member 對應之 creatorId
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-			int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+			var NowCreatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
+            if (NowCreatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
 
             // 發布時間在這邊取得並轉換成資料庫要的型態
             var sDate = DateTime.Now;
@@ -252,7 +251,7 @@ namespace CreatorsPlatform.Controllers
 					CategoryId = Convert.ToInt32(CategoryIdstring),
                     Likes = 0,
 					SubtitleId = SubtitleId,
-					CreatorId = NowCreatorId,
+					CreatorId = NowCreatorId.Value,
 					/*PlanId = content.PlanId,*/ // AddPost沒放
 					PlanId = 3, // AddPost沒放 先隨便放
 
@@ -268,8 +267,6 @@ namespace CreatorsPlatform.Controllers
 			//
 			if (MembersOnline())
 			{
-				//var memberJson = HttpContext.Session.GetString("key");
-				//MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
 			}
@@ -290,11 +287,11 @@ namespace CreatorsPlatform.Controllers
         // 創作者貼文頁面
         public class ContentDetailsViewModel
         {
-            public IEnumerable<Content>? Content { get; set; }
-            public IEnumerable<Plan>? Plans { get; set; }
-            public IEnumerable<Comment>? Comments { get; set; }
-            public IEnumerable<ContentTagsModel>? ContentTagsModel { get; set; }
-            public IEnumerable<ContentsModel>? Contents { get; set; }
+            public IEnumerable<Content> Content { get; set; } = Enumerable.Empty<Content>();
+            public IEnumerable<Plan> Plans { get; set; } = Enumerable.Empty<Plan>();
+            public IEnumerable<Comment> Comments { get; set; } = Enumerable.Empty<Comment>();
+            public IEnumerable<ContentTagsModel> ContentTagsModel { get; set; } = Enumerable.Empty<ContentTagsModel>();
+            public IEnumerable<ContentsModel> Contents { get; set; } = Enumerable.Empty<ContentsModel>();
 
         }
         public IActionResult GetPost(int id)
@@ -305,6 +302,11 @@ namespace CreatorsPlatform.Controllers
                 .ThenInclude(cr => cr.Users)
                 .Include(c => c.Subtitle)
                 .FirstOrDefault(c => c.ContentId == id);
+
+            if (content == null)
+            {
+                return NotFound();
+            }
 
             // 取得留言資料
             var comments = _context.Comments
@@ -400,8 +402,8 @@ namespace CreatorsPlatform.Controllers
 
 			if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
 
@@ -413,7 +415,7 @@ namespace CreatorsPlatform.Controllers
                 var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == content.CreatorId);
                 if (Follow)
                 {
-                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == content.CreatorId).Unfollow;
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == content.CreatorId)?.Unfollow ?? true;
                     ViewBag.UnFollow = TheFollow;
                 }
                 else
@@ -451,7 +453,11 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public async Task<IActionResult> PostComment(Comment commentData)
         {
-            if (ModelState.IsValid != null)
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return Unauthorized();
+            commentData.UserId = member.id;
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (ModelState.IsValid)
             {
                 // 存 Comment 進DB
                 _context.Comments.Add(commentData);
@@ -465,8 +471,10 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public IActionResult PostLikeChange(int LikeChange, int TheCheckedPostId)
 		{
+			if (!MembersOnline()) return Unauthorized();
 			var ThePostModel = _context.Contents.FirstOrDefault(m => m.ContentId == TheCheckedPostId);
-			ThePostModel!.Likes = LikeChange;
+			if (ThePostModel == null) return NotFound();
+			ThePostModel.Likes = LikeChange;
 			_context.Update(ThePostModel);
 			_context.SaveChanges();
 			return Ok();
@@ -476,11 +484,11 @@ namespace CreatorsPlatform.Controllers
 		//委託貼文頁面
 		public class CommissionDetailsViewModel
         {
-            public IEnumerable<Commission>? Commission { get; set; }
-            public IEnumerable<Plan>? Plans { get; set; }
-            public IEnumerable<Comment>? Comments { get; set; }
-            public IEnumerable<CommissionWithImageAndWord>? CommissionsWithWords { get; set; }
-            public IEnumerable<CommissionImage>? CommissionImages { get; set; }
+            public IEnumerable<Commission> Commission { get; set; } = Enumerable.Empty<Commission>();
+            public IEnumerable<Plan> Plans { get; set; } = Enumerable.Empty<Plan>();
+            public IEnumerable<Comment> Comments { get; set; } = Enumerable.Empty<Comment>();
+            public IEnumerable<CommissionWithImageAndWord> CommissionsWithWords { get; set; } = Enumerable.Empty<CommissionWithImageAndWord>();
+            public IEnumerable<CommissionImage> CommissionImages { get; set; } = Enumerable.Empty<CommissionImage>();
 		}
 
         public IActionResult GetCommission(int id = 1)
@@ -491,6 +499,11 @@ namespace CreatorsPlatform.Controllers
                 .Include(c => c.Subtitle)
                 .Include(c => c.CommissionImages)
                 .FirstOrDefault(c => c.CommissionId == id);
+
+            if (commission == null)
+            {
+                return NotFound();
+            }
 
             var commissionImages = _context.CommissionImages
                 .Where(c => c.CommissionId == id);
@@ -559,8 +572,8 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
 
@@ -572,7 +585,7 @@ namespace CreatorsPlatform.Controllers
                 var Follow = _context.Follows.Any(f => f.UserId == member.id && f.CreatorId == commission.CreatorId);
                 if (Follow)
                 {
-                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == commission.CreatorId).Unfollow;
+                    var TheFollow = _context.Follows.FirstOrDefault(f => f.UserId == member.id && f.CreatorId == commission.CreatorId)?.Unfollow ?? true;
                     ViewBag.UnFollow = TheFollow;
                 }
                 else
@@ -595,11 +608,12 @@ namespace CreatorsPlatform.Controllers
         // 創作者建立接受委託表單(修改位置待訂)
         public IActionResult AddCommisionForm()
         {
+            if (!MembersOnline()) return RedirectToAction("Login", "yhu");
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -616,9 +630,10 @@ namespace CreatorsPlatform.Controllers
         public IActionResult CommissionCreate(Commission CreateCommissionModel)
         {
             // 取得 member 對應之 creatorId
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-            int NowCreatorId = (int)_context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+            var NowCreatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
+            if (NowCreatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
 
             // 發布時間在這邊取得並轉換成資料庫要的型態
             var sDate = DateTime.Now;
@@ -630,14 +645,14 @@ namespace CreatorsPlatform.Controllers
                 Title = CreateCommissionModel.Title,
                 PriceMin = CreateCommissionModel.PriceMin,
                 PriceMax = CreateCommissionModel.PriceMax,
-                CreatorId = NowCreatorId,
+                CreatorId = NowCreatorId.Value,
                 Description = CreateCommissionModel.Description,
                 PutUpDate = ssDate,
                 OverDate = CreateCommissionModel.OverDate,
                 SubtitleId = CreateCommissionModel.SubtitleId
             };
 
-            if (ModelState.IsValid != null)
+            if (ModelState.IsValid)
             {
                 _context.Add(CreateCommission);
                 _context.SaveChanges();
@@ -660,6 +675,7 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public IActionResult CreateCommissionExImg(CommissionImage commissionImage)
         {
+            if (!MembersOnline()) return Unauthorized();
             int newCommissionId = Convert.ToInt32(TempData["TheNewCommissionID"]);
 
             var CommissionImageToDB = new CommissionImage
@@ -678,11 +694,12 @@ namespace CreatorsPlatform.Controllers
 		// 創作者編輯訂閱方案
 		public IActionResult EditSubscriptionPlans()
 		{
+			if (!MembersOnline()) return RedirectToAction("Login", "yhu");
 			//
 			if (MembersOnline())
 			{
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				var member = SessionMember.Get(HttpContext, _context);
+				if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
 			}

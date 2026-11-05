@@ -7,7 +7,7 @@ namespace CreatorsPlatform.CsMod.Vicky
         public int TotalPages { get; set; }//總共頁數
         public int PageSize { get; set; } //每頁顯示幾筆
         public string? SearchKey { get; set; }
-        public Dictionary<string, SubtitleCount> Count { get; set; }
+        public Dictionary<string, SubtitleCount> Count { get; set; } = new();
 
     }
 

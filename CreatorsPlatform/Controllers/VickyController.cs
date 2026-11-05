@@ -22,9 +22,9 @@ namespace CreatorsPlatform.Controllers
         {
             _context = context;
         }
-        public string MembersIcon(int x)
+        public string? MembersIcon(int x)
         {
-            string Avatar;
+            string? Avatar;
             var MembersIcon = (from UserData in _context.Users
                                where UserData.UserId == x
                                select UserData.Avatar).FirstOrDefault();
@@ -39,18 +39,7 @@ namespace CreatorsPlatform.Controllers
 
             return Avatar;
         }
-        public bool MembersOnline()
-		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+        public bool MembersOnline() => SessionMember.Get(HttpContext, _context) != null;
 
 		[HttpGet]
         public IActionResult Search(string searchKey, int? subtitle, int? id, string sortOrder, int page = 1, int pageSize = 9)
@@ -87,8 +76,8 @@ namespace CreatorsPlatform.Controllers
             ViewBag.SubtitleCounts = subtitleCounts;
 			if (MembersOnline())
 			{
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				var member = SessionMember.Get(HttpContext, _context);
+				if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
 			}

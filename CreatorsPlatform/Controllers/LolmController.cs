@@ -33,9 +33,9 @@ namespace CreatorsPlatform.Controllers
         //    return View();
         //}
         //臨時增加
-        public string MembersIcon(int x)
+        public string? MembersIcon(int x)
         {
-            string Avatar;
+            string? Avatar;
             var MembersIcon = (from UserData in _context.Users
                                where UserData.UserId == x
                                select UserData.Avatar).FirstOrDefault();
@@ -50,23 +50,13 @@ namespace CreatorsPlatform.Controllers
 
             return Avatar;
         }
-        public bool MembersOnline()
-        {
-            var memberJson = HttpContext.Session.GetString("key");
-            if (memberJson != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        public bool MembersOnline() => SessionMember.Get(HttpContext, _context) != null;
         //
 
         // 新增存 id 的變數，並想把他丟到 View
         public async Task<IActionResult> EventContent(int? id)
         {
+            if (id == null || !_context.Events.Any(e => e.EventId == id)) return NotFound();
             ViewBag.Eid = id;
             string ThePageStyle;
             // 把style丟到前面
@@ -84,8 +74,8 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -99,11 +89,12 @@ namespace CreatorsPlatform.Controllers
 
         public IActionResult CreateEvent()
         {
+            if (!MembersOnline()) return RedirectToAction("Login", "yhu");
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -119,6 +110,7 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload([Bind("EventImageId,ImageUrl,EventId,ImageSample,CreatorId,Description,ImageTitle")] EventImage eventImage, int? id)
         {
+            if (!MembersOnline()) return Unauthorized();
             foreach (var file in HttpContext.Request.Form.Files)
             {
                 if (file.Length > 0)
@@ -166,9 +158,10 @@ namespace CreatorsPlatform.Controllers
         {
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
-                var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+                var NowCreatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
+                if (NowCreatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
 
                 Event NewEvent = new Event
                 {
@@ -193,14 +186,18 @@ namespace CreatorsPlatform.Controllers
             }
             else
             {
-                return RedirectToAction("Login", "yhu");
+                return Unauthorized();
             }
         }
 
         // 活動創建(上傳範例圖片至資料庫)
         [HttpPost]
-        public string CreateEventExImg(EventImage NewEventImageData)
+        public IActionResult CreateEventExImg(EventImage NewEventImageData)
         {
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return Unauthorized();
+            var creatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
+            if (creatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
             int newEventId = Convert.ToInt32(TempData["TheNewEventID"]);
 
             EventImage NewEventImage = new EventImage()
@@ -208,11 +205,11 @@ namespace CreatorsPlatform.Controllers
                 ImageUrl = NewEventImageData.ImageUrl,
                 EventId = newEventId, // 使用从 TempData 中获取的 ID
                 ImageSample = true,
-                CreatorId = 1
+                CreatorId = creatorId.Value
             };
             _context.EventImages.Add(NewEventImage);
             _context.SaveChanges();
-            return "OK";
+            return Content("OK");
         }
 
         // 新增投稿(上傳活動參加者的投稿 到 資料庫的EventImg表)
@@ -220,12 +217,12 @@ namespace CreatorsPlatform.Controllers
         public IActionResult CreateEventPost(EventImage NewEventImageData, int eventId)
         {
             int PostEventId = NewEventImageData.EventId;
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
-            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+            var NowCreatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
             if (NowCreatorId == null)
             {
-                return NotFound();
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
             else
             {
@@ -260,8 +257,10 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public IActionResult PostLikeChange(int LikeChange, int TheCheckedPostId)
         {
+            if (!MembersOnline()) return Unauthorized();
             var ThePostModel = _context.EventImages.FirstOrDefault(m => m.EventImageId == TheCheckedPostId);
-            ThePostModel!.EvePostLike = LikeChange;
+            if (ThePostModel == null) return NotFound();
+            ThePostModel.EvePostLike = LikeChange;
             _context.Update(ThePostModel);
             _context.SaveChanges();
             return Ok();
@@ -324,6 +323,7 @@ namespace CreatorsPlatform.Controllers
         // 編輯活動內容頁面
         public IActionResult EventEdit(int? id)
         {
+            if (!MembersOnline()) return RedirectToAction("Login", "yhu");
             if (id == null)
             {
                 return NotFound();
@@ -343,7 +343,7 @@ namespace CreatorsPlatform.Controllers
                                        EventIntroColor = e.EventStyle != null ? e.EventStyle.Substring(12, 7) : null,
                                        Banner = e.Banner
                                    }).ToList();
-            if (FindEventResult == null)
+            if (FindEventResult.Count == 0)
             {
                 return NotFound();
             }
@@ -359,8 +359,8 @@ namespace CreatorsPlatform.Controllers
             //
             if (MembersOnline())
             {
-                var memberJson = HttpContext.Session.GetString("key");
-                MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+                var member = SessionMember.Get(HttpContext, _context);
+                if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
                 ViewBag.MembersIcon = MembersIcon(member.id);
                 ViewBag.MembersOnline = MembersOnline();
             }
@@ -375,9 +375,11 @@ namespace CreatorsPlatform.Controllers
 
         // 編輯活動內容put:Event表
         [HttpPut]
-        public string UpdateEvent(Event EventUpdateData)
+        public IActionResult UpdateEvent(Event EventUpdateData)
         {
-            var result = _context.Events.First(e => e.EventId == EventUpdateData.EventId);
+            if (!MembersOnline()) return Unauthorized();
+            var result = _context.Events.FirstOrDefault(e => e.EventId == EventUpdateData.EventId);
+            if (result == null) return NotFound();
             result.EventName = EventUpdateData.EventName;
             result.StartDate = EventUpdateData.StartDate;
             result.EndDate = EventUpdateData.EndDate;
@@ -387,18 +389,20 @@ namespace CreatorsPlatform.Controllers
             result.DescriptionString = EventUpdateData.DescriptionString;
             _context.Update(result);
             _context.SaveChanges();
-            return "活動內容變更完成";
+            return Content("活動內容變更完成");
         }
 
         // 編輯活動內容post:EventImage表
         [HttpPost]
-        public string UpdateEventImg(string EventImgArray, int Id)
+        public IActionResult UpdateEventImg(string EventImgArray, int Id)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson!)!;
-            var NowCreatorId = _context.Users.Where(model => model.UserId == member.id && model.CreatorId != null).FirstOrDefault()!.CreatorId;
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+            var NowCreatorId = _context.Users.Where(user => user.UserId == member.id).Select(user => user.CreatorId).FirstOrDefault();
+                if (NowCreatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
 
-            string[] TheArray = JsonConvert.DeserializeObject<string[]>(EventImgArray);
+            string[]? TheArray = JsonConvert.DeserializeObject<string[]>(EventImgArray);
+            if (TheArray == null) return BadRequest();
             if (_context.EventImages.Any(e => e.EventId == Id && e.ImageSample == true))
             {
                 var result = _context.EventImages.Where(e => e.EventId == Id && e.ImageSample == true).ToList();
@@ -421,7 +425,7 @@ namespace CreatorsPlatform.Controllers
                 _context.EventImages.Add(NewEventImage);
             }
             _context.SaveChanges();
-            return "活動圖片內容變更完成";
+            return Ok("活動圖片內容變更完成");
         }
     }
 }

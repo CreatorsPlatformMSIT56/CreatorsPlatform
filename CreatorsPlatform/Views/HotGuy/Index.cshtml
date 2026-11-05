@@ -3,8 +3,8 @@
 @{
 	ViewData["Title"] = "Index";
 
-	var newEvents = ViewData["NewEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
-	var oldEvents = ViewData["OldEvents"] as IEnumerable<CreatorsPlatform.Models.Event>;
+	var newEvents = ViewData["NewEvents"] as IEnumerable<CreatorsPlatform.Models.Event> ?? Enumerable.Empty<CreatorsPlatform.Models.Event>();
+	var oldEvents = ViewData["OldEvents"] as IEnumerable<CreatorsPlatform.Models.Event> ?? Enumerable.Empty<CreatorsPlatform.Models.Event>();
 }
 <link href="~/css/HotGuy/style.css" rel="stylesheet" />
 @if (ViewBag.MembersOnline)

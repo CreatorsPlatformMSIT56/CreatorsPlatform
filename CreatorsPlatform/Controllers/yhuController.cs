@@ -19,16 +19,17 @@ namespace CreatorsPlatform.Controllers
 	public class yhuController : Controller
 	{
 		private readonly ImaginkContext _context;
-		public yhuController(ImaginkContext context)
+        private readonly IConfiguration _configuration;
+		public yhuController(ImaginkContext context, IConfiguration configuration)
 		{
 			_context = context;
+            _configuration = configuration;
 		}
 		public class MemberData
 		{
 			public int id { get; set; }
-			public string Name { get; set; }
-			public string Email { get; set; }
-			public string Password { get; set; }
+			public string Name { get; set; } = string.Empty;
+			public string Email { get; set; } = string.Empty;
 
 		};
 
@@ -54,7 +55,7 @@ namespace CreatorsPlatform.Controllers
 			{
 				MailMessage mail = new MailMessage();
 				//                          前面是發信的email  後面是顯示的名稱   
-				mail.From = new MailAddress("Aa0977706956@gmail.com", "系統驗證碼發送");
+				mail.From = new MailAddress(_configuration["Mail:Username"] ?? throw new InvalidOperationException("Mail:Username is required."), "系統驗證碼發送");
 				//收件者email
 				mail.To.Add(MEmail);//result
 									//mail.To.Add("wryi636@gmail.com");//result\
@@ -73,13 +74,12 @@ namespace CreatorsPlatform.Controllers
 				//設定gmail的smtp(這是google的)
 				SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
 				//在gmail的帳號密碼
-				MySmtp.Credentials = new System.Net.NetworkCredential("Aa0977706956@gmail.com", "kpegknehzepacohd");
+				MySmtp.Credentials = new System.Net.NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
 				//開啟ssl
 				MySmtp.EnableSsl = true;
 				//發送郵件
 				MySmtp.Send(mail);
 				//放掉宣告出來的MySetp
-				MySmtp = null;
 				//放掉宣告出來的mail
 				mail.Dispose();
 				System.Diagnostics.Debug.WriteLine("顯示" + "郵件發送成功");
@@ -125,9 +125,9 @@ namespace CreatorsPlatform.Controllers
 
 
 
-		public string MembersIcon(int x)
+		public string? MembersIcon(int x)
 		{
-			string Avatar;
+			string? Avatar;
 			var MembersIcon = (from UserData in _context.Users
 							   where UserData.UserId == x
 							   select UserData.Avatar).FirstOrDefault();
@@ -142,55 +142,21 @@ namespace CreatorsPlatform.Controllers
 
 			return Avatar;
 		}
-		public bool MembersOnline()
-		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+		public bool MembersOnline() => SessionMember.Get(HttpContext, _context) != null;
 		public IActionResult PersonalUser()
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson == null)
-			{
-				ViewBag.MembersOnline = MembersOnline();
-				return View("Login");
-			}
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-
-			var UserPasswd = (from UserPasswdData in _context.Users
-							  where UserPasswdData.Email == member.Email
-							  select new { UserPasswdData.Password, UserPasswdData.CreatorId }).ToList();
-			if (member.Password == UserPasswd[0].Password.ToString())
-			{
-				var NewmesgData = (from Newmesg in _context.Contents
-								   join UserData in _context.Users on Newmesg.CreatorId equals UserData.CreatorId
-								   select new
-								   {
-									   Newmesg.Title,
-									   Newmesg.Description,
-									   UserData.UserName,
-									   Newmesg.UploadDate,
-									   Newmesg.ContentId
-								   })
-									   .OrderByDescending(item => item.UploadDate).Take(5).ToList();
-				ViewBag.NewmesgData = NewmesgData;
-				ViewBag.MemberCreatorId = UserPasswd[0].CreatorId;
-				ViewBag.MembersIcon = MembersIcon(member.id);
-				ViewBag.MembersOnline = MembersOnline();
-				return View("PersonalUser");
-			}
-			else
-			{
-				ViewBag.MembersOnline = MembersOnline();
-				return View("Login");
-			};
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return RedirectToAction("Login");
+			var user = _context.Users.First(u => u.UserId == member.id);
+			var messages = (from content in _context.Contents
+				join author in _context.Users on content.CreatorId equals author.CreatorId
+				select new { content.Title, content.Description, author.UserName, content.UploadDate, content.ContentId })
+				.OrderByDescending(item => item.UploadDate).Take(5).ToList();
+			ViewBag.NewmesgData = messages;
+			ViewBag.MemberCreatorId = user.CreatorId;
+			ViewBag.MembersIcon = MembersIcon(member.id);
+			ViewBag.MembersOnline = true;
+			return View("PersonalUser");
 		}
 		[HttpPost]
 		public ActionResult PersonalUser(int _CurrentMsg, string tapy)
@@ -205,8 +171,9 @@ namespace CreatorsPlatform.Controllers
 					return Json(NewmesgData.ToList());
 				case "subscribemsg":
 
-					var memberJson = HttpContext.Session.GetString("key");
-					MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+					var member = SessionMember.Get(HttpContext, _context);
+
+					if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 					//var SubscriptionDataList = (from UsersData in _context.Users
 					//                            join SubscriptionsData in _context.Subscriptions on UsersData.UserId equals SubscriptionsData.UserId
 					//                            where SubscriptionsData.UserId == member.id
@@ -244,7 +211,7 @@ namespace CreatorsPlatform.Controllers
 											eventmsg.StartDate,
 											eventmsg.EndDate
 										}).ToList();
-					Console.WriteLine(eventmsgData[1]);
+
 					return Json(eventmsgData);
 				default:
 					return Json("Eeeor");
@@ -268,7 +235,9 @@ namespace CreatorsPlatform.Controllers
                                    UserLikes = PopularityRranking.Sum(r => r.Likes)
                                }).OrderByDescending(item => item.UserLikes).Take(6));
             var xxx = DefaultCreatorsData.ToList();
+            var firstCreatorId = xxx.Select(creator => (int?)creator.CreatorId).FirstOrDefault();
             var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
+
             //作者依喜歡數排序並取則頭像等
             var AuthorProfile = (from UsersData in _context.Users
                                  join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
@@ -281,12 +250,12 @@ namespace CreatorsPlatform.Controllers
                                      HasAvatar = UsersData.Avatar != null,
                                      UsersData.UserName,
                                      UsersData.CreatorId,
-                                     Description = Introduction.Description.Length > 26 ?
+                                     Description = Introduction.Description != null && Introduction.Description.Length > 26 ?
                                     Introduction.Description.Substring(0, 26) + "..." : Introduction.Description,
                                  });
 			//依作者照第一個作者群找作品
 			var DefaultContentsData = ((from DefaultContents in _context.Contents
-										where DefaultContents.CreatorId == xxx[0].CreatorId
+										where DefaultContents.CreatorId == firstCreatorId
 										select new
 										{
 											DefaultContents.ContentId,
@@ -303,15 +272,15 @@ namespace CreatorsPlatform.Controllers
 
 			var DefaultContentsDatalist = DefaultContentsData.ToList();
 
-			Console.WriteLine(DefaultContentsDatalist[1].Title);
+
 
 			ViewBag.EventDataList = EventDataList.ToList();
 			ViewBag.DefaultContentsData = DefaultContentsDatalist;
 			ViewBag.AuthorProfile = AuthorProfile.ToList();
 			if (MembersOnline())
 			{
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+				var member = SessionMember.Get(HttpContext, _context);
+				if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
 			}
@@ -339,6 +308,7 @@ namespace CreatorsPlatform.Controllers
                                UserLikes = PopularityRranking.Sum(r => r.Likes)
                            }).OrderByDescending(item => item.UserLikes).Take(6);
                         var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
+
                         var AuthorProfile = (from UsersData in _context.Users
                                              join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
                                              join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
@@ -350,7 +320,7 @@ namespace CreatorsPlatform.Controllers
                                                  HasAvatar = UsersData.Avatar != null,
                                                  UsersData.UserName,
                                                  UsersData.CreatorId,
-                                                 Description = Introduction.Description.Length > 26 ?
+                                                 Description = Introduction.Description != null && Introduction.Description.Length > 26 ?
                                                  Introduction.Description.Substring(0, 26) + "..." : Introduction.Description
                                              }
                                    );
@@ -364,7 +334,7 @@ namespace CreatorsPlatform.Controllers
                                                  HasAvatar = NewReport.Avatar != null,
                                                  NewReport.UserName,
                                                  NewReport.CategoryId,
-                                                 Description = UserDescription.Description.Length > 26 ? UserDescription.Description.Substring(0, 26) + "..." : UserDescription.Description
+                                                 Description = UserDescription.Description != null && UserDescription.Description.Length > 26 ? UserDescription.Description.Substring(0, 26) + "..." : UserDescription.Description
                                              }).OrderByDescending(u => u.UserId).Take(6);
                         return Json(NewReportData.ToList());
                     default:
@@ -398,7 +368,7 @@ namespace CreatorsPlatform.Controllers
                                         HasAvatar = UserData.Avatar != null,
                                         UserData.UserName,
                                         UserData.CategoryId,
-                                        Description = Creators.Description.Length > 26 ?
+                                        Description = Creators.Description != null && Creators.Description.Length > 26 ?
                                         Creators.Description.Substring(0, 26) + "..." : Creators.Description
                                     });
                 if (userIDsArray.Count == 0)
@@ -412,6 +382,7 @@ namespace CreatorsPlatform.Controllers
                                  UserLikes = PopularityRranking.Sum(r => r.Likes)
                              }).OrderByDescending(item => item.UserLikes).Take(6);
                     var topCreatorUserIds = DefaultCreatorsData.Select(creatorData => creatorData.CreatorId).ToList();
+
                     var AuthorProfile = (from UsersData in _context.Users
                                          join Introduction in _context.Creators on UsersData.CreatorId equals Introduction.CreatorId
                                          join Default in DefaultCreatorsData on UsersData.CreatorId equals Default.CreatorId
@@ -423,7 +394,7 @@ namespace CreatorsPlatform.Controllers
                                              HasAvatar = UsersData.Avatar != null,
                                              UsersData.UserName,
                                              UsersData.CategoryId,
-                                             Description = Introduction.Description.Length > 26 ?
+                                             Description = Introduction.Description != null && Introduction.Description.Length > 26 ?
                                              Introduction.Description.Substring(0, 26) + "..." : Introduction.Description
                                          }
                                );
@@ -453,10 +424,9 @@ namespace CreatorsPlatform.Controllers
 		}
 		public IActionResult Payment(int id)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson != null)
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member != null)
 			{
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 				var subPayment = (from p in _context.Plans
 								  join i in _context.Users on p.CreatorId equals i.CreatorId
 								  where p.PlanId == id
@@ -471,36 +441,39 @@ namespace CreatorsPlatform.Controllers
 									  creatorId = i.CreatorId
 								  });
 
-				ViewBag.subPay = subPayment.ToList();
+				var paymentOptions = subPayment.ToList();
+				if (paymentOptions.Count == 0) return NotFound();
+				ViewBag.subPay = paymentOptions;
 				ViewBag.Id = member.id;
 				ViewBag.PlanId = id;
 
 				var PlanIdToCreator = (from p in _context.Plans
 									   where p.PlanId == id
 									   select new { creatorId = p.CreatorId, }).ToList();
-				ViewBag.Cid = PlanIdToCreator.FirstOrDefault().creatorId;
+				ViewBag.Cid = PlanIdToCreator.FirstOrDefault()?.creatorId;
 
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
 				return View();
 			}
 			ViewBag.MembersOnline = MembersOnline();
-			return View("Login");
+			return RedirectToAction("Login");
 		}
 
 
 		[HttpPost]
 		public ActionResult SubPayments(Subscription subPay)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
+			subPay.UserId = member.id;
 			var SubFollow = (from f in _context.Follows
 							 join i in _context.Users on f.UserId equals i.UserId
 							 join c in _context.Creators on i.CreatorId equals c.CreatorId
 							 where f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId
 							 select f.FollowId).FirstOrDefault();
 
-			if (memberJson != null)
+			if (member != null)
 			{
 				// 如果用戶從沒follow作者過
 				if (SubFollow == 0)
@@ -511,7 +484,7 @@ namespace CreatorsPlatform.Controllers
 						UserId = subPay.UserId,
 						Unfollow = false
 					};
-					if (ModelState.IsValid != null)
+					if (ModelState.IsValid)
 					{
 						_context.Add(follow);
 						_context.SaveChanges();
@@ -523,7 +496,8 @@ namespace CreatorsPlatform.Controllers
 					if (_context.Follows.Any(f => f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId && f.Unfollow == true))
 					{
 						var FollowChange = _context.Follows.SingleOrDefault(f => f.UserId == subPay.UserId && f.CreatorId == subPay.CreatorId && f.Unfollow == true);
-						FollowChange.Unfollow = false;
+						if (FollowChange == null) return NotFound();
+                        FollowChange.Unfollow = false;
 						_context.Update(FollowChange);
 						_context.SaveChanges();
 					}
@@ -546,7 +520,7 @@ namespace CreatorsPlatform.Controllers
 					UserId = subPay.UserId
 				};
 
-				if (ModelState.IsValid != null)
+				if (ModelState.IsValid)
 				{
 					_context.Add(NewSub);
 					_context.SaveChanges();
@@ -559,10 +533,9 @@ namespace CreatorsPlatform.Controllers
 		}
 		public IActionResult EntrustPayment(int id)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson != null)
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member != null)
 			{
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 
 				var ComCheck = (from c in _context.Commissions
 								join i in _context.Users on c.CreatorId equals i.CreatorId
@@ -578,7 +551,9 @@ namespace CreatorsPlatform.Controllers
 									comDescription = c.Description
 								});
 
-				ViewBag.ComCheck = ComCheck.ToList();
+				var commissions = ComCheck.ToList();
+				if (commissions.Count == 0) return NotFound();
+				ViewBag.ComCheck = commissions;
 				ViewBag.Id = member.id;
 				ViewBag.MembersIcon = MembersIcon(member.id);
 				ViewBag.MembersOnline = MembersOnline();
@@ -586,13 +561,16 @@ namespace CreatorsPlatform.Controllers
 				return View();
 			}
 			ViewBag.MembersOnline = MembersOnline();
-			return View("Login");
+			return RedirectToAction("Login");
 
 		}
 		[HttpPost]
 		[Route("yhu/ComOrders")]
 		public ActionResult ComOrders(CommissionOrder ComOrder)
 		{
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return Unauthorized();
+			ComOrder.UserId = member.id;
 			Console.WriteLine("我要進來囉");
 			var sDate = DateTime.Now;
 			DateOnly ssDate = DateOnly.FromDateTime(sDate);
@@ -607,7 +585,7 @@ namespace CreatorsPlatform.Controllers
 				WorkStatus = "待確認中"
 			};
 
-			if (ModelState.IsValid != null)
+			if (ModelState.IsValid)
 			{
 				_context.Add(cOrder);
 				_context.SaveChanges();
@@ -620,10 +598,9 @@ namespace CreatorsPlatform.Controllers
 
 		public IActionResult Individual()
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson != null)
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member != null)
 			{
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
 				var Avatar = (from UserData in _context.Users
 							  where UserData.Email == member.Email
 							  select UserData.Avatar).FirstOrDefault();
@@ -653,19 +630,15 @@ namespace CreatorsPlatform.Controllers
 			else
 			{
 				ViewBag.MembersOnline = MembersOnline();
-				return View("Login");
+				return RedirectToAction("Login");
 			}
 
 		}
 		[HttpPost]
 		public ActionResult IndividualData(string type, int step)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			if (memberJson == null)
-			{
-				View("Login");
-			};
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return Unauthorized();
 			var CreatorId = (from UserData in _context.Users
 							 where UserData.UserId == member.id
 							 select UserData.CreatorId).FirstOrDefault();
@@ -677,7 +650,7 @@ namespace CreatorsPlatform.Controllers
 					var Avatar = (from UserData in _context.Users
 								  where UserData.Email == member.Email
 								  select UserData.Avatar).FirstOrDefault();
-					string AvatarIcon = null;
+					string? AvatarIcon = null;
 					if (Avatar != null)
 					{
 						AvatarIcon = $"/images/avatar/{member.id}";
@@ -965,8 +938,8 @@ namespace CreatorsPlatform.Controllers
 		{
 			string UserName = data[0]["value"];
 			string Email = data[1]["value"];
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 			var UesrDataConFirm = (from UesrData in _context.Users
 								   where UesrData.UserId == member.id
 								   select UesrData).FirstOrDefault();
@@ -986,8 +959,8 @@ namespace CreatorsPlatform.Controllers
 		{
 
 			byte[] binaryData = Convert.FromBase64String(base64);
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 			var AvatarChange = (from AvatarData in _context.Users
 								where AvatarData.UserId == member.id
 								select AvatarData).FirstOrDefault();
@@ -1006,12 +979,13 @@ namespace CreatorsPlatform.Controllers
 			int PlanPrice = Convert.ToInt32(data[1]["value"]);
 			int PlanLevel = Convert.ToInt32(data[2]["value"]);
 			string PlanDescription = data[3]["value"];
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 			var CreatorId = (from AvatarData in _context.Users
 							 where AvatarData.UserId == member.id
 							 select AvatarData.CreatorId).FirstOrDefault();
-			var PlanData = (from UserPlan in _context.Plans
+			if (CreatorId == null) return StatusCode(StatusCodes.Status403Forbidden);
+            var PlanData = (from UserPlan in _context.Plans
 							where UserPlan.CreatorId == CreatorId
 							select UserPlan);
 			var Plancheck = (from Plan in PlanData
@@ -1054,8 +1028,8 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public ActionResult PlanRowRecord(string type, int id)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 			var TargetData = (from PlanData in _context.Plans
 							  join UserData in _context.Users on PlanData.CreatorId equals UserData.CreatorId
 							  where PlanData.PlanId == id
@@ -1066,8 +1040,8 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public ActionResult DataDelete(string type, int id)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 			switch (type)
 			{
 				case "Works":
@@ -1142,15 +1116,16 @@ namespace CreatorsPlatform.Controllers
         [HttpPost]
         public ActionResult FanStatusReply(int id, string Reply)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
             var Order = (from OrderData in _context.CommissionOrders
                          where OrderData.CommissionOrderId == id && OrderData.UserId == member.id
                          select OrderData).FirstOrDefault();
-            string WorkStatus = Order.WorkStatus.ToString();
+            if (Order == null) return NotFound();
+            string? WorkStatus = Order.WorkStatus;
             switch (Reply)
             {
-                
+
                 case "true":
                     switch (WorkStatus)
                     {
@@ -1175,12 +1150,13 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public ActionResult CreatorStatusReply(int id, string Reply,int Price, int step)
         {
-            var memberJson = HttpContext.Session.GetString("key");
-            MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+            var member = SessionMember.Get(HttpContext, _context);
+            if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
             var Order = (from OrderData in _context.CommissionOrders
                          where OrderData.CommissionOrderId == id
                          select OrderData).FirstOrDefault();
-            string WorkStatus = Order.WorkStatus.ToString();
+            if (Order == null) return NotFound();
+            string? WorkStatus = Order.WorkStatus;
             switch (Reply)
             {
 
@@ -1251,18 +1227,8 @@ namespace CreatorsPlatform.Controllers
 					  select IDData.UserId).FirstOrDefault();
 			if (EmailCheck && PasswdCheck)
 			{
-				var MemberData = new MemberData();
-				string Member = JsonConvert.SerializeObject(MemberData);
-				HttpContext.Session.SetString("key", Member);
-				var memberJson = HttpContext.Session.GetString("key");
-				MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
-				/////////
-				member.id = ID;
-				member.Name = Name;
-				member.Email = Email;
-				member.Password = Passwd;
-				Member = JsonConvert.SerializeObject(member);
-				HttpContext.Session.SetString("key", Member);
+                HttpContext.Session.Clear();
+                HttpContext.Session.SetInt32("userId", ID);
 				var MemberUi = (from UserData in _context.Users
 								where UserData.UserId == ID
 								select UserData.Avatar).FirstOrDefault();
@@ -1319,13 +1285,6 @@ namespace CreatorsPlatform.Controllers
 				return Json("EmailCheck");
 			};
 			//目前使用者
-
-			MemberData member = new MemberData();
-			member.Name = UserName;
-			member.Email = Email;
-			member.Password = UserPasswd;
-			string Member = JsonConvert.SerializeObject(member);
-			HttpContext.Session.SetString("key", Member);
 			//sql
 			var UserData = new User
 			{
@@ -1335,6 +1294,8 @@ namespace CreatorsPlatform.Controllers
 			};
 			_context.Users.Add(UserData);
 			_context.SaveChanges();
+			HttpContext.Session.Clear();
+			HttpContext.Session.SetInt32("userId", UserData.UserId);
 
 			return Json("CheckOk");
 		}
@@ -1342,8 +1303,8 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public ActionResult ChangePwd(User user)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 
 			var userPwdUpdate = _context.Users.FirstOrDefault(u => u.UserId == member.id);
 
@@ -1360,17 +1321,18 @@ namespace CreatorsPlatform.Controllers
 		[HttpPost]
 		public ActionResult CreatorIDCheck([FromBody] JsonObject CreatorJson)
 		{
-			var memberJson = HttpContext.Session.GetString("key");
-			MemberData member = JsonConvert.DeserializeObject<MemberData>(memberJson);
+			var member = SessionMember.Get(HttpContext, _context);
+			if (member == null) return HttpMethods.IsGet(Request.Method) ? RedirectToAction("Login", "yhu") : Unauthorized();
 
             var checkFromNewData = CreatorJson["Check"];
             var NewCreatorData = CreatorJson["NewCreator"];
-            
+
 
             if (NewCreatorData != null)
             {
-                var NewCreatorDescription = NewCreatorData["description"].ToString();
-                var NewCreatornotice = NewCreatorData["notice"].ToString();
+                var NewCreatorDescription = NewCreatorData["description"]?.ToString();
+                var NewCreatornotice = NewCreatorData["notice"]?.ToString();
+                if (NewCreatorDescription == null || NewCreatornotice == null) return BadRequest();
                 if (checkFromNewData != null)
                 {
 
