@@ -4,7 +4,7 @@ Next.js App Router / React / TypeScript 提供介面，ASP.NET Core 10 / EF Core
 
 ## 本機啟動
 
-需要 .NET 10 SDK、Node.js 20.9 以上與既有 IMAGINK SQL Server 資料庫。
+需要 .NET 10 SDK、Node.js 22.18 以上（測試使用 Node 內建 TypeScript 支援）與既有 IMAGINK SQL Server 資料庫。
 
 1. 使用 `CreatorsPlatform/appsettings.Development.json` 或環境變數 `ConnectionStrings__ImaginkConnstring` 設定資料庫連線。不要將密碼提交到 Git。
 2. 終端一啟動後端：
@@ -52,3 +52,17 @@ npm run start
 正式環境需同時執行 ASP.NET Core API 與 Next.js Node.js 服務，對外入口為 Next.js；部署前設定 `BACKEND_URL` 並重新建置。靜態圖片由後端 `wwwroot/img` 提供。請使用 HTTPS。
 
 Next.js 架構與代理設定依官方文件：[App Router 安裝](https://nextjs.org/docs/app/getting-started/installation)、[rewrites](https://nextjs.org/docs/app/api-reference/config/next-config-js/rewrites)。
+
+## 驗證
+
+```powershell
+dotnet test CreatorsPlatform.sln
+cd frontend
+npm test
+npm run typecheck
+npm run build
+```
+
+後端整合測試使用每個測試獨立的 SQLite 記憶體資料庫與真實 HTTP pipeline，覆蓋 Session、JSON 寫入限制、權限、作品上下架、訂閱、訂單狀態及活動編輯。測試不連線、寫入或清除正式 SQL Server。SQLite 不涵蓋所有 SQL Server 查詢翻譯；探索、詳情與媒體查詢另以既有 SQL Server 執行唯讀驗證。
+
+前端測試涵蓋既有 Quill Delta 辨識、HTML 清理與活動配色解析。瀏覽器人工檢查涵蓋實際資料呈現與響應式頁面。SMTP 寄送及真實金流未列入自動測試；平台目前沒有真實金流整合。
