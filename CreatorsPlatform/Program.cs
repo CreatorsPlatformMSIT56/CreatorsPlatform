@@ -2,8 +2,9 @@ using CreatorsPlatform.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ImaginkContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("ImaginkConnstring")));
+builder.Services.AddDbContext<ImaginkContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ImaginkConnstring"))
+);
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 builder.Services.AddDistributedMemoryCache();
@@ -19,22 +20,30 @@ builder.Services.AddSession(options =>
 var app = builder.Build();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
-app.Use(async (context, next) =>
-{
-    // JSON-only mutations prevent cross-origin HTML forms from using the session.
-    if (context.Request.Path.StartsWithSegments("/api") &&
-        !HttpMethods.IsGet(context.Request.Method) && !HttpMethods.IsHead(context.Request.Method) &&
-        !context.Request.HasJsonContentType())
+app.Use(
+    async (context, next) =>
     {
-        context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
-        return;
+        // JSON-only mutations prevent cross-origin HTML forms from using the session.
+        if (
+            context.Request.Path.StartsWithSegments("/api")
+            && !HttpMethods.IsGet(context.Request.Method)
+            && !HttpMethods.IsHead(context.Request.Method)
+            && !context.Request.HasJsonContentType()
+        )
+        {
+            context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+            return;
+        }
+        await next();
     }
-    await next();
-});
+);
 app.UseStaticFiles();
 app.UseSession();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 app.Run();
 
+/// <summary>
+/// 應用程式進入點。
+/// </summary>
 public partial class Program;

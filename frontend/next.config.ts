@@ -3,10 +3,14 @@ import type { NextConfig } from "next";
 const backend = process.env.BACKEND_URL || "http://localhost:5251";
 const config: NextConfig = {
   agentRules: false,
+  /** 將 API 與媒體請求轉送至後端。 */
   async rewrites() {
-    return ["/api/:path*", "/images/:path*", "/img/:path*", "/favicon.ico"].map(source => ({
-      source, destination: `${backend}${source}`,
-    }));
+    return ["/api/:path*", "/images/:path*", "/img/:path*", "/favicon.ico"].map(
+      (source) => ({
+        source,
+        destination: `${backend}${source}`,
+      }),
+    );
   },
 };
 export default config;
