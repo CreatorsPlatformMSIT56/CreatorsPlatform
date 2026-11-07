@@ -87,7 +87,10 @@ before(
                 title: `搜尋結果第${page}頁`,
                 creatorId: 1,
                 creatorName: "測試作者",
-                image: null,
+                image:
+                  url.pathname === "/api/catalog/works"
+                    ? "/images/content/77"
+                    : "/img/commission-sample.png",
                 likes: 3,
                 priceMin: 100,
               },
@@ -228,6 +231,8 @@ test("work HTML contains its actual content and metadata without executing JavaS
   assert.match(document, /<p>伺服器留言<\/p>/);
   assert.match(document, /<title>SSR 測試作品 \| IMAGINK<\/title>/);
   assert.match(document, /<meta name="description" content="測試作者/);
+  assert.match(document, /src="\/images\/content\/77"/);
+  assert.doesNotMatch(document, /\/images\/content\/77\/thumbnail/);
 });
 
 test("SSR forwards only this request's session and does not share cached data", async () => {
@@ -271,6 +276,7 @@ test("creator profile and initial works are SSR, while follow state remains requ
     assert.match(html, /<h1>SSR 創作者<\/h1>/);
     assert.match(html, /創作者簡介/);
     assert.match(html, /<h3>搜尋結果第1頁<\/h3>/);
+    assert.match(html, /src="\/images\/content\/77\/thumbnail"/);
     assert.match(html, /<h3>支持方案<\/h3>/);
     assert.ok(html.includes(label));
   }
@@ -285,6 +291,7 @@ test("explore SSR preserves search, category, sort and page in pagination links"
     ).text(),
   );
   assert.match(html, /<h3>搜尋結果第2頁<\/h3>/);
+  assert.match(html, /src="\/images\/content\/77\/thumbnail"/);
   assert.match(html, /<title>搜尋「海邊」 \| IMAGINK<\/title>/);
   const pagination = [...html.matchAll(/href="(\?[^\"]+)"/g)].map(
     (match) => new URL(match[1].replaceAll("&amp;", "&"), origin).searchParams,
@@ -314,6 +321,8 @@ test("creator commission tab and event sorting affect server-rendered results", 
     await (await fetch(`${origin}/creators/1?kind=commissions&page=2`)).text(),
   );
   assert.match(creator, /href="\/commissions\/77"/);
+  assert.match(creator, /src="\/img\/commission-sample.png"/);
+  assert.doesNotMatch(creator, /\/images\/content\/77\/thumbnail/);
   assert.ok(
     requests.some(
       (r) => r.path === "/api/catalog/commissions?creator=1&page=2",

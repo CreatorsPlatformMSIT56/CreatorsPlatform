@@ -16,7 +16,14 @@ export function Cards({
       {items.map((item) => (
         <article className="card" key={item.id}>
           <Link href={`/${kind}/${item.id}`}>
-            <Picture src={item.image} alt={item.title} />
+            <Picture
+              src={
+                kind === "works" && item.image
+                  ? `/images/content/${item.id}/thumbnail`
+                  : item.image
+              }
+              alt={item.title}
+            />
             <h3>{item.title}</h3>
           </Link>
           <Link className="muted" href={`/creators/${item.creatorId}`}>

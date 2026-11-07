@@ -1,13 +1,15 @@
 using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using SkiaSharp;
 
 namespace CreatorsPlatform.Controllers;
 
 /// <summary>
 /// 圖片資源控制器。
 /// </summary>
-public class MediaController(ImaginkContext context) : Controller
+public class MediaController(ImaginkContext context, IMemoryCache cache) : Controller
 {
     /// <summary>
     /// 取得使用者大頭貼
@@ -41,6 +43,52 @@ public class MediaController(ImaginkContext context) : Controller
             .Select(c => c.ImageUrl)
             .FirstOrDefaultAsync();
         return ImageResult(image);
+    }
+
+    /// <summary>
+    /// 取得作品卡片使用的壓縮縮圖，最長邊不超過 800 像素。
+    /// </summary>
+    /// <param name="id">作品識別碼</param>
+    /// <returns>WebP 縮圖；作品已下架或圖片無效時回傳 404</returns>
+    [HttpGet("/images/content/{id:int}/thumbnail")]
+    public async Task<IActionResult> ContentThumbnail(int id)
+    {
+        var content = context.Contents.AsNoTracking().Where(c =>
+            c.ContentId == id && (c.PullOffDate == null || c.PullOffDate > DateTime.Now)
+        );
+        // Check publication on every request, including cache hits.
+        if (!await content.AnyAsync(c => c.ImageUrl != null))
+            return NotFound();
+
+        var thumbnail = await cache.GetOrCreateAsync<byte[]?>(
+            ("content-thumbnail", id),
+            async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+                var source = await content.Select(c => c.ImageUrl).FirstOrDefaultAsync();
+                if (source == null)
+                    return null;
+                // SKImage decodes the first frame and applies EXIF orientation.
+                using var image = SKImage.FromEncodedData(source);
+                if (image == null)
+                    return null;
+                var scale = Math.Min(1, 800d / Math.Max(image.Width, image.Height));
+                using var bitmap = new SKBitmap(
+                    Math.Max(1, (int)Math.Round(image.Width * scale)),
+                    Math.Max(1, (int)Math.Round(image.Height * scale)),
+                    SKColorType.Rgba8888,
+                    SKAlphaType.Premul
+                );
+                using var pixels = bitmap.PeekPixels();
+                if (!image.ScalePixels(pixels, new SKSamplingOptions(SKFilterMode.Linear)))
+                    return null;
+                using var encoded = pixels.Encode(
+                    new SKWebpEncoderOptions(SKWebpEncoderCompression.Lossy, 75)
+                );
+                return encoded?.ToArray();
+            }
+        );
+        return thumbnail == null ? NotFound() : File(thumbnail, "image/webp");
     }
 
     /// <summary>
