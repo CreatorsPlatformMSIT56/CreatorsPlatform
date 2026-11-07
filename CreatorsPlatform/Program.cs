@@ -1,54 +1,40 @@
-using Microsoft.EntityFrameworkCore;
-using CreatorsPlatform.Controllers;
 using CreatorsPlatform.Models;
-
-//使用Session資料方法:
-//設置Session:HttpContext.Session.SetInt32/SetString/......(名稱, 內容);
-//取得Session:HttpContext.Session.GetInt32/GetString/......(名稱, 內容);
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-#region
-
-builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddDbContext<ImaginkContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("ImaginkConnstring")
-    ));
-
-builder.Services.AddControllersWithViews();
-
+    builder.Configuration.GetConnectionString("ImaginkConnstring")));
+builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(600);
-    options.Cookie.Name = "DefaultName";
-    options.Cookie.Path = "/";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.Name = "Imagink.Session";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
 });
-#endregion
-
 var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+app.Use(async (context, next) =>
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-
+    // JSON-only mutations prevent cross-origin HTML forms from using the session.
+    if (context.Request.Path.StartsWithSegments("/api") &&
+        !HttpMethods.IsGet(context.Request.Method) && !HttpMethods.IsHead(context.Request.Method) &&
+        !context.Request.HasJsonContentType())
+    {
+        context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+        return;
+    }
+    await next();
+});
 app.UseStaticFiles();
-
 app.UseSession();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=yhu}/{action=IMAGINK}/{id?}"
-    );
-
+app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 app.Run();
 
+public partial class Program;

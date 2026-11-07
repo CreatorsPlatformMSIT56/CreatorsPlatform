@@ -1,0 +1,18 @@
+import "server-only";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+
+// Fetch directly from C#, never through our own public HTTP entry point.
+// No shared data cache: Creator responses include per-user follow state.
+export async function serverApi<T>(path: string): Promise<T> {
+  const session = (await cookies()).get("Imagink.Session");
+  const response = await fetch(`${process.env.BACKEND_URL || "http://localhost:5251"}/api/${path}`, {
+    cache: "no-store",
+    headers: session ? { Cookie: `Imagink.Session=${session.value}` } : {},
+    signal: AbortSignal.timeout(15000),
+  });
+  if (response.status === 404) notFound();
+  if (response.status === 401) redirect("/login");
+  if (!response.ok) throw new Error("服務暫時無法使用，請稍後重試。");
+  return response.json();
+}
