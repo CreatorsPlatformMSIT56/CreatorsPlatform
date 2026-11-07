@@ -6,18 +6,6 @@ namespace CreatorsPlatform.Controllers;
 
 public class MediaController(ImaginkContext context) : Controller
 {
-    [HttpGet("/images/home/{id:int}")]
-    public async Task<IActionResult> HomeImage(int id)
-    {
-        var creatorId = await context.Contents.GroupBy(c => c.CreatorId)
-            .OrderByDescending(g => g.Sum(c => c.Likes))
-            .Select(g => (int?)g.Key).FirstOrDefaultAsync();
-        var image = await context.Contents.AsNoTracking()
-            .Where(c => c.CreatorId == creatorId).OrderByDescending(c => c.UploadDate)
-            .Take(3).Where(c => c.ContentId == id).Select(c => c.ImageUrl).FirstOrDefaultAsync();
-        return ImageResult(image);
-    }
-
     [HttpGet("/images/avatar/{id:int}")]
     public async Task<IActionResult> Avatar(int id)
     {
@@ -29,7 +17,7 @@ public class MediaController(ImaginkContext context) : Controller
     [HttpGet("/images/content/{id:int}")]
     public async Task<IActionResult> ContentImage(int id)
     {
-        var image = await context.Contents.AsNoTracking().Where(c => c.ContentId == id)
+        var image = await context.Contents.AsNoTracking().Where(c => c.ContentId == id && (c.PullOffDate == null || c.PullOffDate > DateTime.Now))
             .Select(c => c.ImageUrl).FirstOrDefaultAsync();
         return ImageResult(image);
     }
@@ -45,7 +33,7 @@ public class MediaController(ImaginkContext context) : Controller
     [HttpGet("/images/event/{id:int}")]
     public async Task<IActionResult> EventBanner(int id)
     {
-        var data = await context.Events.AsNoTracking().Where(e => e.EventId == id)
+        var data = await context.Events.AsNoTracking().Where(e => e.EventId == id && e.EventCancel != true)
             .Select(e => e.Banner).FirstOrDefaultAsync();
         return DataImageResult(data);
     }
@@ -53,7 +41,7 @@ public class MediaController(ImaginkContext context) : Controller
     [HttpGet("/images/event-image/{id:int}")]
     public async Task<IActionResult> EventImage(int id)
     {
-        var data = await context.EventImages.AsNoTracking().Where(e => e.EventImageId == id)
+        var data = await context.EventImages.AsNoTracking().Where(e => e.EventImageId == id && e.EveImgCancel != true && e.Event.EventCancel != true)
             .Select(e => e.ImageUrl).FirstOrDefaultAsync();
         return DataImageResult(data);
     }
