@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
 import { useState, type FormEvent, type ReactNode } from "react";
-import type { Card } from "@/lib/types";
 
 export function Status({ loading, error, retry }: { loading?: boolean; error?: Error; retry?: () => void }) {
   if (loading) return <p role="status" className="notice">載入中…</p>;
@@ -28,14 +26,6 @@ export function Field({ label, name, type = "text", value, required = true, min,
 }) {
   return <label>{label}{type === "textarea" ? <textarea name={name} defaultValue={value} required={required} maxLength={maxLength} rows={5} />
     : <input name={name} type={type} defaultValue={value} required={required} min={min} maxLength={maxLength} />}</label>;
-}
-export function Cards({ items, kind = "works" }: { items: Card[]; kind?: "works" | "commissions" }) {
-  if (!items.length) return <p className="notice">目前沒有符合條件的內容。</p>;
-  return <div className="grid">{items.map(item => <article className="card" key={item.id}>
-    <Link href={`/${kind}/${item.id}`}><Picture src={item.image} alt={item.title} /><h3>{item.title}</h3></Link>
-    <Link className="muted" href={`/creators/${item.creatorId}`}>{item.creatorName}</Link>
-    <p className="meta">{kind === "works" ? `♡ ${item.likes ?? 0}　${item.subtitle ?? ""}` : `NT$ ${item.priceMin?.toLocaleString()}${item.priceMax ? ` – ${item.priceMax.toLocaleString()}` : " 起"}`}</p>
-  </article>)}</div>;
 }
 export function Picture({ src, alt, className = "", }: { src?: string | null; alt: string; className?: string }) {
   const [failed, setFailed] = useState<string | null>(null);

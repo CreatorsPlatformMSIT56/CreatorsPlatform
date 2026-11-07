@@ -34,7 +34,11 @@ Next.js App Router / React / TypeScript 提供介面，ASP.NET Core 10 / EF Core
 - `/account`：會員、創作者設定、作品、委託、方案、訂閱與訂單管理。
 - `/login`、`/register`、`/forgot-password`：帳號功能。
 
-描述內容沿用 Quill Delta JSON，透過 Quill 顯示及編輯。一般文字與 HTML 介紹會經過清理後顯示。
+描述內容沿用 Quill Delta JSON，編輯時使用 Quill，閱讀時轉成經過清理的 HTML，不必在瀏覽器啟動 Quill。
+
+作品、創作者、委託與活動詳情，以及探索搜尋結果由 Next.js Server Components 取得 C# API 資料，初始 HTML 即包含主要內容與依資料產生的頁面標題／描述。追蹤、按讚、留言及投稿成功後刷新伺服器內容；會員中心與訂單管理維持瀏覽器端 React。首頁、活動列表與追蹤動態仍由瀏覽器取得資料。
+
+伺服器讀取 API 時只轉送該請求的 `Imagink.Session` Cookie，採用 `no-store`，不共用個人化資料快取。這次不增加觀看權限或金流規則，相關業務判斷仍由 C# API 處理。
 
 訂閱維持原專案的示範性質：建立一個月的訂閱紀錄，不處理真實金流，也不蒐集信用卡資料。密碼儲存沿用既有資料庫設計。部署到正式環境前，需另行完成密碼雜湊與真實金流設計。
 
@@ -61,8 +65,11 @@ cd frontend
 npm test
 npm run typecheck
 npm run build
+npm run test:ssr
 ```
 
 後端整合測試使用每個測試獨立的 SQLite 記憶體資料庫與真實 HTTP pipeline，覆蓋 Session、JSON 寫入限制、權限、作品上下架、訂閱、訂單狀態及活動編輯。測試不連線、寫入或清除正式 SQL Server。SQLite 不涵蓋所有 SQL Server 查詢翻譯；探索、詳情與媒體查詢另以既有 SQL Server 執行唯讀驗證。
 
-前端測試涵蓋既有 Quill Delta 辨識、HTML 清理與活動配色解析。瀏覽器人工檢查涵蓋實際資料呈現與響應式頁面。SMTP 寄送及真實金流未列入自動測試；平台目前沒有真實金流整合。
+前端內容測試涵蓋 Quill Delta 轉換、格式保留、HTML 清理與活動配色解析。`npm run test:ssr` 需先執行 `npm run build`，會啟動獨立的 Next.js 正式程序與記憶體測試 API，驗證可見 HTML（排除 script 資料）、metadata、Cookie 隔離、搜尋／分頁／排序與 404／500；不使用現有資料庫。瀏覽器人工檢查另驗證互動刷新。SMTP 寄送及真實金流未列入自動測試；平台目前沒有真實金流整合。
+
+伺服器元件與互動分工依 [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)，錯誤頁使用目前版本的 [`retry()`](https://nextjs.org/docs/app/api-reference/file-conventions/error#retry) 重新取得伺服器資料。

@@ -1,19 +1,21 @@
-"use client";
-import { use } from "react";
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { api } from "@/lib/api";
-import { useResource } from "@/lib/use-resource";
+import { serverApi } from "@/lib/server-api";
 import type { Commission } from "@/lib/types";
-import { AsyncForm, Field, Picture, Status, number, text } from "@/components/ui";
+import { Picture } from "@/components/ui";
 import { RichText } from "@/components/rich-text";
-import { useSession } from "@/components/session";
+import { CommissionOrder } from "@/components/commission-order";
 
-export default function CommissionPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params), resource = useResource<Commission>(`catalog/commissions/${id}`), c = resource.data;
-  const { member } = useSession();
-  return <section className="detail"><Status {...resource} retry={resource.reload} />{c && <><Link href={`/creators/${c.creatorId}`}>← {c.creatorName}</Link><h1>{c.title}</h1>
+const getCommission = cache((id: string) => serverApi<Commission>(`catalog/commissions/${encodeURIComponent(id)}`));
+type Props = { params: Promise<{ id: string }> };
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const c = await getCommission((await params).id);
+  return { title: c.title, description: `${c.creatorName} 的委託「${c.title}」，查看範例、價格與委託說明。` };
+}
+export default async function CommissionPage({ params }: Props) {
+  const c = await getCommission((await params).id);
+  return <section className="detail"><Link href={`/creators/${c.creatorId}`}>← {c.creatorName}</Link><h1>{c.title}</h1>
     <div className="gallery">{c.images.map((src, i) => <Picture key={i} src={src} alt={`${c.title} 範例 ${i + 1}`} />)}</div><p className="price">NT$ {c.priceMin?.toLocaleString()} {c.priceMax ? `– ${c.priceMax.toLocaleString()}` : "起"}</p>
-    <RichText html={c.description} /><p>截止日期：{c.overDate ?? "長期開放"}</p><h2>提出委託需求</h2>
-    {member ? <AsyncForm label="送出委託" action={async data => { await api("studio/orders", "POST", { commissionId: Number(id), price: number(data, "price"), description: text(data, "description") }); }}>
-      <Field name="price" label="預算（NT$）" type="number" min={0} value={c.priceMin} /><Field name="description" label="委託內容與需求" type="textarea" /></AsyncForm> : <p className="notice">請先<Link href="/login">登入</Link>再提出委託。</p>}</>}</section>;
+    <RichText html={c.description} /><p>截止日期：{c.overDate ?? "長期開放"}</p><h2>提出委託需求</h2><CommissionOrder id={c.id} price={c.priceMin ?? 0} /></section>;
 }

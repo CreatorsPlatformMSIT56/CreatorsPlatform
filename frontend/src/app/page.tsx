@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { useResource } from "@/lib/use-resource";
 import type { Creator, PageData } from "@/lib/types";
-import { Cards, Picture, Status } from "@/components/ui";
+import { Picture, Status } from "@/components/ui";
+import { Cards } from "@/components/cards";
 
 export default function Home() {
   const works = useResource<PageData>("catalog/works?sort=popular");
