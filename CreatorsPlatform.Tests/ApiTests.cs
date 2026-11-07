@@ -61,7 +61,7 @@ public class ApiTests
     /// </summary>
     /// <returns>表示測試執行的非同步工作</returns>
     [Fact]
-    public async Task SessionRoundtripDoesNotExposePassword()
+    public async Task CookieAuthenticationRoundtripDoesNotExposePassword()
     {
         using var factory = new ApiFactory();
         await factory.Seed();
@@ -84,7 +84,7 @@ public class ApiTests
     /// </summary>
     /// <returns>表示測試執行的非同步工作</returns>
     [Fact]
-    public async Task MutationRequiresJsonAndAuthenticatedSession()
+    public async Task MutationRequiresJsonAndAuthentication()
     {
         using var factory = new ApiFactory();
         await factory.Seed();
@@ -100,6 +100,76 @@ public class ApiTests
             (await client.PostAsJsonAsync("/api/studio/works/1/like", new { })).StatusCode
         );
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/yhu/IMAGINK")).StatusCode);
+    }
+
+    /// <summary>
+    /// 所有受保護操作在未登入時回傳 401，不重新導向或執行資料驗證。
+    /// </summary>
+    [Theory]
+    [InlineData("GET", "/api/dashboard")]
+    [InlineData("PUT", "/api/account")]
+    [InlineData("PUT", "/api/account/avatar")]
+    [InlineData("PUT", "/api/account/password")]
+    [InlineData("PUT", "/api/studio/creator")]
+    [InlineData("POST", "/api/studio/works")]
+    [InlineData("POST", "/api/studio/commissions")]
+    [InlineData("PUT", "/api/studio/plans")]
+    [InlineData("POST", "/api/studio/creators/1/follow")]
+    [InlineData("POST", "/api/studio/works/1/comments")]
+    [InlineData("POST", "/api/studio/works/1/like")]
+    [InlineData("POST", "/api/studio/plans/1/subscribe")]
+    [InlineData("POST", "/api/studio/orders")]
+    [InlineData("PUT", "/api/studio/orders/1")]
+    [InlineData("DELETE", "/api/studio/works/1")]
+    [InlineData("POST", "/api/events")]
+    [InlineData("PUT", "/api/events/1")]
+    [InlineData("POST", "/api/events/1/entries")]
+    [InlineData("POST", "/api/events/entries/1/like")]
+    [InlineData("GET", "/api/catalog/works?following=true")]
+    public async Task ProtectedEndpointsRejectAnonymousRequests(string method, string path)
+    {
+        using var factory = new ApiFactory();
+        using var client = factory.CreateClient(new() { AllowAutoRedirect = false });
+        using var request = new HttpRequestMessage(new HttpMethod(method), path)
+        {
+            Content = method == "GET" ? null : JsonContent.Create(new { }),
+        };
+        var response = await client.SendAsync(request);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.Null(response.Headers.Location);
+    }
+
+    /// <summary>
+    /// 註冊立即登入、切換帳號時更新身分，且無效驗證 Cookie 無法登入。
+    /// </summary>
+    [Fact]
+    public async Task RegistrationSignsInAndLoginReplacesIdentity()
+    {
+        using var factory = new ApiFactory();
+        await factory.Seed();
+        using var client = factory.CreateClient();
+        var registration = await client.PostAsJsonAsync("/api/account/register", new
+        {
+            email = "new@example.test",
+            password = "password4",
+            name = "New reader",
+        });
+        registration.EnsureSuccessStatusCode();
+        Assert.Equal("new@example.test",
+            (await registration.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("email").GetString());
+        var cookie = Assert.Single(registration.Headers.GetValues("Set-Cookie"));
+        Assert.StartsWith("Imagink.Auth=", cookie);
+        Assert.Contains("httponly", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("samesite=lax", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal("new@example.test",
+            (await client.GetFromJsonAsync<JsonElement>("/api/account")).GetProperty("email").GetString());
+        await Login(client);
+        Assert.Equal(2,
+            (await client.GetFromJsonAsync<JsonElement>("/api/account")).GetProperty("id").GetInt32());
+
+        using var invalid = factory.CreateClient(new() { HandleCookies = false, AllowAutoRedirect = false });
+        invalid.DefaultRequestHeaders.Add("Cookie", "Imagink.Auth=invalid");
+        Assert.Equal(HttpStatusCode.Unauthorized, (await invalid.GetAsync("/api/dashboard")).StatusCode);
     }
 
     /// <summary>

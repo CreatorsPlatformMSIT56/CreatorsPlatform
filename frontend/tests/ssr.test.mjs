@@ -57,7 +57,7 @@ before(
             avatar: null,
             bannerUrl: null,
             followers: 2,
-            following: req.headers.cookie === "Imagink.Session=alice",
+            following: req.headers.cookie === "Imagink.Auth=alice",
             plans: [
               {
                 id: 1,
@@ -235,11 +235,11 @@ test("work HTML contains its actual content and metadata without executing JavaS
   assert.doesNotMatch(document, /\/images\/content\/77\/thumbnail/);
 });
 
-test("SSR forwards only this request's session and does not share cached data", async () => {
+test("SSR forwards only this request's authentication cookie and does not share cached data", async () => {
   requests.length = 0;
   for (const value of ["alice", "bob"]) {
     const response = await fetch(`${origin}/works/77`, {
-      headers: { Cookie: `Imagink.Session=${value}; unrelated=private` },
+      headers: { Cookie: `Imagink.Auth=${value}; unrelated=private` },
     });
     assert.equal(response.status, 200);
     await response.text();
@@ -247,7 +247,7 @@ test("SSR forwards only this request's session and does not share cached data", 
   const calls = requests.filter((r) => r.path === "/api/catalog/works/77");
   assert.deepEqual(
     calls.map((c) => c.cookie),
-    ["Imagink.Session=alice", "Imagink.Session=bob"],
+    ["Imagink.Auth=alice", "Imagink.Auth=bob"],
   );
   likes = 4;
   const html = await (await fetch(`${origin}/works/77`)).text();
@@ -269,7 +269,7 @@ test("creator profile and initial works are SSR, while follow state remains requ
     [null, "＋ 追蹤創作者"],
   ]) {
     const response = await fetch(`${origin}/creators/1`, {
-      headers: cookie ? { Cookie: `Imagink.Session=${cookie}` } : {},
+      headers: cookie ? { Cookie: `Imagink.Auth=${cookie}` } : {},
     });
     assert.equal(response.status, 200);
     const html = visibleHtml(await response.text());

@@ -2,7 +2,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
+using System.Security.Claims;
 using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -119,10 +123,9 @@ public class AccountController(
         );
         if (user == null)
             return Unauthorized(new { message = "電子郵件或密碼錯誤。" });
-        HttpContext.Session.Clear();
-        HttpContext.Session.SetInt32("userId", user.UserId);
         user.LastLoginDate = DateTime.Now;
         await Database.SaveChangesAsync();
+        await SignInUser(user.UserId);
         return await Current();
     }
 
@@ -145,8 +148,7 @@ public class AccountController(
         };
         Database.Users.Add(user);
         await Database.SaveChangesAsync();
-        HttpContext.Session.Clear();
-        HttpContext.Session.SetInt32("userId", user.UserId);
+        await SignInUser(user.UserId);
         return await Current();
     }
 
@@ -155,10 +157,25 @@ public class AccountController(
     /// </summary>
     /// <returns>處理結果</returns>
     [HttpPost("logout")]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-        HttpContext.Session.Clear();
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return NoContent();
+    }
+
+    /// <summary>
+    /// 建立使用者身分並簽發驗證 Cookie。
+    /// </summary>
+    /// <param name="userId">使用者識別碼</param>
+    private async Task SignInUser(int userId)
+    {
+        var identity = new ClaimsIdentity(
+            [new Claim(ClaimTypes.NameIdentifier, userId.ToString())],
+            CookieAuthenticationDefaults.AuthenticationScheme
+        );
+        var principal = new ClaimsPrincipal(identity);
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        HttpContext.User = principal;
     }
 
     /// <summary>
@@ -166,11 +183,10 @@ public class AccountController(
     /// </summary>
     /// <param name="input">請求資料</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPut]
     public async Task<IActionResult> Update(Profile input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var user = await Database.Users.FindAsync(UserId);
         if (user == null)
             return Unauthorized();
@@ -191,11 +207,10 @@ public class AccountController(
     /// </summary>
     /// <param name="input">請求資料</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPut("avatar")]
     public async Task<IActionResult> Avatar(AvatarData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var user = await Database.Users.FindAsync(UserId);
         if (user == null)
             return Unauthorized();
@@ -218,11 +233,10 @@ public class AccountController(
     /// </summary>
     /// <param name="input">請求資料</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPut("password")]
     public async Task<IActionResult> Password(PasswordData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var user = await Database.Users.FindAsync(UserId);
         if (user == null || user.Password != input.CurrentPassword)
             return BadRequest(new { message = "目前密碼錯誤。" });

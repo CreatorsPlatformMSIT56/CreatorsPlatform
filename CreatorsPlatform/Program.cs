@@ -1,4 +1,5 @@
 using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,23 +8,36 @@ builder.Services.AddDbContext<ImaginkContext>(options =>
 );
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.Name = "Imagink.Session";
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
-});
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+        options.Cookie.Name = "Imagink.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Events.OnRedirectToLogin = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
+    });
+builder.Services.AddAuthorization();
 var app = builder.Build();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 app.Use(
     async (context, next) =>
     {
-        // JSON-only mutations prevent cross-origin HTML forms from using the session.
+        // JSON-only mutations prevent cross-origin HTML forms from using the authentication cookie.
         if (
             context.Request.Path.StartsWithSegments("/api")
             && !HttpMethods.IsGet(context.Request.Method)
@@ -38,7 +52,9 @@ app.Use(
     }
 );
 app.UseStaticFiles();
-app.UseSession();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 app.Run();

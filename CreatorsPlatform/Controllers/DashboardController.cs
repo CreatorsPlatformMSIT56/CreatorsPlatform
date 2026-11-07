@@ -1,4 +1,5 @@
 using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace CreatorsPlatform.Controllers;
 /// <summary>
 /// 管理頁面 API 控制器。
 /// </summary>
+[Authorize]
 [ApiController, Route("api/dashboard")]
 public class DashboardController(ImaginkContext database) : ApiController(database)
 {
@@ -17,8 +19,6 @@ public class DashboardController(ImaginkContext database) : ApiController(databa
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         return Ok(
             new

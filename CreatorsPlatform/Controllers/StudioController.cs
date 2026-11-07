@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace CreatorsPlatform.Controllers;
 /// <summary>
 /// 創作及互動 API 控制器。
 /// </summary>
+[Authorize]
 [ApiController, Route("api/studio")]
 public class StudioController(ImaginkContext database) : ApiController(database)
 {
@@ -103,8 +105,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPut("creator")]
     public async Task<IActionResult> SaveCreator(CreatorData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var user = await Database
             .Users.Include(u => u.Creator)
             .FirstOrDefaultAsync(u => u.UserId == UserId);
@@ -125,8 +125,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("works")]
     public async Task<IActionResult> CreatePost(PostData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);
@@ -173,8 +171,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("commissions")]
     public async Task<IActionResult> CreateCommission(CommissionData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);
@@ -211,8 +207,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPut("plans")]
     public async Task<IActionResult> SavePlan(PlanData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);
@@ -239,8 +233,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("creators/{id:int}/follow")]
     public async Task<IActionResult> Follow(int id)
     {
-        if (UserId == null)
-            return Unauthorized();
         if (!await Database.Creators.AnyAsync(c => c.CreatorId == id))
             return NotFound();
         var follow = await Database.Follows.FirstOrDefaultAsync(f =>
@@ -250,7 +242,7 @@ public class StudioController(ImaginkContext database) : ApiController(database)
         {
             follow = new Follow
             {
-                UserId = UserId.Value,
+                UserId = UserId!.Value,
                 CreatorId = id,
                 Unfollow = false,
             };
@@ -271,15 +263,13 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("works/{id:int}/comments")]
     public async Task<IActionResult> Comment(int id, CommentData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         if (!await Database.Contents.AnyAsync(c => c.ContentId == id))
             return NotFound();
         Database.Comments.Add(
             new Comment
             {
                 ContentId = id,
-                UserId = UserId.Value,
+                UserId = UserId!.Value,
                 Comment1 = input.Text,
             }
         );
@@ -295,8 +285,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("works/{id:int}/like")]
     public async Task<IActionResult> Like(int id)
     {
-        if (UserId == null)
-            return Unauthorized();
         var count = await Database
             .Contents.Where(c => c.ContentId == id)
             .ExecuteUpdateAsync(s => s.SetProperty(c => c.Likes, c => (c.Likes ?? 0) + 1));
@@ -311,8 +299,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("plans/{id:int}/subscribe")]
     public async Task<IActionResult> Subscribe(int id)
     {
-        if (UserId == null)
-            return Unauthorized();
         var plan = await Database.Plans.FindAsync(id);
         if (plan == null)
             return NotFound();
@@ -326,7 +312,7 @@ public class StudioController(ImaginkContext database) : ApiController(database)
         Database.Subscriptions.Add(
             new Subscription
             {
-                UserId = UserId.Value,
+                UserId = UserId!.Value,
                 CreatorId = plan.CreatorId,
                 PlanId = id,
                 StartDate = today,
@@ -341,7 +327,7 @@ public class StudioController(ImaginkContext database) : ApiController(database)
             Database.Follows.Add(
                 new Follow
                 {
-                    UserId = UserId.Value,
+                    UserId = UserId!.Value,
                     CreatorId = plan.CreatorId,
                     Unfollow = false,
                 }
@@ -360,8 +346,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPost("orders")]
     public async Task<IActionResult> Order(OrderData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var commission = await Database.Commissions.FindAsync(input.CommissionId);
         if (commission == null)
             return NotFound();
@@ -370,7 +354,7 @@ public class StudioController(ImaginkContext database) : ApiController(database)
         Database.CommissionOrders.Add(
             new CommissionOrder
             {
-                UserId = UserId.Value,
+                UserId = UserId!.Value,
                 CommissionId = input.CommissionId,
                 Price = input.Price,
                 Description = input.Description,
@@ -391,8 +375,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpPut("orders/{id:int}")]
     public async Task<IActionResult> Reply(int id, OrderReply input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         var order = await Database
             .CommissionOrders.Include(o => o.Commission)
@@ -431,8 +413,6 @@ public class StudioController(ImaginkContext database) : ApiController(database)
     [HttpDelete("{kind}/{id:int}")]
     public async Task<IActionResult> Delete(string kind, int id)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);

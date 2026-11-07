@@ -83,8 +83,8 @@ public class CatalogController(ImaginkContext database) : ApiController(database
             .Where(c => c.PullOffDate == null || c.PullOffDate > DateTime.Now);
         if (following)
         {
-            if (UserId == null)
-                return Unauthorized();
+            if (User.Identity?.IsAuthenticated != true)
+                return Challenge();
             query = query.Where(c =>
                 c.Creator.Follows.Any(f => f.UserId == UserId && f.Unfollow != true)
             );

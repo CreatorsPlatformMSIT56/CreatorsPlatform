@@ -4,14 +4,14 @@ import { notFound, redirect } from "next/navigation";
 
 // Fetch directly from C#, never through our own public HTTP entry point.
 // No shared data cache: Creator responses include per-user follow state.
-/** 在伺服器端帶入工作階段呼叫 API。 */
+/** 在伺服器端帶入驗證 Cookie 呼叫 API。 */
 export async function serverApi<T>(path: string): Promise<T> {
-  const session = (await cookies()).get("Imagink.Session");
+  const auth = (await cookies()).get("Imagink.Auth");
   const response = await fetch(
     `${process.env.BACKEND_URL || "http://localhost:5251"}/api/${path}`,
     {
       cache: "no-store",
-      headers: session ? { Cookie: `Imagink.Session=${session.value}` } : {},
+      headers: auth ? { Cookie: `Imagink.Auth=${auth.value}` } : {},
       signal: AbortSignal.timeout(15000),
     },
   );

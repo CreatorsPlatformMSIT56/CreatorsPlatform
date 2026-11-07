@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using CreatorsPlatform.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -137,11 +138,10 @@ public class EventsController(ImaginkContext database) : ApiController(database)
     /// <param name="input">請求資料</param>
     /// <param name="id">目標項目的識別碼</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPost, HttpPut("{id:int}")]
     public async Task<IActionResult> Save(EventData input, int? id = null)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);
@@ -208,11 +208,10 @@ public class EventsController(ImaginkContext database) : ApiController(database)
     /// <param name="id">目標項目的識別碼</param>
     /// <param name="input">請求資料</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPost("{id:int}/entries")]
     public async Task<IActionResult> Submit(int id, EntryData input)
     {
-        if (UserId == null)
-            return Unauthorized();
         var creator = await CreatorId();
         if (creator == null)
             return StatusCode(403);
@@ -245,11 +244,10 @@ public class EventsController(ImaginkContext database) : ApiController(database)
     /// </summary>
     /// <param name="id">目標項目的識別碼</param>
     /// <returns>處理結果</returns>
+    [Authorize]
     [HttpPost("entries/{id:int}/like")]
     public async Task<IActionResult> Like(int id)
     {
-        if (UserId == null)
-            return Unauthorized();
         var count = await Database
             .EventImages.Where(i =>
                 i.EventImageId == id && i.EveImgCancel != true && i.Event.EventCancel != true

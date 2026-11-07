@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CreatorsPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ public abstract class ApiController(ImaginkContext database) : ControllerBase
     /// <summary>
     /// 目前登入使用者的識別碼。
     /// </summary>
-    protected int? UserId => HttpContext.Session.GetInt32("userId");
+    protected int? UserId =>
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : null;
 
     /// <summary>
     /// 取得目前使用者的創作者識別碼
